@@ -1,0 +1,8 @@
+function main(data) {
+    scale = get_config_value("scale");
+    offset = get_config_value("offset");
+    s = get_state("lastPublishedValue");
+    print(s);
+    set_state("lastPublishedValue", s + 1);
+    set_output("R", data.value * scale + offset);
+}

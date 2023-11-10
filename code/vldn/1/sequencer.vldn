@@ -1,0 +1,9 @@
+function main(data) {
+    print();
+    set_output("1+", data.value);
+    set_output("3-", 456);
+    s = get_state("sequenceIndex");
+    print(s);
+    set_state("sequenceIndex", s + 2);
+    print(data.channel);
+}

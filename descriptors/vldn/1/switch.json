@@ -1,0 +1,70 @@
+{
+  "name": "Switch",
+  "group": "input",
+  "description": "Logic block representing a wall switch",
+  "deviceFilters": [
+    {
+      "moduleId": 3,
+      "registerIds": [60,61,62,63,64,65,66,67]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "onClick",
+      "abbrev": "C",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "onShortPress",
+      "abbrev": "P",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "onLongPress",
+      "abbrev": "LP",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "onHold",
+      "abbrev": "H",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "onOn",
+      "abbrev": "ON",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "onOff",
+      "abbrev": "OFF",
+      "type" : "BOOLEAN"
+    }
+  ],
+  "config": [
+    {
+      "name": "clickDurationMs",
+      "type": "INTEGER",
+      "label": "Click [ms]",
+      "description": "Duration of a click in ms"
+    },
+    {
+      "name": "shortPressDurationMs",
+      "type": "INTEGER",
+      "label": "Short press [ms]",
+      "description": "Duration of a short press in ms"
+    },
+    {
+      "name": "longPressDurationMs",
+      "type": "INTEGER",
+      "label": "Long press [ms]",
+      "description": "Duration of a long press in ms"
+    }
+  ],
+  "state": [
+    {
+      "name": "lastChangeTimeMs",
+      "type": "INTEGER",
+      "persistent": false
+    }
+  ]
+}

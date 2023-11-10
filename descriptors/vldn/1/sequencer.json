@@ -1,0 +1,77 @@
+{
+  "name": "Sequencer",
+  "group": "process",
+  "description": "Logic block representing a sequence",
+  "inputs": [
+    {
+      "name": "Forward",
+      "abbrev": "Fwd",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "backward",
+      "abbrev": "Bwd",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "reset",
+      "abbrev": "Rst",
+      "type" : "BOOLEAN"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "onOn for channel #1",
+      "abbrev": "1+",
+      "type" : "INTEGER"
+    },
+    {
+      "name": "onOff for channel #1",
+      "abbrev": "1-",
+      "type" : "INTEGER"
+    },
+    {
+      "name": "onOn for channel #2",
+      "abbrev": "2+",
+      "type" : "INTEGER"
+    },
+    {
+      "name": "onOff for channel #2",
+      "abbrev": "2-",
+      "type" : "INTEGER"
+    },
+    {
+      "name": "onOn for channel #3",
+      "abbrev": "3+",
+      "type" : "INTEGER"
+    },
+    {
+      "name": "onOff for channel #3",
+      "abbrev": "3-",
+      "type" : "INTEGER"
+    },
+    {
+      "name": "onOn for channel #4",
+      "abbrev": "4+",
+      "type" : "INTEGER"
+    },
+    {
+      "name": "onOff for channel #4",
+      "abbrev": "4-",
+      "type" : "INTEGER"
+    }
+  ],
+  "config": [
+    {
+      "name": "sequences",
+      "type": "INTEGER",
+      "repeated": true
+    }
+  ],
+  "state": [
+    {
+      "name": "sequenceIndex",
+      "type": "INTEGER"
+    }
+  ]
+}

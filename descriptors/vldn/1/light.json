@@ -1,0 +1,46 @@
+{
+  "name": "Light",
+  "group": "output",
+  "description": "Logic block representing a light output",
+  "deviceFilters": [
+    {
+      "moduleId": 2,
+      "registerIds": [31,32,33,34]
+    },
+    {
+      "moduleId": 3,
+      "registerIds": [40,41,42,43,44,45,46,47]
+    }
+  ],
+  "inputs": [
+    {
+      "name": "switchOn",
+      "abbrev": "+",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "switchOff",
+      "abbrev": "-",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "toggle",
+      "abbrev": "~",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "presence",
+      "abbrev": "P",
+      "type" : "BOOLEAN"
+    }
+  ],
+  "config": [
+    {
+      "name": "moe",
+      "description": "Manual operation extend time",
+      "type": "INTEGER"
+    }
+  ],
+  "state": [
+  ]
+}

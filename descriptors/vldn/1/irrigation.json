@@ -1,0 +1,74 @@
+{
+  "name": "Irrigation",
+  "group": "process",
+  "description": "Irrigation system",
+  "deviceFilters": [
+    {
+      "moduleId": 1,
+      "registerIds": [1,2,3]
+    },
+    {
+      "moduleId": 2,
+      "registerIds": [4,5]
+    }
+  ],
+  "inputs": [
+    {
+      "name": "Trigger",
+      "abbrev": "T",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "Disable",
+      "abbrev": "D",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "Reset",
+      "abbrev": "Rst",
+      "type" : "BOOLEAN"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "Section #1",
+      "abbrev": "S1",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "Section #2",
+      "abbrev": "S2",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "Section #3",
+      "abbrev": "S3",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "Section #4",
+      "abbrev": "S4",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "Section #5",
+      "abbrev": "S5",
+      "type" : "BOOLEAN"
+    },
+    {
+      "name": "Section #6",
+      "abbrev": "S6",
+      "type" : "BOOLEAN"
+    }
+  ],
+  "config": [
+    {
+      "name": "irrigationTimeMs",
+      "type": "INTEGER",
+      "label": "Time [s]",
+      "description": "Total irrigation time in seconds"
+    }
+  ],
+  "state": [
+  ]
+}
