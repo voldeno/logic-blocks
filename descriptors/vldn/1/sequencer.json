@@ -4,74 +4,101 @@
   "description": "Logic block representing a sequence",
   "inputs": [
     {
+      "id": "forward",
+      "description": "",
       "name": "Forward",
       "abbrev": "Fwd",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     },
     {
+      "id": "backward",
+      "description": "",
       "name": "backward",
       "abbrev": "Bwd",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     },
     {
+      "id": "reset",
+      "description": "",
       "name": "reset",
       "abbrev": "Rst",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     }
   ],
   "outputs": [
     {
+      "id": "1+",
+      "description": "",
       "name": "onOn for channel #1",
       "abbrev": "1+",
-      "type" : "INTEGER"
+      "type": "INTEGER"
     },
     {
+      "id": "1-",
+      "description": "",
       "name": "onOff for channel #1",
       "abbrev": "1-",
-      "type" : "INTEGER"
+      "type": "INTEGER"
     },
     {
+      "id": "2+",
+      "description": "",
       "name": "onOn for channel #2",
       "abbrev": "2+",
-      "type" : "INTEGER"
+      "type": "INTEGER"
     },
     {
+      "id": "2-",
+      "description": "",
       "name": "onOff for channel #2",
       "abbrev": "2-",
-      "type" : "INTEGER"
+      "type": "INTEGER"
     },
     {
+      "id": "3+",
+      "description": "",
       "name": "onOn for channel #3",
       "abbrev": "3+",
-      "type" : "INTEGER"
+      "type": "INTEGER"
     },
     {
+      "id": "3-",
+      "description": "",
       "name": "onOff for channel #3",
       "abbrev": "3-",
-      "type" : "INTEGER"
+      "type": "INTEGER"
     },
     {
+      "id": "4+",
+      "description": "",
       "name": "onOn for channel #4",
       "abbrev": "4+",
-      "type" : "INTEGER"
+      "type": "INTEGER"
     },
     {
+      "id": "4-",
+      "description": "",
       "name": "onOff for channel #4",
       "abbrev": "4-",
-      "type" : "INTEGER"
+      "type": "INTEGER"
     }
   ],
   "config": [
     {
+      "id": "sequences",
+      "description": "",
       "name": "sequences",
       "type": "INTEGER",
-      "repeated": true
+      "default": "0"
     }
   ],
   "state": [
     {
+      "id": "sequenceIndex",
+      "description": "",
       "name": "sequenceIndex",
-      "type": "INTEGER"
+      "type": "INTEGER",
+      "default": "0"
     }
   ]
 }
