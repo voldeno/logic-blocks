@@ -1,6 +1,6 @@
 function main(data) {
-    scale = get_config_value("scale");
-    offset = get_config_value("offset");
+    scale = get_config("scale");
+    offset = get_config("offset");
     s = get_state("lastPublishedValue");
     print(s);
     set_state("lastPublishedValue", s + 1);
