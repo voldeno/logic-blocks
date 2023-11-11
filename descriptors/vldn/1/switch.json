@@ -2,69 +2,98 @@
   "name": "Switch",
   "group": "input",
   "description": "Logic block representing a wall switch",
-  "deviceFilters": [
+  "registerFilters": [
     {
       "moduleId": 3,
-      "registerIds": [60,61,62,63,64,65,66,67]
+      "registerIds": [
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67
+      ]
     }
   ],
   "outputs": [
     {
+      "id": "C",
+      "description": "",
       "name": "onClick",
       "abbrev": "C",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     },
     {
+      "id": "P",
+      "description": "",
       "name": "onShortPress",
       "abbrev": "P",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     },
     {
+      "id": "LP",
+      "description": "",
       "name": "onLongPress",
       "abbrev": "LP",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     },
     {
+      "id": "H",
+      "description": "",
       "name": "onHold",
       "abbrev": "H",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     },
     {
+      "id": "ON",
+      "description": "",
       "name": "onOn",
       "abbrev": "ON",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     },
     {
+      "id": "OFF",
+      "description": "",
       "name": "onOff",
       "abbrev": "OFF",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     }
   ],
   "config": [
     {
+      "id": "cliclDuration",
       "name": "clickDurationMs",
       "type": "INTEGER",
-      "label": "Click [ms]",
-      "description": "Duration of a click in ms"
+      "description": "Duration of a click in ms",
+      "unit": "ms",
+      "default": "0"
     },
     {
+      "id": "shortPressDuration",
       "name": "shortPressDurationMs",
       "type": "INTEGER",
-      "label": "Short press [ms]",
-      "description": "Duration of a short press in ms"
+      "description": "Duration of a short press in ms",
+      "unit": "ms",
+      "default": "0"
     },
     {
+      "id": "longPressDuration",
       "name": "longPressDurationMs",
       "type": "INTEGER",
-      "label": "Long press [ms]",
-      "description": "Duration of a long press in ms"
+      "description": "Duration of a long press in ms",
+      "unit": "ms",
+      "default": "0"
     }
   ],
   "state": [
     {
+      "id": "longChangeTime",
       "name": "lastChangeTimeMs",
       "type": "INTEGER",
-      "persistent": false
+      "unit": "ms",
+      "default": "0"
     }
   ]
 }
