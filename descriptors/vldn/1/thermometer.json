@@ -2,44 +2,59 @@
   "name": "thermometer",
   "group": "input",
   "description": "Logic block representing an analog sensor, e.g. 0-10v or 4-20mA sensor",
-  "deviceFilters": [
+  "registerFilters": [
     {
       "moduleId": 5,
-      "registerIds": [10,11,12,13,20,21,22,23]
+      "registerIds": [
+        10,
+        11,
+        12,
+        13,
+        20,
+        21,
+        22,
+        23
+      ]
     }
   ],
   "outputs": [
     {
+      "id": "read",
       "name": "read",
       "abbrev": "R",
-      "type" : "FLOAT"
+      "type": "FLOAT",
+      "description": ""
     }
   ],
   "config": [
     {
+      "id": "scale",
       "name": "scale",
       "type": "FLOAT",
-      "label": "Scale",
-      "description": "Scale"
+      "description": "Scale",
+      "default": "0"
     },
     {
+      "id": "offset",
       "name": "offset",
       "type": "FLOAT",
-      "label": "Offset",
-      "description": "Offset"
+      "description": "Offset",
+      "default": "0"
     },
     {
+      "id": "hysteresis",
       "name": "hysteresis",
       "type": "FLOAT",
-      "label": "Hysteresis",
-      "description": "Sensor hysteresis"
+      "description": "Sensor hysteresis",
+      "default": "0"
     }
   ],
   "state": [
     {
+      "id": "lastPublishedValue",
       "name": "lastPublishedValue",
       "type": "INTEGER",
-      "persistent": false
+      "default": "0"
     }
   ]
 }
