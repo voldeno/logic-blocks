@@ -1,5 +1,5 @@
 function main(data) {
     print(11);
     set_register(20);
-    print(get_config_value("moe"));
+    print(get_config("moe"));
 }
