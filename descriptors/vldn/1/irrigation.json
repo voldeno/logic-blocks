@@ -2,73 +2,99 @@
   "name": "Irrigation",
   "group": "process",
   "description": "Irrigation system",
-  "deviceFilters": [
+  "registerFilters": [
     {
       "moduleId": 1,
-      "registerIds": [1,2,3]
+      "registerIds": [
+        1,
+        2,
+        3
+      ]
     },
     {
       "moduleId": 2,
-      "registerIds": [4,5]
+      "registerIds": [
+        4,
+        5
+      ]
     }
   ],
   "inputs": [
     {
+      "id": "trigger",
       "name": "Trigger",
       "abbrev": "T",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN",
+      "description": ""
     },
     {
+      "id": "disable",
+      "description": "",
       "name": "Disable",
       "abbrev": "D",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     },
     {
+      "id": "reset",
+      "description": "",
       "name": "Reset",
       "abbrev": "Rst",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     }
   ],
   "outputs": [
     {
+      "id": "section_1",
+      "description": "",
       "name": "Section #1",
       "abbrev": "S1",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     },
     {
+      "id": "section_2",
+      "description": "",
       "name": "Section #2",
       "abbrev": "S2",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     },
     {
+      "id": "section_3",
+      "description": "",
       "name": "Section #3",
       "abbrev": "S3",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     },
     {
+      "id": "section_4",
+      "description": "",
       "name": "Section #4",
       "abbrev": "S4",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     },
     {
+      "id": "section_5",
+      "description": "",
       "name": "Section #5",
       "abbrev": "S5",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     },
     {
+      "id": "section_6",
+      "description": "",
       "name": "Section #6",
       "abbrev": "S6",
-      "type" : "BOOLEAN"
+      "type": "BOOLEAN"
     }
   ],
   "config": [
     {
+      "id": "irrigation",
       "name": "irrigationTimeMs",
       "type": "INTEGER",
-      "label": "Time [s]",
-      "description": "Total irrigation time in seconds"
+      "unit": "ms",
+      "description": "Total irrigation time in seconds",
+      "default": "0"
     }
   ],
-  "state": [
-  ]
+  "state": []
 }
