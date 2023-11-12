@@ -4,5 +4,5 @@ function main(data) {
     s = get_state("lastPublishedValue");
     print(s);
     set_state("lastPublishedValue", s + 1);
-    set_output("R", data.value * scale + offset);
+    set_output("read", data.value * scale + offset);
 }
