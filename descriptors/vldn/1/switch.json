@@ -19,43 +19,43 @@
   ],
   "outputs": [
     {
-      "id": "C",
-      "description": "",
+      "id": "C",      
+      "description": "some description",
       "name": "onClick",
       "abbrev": "C",
       "type": "BOOLEAN"
     },
     {
       "id": "P",
-      "description": "",
+      "description": "some description",
       "name": "onShortPress",
       "abbrev": "P",
       "type": "BOOLEAN"
     },
     {
       "id": "LP",
-      "description": "",
+      "description": "some description",
       "name": "onLongPress",
       "abbrev": "LP",
       "type": "BOOLEAN"
     },
     {
       "id": "H",
-      "description": "",
+      "description": "some description",
       "name": "onHold",
       "abbrev": "H",
       "type": "BOOLEAN"
     },
     {
       "id": "ON",
-      "description": "",
+      "description": "some description",
       "name": "onOn",
       "abbrev": "ON",
       "type": "BOOLEAN"
     },
     {
       "id": "OFF",
-      "description": "",
+      "description": "some description",
       "name": "onOff",
       "abbrev": "OFF",
       "type": "BOOLEAN"
@@ -93,6 +93,7 @@
       "name": "lastChangeTimeMs",
       "type": "INTEGER",
       "unit": "ms",
+      "description": "some description",
       "default": "0"
     }
   ]
