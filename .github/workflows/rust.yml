@@ -11,5 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Download the validator
+      run: wget -qc https://voldeno.com/bin/blocks_validator
     - name: Check
       run: cargo version && ls
