@@ -12,6 +12,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Download the validator
-      run: wget -qc https://voldeno.com/bin/blocks_validator
+      run: wget -qc https://voldeno.com/bin/blocks_validator && chmod +x ./blocks_validator
     - name: Check
-      run: cargo version && ls
+      run: ./blocks_validator ./descriptors
