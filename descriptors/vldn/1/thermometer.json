@@ -23,7 +23,7 @@
       "name": "read",
       "abbrev": "R",
       "type": "FLOAT",
-      "description": ""
+      "description": "some description"
     }
   ],
   "config": [
@@ -54,7 +54,8 @@
       "id": "lastPublishedValue",
       "name": "lastPublishedValue",
       "type": "INTEGER",
-      "default": "0"
+      "default": "0",
+      "description": "some description"
     }
   ]
 }
