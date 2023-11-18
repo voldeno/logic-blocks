@@ -12,4 +12,4 @@ jobs:
     - name: Download the validator
       run: wget -qc https://voldeno.com/bin/blocks_validator && chmod +x ./blocks_validator
     - name: Check
-      run: ./blocks_validator ./descriptors
+      run: ./blocks_validator .
