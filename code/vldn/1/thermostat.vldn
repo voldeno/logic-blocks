@@ -8,11 +8,12 @@ function main(data) {
     temp_hysteresis = get_config("temp_hysteresis");
     max_floor_temp = get_config("max_floor_temp");
 
+    climate_control = get_state("climate_control");
+
     // TODO: floor_temp might be missing - handle optional input
     floor_overheated = (floor_temp + temp_hysteresis) >= max_floor_temp;
     heating_required = air_temp < (comfort_temp - temp_hysteresis);
 
-    climate_control = 0;
     if (floor_overheated) {
         // overheated
         climate_control = 0;
@@ -21,11 +22,13 @@ function main(data) {
         climate_control = 10;
     } else if (air_temp > (comfort_temp - temp_hysteresis) && air_temp < (comfort_temp + temp_hysteresis)) {
         // temp. in hysteresis
-        climate_control = 5;
+        // no change in value
     } else if (air_temp > (comfort_temp + temp_hysteresis)) {
         // temp. too high
         climate_control = 0;
     }
 
+    // TODO: store output values as state?
+    set_state("climate_control", climate_control);
     set_output("climate_control", climate_control);
 }

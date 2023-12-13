@@ -65,5 +65,12 @@
     }
   ],
   "state": [
+    {
+      "id": "climate_control",
+      "description": "Last climate control output value",
+      "name": "Last climate control output value",
+      "type": "INTEGER",
+      "default": "0"
+    }
   ]
 }
