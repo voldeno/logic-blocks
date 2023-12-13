@@ -1,0 +1,30 @@
+function main(data) {
+    climate_in_1 = get_input("climate_1");
+    climate_in_2 = get_input("climate_2");
+    climate_in_3 = get_input("climate_3");
+    climate_in_4 = get_input("climate_4");
+
+    if (climate_in_1 > 5) {
+        set_output("climate_1", climate_in_1);
+    } else {
+        set_output("climate_1", 0);
+    }
+
+    if (climate_in_2 > 5) {
+        set_output("climate_2", climate_in_2);
+    } else {
+        set_output("climate_2", 0);
+    }
+
+    if (climate_in_3 > 5) {
+        set_output("climate_3", climate_in_3);
+    } else {
+        set_output("climate_3", 0);
+    }
+
+    if (climate_in_4 > 5) {
+        set_output("climate_4", climate_in_4);
+    }  else {
+        set_output("climate_4", 0);
+    }
+}

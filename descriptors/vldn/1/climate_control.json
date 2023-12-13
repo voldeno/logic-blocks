@@ -1,0 +1,69 @@
+{
+  "name": "Climate control",
+  "group": "process",
+  "description": "Climate control",
+  "inputs": [
+    {
+      "id": "climate_1",
+      "description": "Climate control #1",
+      "name": "Climate control #1",
+      "abbrev": "CC1",
+      "type": "INTEGER"
+    },
+    {
+      "id": "climate_2",
+      "description": "Climate control #2",
+      "name": "Climate control #2",
+      "abbrev": "CC2",
+      "type": "INTEGER"
+    },
+    {
+      "id": "climate_3",
+      "description": "Climate control #3",
+      "name": "Climate control #3",
+      "abbrev": "CC3",
+      "type": "INTEGER"
+    },
+    {
+      "id": "climate_4",
+      "description": "Climate control #4",
+      "name": "Climate control #4",
+      "abbrev": "CC4",
+      "type": "INTEGER"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "climate_1",
+      "description": "Climate control output #1",
+      "name": "Climate control",
+      "abbrev": "CC1",
+      "type": "INTEGER"
+    },
+    {
+      "id": "climate_2",
+      "description": "Climate control output #2",
+      "name": "Climate control",
+      "abbrev": "CC2",
+      "type": "INTEGER"
+    },
+    {
+      "id": "climate_3",
+      "description": "Climate control output #3",
+      "name": "Climate control",
+      "abbrev": "CC3",
+      "type": "INTEGER"
+    },
+    {
+      "id": "climate_4",
+      "description": "Climate control output #4",
+      "name": "Climate control",
+      "abbrev": "CC4",
+      "type": "INTEGER"
+    }
+  ],
+  "config": [
+  ],
+  "state": [
+  ]
+}

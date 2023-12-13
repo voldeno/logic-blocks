@@ -1,0 +1,41 @@
+{
+  "name": "Climate valve actuator",
+  "group": "output",
+  "description": "Climate valve actuator",
+  "registerFilters": [
+    {
+      "moduleId": 2,
+      "registerIds": [
+        31,
+        32,
+        33,
+        34
+      ]
+    },
+    {
+      "moduleId": 3,
+      "registerIds": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "state",
+      "description": "",
+      "name": "State",
+      "abbrev": "S",
+      "type": "BOOLEAN"
+    }
+  ],
+  "config": [
+  ],
+  "state": []
+}

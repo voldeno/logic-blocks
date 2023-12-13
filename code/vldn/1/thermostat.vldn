@@ -1,0 +1,31 @@
+function main(data) {
+    air_temp = get_input("air_temp");
+    floor_temp = get_input("floor_temp");
+    door_window_contact = get_input("door_window_contact");
+
+    comfort_temp = get_config("comfort_temp");
+    eco_temp = get_config("eco_temp");
+    temp_hysteresis = get_config("temp_hysteresis");
+    max_floor_temp = get_config("max_floor_temp");
+
+    // TODO: floor_temp might be missing - handle optional input
+    floor_overheated = (floor_temp + temp_hysteresis) >= max_floor_temp;
+    heating_required = air_temp < (comfort_temp - temp_hysteresis);
+
+    climate_control = 0;
+    if (floor_overheated) {
+        // overheated
+        climate_control = 0;
+    } else if (air_temp < (comfort_temp - temp_hysteresis)) {
+        // temp. too low
+        climate_control = 10;
+    } else if (air_temp > (comfort_temp - temp_hysteresis) && air_temp < (comfort_temp + temp_hysteresis)) {
+        // temp. in hysteresis
+        climate_control = 5;
+    } else if (air_temp > (comfort_temp + temp_hysteresis)) {
+        // temp. too high
+        climate_control = 0;
+    }
+
+    set_output("climate_control", climate_control);
+}
