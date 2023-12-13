@@ -1,0 +1,76 @@
+{
+  "name": "Thermostat",
+  "group": "process",
+  "description": "Thermostat",
+  "inputs": [
+    {
+      "id": "air_temp",
+      "description": "Air temperature",
+      "name": "Air temperature",
+      "abbrev": "AT",
+      "type": "FLOAT"
+    },
+    {
+      "id": "floor_temp",
+      "description": "Floor temperature",
+      "name": "Floor temperature",
+      "abbrev": "FT",
+      "type": "FLOAT"
+    },
+    {
+      "id": "door_window_contact",
+      "description": "Input for open door/windows contacts",
+      "name": "Door / Window contact",
+      "abbrev": "DWC",
+      "type": "BOOLEAN"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "climate_control",
+      "description": "Output expressing the required climate control in range of -10 to 10",
+      "name": "Climate control",
+      "abbrev": "CC",
+      "type": "INTEGER"
+    }
+  ],
+  "config": [
+    {
+      "id": "comfort_temp",
+      "description": "Comfort temperature",
+      "name": "Comfort temperature",
+      "type": "FLOAT",
+      "default": "21"
+    },
+    {
+      "id": "eco_temp",
+      "description": "Eco temperature diff. below the comfort temp.",
+      "name": "Eco temperature diff",
+      "type": "FLOAT",
+      "default": "2"
+    },
+    {
+      "id": "max_floor_temp",
+      "description": "Floor temperature limit used as a protection mechanism to prevent floor overheating",
+      "name": "Maximum floor temperature",
+      "type": "FLOAT",
+      "default": "28"
+    },
+    {
+      "id": "temp_hysteresis",
+      "description": "Temperature hysteresis",
+      "name": "Temperature hysteresis",
+      "type": "FLOAT",
+      "default": "1.0"
+    }
+  ],
+  "state": [
+    {
+      "id": "climate_control",
+      "description": "Last climate control output value",
+      "name": "Last climate control output value",
+      "type": "INTEGER",
+      "default": "0"
+    }
+  ]
+}

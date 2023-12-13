@@ -1,0 +1,34 @@
+{
+  "name": "Climate control gate",
+  "group": "process",
+  "description": "Climate control gate",
+  "inputs": [
+    {
+      "id": "climate_control",
+      "description": "Climate control",
+      "name": "Climate control",
+      "abbrev": "CC",
+      "type": "INTEGER"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "heating",
+      "description": "Heating output",
+      "name": "Heating",
+      "abbrev": "H",
+      "type": "BOOLEAN"
+    },
+    {
+      "id": "cooling",
+      "description": "Cooling output",
+      "name": "Cooling",
+      "abbrev": "C",
+      "type": "BOOLEAN"
+    }
+  ],
+  "config": [
+  ],
+  "state": [
+  ]
+}
