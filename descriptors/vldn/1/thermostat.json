@@ -68,7 +68,7 @@
     {
       "id": "climate_control",
       "description": "Last climate control output value",
-      "name": "Last climate control output value",
+      "name": "Last climate control output",
       "type": "NUMBER",
       "default": "0"
     }
