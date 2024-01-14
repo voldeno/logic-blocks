@@ -8,14 +8,14 @@
       "description": "Air temperature",
       "name": "Air temperature",
       "abbrev": "AT",
-      "type": "FLOAT"
+      "type": "NUMBER"
     },
     {
       "id": "floor_temp",
       "description": "Floor temperature",
       "name": "Floor temperature",
       "abbrev": "FT",
-      "type": "FLOAT"
+      "type": "NUMBER"
     },
     {
       "id": "door_window_contact",
@@ -31,7 +31,7 @@
       "description": "Output expressing the required climate control in range of -10 to 10",
       "name": "Climate control",
       "abbrev": "CC",
-      "type": "INTEGER"
+      "type": "NUMBER"
     }
   ],
   "config": [
@@ -39,28 +39,28 @@
       "id": "comfort_temp",
       "description": "Comfort temperature",
       "name": "Comfort temperature",
-      "type": "FLOAT",
+      "type": "NUMBER",
       "default": "21"
     },
     {
       "id": "eco_temp",
       "description": "Eco temperature diff. below the comfort temp.",
       "name": "Eco temperature diff",
-      "type": "FLOAT",
+      "type": "NUMBER",
       "default": "2"
     },
     {
       "id": "max_floor_temp",
       "description": "Floor temperature limit used as a protection mechanism to prevent floor overheating",
       "name": "Maximum floor temperature",
-      "type": "FLOAT",
+      "type": "NUMBER",
       "default": "28"
     },
     {
       "id": "temp_hysteresis",
       "description": "Temperature hysteresis",
       "name": "Temperature hysteresis",
-      "type": "FLOAT",
+      "type": "NUMBER",
       "default": "1.0"
     }
   ],
@@ -69,7 +69,7 @@
       "id": "climate_control",
       "description": "Last climate control output value",
       "name": "Last climate control output value",
-      "type": "INTEGER",
+      "type": "NUMBER",
       "default": "0"
     }
   ]
