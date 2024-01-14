@@ -1,14 +1,12 @@
-function main(data) {
-    climate_control = get_input("climate_control");
+    climate_control = get_input("climate_control")
 
     if (climate_control > 0) {
-        set_output("heating", true);
-        set_output("cooling", false);
+        set_output("heating", true)
+        set_output("cooling", false)
     } else if (climate_control < 0) {
-        set_output("heating", false);
-        set_output("cooling", true);
+        set_output("heating", false)
+        set_output("cooling", true)
     } else {
-        set_output("heating", false);
-        set_output("cooling", false);
+        set_output("heating", false)
+        set_output("cooling", false)
     }
-}
