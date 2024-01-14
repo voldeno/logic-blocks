@@ -90,7 +90,7 @@
     {
       "id": "irrigation",
       "name": "irrigationTimeMs",
-      "type": "INTEGER",
+      "type": "NUMBER",
       "unit": "ms",
       "description": "Total irrigation time in seconds",
       "default": "0"
