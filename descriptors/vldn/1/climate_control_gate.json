@@ -8,7 +8,7 @@
       "description": "Climate control",
       "name": "Climate control",
       "abbrev": "CC",
-      "type": "INTEGER"
+      "type": "NUMBER"
     }
   ],
   "outputs": [
