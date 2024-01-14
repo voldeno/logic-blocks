@@ -65,7 +65,7 @@
     {
       "id": "cliclDuration",
       "name": "clickDurationMs",
-      "type": "INTEGER",
+      "type": "NUMBER",
       "description": "Duration of a click in ms",
       "unit": "ms",
       "default": "0"
@@ -73,7 +73,7 @@
     {
       "id": "shortPressDuration",
       "name": "shortPressDurationMs",
-      "type": "INTEGER",
+      "type": "NUMBER",
       "description": "Duration of a short press in ms",
       "unit": "ms",
       "default": "0"
@@ -81,7 +81,7 @@
     {
       "id": "longPressDuration",
       "name": "longPressDurationMs",
-      "type": "INTEGER",
+      "type": "NUMBER",
       "description": "Duration of a long press in ms",
       "unit": "ms",
       "default": "0"
@@ -91,7 +91,7 @@
     {
       "id": "longChangeTime",
       "name": "lastChangeTimeMs",
-      "type": "INTEGER",
+      "type": "NUMBER",
       "unit": "ms",
       "description": "some description",
       "default": "0"

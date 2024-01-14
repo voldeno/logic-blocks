@@ -22,7 +22,7 @@
       "id": "read",
       "name": "read",
       "abbrev": "R",
-      "type": "FLOAT",
+      "type": "NUMBER",
       "description": "some description"
     }
   ],
@@ -30,21 +30,21 @@
     {
       "id": "scale",
       "name": "scale",
-      "type": "FLOAT",
+      "type": "NUMBER",
       "description": "Scale",
       "default": "0"
     },
     {
       "id": "offset",
       "name": "offset",
-      "type": "FLOAT",
+      "type": "NUMBER",
       "description": "Offset",
       "default": "0"
     },
     {
       "id": "hysteresis",
       "name": "hysteresis",
-      "type": "FLOAT",
+      "type": "NUMBER",
       "description": "Sensor hysteresis",
       "default": "0"
     }
@@ -53,7 +53,7 @@
     {
       "id": "lastPublishedValue",
       "name": "lastPublishedValue",
-      "type": "INTEGER",
+      "type": "NUMBER",
       "default": "0",
       "description": "some description"
     }

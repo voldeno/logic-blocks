@@ -61,7 +61,7 @@
       "id": "moe",
       "name": "moe",
       "description": "Manual operation extend time",
-      "type": "INTEGER",
+      "type": "NUMBER",
       "default": "0"
     }
   ],

@@ -1,9 +1,7 @@
-function main(data) {
-    state = get_input("state");
+    state = get_input("state")
 
     if (state) {
-        set_register(1);
+        set_register(1)
     } else {
-        set_register(0);
+        set_register(0)
     }
-}

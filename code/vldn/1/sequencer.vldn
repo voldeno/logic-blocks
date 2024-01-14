@@ -1,9 +1,8 @@
-function main(data) {
-    print();
-    set_output("1+", data.value);
-    set_output("3-", 456);
-    s = get_state("sequenceIndex");
-    print(s);
-    set_state("sequenceIndex", s + 2);
-    print(data.channel);
-}
+    value = get_current_value()
+    set_output("1+", value)
+    set_output("3-", 456)
+    s = get_state("sequenceIndex")
+    print(s)
+    set_state("sequenceIndex", s + 2)
+    channel = get_current_channel()
+    print(channel)

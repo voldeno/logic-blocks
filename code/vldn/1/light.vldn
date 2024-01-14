@@ -1,5 +1,3 @@
-function main(data) {
-    print(11);
-    set_register(20);
-    print(get_config("moe"));
-}
+    print(11)
+    set_register(20)
+    print(get_config("moe"))
