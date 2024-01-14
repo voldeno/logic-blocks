@@ -14,4 +14,4 @@ jobs:
         wget -qc https://voldeno.com/bin/blocks_validator && chmod +x ./blocks_validator
         wget -qc https://voldeno.com/bin/functions.txt
     - name: Check
-      run: ./blocks_validator .
+      run: ./blocks_validator --resources .
