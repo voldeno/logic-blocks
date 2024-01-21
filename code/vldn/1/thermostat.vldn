@@ -19,7 +19,7 @@
     } else if (air_temp < (comfort_temp - temp_hysteresis)) {
         // temp. too low
         climate_control = 10
-    } else if (air_temp > (comfort_temp - temp_hysteresis) and air_temp < (comfort_temp + temp_hysteresis)) {
+    } else if ((air_temp > (comfort_temp - temp_hysteresis)) and (air_temp < (comfort_temp + temp_hysteresis))) {
         // temp. in hysteresis
         // no change in value
     } else if (air_temp > (comfort_temp + temp_hysteresis)) {
