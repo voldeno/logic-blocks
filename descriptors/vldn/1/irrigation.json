@@ -2,7 +2,7 @@
   "name": "Irrigation",
   "group": "process",
   "description": "Irrigation system",
-  "registerFilters": [
+  "ioRegisterFilters": [
     {
       "moduleId": 1,
       "registerIds": [

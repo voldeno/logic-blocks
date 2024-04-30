@@ -2,7 +2,8 @@
   "name": "Switch",
   "group": "input",
   "description": "Logic block representing a wall switch",
-  "registerFilters": [
+  "ioType": "register",
+  "ioRegisterFilters": [
     {
       "moduleId": 3,
       "registerIds": [
@@ -85,14 +86,6 @@
       "description": "Duration of a long press in ms",
       "unit": "ms",
       "default": "0"
-    },
-    {
-      "id": "test",
-      "name": "test",
-      "type": "STRING",
-      "description": "Duration of a long press in ms",
-      "unit": "ms",
-      "default": "abc"
     }
   ],
   "state": [

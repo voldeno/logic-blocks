@@ -2,7 +2,8 @@
   "name": "Climate valve actuator",
   "group": "output",
   "description": "Climate valve actuator",
-  "registerFilters": [
+  "ioType": "register",
+  "ioRegisterFilters": [
     {
       "moduleId": 2,
       "registerIds": [

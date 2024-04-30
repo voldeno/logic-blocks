@@ -2,7 +2,8 @@
   "name": "Thermometer",
   "group": "input",
   "description": "Logic block representing a thermometer",
-  "registerFilters": [
+  "ioType": "register",
+  "ioRegisterFilters": [
     {
       "moduleId": 4,
       "registerIds": [

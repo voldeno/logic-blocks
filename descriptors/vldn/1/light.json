@@ -2,7 +2,8 @@
   "name": "Light",
   "group": "output",
   "description": "Logic block representing a light output",
-  "registerFilters": [
+  "ioType": "register",
+  "ioRegisterFilters": [
     {
       "moduleId": 2,
       "registerIds": [

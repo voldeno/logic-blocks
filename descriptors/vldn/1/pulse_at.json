@@ -1,7 +1,8 @@
 {
   "name": "PulseAt",
-  "group": "scheduled",
+  "group": "input",
   "description": "Sends a pulse at specified time",
+  "ioType": "scheduler",
   "outputs": [
     {
       "id": "pulse",      
