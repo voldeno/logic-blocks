@@ -13,4 +13,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Check
-      run: blocks_validator --funcs functions.txt --resources .
+      run: ls -al && blocks_validator --funcs functions.txt --resources .
