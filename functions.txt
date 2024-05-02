@@ -7,3 +7,5 @@ set_state, 2
 set_output, 2
 set_register, 1
 print, 1
+uptime, 0
+now, 0
