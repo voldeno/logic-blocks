@@ -8,6 +8,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/voldeno/blocks_check:latest
     steps:
     - uses: actions/checkout@v3
     - name: Download the validator
