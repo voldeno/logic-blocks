@@ -7,9 +7,6 @@ if (channel == "calculate_activation_ts") {
 }
 
 if (channel == "activate") {
-    last_output = get_state("last_output")
-    new_output = !last_output
-    set_state("last_output", new_output)
-    set_output("pulse", new_output)
+    set_output("pulse", !get_output("pulse"))
     return
 }

@@ -1,6 +1,7 @@
 get_config, 1
 get_input, 1
 get_state, 1
+get_output, 1
 get_current_value, 0
 get_current_channel, 0
 set_state, 2

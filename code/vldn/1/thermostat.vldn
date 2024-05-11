@@ -7,7 +7,7 @@ eco_temp = get_config("eco_temp")
 temp_hysteresis = get_config("temp_hysteresis")
 max_floor_temp = get_config("max_floor_temp")
 
-climate_control = get_state("climate_control")
+climate_control = get_output("climate_control")
 
 // TODO: floor_temp might be missing - handle optional input
 floor_overheated = (floor_temp + temp_hysteresis) >= max_floor_temp
@@ -31,6 +31,4 @@ if (floor_overheated) {
     }
 }
 
-// TODO: store output values as state?
-set_state("climate_control", climate_control)
 set_output("climate_control", climate_control)

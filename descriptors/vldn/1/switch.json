@@ -96,14 +96,6 @@
       "unit": "ms",
       "description": "some description",
       "default": "0"
-    },
-    {
-      "id": "state",
-      "name": "state",
-      "type": "BOOLEAN",
-      "unit": "",
-      "description": "some description",
-      "default": "false"
     }
   ]
 }
