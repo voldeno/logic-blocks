@@ -20,7 +20,7 @@
   ],
   "outputs": [
     {
-      "id": "click",      
+      "id": "click",
       "description": "Active on a click",
       "name": "Click",
       "abbrev": "C",
@@ -38,6 +38,13 @@
       "description": "Active on a long press",
       "name": "Long press",
       "abbrev": "LP",
+      "type": "BOOLEAN"
+    },
+    {
+      "id": "hold",
+      "description": "Active on a hold",
+      "name": "Hold",
+      "abbrev": "H",
       "type": "BOOLEAN"
     },
     {
@@ -69,7 +76,7 @@
       "type": "NUMBER",
       "description": "Duration of a click in ms",
       "unit": "ms",
-      "default": "0"
+      "default": "200"
     },
     {
       "id": "short_press_duration_ms",
@@ -77,7 +84,7 @@
       "type": "NUMBER",
       "description": "Duration of a short press in ms",
       "unit": "ms",
-      "default": "0"
+      "default": "500"
     },
     {
       "id": "long_press_duration_ms",
@@ -85,7 +92,15 @@
       "type": "NUMBER",
       "description": "Duration of a long press in ms",
       "unit": "ms",
-      "default": "0"
+      "default": "1000"
+    },
+    {
+      "id": "hold_duration_ms",
+      "name": "holdDuration",
+      "type": "NUMBER",
+      "description": "Duration of a hold in ms",
+      "unit": "ms",
+      "default": "500"
     }
   ],
   "state": [
