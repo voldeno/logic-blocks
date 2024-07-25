@@ -25,21 +25,24 @@
       "name": "Trigger",
       "abbrev": "T",
       "type": "BOOLEAN",
-      "description": ""
+      "description": "",
+      "default": "false"
     },
     {
       "id": "disable",
       "description": "",
       "name": "Disable",
       "abbrev": "D",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "reset",
       "description": "",
       "name": "Reset",
       "abbrev": "Rst",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "outputs": [
@@ -48,42 +51,48 @@
       "description": "",
       "name": "Section #1",
       "abbrev": "S1",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "section_2",
       "description": "",
       "name": "Section #2",
       "abbrev": "S2",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "section_3",
       "description": "",
       "name": "Section #3",
       "abbrev": "S3",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "section_4",
       "description": "",
       "name": "Section #4",
       "abbrev": "S4",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "section_5",
       "description": "",
       "name": "Section #5",
       "abbrev": "S5",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "section_6",
       "description": "",
       "name": "Section #6",
       "abbrev": "S6",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "config": [

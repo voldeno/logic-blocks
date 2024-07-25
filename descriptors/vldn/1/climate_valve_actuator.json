@@ -33,7 +33,8 @@
       "description": "",
       "name": "State",
       "abbrev": "S",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "config": [

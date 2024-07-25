@@ -9,7 +9,8 @@
       "description": "Pulse output",
       "name": "Pulse",
       "abbrev": "O",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "config": [

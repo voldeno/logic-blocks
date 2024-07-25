@@ -24,49 +24,56 @@
       "description": "Active on a click",
       "name": "Click",
       "abbrev": "C",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "short_press",
       "description": "Active on a short press",
       "name": "Short press",
       "abbrev": "SP",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "long_press",
       "description": "Active on a long press",
       "name": "Long press",
       "abbrev": "LP",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "hold",
       "description": "Active on a hold",
       "name": "Hold",
       "abbrev": "H",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "toggle",
       "description": "Toggle output, active after a click",
       "name": "Toggle",
       "abbrev": "TG",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "on",
       "description": "Active when switch is on",
       "name": "ON",
       "abbrev": "ON",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "off",
       "description": "Active when switch is off",
       "name": "OFF",
       "abbrev": "OFF",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "true"
     }
   ],
   "config": [

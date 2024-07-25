@@ -8,28 +8,32 @@
       "description": "Input #1",
       "name": "Input #1",
       "abbrev": "I1",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "input_2",
       "description": "Input #2",
       "name": "Input #2",
       "abbrev": "I2",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "input_3",
       "description": "Input #3",
       "name": "Input #3",
       "abbrev": "I3",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "input_4",
       "description": "Input #4",
       "name": "Input #4",
       "abbrev": "I4",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "outputs": [
@@ -38,7 +42,8 @@
       "description": "Output",
       "name": "Output",
       "abbrev": "O",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "config": [

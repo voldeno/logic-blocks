@@ -8,14 +8,16 @@
       "description": "Air temperature",
       "name": "Air temperature",
       "abbrev": "AT",
-      "type": "NUMBER"
+      "type": "NUMBER",
+      "default": "0"
     },
     {
       "id": "floor_temp",
       "description": "Floor temperature",
       "name": "Floor temperature",
       "abbrev": "FT",
-      "type": "NUMBER"
+      "type": "NUMBER",
+      "default": "0"
     }
   ],
   "outputs": [
@@ -24,7 +26,8 @@
       "description": "Output expressing the required climate control in range of -10 to 10",
       "name": "Climate control",
       "abbrev": "CC",
-      "type": "NUMBER"
+      "type": "NUMBER",
+      "default": "0"
     }
   ],
   "config": [

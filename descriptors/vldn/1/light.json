@@ -33,28 +33,32 @@
       "description": "",
       "name": "switchOn",
       "abbrev": "+",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "switchOff",
       "description": "",
       "name": "switchOff",
       "abbrev": "-",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "toggle",
       "description": "",
       "name": "toggle",
       "abbrev": "~",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "presence",
       "description": "",
       "name": "presence",
       "abbrev": "P",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "config": [

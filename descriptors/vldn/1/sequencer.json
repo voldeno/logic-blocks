@@ -8,21 +8,24 @@
       "description": "",
       "name": "Forward",
       "abbrev": "Fwd",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "backward",
       "description": "",
       "name": "backward",
       "abbrev": "Bwd",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "reset",
       "description": "",
       "name": "reset",
       "abbrev": "Rst",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "outputs": [
@@ -31,35 +34,40 @@
       "description": "",
       "name": "Off",
       "abbrev": "Off",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "true"
     },
     {
       "id": "o1",
       "description": "",
       "name": "Output #1",
       "abbrev": "O1",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "o2",
       "description": "",
       "name": "Output #2",
       "abbrev": "O2",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "o3",
       "description": "",
       "name": "Output #3",
       "abbrev": "O3",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "o4",
       "description": "",
       "name": "Output #4",
       "abbrev": "O4",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "config": [

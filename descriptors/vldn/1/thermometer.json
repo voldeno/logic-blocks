@@ -25,7 +25,8 @@
       "name": "read",
       "abbrev": "R",
       "type": "NUMBER",
-      "description": "Temperature sensor read"
+      "description": "Temperature sensor read",
+      "default": "0"
     }
   ],
   "config": [
