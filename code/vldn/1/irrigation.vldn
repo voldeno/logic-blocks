@@ -73,12 +73,21 @@ if (channel == "callback") {
     return
 }
 
-trigger = get_current_value()
-if (trigger) {
+input_value = get_current_value()
+
+if (channel == "trigger" and input_value) {
     if (get_state("active")) {
         return
     }
 
     set_state("active", true)
     callback(0, 0)
+    return
 }
+
+if (channel == "reset") {
+    clear_callback()
+    callback(0, 9)
+    return
+}
+

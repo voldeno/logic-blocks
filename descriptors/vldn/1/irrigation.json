@@ -27,6 +27,14 @@
       "type": "BOOLEAN",
       "description": "",
       "default": "false"
+    },
+    {
+      "id": "reset",
+      "name": "Reset",
+      "abbrev": "R",
+      "type": "BOOLEAN",
+      "description": "",
+      "default": "false"
     }
   ],
   "outputs": [

@@ -83,7 +83,7 @@
       "type": "NUMBER",
       "description": "Duration of a click in ms",
       "unit": "ms",
-      "default": "200"
+      "default": "500"
     },
     {
       "id": "short_press_duration_ms",
@@ -91,7 +91,7 @@
       "type": "NUMBER",
       "description": "Duration of a short press in ms",
       "unit": "ms",
-      "default": "500"
+      "default": "1000"
     },
     {
       "id": "long_press_duration_ms",
@@ -99,7 +99,7 @@
       "type": "NUMBER",
       "description": "Duration of a long press in ms",
       "unit": "ms",
-      "default": "1000"
+      "default": "5000"
     },
     {
       "id": "hold_duration_ms",
@@ -107,7 +107,7 @@
       "type": "NUMBER",
       "description": "Duration of a hold in ms",
       "unit": "ms",
-      "default": "500"
+      "default": "1000"
     }
   ],
   "state": [

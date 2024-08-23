@@ -11,11 +11,10 @@ if (channel == "callback") {
         set_output("long_press", false)
     } else if (callback_id == 10) { // hold check
         if (get_output("on") == true) {
-            diff_ms = uptime() - get_state("last_change_time_ms")
-            if (get_output("hold") and diff_ms >= callback_ms) {
+            if (get_output("hold")) {
                 set_output("hold", false)
                 callback(get_config("hold_duration_ms"), 10)
-            } else if (!get_output("hold") and diff_ms >= get_config("hold_duration_ms")) {
+            } else if (!get_output("hold")) {
                 set_output("hold", true)
                 callback(callback_ms, 10) // schedule callback to switch off the hold pulse
             }
@@ -34,6 +33,8 @@ if (pressed == 1) {
 
     callback(get_config("hold_duration_ms"), 10)
 } else {
+    clear_callback()
+
     diff_ms = uptime() - get_state("last_change_time_ms")
 
     set_output("toggle", !get_output("toggle"))
