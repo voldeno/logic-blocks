@@ -235,12 +235,12 @@
   ],
   "state": [
     {
-      "id": "current_section",
-      "name": "Current section",
-      "type": "NUMBER",
+      "id": "active",
+      "name": "active",
+      "type": "BOOLEAN",
       "unit": "",
-      "description": "Currently active irrigation section",
-      "default": "0"
+      "description": "Is irrigation currently active",
+      "default": "false"
     }
   ]
 }

@@ -21,6 +21,7 @@ if (channel == "callback") {
         current_section = callback_id
     } else if (callback_id == 9) {
         set_output("pump", false)
+        set_state("active", false)
         return
     }
 
@@ -74,5 +75,10 @@ if (channel == "callback") {
 
 trigger = get_current_value()
 if (trigger) {
+    if (get_state("active")) {
+        return
+    }
+
+    set_state("active", true)
     callback(0, 0)
 }
