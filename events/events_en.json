@@ -1,0 +1,23 @@
+{
+  "lang": "en",
+  "groups" : [
+    {
+      "group": 1,
+      "events" : [
+        {
+          "code" : 0,
+          "desc" : "low voltage"
+        }
+      ]
+    },
+    {
+      "group": 3,
+      "events" : [
+        {
+          "code" : 0,
+          "desc" : "module firmware upgrade failure"
+        }
+      ]
+    }
+  ]
+}

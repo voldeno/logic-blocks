@@ -1,0 +1,23 @@
+{
+  "lang": "pl",
+  "groups" : [
+    {
+      "group": 1,
+      "events" : [
+        {
+          "code" : 0,
+          "desc" : "zbyt niskie napięcie"
+        }
+      ]
+    },
+    {
+      "group": 3,
+      "events" : [
+        {
+          "code" : 0,
+          "desc" : "aktualizacja firmware zakończyła się błędem"
+        }
+      ]
+    }
+  ]
+}
