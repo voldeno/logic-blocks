@@ -15,7 +15,19 @@
       "events" : [
         {
           "code" : 0,
-          "desc" : "awaryjne wyłączenie"
+          "desc" : "awaryjne wyłączenie",
+           "data" : [
+                {
+                  "id" : 1,
+                  "title" : "PC",
+                  "desc": "Adres instrukcji"
+                },
+                {
+                  "id" : 2,
+                  "title" : "SP",
+                  "desc": "Adres na stosie"
+                }
+          ]
         },
         {
           "code" : 1,
