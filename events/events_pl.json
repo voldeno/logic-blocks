@@ -11,6 +11,27 @@
       ]
     },
     {
+      "group": 2,
+      "events" : [
+        {
+          "code" : 0,
+          "desc" : "awaryjne wyłączenie"
+        },
+        {
+          "code" : 1,
+          "desc" : "start systemu"
+        },
+        {
+          "code" : 2,
+          "desc" : "manualny restart"
+        },        
+        {
+          "code" : 3,
+          "desc" : "automatyczny restart z powodu braku odpowiedzi systemu"
+        }
+      ]
+    },
+    {
       "group": 3,
       "events" : [
         {

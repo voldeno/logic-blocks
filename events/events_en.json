@@ -10,6 +10,27 @@
         }
       ]
     },
+     {
+      "group": 2,
+      "events" : [
+        {
+          "code" : 0,
+          "desc" : "abnormal shutdown"
+        },
+        {
+          "code" : 1,
+          "desc" : "system startup"
+        },
+        {
+          "code" : 2,
+          "desc" : "manual restart"
+        },        
+        {
+          "code" : 3,
+          "desc" : "automatic reset due to unresponsiveness"
+        }
+      ]
+    },
     {
       "group": 3,
       "events" : [
