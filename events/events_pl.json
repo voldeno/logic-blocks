@@ -15,6 +15,22 @@
       "events" : [
         {
           "code" : 0,
+          "desc" : "start systemu"
+        },
+        {
+          "code" : 1,
+          "desc" : "restart fizyczny"
+        },
+        {
+          "code" : 2,
+          "desc" : "restart z programu"
+        },
+        {
+          "code" : 3,
+          "desc" : "automatyczny restart z powodu braku odpowiedzi systemu"
+        },
+        {
+          "code" : 4,
           "desc" : "awaryjne wyłączenie",
            "data" : [
                 {
@@ -24,22 +40,15 @@
                 },
                 {
                   "id" : 2,
+                  "title" : "LR",
+                  "desc": "Adres powrotu"
+                },
+                {
+                  "id" : 3,
                   "title" : "SP",
                   "desc": "Adres na stosie"
                 }
           ]
-        },
-        {
-          "code" : 1,
-          "desc" : "start systemu"
-        },
-        {
-          "code" : 2,
-          "desc" : "manualny restart"
-        },        
-        {
-          "code" : 3,
-          "desc" : "automatyczny restart z powodu braku odpowiedzi systemu"
         }
       ]
     },

@@ -15,6 +15,22 @@
       "events" : [
         {
           "code" : 0,
+          "desc" : "system startup"
+        },
+        {
+          "code" : 1,
+          "desc" : "hardware restart"
+        },
+        {
+          "code" : 2,
+          "desc" : "software restart"
+        },
+        {
+          "code" : 3,
+          "desc" : "automatic reset due to unresponsiveness"
+        },
+        {
+          "code" : 4,
           "desc" : "abnormal shutdown",
            "data" : [
                 {
@@ -24,22 +40,15 @@
                 },
                 {
                   "id" : 2,
+                  "title" : "LR",
+                  "desc": "Link Register"
+                },
+                {
+                  "id" : 3,
                   "title" : "SP",
                   "desc": "Stack pointer"
                 }
           ]
-        },
-        {
-          "code" : 1,
-          "desc" : "system startup"
-        },
-        {
-          "code" : 2,
-          "desc" : "manual restart"
-        },        
-        {
-          "code" : 3,
-          "desc" : "automatic reset due to unresponsiveness"
         }
       ]
     },
