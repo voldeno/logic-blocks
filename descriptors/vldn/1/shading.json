@@ -1,0 +1,183 @@
+{
+  "name": "Shading",
+  "group": "process",
+  "description": "Shading",
+  "inputs": [
+    {
+      "id": "toggle",
+      "name": "Toggle",
+      "description": "Toggles between open, stop, close. For single button control.",
+      "abbrev": "T",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "part_open",
+      "name": "Partial open",
+      "description": "Partial open with push & hold",
+      "abbrev": "PO",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "part_close",
+      "name": "Partial close",
+      "description": "Partial close with push & hold",
+      "abbrev": "PC",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "full_open",
+      "name": "Full open",
+      "description": "If in motion, stops.",
+      "abbrev": "FO",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "full_close",
+      "name": "Full close",
+      "description": "If in motion, stops.",
+      "abbrev": "FC",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "slightly_open",
+      "name": "Slightly open",
+      "description": "Venetian blinds close completely and move slats in horizontal position according to parameter (Return duration). Roller blinds, curtains and awnings move into position according to parameter (Return duration).",
+      "abbrev": "SO",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "wa",
+      "name": "Wind alarm",
+      "description": "Moves shading to the wind alarm position and locks the block.",
+      "abbrev": "WA",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "dwc",
+      "name": "Door window contact",
+      "description": "Door windows contact - open fully and lock controls",
+      "abbrev": "DWC",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "off",
+      "name": "Off",
+      "description": "Off - pulse stops movement, hold locks the block",
+      "abbrev": "OFF",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "pos",
+      "name": "Position",
+      "description": "Move the shading to the specified position",
+      "abbrev": "POS",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "slats",
+      "name": "Slats",
+      "description": "Move the slats to the specified position",
+      "abbrev": "SLT",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "open",
+      "name": "Open",
+      "description": "Open",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "close",
+      "name": "Close",
+      "description": "Close",
+      "abbrev": "C",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "position",
+      "name": "Position",
+      "description": "Percentage of fully open position - 0-100 range, 0=fully closed, 100=fully open",
+      "abbrev": "P",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "shading_type",
+      "name": "Shading type",
+      "description": "Shading type: 0=Venetian blinds, 1=Roller blinds, 2=Curtains (both sides), 3=Curtails (left), 4=Curtains (right), 5=Awning",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "opening_duration",
+      "name": "Opening duration",
+      "description": "Opening duration",
+      "type": "NUMBER",
+      "default": "75"
+    },
+    {
+      "id": "closing_duration",
+      "name": "Closing duration",
+      "description": "Closing duration",
+      "type": "NUMBER",
+      "default": "70"
+    },
+    {
+      "id": "motor_lock_duration",
+      "name": "Motor lock duration",
+      "description": "Duration of motor lock between direction changes",
+      "type": "NUMBER",
+      "default": "0.5"
+    },
+    {
+      "id": "return_duration",
+      "name": "Return duration",
+      "description": "Return duration for horizontal alignment of slats. Slightly open position for roller blinds, curtains and awnings",
+      "type": "NUMBER",
+      "default": "0.8"
+    },
+    {
+      "id": "wind_alarm_position",
+      "name": "Wind alarm position",
+      "description": "Wind alarm position",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "state": [
+    {
+      "id": "steps_left",
+      "name": "Steps left",
+      "description": "Internal variable for controlling movement time",
+      "type": "NUMBER",
+      "unit": "steps",
+      "default": "0"
+    },
+    {
+      "id": "was_opening",
+      "name": "Was opening",
+      "description": "Was previous movement in opening direction",
+      "type": "BOOLEAN",
+      "unit": "",
+      "default": "false"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+name: "all true"
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      input_1: true
+      input_2: true
+      input_3: true
+      input_4: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true

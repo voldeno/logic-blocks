@@ -1,0 +1,65 @@
+name: "long press"
+
+config:
+  click_duration_ms: 100
+  short_press_duration_ms: 300
+  long_press_duration_ms: 500
+  hold_duration_ms: 1000
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      register: 1
+
+  - action: "assert_outputs"
+    expected_outputs:
+      on: true
+      off: false
+      click: false
+      short_press: false
+      long_press: false
+      hold: false
+      toggle: false
+
+  - action: "wait"
+    duration_ms: 350
+
+  - action: "set_inputs"
+    inputs:
+      register: 0
+
+  - action: "assert_outputs"
+    expected_outputs:
+      on: false
+      off: true
+      click: false
+      short_press: false
+      long_press: true
+      hold: false
+      toggle: true
+
+  - action: "wait"
+    duration_ms: 10
+
+  - action: "assert_outputs"
+    expected_outputs:
+      on: false
+      off: true
+      click: false
+      short_press: false
+      long_press: true
+      hold: false
+      toggle: true
+
+  - action: "wait"
+    duration_ms: 100
+
+  - action: "assert_outputs"
+    expected_outputs:
+      on: false
+      off: true
+      click: false
+      short_press: false
+      long_press: false
+      hold: false
+      toggle: true
