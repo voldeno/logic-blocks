@@ -111,6 +111,7 @@ if (channel == "full_open") {
     set_output("open", true)
     set_output("close", false)
     set_output("position", get_output("position"))
+    set_state("was_opening", true)
     callback(callback_ms, 1)
     return
 }
@@ -132,6 +133,7 @@ if (channel == "full_close") {
     set_output("open", false)
     set_output("close", true)
     set_output("position", get_output("position"))
+    set_state("was_opening", false)
     callback(callback_ms, 2)
     return
 }
