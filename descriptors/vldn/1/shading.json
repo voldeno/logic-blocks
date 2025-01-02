@@ -46,7 +46,7 @@
     {
       "id": "slightly_open",
       "name": "Slightly open",
-      "description": "Venetian blinds close completely and move slats in horizontal position according to parameter (Return duration). Roller blinds, curtains and awnings move into position according to parameter (Return duration).",
+      "description": "Venetian blinds close completely and move slats in horizontal position according to parameter (Slightly open duration). Roller blinds, curtains and awnings move into position according to parameter (Slightly open duration).",
       "abbrev": "SO",
       "type": "BOOLEAN",
       "default": "false"
@@ -116,6 +116,14 @@
       "abbrev": "P",
       "type": "NUMBER",
       "default": "0"
+    },
+    {
+      "id": "slats",
+      "name": "Slats position",
+      "description": "Percentage of full slats rotation - 0-100 range, 0=vertical opening, 50=horizontal, 100=vertical closing",
+      "abbrev": "S",
+      "type": "NUMBER",
+      "default": "0"
     }
   ],
   "config": [
@@ -148,9 +156,9 @@
       "default": "0.5"
     },
     {
-      "id": "return_duration",
-      "name": "Return duration",
-      "description": "Return duration for horizontal alignment of slats. Slightly open position for roller blinds, curtains and awnings",
+      "id": "slightly_open_duration",
+      "name": "Slightly open duration",
+      "description": "Return duration for horizontal alignment of venetian blinds' slats. Slightly open movement duration from fully closed position for roller blinds, curtains and awnings",
       "type": "NUMBER",
       "default": "0.8"
     },
