@@ -48,7 +48,29 @@ steps:
       full_close: false
 
   - action: "assert_outputs"
-    comment: "Should not try closing on fully closed"
+    comment: "Should start closing"
+    expected_outputs:
+      open: false
+      close: true
+      position: 0
+
+  - action: "wait"
+    comment: "Wait for 10% move"
+    duration_ms: 120
+
+  - action: "assert_outputs"
+    comment: "Should keep close active for the full closing duration, even if position is already 0"
+    expected_outputs:
+      open: false
+      close: true
+      position: 0
+
+  - action: "wait"
+    comment: "Wait for the rest of the whole closing duration"
+    duration_ms: 1000
+
+  - action: "assert_outputs"
+    comment: "Should stop closing after the full closing duration passed"
     expected_outputs:
       open: false
       close: false

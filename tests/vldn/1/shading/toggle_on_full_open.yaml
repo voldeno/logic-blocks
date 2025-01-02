@@ -28,6 +28,7 @@ steps:
       open: true
       close: false
       position: 0
+      slats: 0
 
   - action: "wait"
     comment: "Wait 10% of opening time"

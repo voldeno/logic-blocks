@@ -159,12 +159,14 @@ if (channel == "full_open" or channel == "slightly_open") {
 
     // TODO: position should be taken into account during opening
     full_open_steps = (1000 * get_config("opening_duration")) / callback_ms
+    full_open_steps_left = full_open_steps * (100 - get_output("position")) / 100
     slightly_open_return_steps = (1000 * get_config("slightly_open_duration")) / callback_ms
+    slats_return_steps_to_opening = 2 * slightly_open_return_steps * get_output("slats") / 100
 
     if (channel == "full_open") {
-        set_state("steps_left", full_open_steps)
+        set_state("steps_left", full_open_steps_left + slats_return_steps_to_opening)
     } else if (channel == "slightly_open") {
-        set_state("steps_left", full_open_steps + slightly_open_return_steps)
+        set_state("steps_left", full_open_steps_left + slats_return_steps_to_opening + slightly_open_return_steps)
     }
     set_output("open", true)
     set_output("close", false)
@@ -191,7 +193,7 @@ if (channel == "full_close") {
     full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
     slats_full_rotation_steps = (1000 * 2 * get_config("slightly_open_duration")) / callback_ms
 
-    steps_left = full_closing_steps * get_output("position") / 100 + slats_full_rotation_steps * (100 - get_output("slats")) / 100
+    steps_left = full_closing_steps + slats_full_rotation_steps
     if (steps_left == 0) {
         return
     }

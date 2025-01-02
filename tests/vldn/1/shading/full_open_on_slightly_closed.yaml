@@ -109,9 +109,9 @@ steps:
     duration_ms: 120
 
   - action: "assert_outputs"
-    comment: "Should open the remaining part from current position, but should not stop when opening"
+    comment: "Should open the remaining part from current position and should stop when opening"
     expected_outputs:
-      open: true
+      open: false
       close: false
       position: 100
 
@@ -120,18 +120,7 @@ steps:
     duration_ms: 120
 
   - action: "assert_outputs"
-    comment: "Should keep open active for the full opening duration, even if position is 100"
-    expected_outputs:
-      open: true
-      close: false
-      position: 100
-
-  - action: "wait"
-    comment: "Wait for the rest of the whole opening duration"
-    duration_ms: 900
-
-  - action: "assert_outputs"
-    comment: "Should stop opening after the full opening duration passed"
+    comment: "Should stop opening after reaching end position in opening direction"
     expected_outputs:
       open: false
       close: false

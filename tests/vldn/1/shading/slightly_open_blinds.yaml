@@ -98,8 +98,12 @@ steps:
       slats: 100
 
   - action: "wait"
-    comment: "Wait till fully closed"
-    duration_ms: 300
+    comment: "Wait till fully closed - 10% left"
+    duration_ms: 200
+
+  - action: "wait"
+    comment: "Wait till fully closed - ensure slats can perform full rotation"
+    duration_ms: 1200
 
   - action: "assert_outputs"
     comment: "Should be closed"

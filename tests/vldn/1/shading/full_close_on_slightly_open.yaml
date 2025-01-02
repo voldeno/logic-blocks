@@ -109,7 +109,29 @@ steps:
     duration_ms: 120
 
   - action: "assert_outputs"
-    comment: "Should close the remaining part from current position only and stop"
+    comment: "Should close the remaining part from current position, but should not stop when closing"
+    expected_outputs:
+      open: false
+      close: true
+      position: 0
+
+  - action: "wait"
+    comment: "Wait for 10% move"
+    duration_ms: 120
+
+  - action: "assert_outputs"
+    comment: "Should keep close active for the full closing duration, even if position is already 0"
+    expected_outputs:
+      open: false
+      close: true
+      position: 0
+
+  - action: "wait"
+    comment: "Wait for the rest of the whole closing duration"
+    duration_ms: 900
+
+  - action: "assert_outputs"
+    comment: "Should stop closing after the full closing duration passed"
     expected_outputs:
       open: false
       close: false
