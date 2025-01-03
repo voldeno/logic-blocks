@@ -1,0 +1,123 @@
+name: "toggle on full close"
+
+config:
+  shading_type: 0 # venetian blinds
+  opening_duration: 1
+  closing_duration: 1
+  slightly_open_duration: 0
+  motor_lock_duration: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - high"
+    inputs:
+      full_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - low"
+    inputs:
+      full_open: false
+
+  - action: "wait"
+    comment: "Wait 100% of opening time to set init position for the test"
+    duration_ms: 1200
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - high"
+    inputs:
+      full_close: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_close input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - low"
+    inputs:
+      full_close: false
+
+  - action: "assert_outputs"
+    comment: "Should start closing"
+    expected_outputs:
+      open: false
+      close: true
+      position: 100
+
+  - action: "wait"
+    comment: "Wait 10% of closing time"
+    duration_ms: 120
+
+  - action: "assert_outputs"
+    comment: "Should be still closing - 10%"
+    expected_outputs:
+      open: false
+      close: true
+      position: 90
+
+  - action: "set_inputs"
+    comment: "Send a pulse to toggle input to stop movement - high"
+    inputs:
+      toggle: true
+
+  - action: "wait"
+    comment: "Send a pulse to toggle input to stop movement - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to toggle input to stop movement - low"
+    inputs:
+      toggle: false
+
+  - action: "assert_outputs"
+    comment: "Should stop moving"
+    expected_outputs:
+      open: false
+      close: false
+      position: 90
+
+  - action: "set_inputs"
+    comment: "Send a pulse to toggle input to start opening - high"
+    inputs:
+      toggle: true
+
+  - action: "wait"
+    comment: "Send a pulse to toggle input to start opening - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to toggle input to start opening - low"
+    inputs:
+      toggle: false
+
+  - action: "assert_outputs"
+    comment: "Should start opening"
+    expected_outputs:
+      open: true
+      close: false
+      position: 90
+
+  - action: "wait"
+    comment: "Wait 10% of opening time"
+    duration_ms: 200
+
+  - action: "assert_outputs"
+    comment: "Should not stop opening after reaching fully open position"
+    expected_outputs:
+      open: true
+      close: false
+      position: 100
+
+  - action: "wait"
+    comment: "Wait the rest of the opening time"
+    duration_ms: 950
+
+  - action: "assert_outputs"
+    comment: "Should stop opening after whole opening duration"
+    expected_outputs:
+      open: false
+      close: false
+      position: 100

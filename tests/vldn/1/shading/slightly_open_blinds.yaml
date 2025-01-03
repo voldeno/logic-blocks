@@ -1,0 +1,114 @@
+name: "slightly open for venetian blinds"
+
+config:
+  shading_type: 0 # venetian blinds
+  opening_duration: 1
+  closing_duration: 1
+#  slightly_open_duration: 0.2 # TODO: use float in test after fixing: SOF-83
+  slightly_open_duration: 1
+  motor_lock_duration: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Send a pulse to slightly_open input - high"
+    inputs:
+      slightly_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to slightly_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to slightly_open input - low"
+    inputs:
+      slightly_open: false
+
+  - action: "assert_outputs"
+    comment: "Should start opening"
+    expected_outputs:
+      open: true
+      close: false
+      position: 0
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait 90% opening time"
+    duration_ms: 980
+
+  - action: "assert_outputs"
+    comment: "Should be 90% open and opening"
+    expected_outputs:
+      open: true
+      close: false
+      position: 90
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait till full opening time"
+    duration_ms: 1200
+
+  - action: "wait"
+    comment: "Wait till full slightly open time"
+    duration_ms: 1200
+
+  - action: "assert_outputs"
+    comment: "Should be slightly open, not moving"
+    expected_outputs:
+      open: false
+      close: false
+      position: 100
+      slats: 50
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - high"
+    inputs:
+      full_close: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_close input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - low"
+    inputs:
+      full_close: false
+
+  - action: "assert_outputs"
+    comment: "Should start closing"
+    expected_outputs:
+      open: false
+      close: true
+      position: 100
+      slats: 50
+
+  - action: "wait"
+    comment: "Wait for another 50% of slats rotation"
+    duration_ms: 1000
+
+  - action: "wait"
+    comment: "Wait 90% closing time"
+    duration_ms: 980
+
+  - action: "assert_outputs"
+    comment: "Should be 90% closed and closing"
+    expected_outputs:
+      open: false
+      close: true
+      position: 10
+      slats: 100
+
+  - action: "wait"
+    comment: "Wait till fully closed - 10% left"
+    duration_ms: 200
+
+  - action: "wait"
+    comment: "Wait till fully closed - ensure slats can perform full rotation"
+    duration_ms: 1200
+
+  - action: "assert_outputs"
+    comment: "Should be closed"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+      slats: 0

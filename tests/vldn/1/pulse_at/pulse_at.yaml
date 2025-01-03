@@ -1,0 +1,34 @@
+name: "pulse_at"
+
+config:
+  interval: 1
+
+steps:
+  # wait for the scheduled block execution timestamp to be calculated (1 cycle = 100ms)
+  - action: "wait"
+    duration_ms: 100
+
+  - action: "assert_outputs"
+    expected_outputs:
+      pulse: false
+
+  - action: "wait"
+    duration_ms: 1000
+
+  - action: "assert_outputs"
+    expected_outputs:
+      pulse: true
+
+  - action: "wait"
+    duration_ms: 1000
+
+  - action: "assert_outputs"
+    expected_outputs:
+      pulse: false
+
+  - action: "wait"
+    duration_ms: 1000
+
+  - action: "assert_outputs"
+    expected_outputs:
+      pulse: true

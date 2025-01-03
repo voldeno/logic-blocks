@@ -1,0 +1,138 @@
+name: "full close on slightly open"
+
+config:
+  shading_type: 0 # venetian blinds
+  opening_duration: 1
+  closing_duration: 1
+  slightly_open_duration: 0
+  motor_lock_duration: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - high"
+    inputs:
+      full_close: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_close input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - low"
+    inputs:
+      full_close: false
+
+  - action: "wait"
+    comment: "Wait till the 100% closing duration"
+    duration_ms: 1200
+
+  - action: "assert_outputs"
+    comment: "Should stop closing - 100% closed"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - high"
+    inputs:
+      full_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - low"
+    inputs:
+      full_open: false
+
+  - action: "wait"
+    comment: "Wait till 10% open"
+    duration_ms: 120
+
+  - action: "set_inputs"
+    comment: "Send a pulse to off input - high"
+    inputs:
+      off: true
+
+  - action: "wait"
+    comment: "Send a pulse to off input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to off input - low"
+    inputs:
+      off: false
+
+  - action: "assert_outputs"
+    comment: "Should stop moving and be 10% open"
+    expected_outputs:
+      open: false
+      close: false
+      position: 10
+
+  - action: "wait"
+    comment: "Wait a bit to confirm it's not moving anymore"
+    duration_ms: 500
+
+  - action: "assert_outputs"
+    comment: "Should stop moving and be 10% open"
+    expected_outputs:
+      open: false
+      close: false
+      position: 10
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - high"
+    inputs:
+      full_close: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_close input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - low"
+    inputs:
+      full_close: false
+
+  - action: "assert_outputs"
+    comment: "Should start closing"
+    expected_outputs:
+      open: false
+      close: true
+      position: 10
+
+  - action: "wait"
+    comment: "Wait for 10% move"
+    duration_ms: 120
+
+  - action: "assert_outputs"
+    comment: "Should close the remaining part from current position, but should not stop when closing"
+    expected_outputs:
+      open: false
+      close: true
+      position: 0
+
+  - action: "wait"
+    comment: "Wait for 10% move"
+    duration_ms: 120
+
+  - action: "assert_outputs"
+    comment: "Should keep close active for the full closing duration, even if position is already 0"
+    expected_outputs:
+      open: false
+      close: true
+      position: 0
+
+  - action: "wait"
+    comment: "Wait for the rest of the whole closing duration"
+    duration_ms: 900
+
+  - action: "assert_outputs"
+    comment: "Should stop closing after the full closing duration passed"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0

@@ -1,0 +1,82 @@
+name: "slightly open for curtains from fully open"
+
+config:
+  shading_type: 1 # roller blinds
+  opening_duration: 2 # TODO: use value of 1 in test after fixing: SOF-83
+  closing_duration: 2 # TODO: use value of 1 in test after fixing: SOF-83
+#  slightly_open_duration: 0.2 # TODO: use float in test after fixing: SOF-83
+  slightly_open_duration: 1
+  motor_lock_duration: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - high"
+    inputs:
+      full_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - low"
+    inputs:
+      full_open: false
+
+  - action: "wait"
+    comment: "Wait for full open to finish"
+    duration_ms: 2200
+
+  - action: "assert_outputs"
+    comment: "Should be fully open and not moving"
+    expected_outputs:
+      open: false
+      close: false
+      position: 100
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Send a pulse to slightly_open input - high"
+    inputs:
+      slightly_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to slightly_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to slightly_open input - low"
+    inputs:
+      slightly_open: false
+
+  - action: "assert_outputs"
+    comment: "Should start closing, as the slightly open position is above current"
+    expected_outputs:
+      open: false
+      close: true
+      position: 100
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait 50% closing time"
+    duration_ms: 1200
+
+  - action: "assert_outputs"
+    comment: "Should be 50% open and stopped (50% because of the ratio of full and slightly open durations)"
+    expected_outputs:
+      open: false
+      close: false
+      position: 50
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait to re-check"
+    duration_ms: 200
+
+  - action: "assert_outputs"
+    comment: "Should be 50% open and stopped (50% because of the ratio of full and slightly open durations)"
+    expected_outputs:
+      open: false
+      close: false
+      position: 50
+      slats: 0
