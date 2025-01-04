@@ -1,0 +1,181 @@
+name: "wind alarm"
+
+config:
+  shading_type: 0 # venetian blinds
+  opening_duration: 1
+  closing_duration: 1
+  slightly_open_duration: 0
+  motor_lock_duration: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - high"
+    inputs:
+      full_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - low"
+    inputs:
+      full_open: false
+
+  - action: "wait"
+    comment: "Wait till the 80% opening duration"
+    duration_ms: 850
+
+  - action: "set_inputs"
+    comment: "Send a pulse to off input - high"
+    inputs:
+      off: true
+
+  - action: "wait"
+    comment: "Send a pulse to off input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to off input - low"
+    inputs:
+      off: false
+
+  - action: "assert_outputs"
+    comment: "Should stop opening - 100% open"
+    expected_outputs:
+      open: false
+      close: false
+      position: 80
+
+  - action: "set_inputs"
+    comment: "Set wind_alarm input high"
+    inputs:
+      wind_alarm: true
+
+  - action: "assert_outputs"
+    comment: "Should start closing"
+    expected_outputs:
+      open: false
+      close: true
+      position: 80
+
+  - action: "wait"
+    comment: "Wait full closing duration"
+    duration_ms: 1200
+
+  - action: "assert_outputs"
+    comment: "Should stay closed and not react to any movement triggers"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - high"
+    inputs:
+      full_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - low"
+    inputs:
+      full_open: false
+
+  - action: "assert_outputs"
+    comment: "Should stay closed and not react to any movement triggers"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+
+  - action: "set_inputs"
+    comment: "Send a pulse to toggle input - high"
+    inputs:
+      toggle: true
+
+  - action: "wait"
+    comment: "Send a pulse to toggle input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to toggle input - low"
+    inputs:
+      toggle: false
+
+  - action: "assert_outputs"
+    comment: "Should stay closed and not react to any movement triggers"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+
+  - action: "set_inputs"
+    comment: "Set part_open input high"
+    inputs:
+      part_open: true
+
+  - action: "assert_outputs"
+    comment: "Should stay closed and not react to any movement triggers"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+
+  - action: "set_inputs"
+    comment: "Set part_open input low"
+    inputs:
+      part_open: false
+
+  - action: "set_inputs"
+    comment: "Send a pulse to slightly_open input - high"
+    inputs:
+      slightly_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to slightly_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to slightly_open input - low"
+    inputs:
+      slightly_open: false
+
+  - action: "assert_outputs"
+    comment: "Should stay closed and not react to any movement triggers"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+
+  - action: "set_inputs"
+    comment: "Set wind_alarm input low"
+    inputs:
+      wind_alarm: false
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - high"
+    inputs:
+      full_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - low"
+    inputs:
+      full_open: false
+
+  - action: "wait"
+    comment: "Wait till the 80% opening duration"
+    duration_ms: 1200
+
+  - action: "assert_outputs"
+    comment: "Should start reacting to movement riggers after wind alarm was removed"
+    expected_outputs:
+      open: false
+      close: false
+      position: 100

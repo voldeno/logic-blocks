@@ -52,7 +52,7 @@
       "default": "false"
     },
     {
-      "id": "wa",
+      "id": "wind_alarm",
       "name": "Wind alarm",
       "description": "Moves shading to the wind alarm position and locks the block.",
       "abbrev": "WA",
@@ -139,14 +139,14 @@
       "name": "Opening duration",
       "description": "Opening duration",
       "type": "NUMBER",
-      "default": "75"
+      "default": "80"
     },
     {
       "id": "closing_duration",
       "name": "Closing duration",
       "description": "Closing duration",
       "type": "NUMBER",
-      "default": "70"
+      "default": "80"
     },
     {
       "id": "motor_lock_duration",
