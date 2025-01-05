@@ -12,5 +12,7 @@ jobs:
       image: ghcr.io/voldeno/checker:latest
     steps:
     - uses: actions/checkout@v3
-    - name: Check
+    - name: Check scripts
       run: validator --funcs functions.txt --resources .
+    - name: Run tests
+      run: logic_tests_runner --resources .
