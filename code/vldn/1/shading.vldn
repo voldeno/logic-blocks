@@ -134,12 +134,34 @@ if (channel == "part_close") {
 if (channel == "wind_alarm") {
     if (value) {
         clear_callback()
-        set_output("open", false)
-        set_output("close", true)
+        wap = get_config("wind_alarm_position")
 
-        full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
-        set_state("steps_left", full_closing_steps * get_output("position") / 100)
-        callback(callback_ms, 2)
+        // position_diff - percentage:
+        // zero - ok
+        // negative - need to move in closing direction
+        // positive - need to move in opening direction
+        position_diff = -100
+        if (wap != 0) { // use diff only if wap is not fully-closed
+            position_diff = wap - get_output("position")
+        }
+
+        if (position_diff == 0) {
+            return
+        }
+
+        if (position_diff < 0) { // closing
+            set_output("open", false)
+            set_output("close", true)
+            full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
+            set_state("steps_left", full_closing_steps * -position_diff / 100)
+            callback(callback_ms, 2)
+        } else { // opening
+            set_output("open", true)
+            set_output("close", false)
+            full_opening_steps = (1000 * get_config("opening_duration")) / callback_ms
+            set_state("steps_left", full_opening_steps * position_diff / 100)
+            callback(callback_ms, 1)
+        }
         return
     }
 }
