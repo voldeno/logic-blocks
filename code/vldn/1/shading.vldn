@@ -5,7 +5,7 @@ shading_type = get_config("shading_type")
 
 if (channel == "callback") {
     steps_left = get_state("steps_left")
-    steps_left = steps_left - 1
+    steps_left -= 1
     if (steps_left <= 0) {
         steps_left = 0
     }
@@ -99,6 +99,10 @@ if (channel == "callback") {
 }
 
 if (channel == "part_open") {
+    if (get_input("wind_alarm")) {
+        return
+    }
+
     clear_callback()
     set_output("open", value)
     set_output("close", false)
@@ -111,6 +115,10 @@ if (channel == "part_open") {
 }
 
 if (channel == "part_close") {
+    if (get_input("wind_alarm")) {
+        return
+    }
+
     clear_callback()
     set_output("open", false)
     set_output("close", value)
@@ -121,6 +129,41 @@ if (channel == "part_close") {
         callback(callback_ms, 2)
     }
     return
+}
+
+if (channel == "wind_alarm") {
+    if (value) {
+        clear_callback()
+        wap = get_config("wind_alarm_position")
+
+        // position_diff - percentage:
+        // zero - ok
+        // negative - need to move in closing direction
+        // positive - need to move in opening direction
+        position_diff = -100
+        if (wap != 0) { // use diff only if wap is not fully-closed
+            position_diff = wap - get_output("position")
+        }
+
+        if (position_diff == 0) {
+            return
+        }
+
+        if (position_diff < 0) { // closing
+            set_output("open", false)
+            set_output("close", true)
+            full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
+            set_state("steps_left", full_closing_steps * -position_diff / 100)
+            callback(callback_ms, 2)
+        } else { // opening
+            set_output("open", true)
+            set_output("close", false)
+            full_opening_steps = (1000 * get_config("opening_duration")) / callback_ms
+            set_state("steps_left", full_opening_steps * position_diff / 100)
+            callback(callback_ms, 1)
+        }
+        return
+    }
 }
 
 // pulse signals below
@@ -136,6 +179,10 @@ if (channel == "off") {
 }
 
 if (channel == "toggle") {
+    if (get_input("wind_alarm")) {
+        return
+    }
+
     if (get_output("open") or get_output("close")) { // stop on movement
         clear_callback()
         set_output("open", false)
@@ -160,6 +207,10 @@ if (channel == "toggle") {
 }
 
 if (channel == "full_open" or channel == "slightly_open") {
+    if (get_input("wind_alarm")) {
+        return
+    }
+
     callback_id = 1
     if (channel == "slightly_open") {
         callback_id = 3
@@ -218,6 +269,10 @@ if (channel == "full_open" or channel == "slightly_open") {
 }
 
 if (channel == "full_close") {
+    if (get_input("wind_alarm")) {
+        return
+    }
+
     if (get_output("close")) { // stops if in motion
         clear_callback()
         set_state("steps_left", 0)

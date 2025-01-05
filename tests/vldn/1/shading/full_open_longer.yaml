@@ -1,0 +1,74 @@
+name: "full open, longer duration"
+
+config:
+  shading_type: 0 # venetian blinds
+  opening_duration: 5
+  closing_duration: 5
+  slightly_open_duration: 0
+  motor_lock_duration: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - high"
+    inputs:
+      full_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - low"
+    inputs:
+      full_open: false
+
+  - action: "assert_outputs"
+    comment: "Should start opening"
+    expected_outputs:
+      open: true
+      close: false
+      position: 0
+
+  - action: "wait"
+    comment: "Wait 10% of opening time"
+    duration_ms: 550
+
+  - action: "assert_outputs"
+    comment: "Should be still opening - 10%"
+    expected_outputs:
+      open: true
+      close: false
+      position: 10
+
+  - action: "wait"
+    comment: "Wait 10% of opening time"
+    duration_ms: 550
+
+  - action: "assert_outputs"
+    comment: "Should be still opening - 20%"
+    expected_outputs:
+      open: true
+      close: false
+      position: 20
+
+  - action: "wait"
+    comment: "Wait 10% of opening time"
+    duration_ms: 550
+
+  - action: "assert_outputs"
+    comment: "Should be still opening - 30%"
+    expected_outputs:
+      open: true
+      close: false
+      position: 30
+
+  - action: "wait"
+    comment: "Wait the rest of the opening time"
+    duration_ms: 4000
+
+  - action: "assert_outputs"
+    comment: "Should stop opening - 100% open"
+    expected_outputs:
+      open: false
+      close: false
+      position: 100
