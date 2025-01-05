@@ -2,10 +2,9 @@ name: "slightly open for curtains from fully open"
 
 config:
   shading_type: 1 # roller blinds
-  opening_duration: 2 # TODO: use value of 1 in test after fixing: SOF-83
-  closing_duration: 2 # TODO: use value of 1 in test after fixing: SOF-83
-#  slightly_open_duration: 0.2 # TODO: use float in test after fixing: SOF-83
-  slightly_open_duration: 1
+  opening_duration: 1
+  closing_duration: 1
+  slightly_open_duration: 0.5
   motor_lock_duration: 0
 
 steps:
@@ -25,7 +24,7 @@ steps:
 
   - action: "wait"
     comment: "Wait for full open to finish"
-    duration_ms: 2200
+    duration_ms: 1200
 
   - action: "assert_outputs"
     comment: "Should be fully open and not moving"
@@ -59,7 +58,7 @@ steps:
 
   - action: "wait"
     comment: "Wait 50% closing time"
-    duration_ms: 1200
+    duration_ms: 550
 
   - action: "assert_outputs"
     comment: "Should be 50% open and stopped (50% because of the ratio of full and slightly open durations)"

@@ -4,8 +4,7 @@ config:
   shading_type: 0 # venetian blinds
   opening_duration: 1
   closing_duration: 1
-#  slightly_open_duration: 0.2 # TODO: use float in test after fixing: SOF-83
-  slightly_open_duration: 1
+  slightly_open_duration: 0.2
   motor_lock_duration: 0
 
 steps:
@@ -49,7 +48,7 @@ steps:
 
   - action: "wait"
     comment: "Wait till full slightly open time"
-    duration_ms: 1200
+    duration_ms: 230
 
   - action: "assert_outputs"
     comment: "Should be slightly open, not moving"
@@ -83,11 +82,11 @@ steps:
 
   - action: "wait"
     comment: "Wait for another 50% of slats rotation"
-    duration_ms: 1000
+    duration_ms: 220
 
   - action: "wait"
     comment: "Wait 90% closing time"
-    duration_ms: 980
+    duration_ms: 920
 
   - action: "assert_outputs"
     comment: "Should be 90% closed and closing"
