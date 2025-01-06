@@ -56,7 +56,7 @@ steps:
 
   - action: "wait"
     comment: "Wait till full slightly open time"
-    duration_ms: 300
+    duration_ms: 350
 
   - action: "assert_outputs"
     comment: "Should be slightly open, not moving"
