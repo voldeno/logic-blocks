@@ -1,10 +1,10 @@
-name: "wind alarm to mid position closing"
+name: "wind alarm to mid position closing, awning"
 
 config:
-  shading_type: 1 # blinds
+  shading_type: 5 # awning
   opening_duration: 1
   closing_duration: 1
-  slightly_open_duration: 0
+  slightly_open_duration: 0.2
   motor_lock_duration: 0
   wind_alarm_position: 20
 

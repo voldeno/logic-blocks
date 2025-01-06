@@ -1,10 +1,10 @@
-name: "wind alarm to fully open"
+name: "wind alarm to fully open, awning"
 
 config:
-  shading_type: 0 # venetian blinds
+  shading_type: 5 # awning
   opening_duration: 1
   closing_duration: 1
-  slightly_open_duration: 0
+  slightly_open_duration: 0.2
   motor_lock_duration: 0
   wind_alarm_position: 100
 
@@ -175,7 +175,7 @@ steps:
     duration_ms: 1010
 
   - action: "assert_outputs"
-    comment: "Should start reacting to movement riggers after wind alarm was removed"
+    comment: "Should start reacting to movement triggers after wind alarm was removed"
     expected_outputs:
       open: false
       close: false
