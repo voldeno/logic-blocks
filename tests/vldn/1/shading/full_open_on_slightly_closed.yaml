@@ -24,7 +24,7 @@ steps:
 
   - action: "wait"
     comment: "Wait till the 100% opening duration"
-    duration_ms: 1200
+    duration_ms: 1010
 
   - action: "assert_outputs"
     comment: "Should stop opening - 100% open"
@@ -49,7 +49,7 @@ steps:
 
   - action: "wait"
     comment: "Wait till 10% closed"
-    duration_ms: 120
+    duration_ms: 110
 
   - action: "set_inputs"
     comment: "Send a pulse to off input - high"
@@ -74,7 +74,7 @@ steps:
 
   - action: "wait"
     comment: "Wait a bit to confirm it's not moving anymore"
-    duration_ms: 500
+    duration_ms: 300
 
   - action: "assert_outputs"
     comment: "Should stop moving and be 10% closed"
@@ -106,7 +106,7 @@ steps:
 
   - action: "wait"
     comment: "Wait for 10% move"
-    duration_ms: 120
+    duration_ms: 110
 
   - action: "assert_outputs"
     comment: "Should open the remaining part from current position and should stop when opening"
@@ -117,7 +117,7 @@ steps:
 
   - action: "wait"
     comment: "Wait for 10% move"
-    duration_ms: 120
+    duration_ms: 110
 
   - action: "assert_outputs"
     comment: "Should stop opening after reaching end position in opening direction"

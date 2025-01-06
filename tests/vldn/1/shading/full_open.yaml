@@ -31,7 +31,7 @@ steps:
 
   - action: "wait"
     comment: "Wait 10% of opening time"
-    duration_ms: 120
+    duration_ms: 110
 
   - action: "assert_outputs"
     comment: "Should be still opening - 10%"
@@ -42,7 +42,7 @@ steps:
 
   - action: "wait"
     comment: "Wait 10% of opening time"
-    duration_ms: 120
+    duration_ms: 110
 
   - action: "assert_outputs"
     comment: "Should be still opening - 20%"
@@ -53,7 +53,7 @@ steps:
 
   - action: "wait"
     comment: "Wait till the 100% opening duration"
-    duration_ms: 900
+    duration_ms: 810
 
   - action: "assert_outputs"
     comment: "Should stop opening - 100% open"
