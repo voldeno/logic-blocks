@@ -1,0 +1,112 @@
+name: "part open curtains"
+
+config:
+  shading_type: 2 # curtains
+  opening_duration: 1
+  closing_duration: 1
+  slightly_open_duration: 0
+  motor_lock_duration: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - high"
+    inputs:
+      full_close: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_close input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - low"
+    inputs:
+      full_close: false
+
+  - action: "wait"
+    comment: "Wait till the 100% closing duration"
+    duration_ms: 1010
+
+  - action: "assert_outputs"
+    comment: "Should stop closing - 100% closed"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Set part_open high"
+    inputs:
+      part_open: true
+
+  - action: "wait"
+    comment: "Wait for 20% opening duration"
+    duration_ms: 210
+
+  - action: "set_inputs"
+    comment: "Set part_open low"
+    inputs:
+      part_open: false
+
+  - action: "assert_outputs"
+    comment: "Should be 20% open and not moving"
+    expected_outputs:
+      open: false
+      close: false
+      position: 20
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait a bit to confirm not moving"
+    duration_ms: 300
+
+  - action: "assert_outputs"
+    comment: "Should not be moving after part_open release"
+    expected_outputs:
+      open: false
+      close: false
+      position: 20
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Set part_open high again"
+    inputs:
+      part_open: true
+
+  - action: "wait"
+    comment: "Wait for the rest of the opening duration"
+    duration_ms: 810
+
+  - action: "assert_outputs"
+    comment: "Should not be moving after full opening, even if part_open wasn't released yet"
+    expected_outputs:
+      open: false
+      close: false
+      position: 100
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait a bit more before release"
+    duration_ms: 300
+
+  - action: "assert_outputs"
+    comment: "Should not be moving after full opening, even if part_open wasn't released yet - after extra wait"
+    expected_outputs:
+      open: false
+      close: false
+      position: 100
+      slats: 0
+
+
+  - action: "set_inputs"
+    comment: "Set part_open low"
+    inputs:
+      part_open: false
+
+  - action: "assert_outputs"
+    comment: "Should not be moving after the part_open release"
+    expected_outputs:
+      open: false
+      close: false
+      position: 100
+      slats: 0

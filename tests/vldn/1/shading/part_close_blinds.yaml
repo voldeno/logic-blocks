@@ -1,10 +1,10 @@
-name: "part close"
+name: "part close blinds"
 
 config:
   shading_type: 0 # venetian blinds
   opening_duration: 1
   closing_duration: 1
-  slightly_open_duration: 0
+  slightly_open_duration: 0.2
   motor_lock_duration: 0
 
 steps:
@@ -32,11 +32,36 @@ steps:
       open: false
       close: false
       position: 100
+      slats: 0
 
   - action: "set_inputs"
     comment: "Set part_close high"
     inputs:
       part_close: true
+
+  - action: "wait"
+    comment: "Wait for 50% of slats rotation duration"
+    duration_ms: 210
+
+  - action: "assert_outputs"
+    comment: "Should be 100% open with horizontal slats"
+    expected_outputs:
+      open: false
+      close: true
+      position: 100
+      slats: 50
+
+  - action: "wait"
+    comment: "Wait for full slats rotation duration to align vertical in closing direction"
+    duration_ms: 210
+
+  - action: "assert_outputs"
+    comment: "Should be 100% open with slats fully rotated to closing direction"
+    expected_outputs:
+      open: false
+      close: true
+      position: 100
+      slats: 100
 
   - action: "wait"
     comment: "Wait for 20% closing duration"
@@ -53,6 +78,7 @@ steps:
       open: false
       close: false
       position: 80
+      slats: 100
 
   - action: "wait"
     comment: "Wait a bit to confirm not moving"
@@ -64,6 +90,7 @@ steps:
       open: false
       close: false
       position: 80
+      slats: 100
 
   - action: "set_inputs"
     comment: "Set part_close high again"
@@ -80,17 +107,19 @@ steps:
       open: false
       close: true
       position: 0
+      slats: 0
 
   - action: "wait"
     comment: "Wait a bit, but still withing the closing duration"
     duration_ms: 100
 
   - action: "assert_outputs"
-    comment: "Should be still closing after full close to align to zero position"
+    comment: "Should be still closing after full close to align to zero position - check again"
     expected_outputs:
       open: false
       close: true
       position: 0
+      slats: 0
 
   - action: "wait"
     comment: "Wait till full closing duration"
@@ -102,6 +131,7 @@ steps:
       open: false
       close: false
       position: 0
+      slats: 0
 
   - action: "wait"
     comment: "Wait till full closing duration"
@@ -113,6 +143,7 @@ steps:
       open: false
       close: false
       position: 0
+      slats: 0
 
   - action: "set_inputs"
     comment: "Set part_close low"
@@ -125,3 +156,4 @@ steps:
       open: false
       close: false
       position: 0
+      slats: 0

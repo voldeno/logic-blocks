@@ -62,19 +62,19 @@ if (channel == "callback") {
     }
 
     if (value == 2) { // closing callback - full_close
-        if (shading_type == 0) { // slats are exists only for venetian blinds
+        if (shading_type == 0) { // slats exists only for venetian blinds
             if (get_config("slightly_open_duration") == 0) { // handle division by zero
                 current_slats = 100
                 last_slats = current_slats
             } else {
-                current_slats = last_slats + (((100 * callback_ms) / (2 * get_config("slightly_open_duration") * 1000.0)))
+                current_slats = last_slats + ((100 * callback_ms) / (2 * get_config("slightly_open_duration") * 1000.0))
             }
             if (current_slats >= 100) {
                 current_slats = 100
             }
 
             if (last_slats == 100) { // slats fully moved, start changing position
-                current_position = last_position - (((100 * callback_ms) / (get_config("closing_duration") * 1000.0)))
+                current_position = last_position - ((100 * callback_ms) / (get_config("closing_duration") * 1000.0))
                 if (current_position <= 0) {
                     current_position = 0
                 }
@@ -84,14 +84,19 @@ if (channel == "callback") {
                 current_slats = 0
             }
         } else { // other shading types
-            current_position = last_position - (((100 * callback_ms) / (get_config("closing_duration") * 1000.0)))
+            current_position = last_position - ((100 * callback_ms) / (get_config("closing_duration") * 1000.0))
             if (current_position <= 0) {
                 current_position = 0
             }
         }
 
         set_state("slats", current_slats)
-        set_output("slats", round(current_slats))
+        // 0 and 100 positions are the same when fully closed
+        if (round(current_position) == 0 and (round(current_slats) == 0 or round(current_slats) == 100)) {
+            set_output("slats", 0)
+        } else {
+            set_output("slats", round(current_slats))
+        }
         set_state("position", current_position)
         set_output("position", round(current_position))
 
@@ -134,7 +139,9 @@ if (channel == "part_close") {
 
     if (value) {
         full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
-        set_state("steps_left", full_closing_steps)
+        slightly_open_return_steps = (1000 * get_config("slightly_open_duration")) / callback_ms
+        slats_return_steps_to_closing = 2 * slightly_open_return_steps * ((100 - get_state("slats")) / 100)
+        set_state("steps_left", full_closing_steps + slats_return_steps_to_closing)
         callback(callback_ms_real, 2)
     }
     return
