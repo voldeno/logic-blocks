@@ -40,6 +40,7 @@ steps:
       open: true
       close: false
       position: 10
+      slats: 0
 
   - action: "set_inputs"
     comment: "Send a pulse to toggle input to stop movement - high"
@@ -61,6 +62,7 @@ steps:
       open: false
       close: false
       position: 10
+      slats: 0
 
   - action: "set_inputs"
     comment: "Send a pulse to toggle input to start closing - high"
@@ -82,14 +84,28 @@ steps:
       open: false
       close: true
       position: 10
+      slats: 0
 
   - action: "wait"
     comment: "Wait 10% of closing time"
     duration_ms: 110
 
   - action: "assert_outputs"
-    comment: "Should stop closing after reaching fully closed position"
+    comment: "Should reach fully closed position"
+    expected_outputs:
+      open: false
+      close: true
+      position: 0
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait 90% of closing time"
+    duration_ms: 910
+
+  - action: "assert_outputs"
+    comment: "Should to closing after full closing period"
     expected_outputs:
       open: false
       close: false
       position: 0
+      slats: 0

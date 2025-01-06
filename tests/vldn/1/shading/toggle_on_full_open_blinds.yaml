@@ -1,26 +1,26 @@
-name: "toggle partial, awning"
+name: "toggle on full open, blinds"
 
 config:
-  shading_type: 5 # awning
+  shading_type: 0 # venetian blinds
   opening_duration: 1
   closing_duration: 1
-  slightly_open_duration: 0
+  slightly_open_duration: 0.2
   motor_lock_duration: 0
 
 steps:
   - action: "set_inputs"
-    comment: "Send a pulse to toggle input to start opening - high"
+    comment: "Send a pulse to full_open input - high"
     inputs:
-      toggle: true
+      full_open: true
 
   - action: "wait"
-    comment: "Send a pulse to toggle input to start opening - wait"
+    comment: "Send a pulse to full_open input - wait"
     duration_ms: 20
 
   - action: "set_inputs"
-    comment: "Send a pulse to toggle input to start opening - low"
+    comment: "Send a pulse to full_open input - low"
     inputs:
-      toggle: false
+      full_open: false
 
   - action: "assert_outputs"
     comment: "Should start opening"
@@ -42,18 +42,6 @@ steps:
       position: 10
       slats: 0
 
-  - action: "wait"
-    comment: "Wait 10% of opening time"
-    duration_ms: 110
-
-  - action: "assert_outputs"
-    comment: "Should be still opening - 20%"
-    expected_outputs:
-      open: true
-      close: false
-      position: 20
-      slats: 0
-
   - action: "set_inputs"
     comment: "Send a pulse to toggle input to stop movement - high"
     inputs:
@@ -69,23 +57,11 @@ steps:
       toggle: false
 
   - action: "assert_outputs"
-    comment: "Should not be moving"
+    comment: "Should stop moving"
     expected_outputs:
       open: false
       close: false
-      position: 20
-      slats: 0
-
-  - action: "wait"
-    comment: "Wait 20% of opening time"
-    duration_ms: 210
-
-  - action: "assert_outputs"
-    comment: "Should not be moving - after wait"
-    expected_outputs:
-      open: false
-      close: false
-      position: 20
+      position: 10
       slats: 0
 
   - action: "set_inputs"
@@ -107,39 +83,53 @@ steps:
     expected_outputs:
       open: false
       close: true
-      position: 20
+      position: 10
       slats: 0
+
+  - action: "wait"
+    comment: "Wait 50% of full slats rotation time"
+    duration_ms: 210
+
+  - action: "assert_outputs"
+    comment: "Should be still closing, slats horizontal"
+    expected_outputs:
+      open: false
+      close: true
+      position: 10
+      slats: 50
+
+  - action: "wait"
+    comment: "Wait 50% of full slats rotation time"
+    duration_ms: 210
+
+  - action: "assert_outputs"
+    comment: "Should be still closing, slats vertical in closing direction"
+    expected_outputs:
+      open: false
+      close: true
+      position: 10
+      slats: 100
 
   - action: "wait"
     comment: "Wait 10% of closing time"
     duration_ms: 110
 
   - action: "assert_outputs"
-    comment: "Should be still closing - 10%"
+    comment: "Should reach fully closed position, but still be closing for the whole closing duration + slats"
     expected_outputs:
       open: false
       close: true
-      position: 10
+      position: 0
       slats: 0
 
-  - action: "set_inputs"
-    comment: "Send a pulse to toggle input to stop movement - high"
-    inputs:
-      toggle: true
-
   - action: "wait"
-    comment: "Send a pulse to toggle input to stop movement - wait"
-    duration_ms: 20
-
-  - action: "set_inputs"
-    comment: "Send a pulse to toggle input to stop movement - low"
-    inputs:
-      toggle: false
+    comment: "Wait 90% of closing time"
+    duration_ms: 910
 
   - action: "assert_outputs"
-    comment: "Should not be moving"
+    comment: "Should be closed, not moving"
     expected_outputs:
       open: false
       close: false
-      position: 10
+      position: 0
       slats: 0
