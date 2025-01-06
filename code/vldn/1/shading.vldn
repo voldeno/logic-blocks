@@ -112,21 +112,31 @@ if (channel == "callback") {
     return
 }
 
+// TODO: check shading type here and set steps left for slats properly
+
+full_opening_steps = (1000 * get_config("opening_duration")) / callback_ms
+full_opening_steps_left = full_opening_steps * (100 - get_state("position")) / 100.0
+full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
+slats_full_rotation_steps = (1000 * 2 * get_config("slightly_open_duration")) / callback_ms
+slats_full_rotation_steps_left = slats_full_rotation_steps * get_state("slats") / 100.0
+steps_left_opening = round(full_opening_steps_left + slats_full_rotation_steps_left)
+steps_left_closing = round(full_closing_steps + slats_full_rotation_steps)
+
+
 if (channel == "part_open") {
     if (get_input("wind_alarm")) {
         return
     }
 
     clear_callback()
-    set_output("open", value)
     set_output("close", false)
 
-    if (value) {
-        // TODO: slats?
-
-        full_opening_steps = (1000 * get_config("opening_duration")) / callback_ms
-        set_state("steps_left", full_opening_steps * (100 - get_state("position")) / 100.0)
+    if (value and steps_left_opening != 0) {
+        set_output("open", true)
+        set_state("steps_left", steps_left_opening)
         callback(callback_ms_real, 1)
+    } else {
+        set_output("open", false)
     }
     return
 }
@@ -141,10 +151,7 @@ if (channel == "part_close") {
     set_output("close", value)
 
     if (value) {
-        full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
-        slightly_open_return_steps = (1000 * get_config("slightly_open_duration")) / callback_ms
-        slats_return_steps_to_closing = 2 * slightly_open_return_steps * ((100 - get_state("slats")) / 100)
-        set_state("steps_left", full_closing_steps + slats_return_steps_to_closing)
+        set_state("steps_left", steps_left_closing)
         callback(callback_ms_real, 2)
     }
     return
@@ -167,6 +174,8 @@ if (channel == "wind_alarm") {
         if (position_diff == 0) {
             return
         }
+
+        // TODO: handle slats position for custom wap positions
 
         if (position_diff < 0) { // closing
             set_output("open", false)
@@ -211,22 +220,14 @@ if (channel == "toggle") {
         set_output("open", false)
         set_output("close", true)
 
-        full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
-        slats_full_rotation_steps = (1000 * 2 * get_config("slightly_open_duration")) / callback_ms
-        steps_left = full_closing_steps + slats_full_rotation_steps
-        set_state("steps_left", steps_left)
+        set_state("steps_left", steps_left_closing)
         callback(callback_ms_real, 2)
     } else { // toggle to opening
         set_state("was_opening", true)
         set_output("open", true)
         set_output("close", false)
 
-        full_open_steps = (1000 * get_config("opening_duration")) / callback_ms
-        full_open_steps_left = full_open_steps * (100 - get_state("position")) / 100.0
-        slightly_open_return_steps = (1000 * get_config("slightly_open_duration")) / callback_ms
-        slats_return_steps_to_opening = 2 * slightly_open_return_steps * get_state("slats") / 100.0
-
-        set_state("steps_left", full_open_steps_left + slats_return_steps_to_opening)
+        set_state("steps_left", steps_left_opening)
         callback(callback_ms_real, 1)
     }
     return
@@ -237,11 +238,6 @@ if (channel == "full_open" or channel == "slightly_open") {
         return
     }
 
-    callback_id = 1
-    if (channel == "slightly_open") {
-        callback_id = 3
-    }
-
     if (get_output("open")) { // stops if in motion
         clear_callback()
         set_state("steps_left", 0)
@@ -249,35 +245,42 @@ if (channel == "full_open" or channel == "slightly_open") {
         return
     }
 
+    callback_id = 1
+    if (channel == "slightly_open") {
+        callback_id = 3
+    }
+
+    steps_left = 0
     if (shading_type == 0) {
         // TODO: test SO from full_open?
 
-        full_open_steps = (1000 * get_config("opening_duration")) / callback_ms
-        full_open_steps_left = full_open_steps * (100 - get_state("position")) / 100.0
-        slightly_open_return_steps = (1000 * get_config("slightly_open_duration")) / callback_ms
-        slats_return_steps_to_opening = 2 * slightly_open_return_steps * get_state("slats") / 100.0
-
-        steps_left = full_open_steps_left + slats_return_steps_to_opening
-        set_state("steps_left", steps_left)
+        steps_left = steps_left_opening
     } else {
+        // TODO: use common values?
+
         full_open_steps = (1000 * get_config("opening_duration")) / callback_ms
         full_open_steps_left = full_open_steps * (100 - get_state("position")) / 100.0
 
         if (channel == "full_open") {
-            set_state("steps_left", full_open_steps_left)
+            steps_left = full_open_steps_left
         } else {
             slightly_open_return_steps = (1000 * get_config("slightly_open_duration")) / callback_ms
             slightly_open_steps_left = full_open_steps_left - slightly_open_return_steps
 
             if (slightly_open_steps_left >= 0) {
-                set_state("steps_left", slightly_open_steps_left)
+                steps_left = slightly_open_steps_left
             } else {
-                set_state("steps_left", -slightly_open_steps_left)
+                steps_left = -slightly_open_steps_left
                 callback_id = 2 // closing direction
             }
         }
     }
 
+    if (steps_left == 0) {
+        return
+    }
+
+    set_state("steps_left", steps_left)
     if (callback_id == 1 or callback_id == 3) {
         set_output("open", true)
         set_output("close", false)
@@ -304,13 +307,7 @@ if (channel == "full_close") {
         return
     }
 
-    full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
-    slats_full_rotation_steps = (1000 * 2 * get_config("slightly_open_duration")) / callback_ms
-    steps_left = full_closing_steps + slats_full_rotation_steps
-    if (steps_left == 0) {
-        return
-    }
-    set_state("steps_left", steps_left)
+    set_state("steps_left", steps_left_closing)
     set_output("open", false)
     set_output("close", true)
     set_state("was_opening", false)
