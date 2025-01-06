@@ -53,7 +53,7 @@ if (channel == "callback") {
             }
             set_output("close", true)
             set_state("steps_left", slightly_open_steps)
-            callback(callback_ms, 2)
+            callback(0, 2)
             return
         }
         return
