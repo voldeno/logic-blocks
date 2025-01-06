@@ -25,7 +25,7 @@ steps:
 
   - action: "wait"
     comment: "Wait till the 80% opening duration"
-    duration_ms: 850
+    duration_ms: 810
 
   - action: "set_inputs"
     comment: "Send a pulse to off input - high"
@@ -62,7 +62,7 @@ steps:
 
   - action: "wait"
     comment: "Wait the rest of the opening duration"
-    duration_ms: 250
+    duration_ms: 210
 
   - action: "assert_outputs"
     comment: "Should move into wind_alarm_position and stop opening if wind_alarm_position != 0 (not fully closed)"
@@ -172,7 +172,7 @@ steps:
 
   - action: "wait"
     comment: "Wait till the 100% closing duration"
-    duration_ms: 1200
+    duration_ms: 1010
 
   - action: "assert_outputs"
     comment: "Should start reacting to movement riggers after wind alarm was removed"

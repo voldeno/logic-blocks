@@ -31,7 +31,7 @@ steps:
 
   - action: "wait"
     comment: "Wait full opening duration"
-    duration_ms: 1200
+    duration_ms: 1010
 
   - action: "assert_outputs"
     comment: "Should be fully open and switched off"
@@ -63,7 +63,7 @@ steps:
 
   - action: "wait"
     comment: "Wait full closing duration"
-    duration_ms: 1200
+    duration_ms: 1010
 
   - action: "assert_outputs"
     comment: "Should be fully closed and switched off"
@@ -95,7 +95,7 @@ steps:
 
   - action: "wait"
     comment: "Wait full opening duration"
-    duration_ms: 1200
+    duration_ms: 1010
 
   - action: "assert_outputs"
     comment: "Should be fully open and switched off"
