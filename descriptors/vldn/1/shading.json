@@ -172,6 +172,22 @@
   ],
   "state": [
     {
+      "id": "position",
+      "name": "Position",
+      "description": "Raw (not rounded) value of the output with the same name",
+      "type": "NUMBER",
+      "unit" : "%",
+      "default": "0.0"
+    },
+    {
+      "id": "slats",
+      "name": "Slats position",
+      "description": "Raw (not rounded) value of the output with the same name",
+      "type": "NUMBER",
+      "unit" : "%",
+      "default": "0.0"
+    },
+    {
       "id": "steps_left",
       "name": "Steps left",
       "description": "Internal variable for controlling movement time",
