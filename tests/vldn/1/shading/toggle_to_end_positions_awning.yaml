@@ -1,7 +1,7 @@
-name: "toggle to end positions"
+name: "toggle to end positions, awning"
 
 config:
-  shading_type: 0 # venetian blinds
+  shading_type: 5 # awning
   opening_duration: 1
   closing_duration: 1
   slightly_open_duration: 0
