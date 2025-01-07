@@ -1,12 +1,12 @@
-name: "wind alarm to fully open"
+name: "wind alarm to mid position closing, blinds"
 
 config:
   shading_type: 0 # venetian blinds
   opening_duration: 1
   closing_duration: 1
-  slightly_open_duration: 0
+  slightly_open_duration: 0.2
   motor_lock_duration: 0
-  wind_alarm_position: 100
+  wind_alarm_position: 20
 
 steps:
   - action: "set_inputs"
@@ -47,6 +47,7 @@ steps:
       open: false
       close: false
       position: 80
+      slats: 0
 
   - action: "set_inputs"
     comment: "Set wind_alarm input high"
@@ -54,22 +55,48 @@ steps:
       wind_alarm: true
 
   - action: "assert_outputs"
-    comment: "Should start opening"
+    comment: "Should start closing"
     expected_outputs:
-      open: true
-      close: false
+      open: false
+      close: true
       position: 80
+      slats: 0
 
   - action: "wait"
-    comment: "Wait the rest of the opening duration"
+    comment: "Wait for 50% of slats rotation duration"
     duration_ms: 210
 
   - action: "assert_outputs"
-    comment: "Should move into wind_alarm_position and stop opening if wind_alarm_position != 0 (not fully closed)"
+    comment: "Should be 80% open with horizontal slats"
+    expected_outputs:
+      open: false
+      close: true
+      position: 80
+      slats: 50
+
+  - action: "wait"
+    comment: "Wait for full slats rotation duration to align vertical in closing direction"
+    duration_ms: 210
+
+  - action: "assert_outputs"
+    comment: "Should be 80% open with slats fully rotated to closing direction"
+    expected_outputs:
+      open: false
+      close: true
+      position: 80
+      slats: 100
+
+  - action: "wait"
+    comment: "Wait the rest of the closing duration in reference to wind alarm position (80-20=60)"
+    duration_ms: 610
+
+  - action: "assert_outputs"
+    comment: "Should move into wind_alarm_position and stop closing"
     expected_outputs:
       open: false
       close: false
-      position: 100
+      position: 20
+      slats: 100
 
   - action: "set_inputs"
     comment: "Send a pulse to full_open input - high"
@@ -90,7 +117,8 @@ steps:
     expected_outputs:
       open: false
       close: false
-      position: 100
+      position: 20
+      slats: 100
 
   - action: "set_inputs"
     comment: "Send a pulse to toggle input - high"
@@ -111,7 +139,8 @@ steps:
     expected_outputs:
       open: false
       close: false
-      position: 100
+      position: 20
+      slats: 100
 
   - action: "set_inputs"
     comment: "Set part_open input high"
@@ -123,7 +152,8 @@ steps:
     expected_outputs:
       open: false
       close: false
-      position: 100
+      position: 20
+      slats: 100
 
   - action: "set_inputs"
     comment: "Set part_open input low"
@@ -149,7 +179,8 @@ steps:
     expected_outputs:
       open: false
       close: false
-      position: 100
+      position: 20
+      slats: 100
 
   - action: "set_inputs"
     comment: "Set wind_alarm input low"
@@ -171,12 +202,13 @@ steps:
       full_close: false
 
   - action: "wait"
-    comment: "Wait till the 100% closing duration"
-    duration_ms: 1010
+    comment: "Wait till the 100% closing duration + slats duration"
+    duration_ms: 1410
 
   - action: "assert_outputs"
-    comment: "Should start reacting to movement riggers after wind alarm was removed"
+    comment: "Should start reacting to movement triggers after wind alarm was removed"
     expected_outputs:
       open: false
       close: false
       position: 0
+      slats: 0

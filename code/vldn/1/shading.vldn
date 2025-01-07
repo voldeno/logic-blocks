@@ -23,15 +23,16 @@ if (channel == "callback") {
         if (shading_type == 0) { // slats exists only for venetian blinds
             if (get_config("slightly_open_duration") == 0) { // handle division by zero
                 current_slats = 0
+                last_slats = current_slats
             } else {
-                current_slats = last_slats - (((100 * callback_ms) / (get_config("slightly_open_duration") * 1000.0)))
+                current_slats = last_slats - (((100 * callback_ms) / (2 * get_config("slightly_open_duration") * 1000.0)))
             }
             if (current_slats <= 0) {
                 current_slats = 0
             }
         }
 
-        if (round(current_slats) <= 0) { // slats fully moved, start changing position
+        if (round(last_slats) <= 0) { // slats fully moved, start changing position
             current_position = last_position + (((100 * callback_ms) / (get_config("opening_duration") * 1000.0)))
             if (current_position >= 100) {
                 current_position = 100
@@ -62,36 +63,38 @@ if (channel == "callback") {
     }
 
     if (value == 2) { // closing callback - full_close
-        if (shading_type == 0) { // slats are exists only for venetian blinds
+        if (shading_type == 0) { // slats exists only for venetian blinds
             if (get_config("slightly_open_duration") == 0) { // handle division by zero
                 current_slats = 100
                 last_slats = current_slats
             } else {
-                current_slats = last_slats + (((100 * callback_ms) / (2 * get_config("slightly_open_duration") * 1000.0)))
+                current_slats = last_slats + ((100 * callback_ms) / (2 * get_config("slightly_open_duration") * 1000.0))
             }
             if (current_slats >= 100) {
                 current_slats = 100
             }
 
             if (last_slats == 100) { // slats fully moved, start changing position
-                current_position = last_position - (((100 * callback_ms) / (get_config("closing_duration") * 1000.0)))
+                current_position = last_position - ((100 * callback_ms) / (get_config("closing_duration") * 1000.0))
                 if (current_position <= 0) {
                     current_position = 0
                 }
             }
 
-            if (current_position == 0 and current_slats == 100 and steps_left == 0) {
-                current_slats = 0
-            }
         } else { // other shading types
-            current_position = last_position - (((100 * callback_ms) / (get_config("closing_duration") * 1000.0)))
+            current_position = last_position - ((100 * callback_ms) / (get_config("closing_duration") * 1000.0))
             if (current_position <= 0) {
                 current_position = 0
             }
         }
 
         set_state("slats", current_slats)
-        set_output("slats", round(current_slats))
+        // 0 and 100 positions are the same when fully closed
+        if (round(current_position) == 0 and (round(current_slats) == 0 or round(current_slats) == 100)) {
+            set_output("slats", 0)
+        } else {
+            set_output("slats", round(current_slats))
+        }
         set_state("position", current_position)
         set_output("position", round(current_position))
 
@@ -106,19 +109,37 @@ if (channel == "callback") {
     return
 }
 
+if (get_state("slats") >= 100 and get_state("position") <= 0) {
+    // 0 and 100 position of slats are equal on position == 0
+    set_state("slats", 0)
+}
+
+full_opening_steps = (1000 * get_config("opening_duration")) / callback_ms
+full_opening_steps_left = full_opening_steps * (100 - get_state("position")) / 100.0
+full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
+slats_full_rotation_steps = (1000 * 2 * get_config("slightly_open_duration")) / callback_ms
+if (shading_type != 0) { // slats are present only for venetian blinds
+    slats_full_rotation_steps = 0
+}
+slats_full_rotation_steps_left_opening = slats_full_rotation_steps * get_state("slats") / 100.0
+slats_full_rotation_steps_left_closing = slats_full_rotation_steps * (100 - get_state("slats")) / 100.0
+steps_left_opening = round(full_opening_steps_left + slats_full_rotation_steps_left_opening)
+steps_left_closing = round(full_closing_steps + slats_full_rotation_steps)
+
 if (channel == "part_open") {
     if (get_input("wind_alarm")) {
         return
     }
 
     clear_callback()
-    set_output("open", value)
     set_output("close", false)
 
-    if (value) {
-        full_opening_steps = (1000 * get_config("opening_duration")) / callback_ms
-        set_state("steps_left", full_opening_steps * (100 - get_state("position")) / 100.0)
+    if (value and steps_left_opening != 0) {
+        set_output("open", true)
+        set_state("steps_left", steps_left_opening)
         callback(callback_ms_real, 1)
+    } else {
+        set_output("open", false)
     }
     return
 }
@@ -133,8 +154,7 @@ if (channel == "part_close") {
     set_output("close", value)
 
     if (value) {
-        full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
-        set_state("steps_left", full_closing_steps)
+        set_state("steps_left", steps_left_closing)
         callback(callback_ms_real, 2)
     }
     return
@@ -162,13 +182,13 @@ if (channel == "wind_alarm") {
             set_output("open", false)
             set_output("close", true)
             full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
-            set_state("steps_left", full_closing_steps * -position_diff / 100)
+            set_state("steps_left", full_closing_steps * -position_diff / 100 + slats_full_rotation_steps_left_closing)
             callback(callback_ms_real, 2)
         } else { // opening
             set_output("open", true)
             set_output("close", false)
             full_opening_steps = (1000 * get_config("opening_duration")) / callback_ms
-            set_state("steps_left", full_opening_steps * position_diff / 100)
+            set_state("steps_left", full_opening_steps * position_diff / 100 + slats_full_rotation_steps_left_opening)
             callback(callback_ms_real, 1)
         }
         return
@@ -201,15 +221,14 @@ if (channel == "toggle") {
         set_output("open", false)
         set_output("close", true)
 
-        full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
-        set_state("steps_left", full_closing_steps * get_state("position") / 100)
+        set_state("steps_left", steps_left_closing)
         callback(callback_ms_real, 2)
     } else { // toggle to opening
         set_state("was_opening", true)
         set_output("open", true)
         set_output("close", false)
 
-        set_state("steps_left", (1000 * get_config("opening_duration")) / callback_ms)
+        set_state("steps_left", steps_left_opening)
         callback(callback_ms_real, 1)
     }
     return
@@ -220,11 +239,6 @@ if (channel == "full_open" or channel == "slightly_open") {
         return
     }
 
-    callback_id = 1
-    if (channel == "slightly_open") {
-        callback_id = 3
-    }
-
     if (get_output("open")) { // stops if in motion
         clear_callback()
         set_state("steps_left", 0)
@@ -232,38 +246,38 @@ if (channel == "full_open" or channel == "slightly_open") {
         return
     }
 
-    if (shading_type == 0) {
-        full_open_steps = (1000 * get_config("opening_duration")) / callback_ms
-        full_open_steps_left = full_open_steps * (100 - get_state("position")) / 100.0
-        slightly_open_return_steps = (1000 * get_config("slightly_open_duration")) / callback_ms
-        slats_return_steps_to_opening = 2 * slightly_open_return_steps * get_state("slats") / 100.0
+    callback_id = 1
+    if (channel == "slightly_open") {
+        callback_id = 3
+    }
 
-        if (channel == "full_open") {
-            steps_left = full_open_steps_left + slats_return_steps_to_opening
-            set_state("steps_left", steps_left)
-        } else if (channel == "slightly_open") {
-            steps_left = full_open_steps_left + slats_return_steps_to_opening
-            set_state("steps_left", steps_left)
-        }
+    steps_left = 0
+    if (shading_type == 0) {
+        steps_left = steps_left_opening
     } else {
         full_open_steps = (1000 * get_config("opening_duration")) / callback_ms
         full_open_steps_left = full_open_steps * (100 - get_state("position")) / 100.0
 
         if (channel == "full_open") {
-            set_state("steps_left", full_open_steps_left)
+            steps_left = full_open_steps_left
         } else {
             slightly_open_return_steps = (1000 * get_config("slightly_open_duration")) / callback_ms
             slightly_open_steps_left = full_open_steps_left - slightly_open_return_steps
 
             if (slightly_open_steps_left >= 0) {
-                set_state("steps_left", slightly_open_steps_left)
+                steps_left = slightly_open_steps_left
             } else {
-                set_state("steps_left", -slightly_open_steps_left)
+                steps_left = -slightly_open_steps_left
                 callback_id = 2 // closing direction
             }
         }
     }
 
+    if (steps_left == 0) {
+        return
+    }
+
+    set_state("steps_left", steps_left)
     if (callback_id == 1 or callback_id == 3) {
         set_output("open", true)
         set_output("close", false)
@@ -290,14 +304,7 @@ if (channel == "full_close") {
         return
     }
 
-    full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
-    slats_full_rotation_steps = (1000 * 2 * get_config("slightly_open_duration")) / callback_ms
-
-    steps_left = full_closing_steps + slats_full_rotation_steps
-    if (steps_left == 0) {
-        return
-    }
-    set_state("steps_left", steps_left)
+    set_state("steps_left", steps_left_closing)
     set_output("open", false)
     set_output("close", true)
     set_state("was_opening", false)
