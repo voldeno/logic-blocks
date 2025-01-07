@@ -1,0 +1,132 @@
+name: "active off holds the block"
+
+config:
+  shading_type: 0 # venetian blinds
+  opening_duration: 1
+  closing_duration: 1
+  slightly_open_duration: 0.4
+  motor_lock_duration: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - high"
+    inputs:
+      full_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - low"
+    inputs:
+      full_open: false
+
+  - action: "wait"
+    comment: "Wait 20% of opening time"
+    duration_ms: 210
+
+  - action: "set_inputs"
+    comment: "Stop pulse - high"
+    inputs:
+      off: true
+
+  - action: "assert_outputs"
+    comment: "Should be 20% open, not moving"
+    expected_outputs:
+      open: false
+      close: false
+      position: 20
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait to re-check"
+    duration_ms: 200
+
+  - action: "assert_outputs"
+    comment: "Should be 20% open, not moving, after wait"
+    expected_outputs:
+      open: false
+      close: false
+      position: 20
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - high"
+    inputs:
+      full_close: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_close input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - low"
+    inputs:
+      full_close: false
+
+  - action: "assert_outputs"
+    comment: "Should not react"
+    expected_outputs:
+      open: false
+      close: false
+      position: 20
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - high"
+    inputs:
+      full_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - low"
+    inputs:
+      full_open: false
+
+  - action: "assert_outputs"
+    comment: "Should not react"
+    expected_outputs:
+      open: false
+      close: false
+      position: 20
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Set part_open input - high"
+    inputs:
+      part_open: true
+
+  - action: "assert_outputs"
+    comment: "Should not react"
+    expected_outputs:
+      open: false
+      close: false
+      position: 20
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Set part_open input - low"
+    inputs:
+      part_open: false
+
+  - action: "set_inputs"
+    comment: "Set wind_alarm input - high"
+    inputs:
+      wind_alarm: true
+
+  - action: "assert_outputs"
+    comment: "Should not react"
+    expected_outputs:
+      open: false
+      close: false
+      position: 20
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Set wind_alarm input - low"
+    inputs:
+      wind_alarm: false
