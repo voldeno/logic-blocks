@@ -5,6 +5,11 @@ channel = get_current_channel()
 value = get_current_value()
 shading_type = get_config("shading_type")
 
+// slats exists only for venetian blinds, so ensure they are zeroed for other configurations
+if (shading_type != 0 and get_state("slats") != 0) {
+    set_state("slats", 0)
+}
+
 if (channel == "callback") {
     steps_left = get_state("steps_left")
     steps_left -= 1
@@ -68,8 +73,14 @@ if (channel == "callback") {
                 current_slats = 100
                 last_slats = current_slats
             } else {
-                current_slats = last_slats + ((100 * callback_ms) / (2 * get_config("slightly_open_duration") * 1000.0))
+                if (last_slats <= 0 and last_position <= 0) {
+                    // prevent a 0 -> 100 move for slats in closed blind position
+                    current_slats = 0
+                } else {
+                    current_slats = last_slats + ((100 * callback_ms) / (2 * get_config("slightly_open_duration") * 1000.0))
+                }
             }
+
             if (current_slats >= 100) {
                 current_slats = 100
             }
@@ -127,7 +138,7 @@ steps_left_opening = round(full_opening_steps_left + slats_full_rotation_steps_l
 steps_left_closing = round(full_closing_steps + slats_full_rotation_steps)
 
 if (channel == "part_open") {
-    if (get_input("wind_alarm")) {
+    if (get_input("wind_alarm") or get_input("off")) {
         return
     }
 
@@ -145,7 +156,7 @@ if (channel == "part_open") {
 }
 
 if (channel == "part_close") {
-    if (get_input("wind_alarm")) {
+    if (get_input("wind_alarm") or get_input("off")) {
         return
     }
 
@@ -161,6 +172,10 @@ if (channel == "part_close") {
 }
 
 if (channel == "wind_alarm") {
+    if (get_input("off")) {
+        return
+    }
+
     if (value) {
         clear_callback()
         wap = get_config("wind_alarm_position")
@@ -195,20 +210,22 @@ if (channel == "wind_alarm") {
     }
 }
 
+if (channel == "off") {
+    if (value) { // reset on raising edge, no-op on fall
+        clear_callback()
+        set_output("open", false)
+        set_output("close", false)
+        return
+    }
+}
+
 // pulse signals below
 if (value == true) {
     return
 }
 
-if (channel == "off") {
-    clear_callback()
-    set_output("open", false)
-    set_output("close", false)
-    return
-}
-
 if (channel == "toggle") {
-    if (get_input("wind_alarm")) {
+    if (get_input("wind_alarm") or get_input("off")) {
         return
     }
 
@@ -235,7 +252,7 @@ if (channel == "toggle") {
 }
 
 if (channel == "full_open" or channel == "slightly_open") {
-    if (get_input("wind_alarm")) {
+    if (get_input("wind_alarm") or get_input("off")) {
         return
     }
 
@@ -293,7 +310,7 @@ if (channel == "full_open" or channel == "slightly_open") {
 }
 
 if (channel == "full_close") {
-    if (get_input("wind_alarm")) {
+    if (get_input("wind_alarm") or get_input("off")) {
         return
     }
 
