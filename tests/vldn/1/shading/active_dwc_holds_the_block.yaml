@@ -1,0 +1,173 @@
+name: "active dwc closes rollers and holds the block"
+
+config:
+  shading_type: 1 # roller blinds
+  opening_duration: 1
+  closing_duration: 1
+  slightly_open_duration: 0
+  motor_lock_duration: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - high"
+    inputs:
+      full_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - low"
+    inputs:
+      full_open: false
+
+  - action: "wait"
+    comment: "Wait full opening time"
+    duration_ms: 1010
+
+  - action: "assert_outputs"
+    comment: "Should be 100% open, not moving"
+    expected_outputs:
+      open: false
+      close: false
+      position: 100
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Set dwc input high"
+    inputs:
+      dwc: true
+
+  - action: "assert_outputs"
+    comment: "Should start closing"
+    expected_outputs:
+      open: false
+      close: true
+      position: 100
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait 10% of closing time"
+    duration_ms: 110
+
+  - action: "assert_outputs"
+    comment: "Should be 90% open"
+    expected_outputs:
+      open: false
+      close: true
+      position: 90
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait 90% of closing time"
+    duration_ms: 910
+
+  - action: "assert_outputs"
+    comment: "Should be closed"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - high"
+    inputs:
+      full_close: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_close input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - low"
+    inputs:
+      full_close: false
+
+  - action: "assert_outputs"
+    comment: "Should not react"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - high"
+    inputs:
+      full_open: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_open input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_open input - low"
+    inputs:
+      full_open: false
+
+  - action: "assert_outputs"
+    comment: "Should not react"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Set part_open input - high"
+    inputs:
+      part_open: true
+
+  - action: "assert_outputs"
+    comment: "Should not react"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Set part_open input - low"
+    inputs:
+      part_open: false
+
+  - action: "set_inputs"
+    comment: "Set part_close input - high"
+    inputs:
+      part_close: true
+
+  - action: "assert_outputs"
+    comment: "Should not react"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Set part_close input - low"
+    inputs:
+      part_close: false
+
+  - action: "assert_outputs"
+    comment: "Should not react"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Set dwc input - low"
+    inputs:
+      dwc: false
+
+  - action: "assert_outputs"
+    comment: "Should not react"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+      slats: 0
