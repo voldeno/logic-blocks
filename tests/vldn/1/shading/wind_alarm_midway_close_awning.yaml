@@ -175,7 +175,7 @@ steps:
     duration_ms: 1010
 
   - action: "assert_outputs"
-    comment: "Should start reacting to movement riggers after wind alarm was removed"
+    comment: "Should start reacting to movement triggers after wind alarm was removed"
     expected_outputs:
       open: false
       close: false

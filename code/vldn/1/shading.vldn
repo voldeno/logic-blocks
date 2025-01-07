@@ -81,9 +81,6 @@ if (channel == "callback") {
                 }
             }
 
-            if (current_position == 0 and current_slats == 100 and steps_left == 0) {
-                current_slats = 0
-            }
         } else { // other shading types
             current_position = last_position - ((100 * callback_ms) / (get_config("closing_duration") * 1000.0))
             if (current_position <= 0) {
@@ -110,6 +107,11 @@ if (channel == "callback") {
     }
 
     return
+}
+
+if (get_state("slats") >= 100 and get_state("position") <= 0) {
+    // 0 and 100 position of slats are equal on position == 0
+    set_state("slats", 0)
 }
 
 full_opening_steps = (1000 * get_config("opening_duration")) / callback_ms

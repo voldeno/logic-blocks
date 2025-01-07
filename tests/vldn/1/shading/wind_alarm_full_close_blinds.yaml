@@ -4,7 +4,7 @@ config:
   shading_type: 0 # venetian blinds
   opening_duration: 1
   closing_duration: 1
-  slightly_open_duration: 0.2
+  slightly_open_duration: 0.4
   motor_lock_duration: 0
   wind_alarm_position: 0
 
@@ -64,7 +64,7 @@ steps:
 
   - action: "wait"
     comment: "Wait for 50% of slats rotation duration"
-    duration_ms: 210
+    duration_ms: 410
 
   - action: "assert_outputs"
     comment: "Should be 80% open with horizontal slats"
@@ -76,7 +76,7 @@ steps:
 
   - action: "wait"
     comment: "Wait for full slats rotation duration to align vertical in closing direction"
-    duration_ms: 210
+    duration_ms: 410
 
   - action: "assert_outputs"
     comment: "Should be 80% open with slats fully rotated to closing direction"
@@ -214,11 +214,23 @@ steps:
       full_open: false
 
   - action: "wait"
-    comment: "Wait till the 100% opening duration"
-    duration_ms: 1010
+    comment: "Wait till the 10% opening duration"
+    duration_ms: 110
 
   - action: "assert_outputs"
-    comment: "Should start reacting to movement riggers after wind alarm was removed"
+    comment: "Should start reacting to movement triggers after wind alarm was removed"
+    expected_outputs:
+      open: true
+      close: false
+      position: 10
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait till the 100% opening duration"
+    duration_ms: 910
+
+  - action: "assert_outputs"
+    comment: "Should start reacting to movement triggers after wind alarm was removed"
     expected_outputs:
       open: false
       close: false
