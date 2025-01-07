@@ -253,12 +253,8 @@ if (channel == "full_open" or channel == "slightly_open") {
 
     steps_left = 0
     if (shading_type == 0) {
-        // TODO: test SO from full_open?
-
         steps_left = steps_left_opening
     } else {
-        // TODO: use common values?
-
         full_open_steps = (1000 * get_config("opening_duration")) / callback_ms
         full_open_steps_left = full_open_steps * (100 - get_state("position")) / 100.0
 
