@@ -196,6 +196,14 @@
       "default": "0"
     },
     {
+      "id": "steps_left_slats",
+      "name": "Steps left for slats",
+      "description": "Number of steps remaining for completing the current movement for slats",
+      "type": "NUMBER",
+      "unit": "steps",
+      "default": "0"
+    },
+    {
       "id": "was_opening",
       "name": "Was opening",
       "description": "Indicates whether the previous movement was in the opening direction",

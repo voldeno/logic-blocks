@@ -1,0 +1,206 @@
+name: "specific position for blinds"
+
+config:
+  shading_type: 0 # venetian blinds
+  opening_duration: 1
+  closing_duration: 1
+  slightly_open_duration: 0.5
+  motor_lock_duration: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Set the position input to 40%"
+    inputs:
+      position: 40
+
+  - action: "wait"
+    comment: "Wait till the 40% opening duration"
+    duration_ms: 410
+
+  - action: "assert_outputs"
+    comment: "Should be 40% open, 0% slats"
+    expected_outputs:
+      open: false
+      close: false
+      position: 40
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Set the slats input to 30%"
+    inputs:
+      slats: 30
+
+  - action: "assert_outputs"
+    comment: "Should start closing"
+    expected_outputs:
+      open: false
+      close: true
+      position: 40
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait till the 30% opening of slats"
+    duration_ms: 310
+
+  - action: "assert_outputs"
+    comment: "Should be 40% open, 30% slats"
+    expected_outputs:
+      open: false
+      close: false
+      position: 40
+      slats: 30
+
+  - action: "set_inputs"
+    comment: "Set the position input to 20%"
+    inputs:
+      position: 20
+
+  - action: "wait"
+    comment: "Wait till the 70% opening of slats"
+    duration_ms: 710
+
+  - action: "assert_outputs"
+    comment: "Should be 40% open, 100% slats"
+    expected_outputs:
+      open: false
+      close: true
+      position: 40
+      slats: 100
+
+  - action: "wait"
+    comment: "Wait till the 20% movement"
+    duration_ms: 210
+
+  - action: "assert_outputs"
+    comment: "Should be 20% open, 100% slats"
+    expected_outputs:
+      open: true
+      close: false
+      position: 20
+      slats: 100
+
+  - action: "wait"
+    comment: "Wait till the 70% opening of slats"
+    duration_ms: 710
+
+  - action: "assert_outputs"
+    comment: "Should be 20% open, 30% slats"
+    expected_outputs:
+      open: false
+      close: false
+      position: 20
+      slats: 30
+
+  - action: "wait"
+    comment: "Wait till the 70% opening of slats"
+    duration_ms: 710
+
+  - action: "wait"
+    comment: "Wait till the 20% movement"
+    duration_ms: 210
+
+  - action: "wait"
+    comment: "Wait till the 70% opening of slats"
+    duration_ms: 710
+
+  - action: "set_inputs"
+    comment: "Set the slats input to 80%"
+    inputs:
+      slats: 80
+
+  - action: "wait"
+    comment: "Wait till the 80% opening of slats"
+    duration_ms: 510
+
+  - action: "assert_outputs"
+    comment: "Should be 20% open, 30% slats"
+    expected_outputs:
+      open: false
+      close: false
+      position: 20
+      slats: 80
+
+  - action: "set_inputs"
+    comment: "Set the slats input to 20%"
+    inputs:
+      slats: 20
+
+  - action: "wait"
+    comment: "Wait till the 20% opening of slats"
+    duration_ms: 610
+
+  - action: "assert_outputs"
+    comment: "Should be 20% open, 30% slats"
+    expected_outputs:
+      open: false
+      close: false
+      position: 20
+      slats: 20
+
+  - action: "set_inputs"
+    comment: "Set the position input to 80% and slats input to 70%"
+    inputs:
+      position: 80
+      slats: 70
+
+  - action: "wait"
+    comment: "Wait till the 20% opening of slats"
+    duration_ms: 210
+
+  - action: "assert_outputs"
+    comment: "Should be 20% open, 0% slats"
+    expected_outputs:
+      open: true
+      close: false
+      position: 20
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait till the 60% movement"
+    duration_ms: 610
+
+  - action: "assert_outputs"
+    comment: "Should be 80% open, 0% slats"
+    expected_outputs:
+      open: false
+      close: true
+      position: 80
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait till the 70% opening of slats"
+    duration_ms: 710
+
+  - action: "assert_outputs"
+    comment: "Should be 80% open, 70% slats"
+    expected_outputs:
+      open: false
+      close: false
+      position: 80
+      slats: 70
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - high"
+    inputs:
+      full_close: true
+
+  - action: "wait"
+    comment: "Send a pulse to full_close input - wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Send a pulse to full_close input - low"
+    inputs:
+      full_close: false
+
+  - action: "wait"
+    comment: "Wait for full closing"
+    duration_ms: 2010
+
+  - action: "assert_outputs"
+    comment: "Should be fully closed"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+      slats: 0

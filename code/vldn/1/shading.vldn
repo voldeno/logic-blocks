@@ -55,19 +55,20 @@ if (channel == "callback") {
             set_output("open", false)
         } else if (value == 3) { // slightly_open for venetian blinds
             set_output("open", false)
-            slightly_open_steps = (1000 * get_config("slightly_open_duration")) / callback_ms
-            if (slightly_open_steps == 0) {
+            steps_left_slats = get_state("steps_left_slats")
+            if (steps_left_slats == 0) {
                 return
             }
             set_output("close", true)
-            set_state("steps_left", slightly_open_steps)
-            callback(0, 2)
+            set_state("steps_left", steps_left_slats)
+            //callback(0, 2)
+            callback(callback_ms_real, 2)
             return
         }
         return
     }
 
-    if (value == 2) { // closing callback - full_close
+    if (value == 2 or value == 4) { // closing callback - full_close
         if (shading_type == 0) { // slats exists only for venetian blinds
             if (get_config("slightly_open_duration") == 0) { // handle division by zero
                 current_slats = 100
@@ -110,9 +111,21 @@ if (channel == "callback") {
         set_output("position", round(current_position))
 
         if (steps_left > 0) {
-           callback(callback_ms_real, 2)
-        } else {
-           set_output("close", false)
+           callback(callback_ms_real, value)
+        } else if (value == 2 or (value == 4 and shading_type != 0)) {
+            set_output("close", false)
+        } else if (value == 4) {
+            set_output("close", false)
+            steps_left_slats = get_state("steps_left_slats")
+
+            if (steps_left_slats == 0) {
+                return
+            }
+            set_output("open", true)
+            set_state("steps_left", steps_left_slats)
+            //callback(0, 1)
+            callback(callback_ms_real, 1)
+            return
         }
         return
     }
@@ -136,6 +149,82 @@ slats_full_rotation_steps_left_opening = slats_full_rotation_steps * get_state("
 slats_full_rotation_steps_left_closing = slats_full_rotation_steps * (100 - get_state("slats")) / 100.0
 steps_left_opening = round(full_opening_steps_left + slats_full_rotation_steps_left_opening)
 steps_left_closing = round(full_closing_steps + slats_full_rotation_steps)
+
+if (channel == "position" or channel == "slats") {
+    if (get_input("wind_alarm") or get_input("off") or get_input("dwc")) {
+        return
+    }
+    clear_callback()
+
+    position_in = get_input("position")
+    slats_in = get_input("slats")
+
+    // position_diff - percentage:
+    // zero - ok
+    // negative - need to move in closing direction
+    // positive - need to move in opening direction
+    position_diff = position_in - get_state("position")
+    slats_position_diff = 0
+    if (position_diff == 0) {
+        slats_position_diff = slats_in - get_state("slats")
+    } else if (position_diff > 0) { // opening, so slats will close (0)
+        slats_position_diff = slats_in
+    } else { // closing, so slats will open (100)
+        slats_position_diff = slats_in - 100
+    }
+
+    callback_id = 0
+    steps_left = 0
+    steps_left_slats = 0
+    if (slats_position_diff == 0) {
+        // no-op
+    } else if (slats_position_diff > 0) {
+        steps_left_slats = slats_full_rotation_steps * slats_position_diff / 100
+    } else {
+        steps_left_slats = slats_full_rotation_steps * -slats_position_diff / 100
+    }
+
+    if (position_diff == 0 and slats_position_diff == 0) {
+        return
+    }
+
+    if (position_diff == 0) { // slats only
+        steps_left = steps_left_slats
+        steps_left_slats = 0
+        if (slats_position_diff > 0) { // closing direction to start opening slats
+            set_output("open", false)
+            set_output("close", true)
+            set_state("was_opening", false)
+
+            callback_id = 2
+        } else { // opening direction to start closing slats
+            set_output("open", true)
+            set_output("close", false)
+            set_state("was_opening", true)
+
+            callback_id = 1
+        }
+    } else if (position_diff < 0) { // closing
+        set_output("open", false)
+        set_output("close", true)
+        set_state("was_opening", false)
+
+        steps_left = full_closing_steps * -position_diff / 100 + slats_full_rotation_steps_left_closing
+        callback_id = 4
+    } else { // opening
+        set_output("open", true)
+        set_output("close", false)
+        set_state("was_opening", true)
+
+        steps_left = full_opening_steps * position_diff / 100 + slats_full_rotation_steps_left_opening
+        callback_id = 3
+    }
+
+    set_state("steps_left", steps_left)
+    set_state("steps_left_slats", steps_left_slats)
+    callback(callback_ms_real, callback_id)
+    return
+}
 
 if (channel == "part_open") {
     if (get_input("wind_alarm") or get_input("off") or get_input("dwc")) {
@@ -214,14 +303,12 @@ if (channel == "wind_alarm") {
         set_output("open", false)
         set_output("close", true)
         set_state("was_opening", false)
-        full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
         set_state("steps_left", full_closing_steps * -position_diff / 100 + slats_full_rotation_steps_left_closing)
         callback(callback_ms_real, 2)
     } else { // opening
         set_output("open", true)
         set_output("close", false)
         set_state("was_opening", true)
-        full_opening_steps = (1000 * get_config("opening_duration")) / callback_ms
         set_state("steps_left", full_opening_steps * position_diff / 100 + slats_full_rotation_steps_left_opening)
         callback(callback_ms_real, 1)
     }
@@ -284,6 +371,7 @@ if (channel == "full_open" or channel == "slightly_open") {
     callback_id = 1
     if (channel == "slightly_open") {
         callback_id = 3
+        set_state("steps_left_slats", (1000 * get_config("slightly_open_duration")) / callback_ms)
     }
 
     steps_left = 0
