@@ -130,3 +130,24 @@ steps:
     comment: "Set wind_alarm input - low"
     inputs:
       wind_alarm: false
+
+  - action: "assert_outputs"
+    comment: "Should not react"
+    expected_outputs:
+      open: false
+      close: false
+      position: 20
+      slats: 0
+
+  - action: "set_inputs"
+    comment: "Set off input - low"
+    inputs:
+      wind_alarm: false
+
+  - action: "assert_outputs"
+    comment: "Should not react"
+    expected_outputs:
+      open: false
+      close: false
+      position: 20
+      slats: 0
