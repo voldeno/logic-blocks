@@ -26,11 +26,11 @@ if (channel == "callback") {
 
     if (value == 1 or value == 3) { // opening callback - full_open and slightly_open
         if (shading_type == 0) { // slats exists only for venetian blinds
-            if (get_config("slightly_open_duration") == 0) { // handle division by zero
+            if (get_config("return_duration") == 0) { // handle division by zero
                 current_slats = 0
                 last_slats = current_slats
             } else {
-                current_slats = last_slats - (((100 * callback_ms) / (2 * get_config("slightly_open_duration") * 1000.0)))
+                current_slats = last_slats - (((100 * callback_ms) / (2 * get_config("return_duration") * 1000.0)))
             }
             if (current_slats <= 0) {
                 current_slats = 0
@@ -70,7 +70,7 @@ if (channel == "callback") {
 
     if (value == 2 or value == 4) { // closing callback - full_close
         if (shading_type == 0) { // slats exists only for venetian blinds
-            if (get_config("slightly_open_duration") == 0) { // handle division by zero
+            if (get_config("return_duration") == 0) { // handle division by zero
                 current_slats = 100
                 last_slats = current_slats
             } else {
@@ -78,7 +78,7 @@ if (channel == "callback") {
                     // prevent a 0 -> 100 move for slats in closed blind position
                     current_slats = 0
                 } else {
-                    current_slats = last_slats + ((100 * callback_ms) / (2 * get_config("slightly_open_duration") * 1000.0))
+                    current_slats = last_slats + ((100 * callback_ms) / (2 * get_config("return_duration") * 1000.0))
                 }
             }
 
@@ -141,7 +141,7 @@ if (get_state("slats") >= 100 and get_state("position") <= 0) {
 full_opening_steps = (1000 * get_config("opening_duration")) / callback_ms
 full_opening_steps_left = full_opening_steps * (100 - get_state("position")) / 100.0
 full_closing_steps = (1000 * get_config("closing_duration")) / callback_ms
-slats_full_rotation_steps = (1000 * 2 * get_config("slightly_open_duration")) / callback_ms
+slats_full_rotation_steps = (1000 * 2 * get_config("return_duration")) / callback_ms
 if (shading_type != 0) { // slats are present only for venetian blinds
     slats_full_rotation_steps = 0
 }
@@ -371,7 +371,7 @@ if (channel == "full_open" or channel == "slightly_open") {
     callback_id = 1
     if (channel == "slightly_open") {
         callback_id = 3
-        set_state("steps_left_slats", (1000 * get_config("slightly_open_duration")) / callback_ms)
+        set_state("steps_left_slats", (1000 * get_config("return_duration")) / callback_ms)
     }
 
     steps_left = 0
@@ -384,7 +384,7 @@ if (channel == "full_open" or channel == "slightly_open") {
         if (channel == "full_open") {
             steps_left = full_open_steps_left
         } else {
-            slightly_open_return_steps = (1000 * get_config("slightly_open_duration")) / callback_ms
+            slightly_open_return_steps = (1000 * get_config("return_duration")) / callback_ms
             slightly_open_steps_left = full_open_steps_left - slightly_open_return_steps
 
             if (slightly_open_steps_left >= 0) {

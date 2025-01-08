@@ -139,6 +139,7 @@
       "name": "Opening duration",
       "description": "The time taken to fully open the shading device, in seconds",
       "type": "NUMBER",
+      "unit" : "s",
       "default": "80"
     },
     {
@@ -146,20 +147,15 @@
       "name": "Closing duration",
       "description": "The time taken to fully close the shading device, in seconds",
       "type": "NUMBER",
+      "unit" : "s",
       "default": "80"
     },
     {
-      "id": "motor_lock_duration",
-      "name": "Motor lock duration",
-      "description": "Time required to release the motor lock between direction changes, in seconds",
+      "id": "return_duration",
+      "name": "Return duration",
+      "description": "Return duration to position the shading device slightly open from fully open position. For venetian blinds, duration for horizontal alignment of slats.",
       "type": "NUMBER",
-      "default": "0.5"
-    },
-    {
-      "id": "slightly_open_duration",
-      "name": "Slightly open duration",
-      "description": "Duration to position the shading device slightly open from fully open position",
-      "type": "NUMBER",
+      "unit" : "s",
       "default": "0.8"
     },
     {
@@ -167,7 +163,16 @@
       "name": "Wind alarm position",
       "description": "The position of the shading device during wind alarm activation, as a percentage of fully open",
       "type": "NUMBER",
+      "unit" : "%",
       "default": "0"
+    },
+    {
+      "id": "motor_lock_duration",
+      "name": "Motor lock duration",
+      "description": "Time required to release the motor lock between direction changes, in seconds",
+      "type": "NUMBER",
+      "unit" : "s",
+      "default": "0.5"
     }
   ],
   "state": [
@@ -208,7 +213,6 @@
       "name": "Was opening",
       "description": "Indicates whether the previous movement was in the opening direction",
       "type": "BOOLEAN",
-      "unit": "",
       "default": "false"
     }
   ]
