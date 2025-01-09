@@ -1,11 +1,11 @@
-name: "slightly open for venetian blinds"
+name: "motor lock for venetian blinds"
 
 config:
   shading_type: 0 # venetian blinds
   opening_duration: 1
   closing_duration: 1
   return_duration: 0.2
-  motor_lock_duration: 0
+  motor_lock_duration: 0.5
 
 steps:
   - action: "set_inputs"
@@ -47,11 +47,36 @@ steps:
     duration_ms: 910
 
   - action: "assert_outputs"
-    comment: "Should be 100% open and start aligning slats"
+    comment: "Should be 100% open and stopped for the motor lock duration"
+    expected_outputs:
+      open: false
+      close: false
+      position: 100
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait most of the motor lock duration"
+    duration_ms: 450
+
+  - action: "assert_outputs"
+    comment: "Should be 100% open and stopped for the motor lock duration - after wait"
+    expected_outputs:
+      open: false
+      close: false
+      position: 100
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait till motor lock duration passes"
+    duration_ms: 60
+
+  - action: "assert_outputs"
+    comment: "Should be 100% open and start closing"
     expected_outputs:
       open: false
       close: true
       position: 100
+      slats: 0
 
   - action: "wait"
     comment: "Wait till full slightly open time"
