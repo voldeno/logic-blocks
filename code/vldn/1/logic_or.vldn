@@ -1,6 +1,6 @@
-i1 = get_input("input_1")
-i2 = get_input("input_2")
-i3 = get_input("input_3")
-i4 = get_input("input_4")
+i1 = std::get_input("input_1")
+i2 = std::get_input("input_2")
+i3 = std::get_input("input_3")
+i4 = std::get_input("input_4")
 
-set_output("output", i1 or i2 or i3 or i4)
+std::set_output("output", i1 or i2 or i3 or i4)

@@ -1,16 +1,16 @@
-climate_control = get_input("climate_control")
+climate_control = std::get_input("climate_control")
 
 if (climate_control > 0) {
-    set_output("heating", true)
-    set_output("cooling", false)
+    std::set_output("heating", true)
+    std::set_output("cooling", false)
 }
 
 if (climate_control < 0) {
-    set_output("heating", false)
-    set_output("cooling", true)
+    std::set_output("heating", false)
+    std::set_output("cooling", true)
 }
 
 if (climate_control == 0) {
-    set_output("heating", false)
-    set_output("cooling", false)
+    std::set_output("heating", false)
+    std::set_output("cooling", false)
 }

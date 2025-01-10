@@ -1,7 +1,7 @@
-state = get_input("state")
+state = std::get_input("state")
 
 if (state) {
-    set_register(1)
+    std::set_register(1)
 } else {
-    set_register(0)
+    std::set_register(0)
 }
