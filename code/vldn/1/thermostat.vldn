@@ -1,13 +1,13 @@
-air_temp = get_input("air_temp")
-floor_temp = get_input("floor_temp")
-door_window_contact = get_input("door_window_contact")
+air_temp = std::get_input("air_temp")
+floor_temp = std::get_input("floor_temp")
+door_window_contact = std::get_input("door_window_contact")
 
-comfort_temp = get_config("comfort_temp")
-eco_temp = get_config("eco_temp")
-temp_hysteresis = get_config("temp_hysteresis")
-max_floor_temp = get_config("max_floor_temp")
+comfort_temp = std::get_config("comfort_temp")
+eco_temp = std::get_config("eco_temp")
+temp_hysteresis = std::get_config("temp_hysteresis")
+max_floor_temp = std::get_config("max_floor_temp")
 
-climate_control = get_output("climate_control")
+climate_control = std::get_output("climate_control")
 
 // TODO: floor_temp might be missing - handle optional input
 floor_overheated = (floor_temp + temp_hysteresis) >= max_floor_temp
@@ -31,4 +31,4 @@ if (floor_overheated) {
     }
 }
 
-set_output("climate_control", climate_control)
+std::set_output("climate_control", climate_control)

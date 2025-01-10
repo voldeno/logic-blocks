@@ -1,27 +1,27 @@
-channel = get_current_channel()
+channel = std::get_current_channel()
 
 if (channel == "callback") {
-    set_output("section_1", false)
-    set_output("section_2", false)
-    set_output("section_3", false)
-    set_output("section_4", false)
-    set_output("section_5", false)
-    set_output("section_6", false)
-    set_output("section_7", false)
-    set_output("section_8", false)
+    std::set_output("section_1", false)
+    std::set_output("section_2", false)
+    std::set_output("section_3", false)
+    std::set_output("section_4", false)
+    std::set_output("section_5", false)
+    std::set_output("section_6", false)
+    std::set_output("section_7", false)
+    std::set_output("section_8", false)
 
     current_section = 0
 
-    callback_id = get_current_value()
+    callback_id = std::get_current_value()
     if (callback_id == 0) {
-        set_output("pump", true)
-        callback(0, 1)
+        std::set_output("pump", true)
+        std::callback(0, 1)
         return
     } else if (callback_id > 0 and callback_id < 9) {
         current_section = callback_id
     } else if (callback_id == 9) {
-        set_output("pump", false)
-        set_state("active", false)
+        std::set_output("pump", false)
+        std::set_state("active", false)
         return
     }
 
@@ -63,31 +63,30 @@ if (channel == "callback") {
         section_duration_cfg = "s8_duration"
     }
 
-    section_enabled = get_config(section_enabled_cfg)
-    section_duration = get_config(section_duration_cfg)
+    section_enabled = std::get_config(section_enabled_cfg)
+    section_duration = std::get_config(section_duration_cfg)
 
-    set_output(section_output, true)
+    std::set_output(section_output, true)
 
-    callback(section_duration * 1000, current_section + 1)
+    std::callback(section_duration * 1000, current_section + 1)
 
     return
 }
 
-input_value = get_current_value()
+input_value = std::get_current_value()
 
 if (channel == "trigger" and input_value) {
-    if (get_state("active")) {
+    if (std::get_state("active")) {
         return
     }
 
-    set_state("active", true)
-    callback(0, 0)
+    std::set_state("active", true)
+    std::callback(0, 0)
     return
 }
 
 if (channel == "reset") {
-    clear_callback()
-    callback(0, 9)
+    std::clear_callback()
+    std::callback(0, 9)
     return
 }
-

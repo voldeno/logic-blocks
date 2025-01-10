@@ -1,17 +1,17 @@
-value = get_current_value()
+value = std::get_current_value()
 if (value == false) {
     return
 }
 
-channel = get_current_channel()
-index = get_state("sequence_index")
-max_index = get_config("max_index")
+channel = std::get_current_channel()
+index = std::get_state("sequence_index")
+max_index = std::get_config("max_index")
 
 new_index = index
 
 if (channel == "reset" and value) {
     new_index = 0
-    set_state("sequence_index", new_index)
+    std::set_state("sequence_index", new_index)
 }
 
 if (channel == "forward" and value) {
@@ -20,7 +20,7 @@ if (channel == "forward" and value) {
         new_index = 0
     }
 
-    set_state("sequence_index", new_index)
+    std::set_state("sequence_index", new_index)
 }
 
 if (channel == "backward" and value) {
@@ -29,7 +29,7 @@ if (channel == "backward" and value) {
         new_index = max_index
     }
 
-    set_state("sequence_index", new_index)
+    std::set_state("sequence_index", new_index)
 }
 
 off = false
@@ -54,8 +54,8 @@ if (new_index == 4) {
     o4 = true
 }
 
-set_output("off", off)
-set_output("o1", o1)
-set_output("o2", o2)
-set_output("o3", o3)
-set_output("o4", o4)
+std::set_output("off", off)
+std::set_output("o1", o1)
+std::set_output("o2", o2)
+std::set_output("o3", o3)
+std::set_output("o4", o4)
