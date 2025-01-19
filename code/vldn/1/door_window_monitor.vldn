@@ -1,6 +1,3 @@
-channel = std::get_current_channel()
-value = std::get_current_value()
-
 open = std::get_input("open_contact")
 tilted = std::get_input("tilted_contact")
 closed = !open and !tilted
