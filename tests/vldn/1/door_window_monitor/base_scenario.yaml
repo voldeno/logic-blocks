@@ -1,0 +1,84 @@
+name: "base scenario"
+
+steps:
+  - action: "set_inputs"
+    comment: "Start with window closed and locked"
+    inputs:
+      open_contact: false
+      tilted_contact: false
+      locked_contact: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      open: false
+      tilted: false
+      closed: true
+      locked: true
+      secured: true
+
+  - action: "set_inputs"
+    comment: "Unlock window"
+    inputs:
+      locked_contact: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      open: false
+      tilted: false
+      closed: true
+      locked: false
+      secured: false
+
+  - action: "set_inputs"
+    comment: "tilt window"
+    inputs:
+      tilted_contact: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      open: false
+      tilted: true
+      closed: false
+      locked: false
+      secured: false
+
+  - action: "set_inputs"
+    comment: "open window"
+    inputs:
+      open_contact: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      open: true
+      tilted: false
+      closed: false
+      locked: false
+      secured: false
+
+  - action: "set_inputs"
+    comment: "lock when open"
+    inputs:
+      locked_contact: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      open: true
+      tilted: false
+      closed: false
+      locked: true
+      secured: false
+
+  - action: "set_inputs"
+    comment: "unlock and close"
+    inputs:
+      locked_contact: false
+      open_contact: false
+      tilted_contact: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      open: false
+      tilted: false
+      closed: true
+      locked: false
+      secured: false

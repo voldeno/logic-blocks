@@ -1,7 +1,7 @@
 {
-  "name": "Climate valve actuator",
+  "name": "Relay",
   "group": "output",
-  "description": "Climate valve actuator",
+  "description": "Relay output of Voldeno module",
   "ioType": "register",
   "ioRegisterFilters": [
     {
@@ -30,7 +30,7 @@
   "inputs": [
     {
       "id": "state",
-      "description": "",
+      "description": "Desired state of the relay output",
       "name": "State",
       "abbrev": "S",
       "type": "BOOLEAN",

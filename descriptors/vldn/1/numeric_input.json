@@ -1,7 +1,7 @@
 {
-  "name": "Thermometer",
+  "name": "Numeric input",
   "group": "input",
-  "description": "Logic block representing a thermometer",
+  "description": "Numeric input of Voldeno module",
   "ioType": "register",
   "ioRegisterFilters": [
     {
@@ -21,11 +21,11 @@
   ],
   "outputs": [
     {
-      "id": "read",
-      "name": "read",
-      "abbrev": "R",
+      "id": "value",
+      "name": "Value",
+      "abbrev": "V",
       "type": "NUMBER",
-      "description": "Temperature sensor read",
+      "description": "Numeric value",
       "default": "0"
     }
   ],
@@ -35,7 +35,7 @@
       "name": "scale",
       "type": "NUMBER",
       "description": "Scale",
-      "default": "0"
+      "default": "1"
     },
     {
       "id": "offset",

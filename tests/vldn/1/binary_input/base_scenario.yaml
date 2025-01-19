@@ -1,0 +1,32 @@
+name: "base scenario"
+
+steps:
+  - action: "set_inputs"
+    comment: "Register high"
+    inputs:
+      register: 1
+
+  - action: "assert_outputs"
+    comment: "Output high"
+    expected_outputs:
+      state: true
+
+  - action: "set_inputs"
+    comment: "Register low"
+    inputs:
+      register: 0
+
+  - action: "assert_outputs"
+    comment: "Output low"
+    expected_outputs:
+      state: false
+
+  - action: "set_inputs"
+    comment: "Register high"
+    inputs:
+      register: 1
+
+  - action: "assert_outputs"
+    comment: "Output high"
+    expected_outputs:
+      state: true
