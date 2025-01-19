@@ -1,6 +1,4 @@
-state = std::get_input("state")
-
-if (state) {
+if (std::get_input("state")) {
     std::set_register(1)
 } else {
     std::set_register(0)

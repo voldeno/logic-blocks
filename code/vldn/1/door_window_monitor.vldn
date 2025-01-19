@@ -1,0 +1,14 @@
+channel = std::get_current_channel()
+value = std::get_current_value()
+
+open = std::get_input("open_contact")
+tilted = std::get_input("tilted_contact")
+closed = !open and !tilted
+locked = std::get_input("locked_contact")
+secured = closed and locked
+
+std::set_output("open", open)
+std::set_output("tilted", tilted and !open)
+std::set_output("closed", closed)
+std::set_output("locked", locked)
+std::set_output("secured", secured)

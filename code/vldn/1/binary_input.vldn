@@ -1,0 +1,5 @@
+if (std::get_current_value() == 1) {
+    std::set_output("state", true)
+} else {
+    std::set_output("state", false)
+}

@@ -1,0 +1,36 @@
+name: "base scenario"
+
+config:
+  scale: 1
+  offset: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Register to 1000"
+    inputs:
+      register: 1000
+
+  - action: "assert_outputs"
+    comment: "Output is 1"
+    expected_outputs:
+      value: 1
+
+  - action: "set_inputs"
+    comment: "Register to 2500"
+    inputs:
+      register: 2500
+
+  - action: "assert_outputs"
+    comment: "Output is 2.5"
+    expected_outputs:
+      value: 2.5
+
+  - action: "set_inputs"
+    comment: "Register to -13752"
+    inputs:
+      register: -13752
+
+  - action: "assert_outputs"
+    comment: "Output is -13.752"
+    expected_outputs:
+      value: -13.752

@@ -1,4 +1,0 @@
-scale = std::get_config("scale")
-offset = std::get_config("offset")
-value = std::get_current_value()
-std::set_output("read", value * scale + offset)

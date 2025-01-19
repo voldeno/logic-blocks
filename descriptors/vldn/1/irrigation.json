@@ -2,23 +2,6 @@
   "name": "Irrigation",
   "group": "process",
   "description": "Irrigation system",
-  "ioRegisterFilters": [
-    {
-      "moduleId": 1,
-      "registerIds": [
-        1,
-        2,
-        3
-      ]
-    },
-    {
-      "moduleId": 2,
-      "registerIds": [
-        4,
-        5
-      ]
-    }
-  ],
   "inputs": [
     {
       "id": "trigger",
