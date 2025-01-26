@@ -1,0 +1,133 @@
+name: "base scenario"
+
+config:
+  s1_enabled: true
+  s1_duration: 1
+  s2_enabled: true
+  s2_duration: 2
+  s3_enabled: true
+  s3_duration: 1.5
+  s4_enabled: false
+  s4_duration: 2
+  s5_enabled: true
+  s5_duration: 1
+  s6_enabled: true
+  s6_duration: 2.2
+  s7_enabled: false
+  s7_duration: 1
+  s8_enabled: false
+  s8_duration: 3
+
+steps:
+  - action: "assert_outputs"
+    comment: "Should start disabled"
+    expected_outputs:
+      pump: false
+      section_1: false
+      section_2: false
+      section_3: false
+      section_4: false
+      section_5: false
+      section_6: false
+      section_7: false
+      section_8: false
+
+  - action: "set_inputs"
+    comment: "Trigger irrigation - high"
+    inputs:
+      trigger: true
+
+  - action: "wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Trigger irrigation - low"
+    inputs:
+      trigger: false
+
+  - action: "assert_outputs"
+    comment: "Should enable pump and 1st section output"
+    expected_outputs:
+      pump: true
+      section_1: true
+      section_2: false
+      section_3: false
+      section_4: false
+      section_5: false
+      section_6: false
+      section_7: false
+      section_8: false
+
+  - action: "wait"
+    duration_ms: 900
+
+  - action: "assert_outputs"
+    comment: "Should enable pump and 1st section output - still active"
+    expected_outputs:
+      pump: true
+      section_1: true
+      section_2: false
+      section_3: false
+      section_4: false
+      section_5: false
+      section_6: false
+      section_7: false
+      section_8: false
+
+  - action: "wait"
+    duration_ms: 120
+
+  - action: "assert_outputs"
+    comment: "Should switch to 2nd section"
+    expected_outputs:
+      pump: true
+      section_1: false
+      section_2: true
+      section_3: false
+      section_4: false
+      section_5: false
+      section_6: false
+      section_7: false
+      section_8: false
+
+  - action: "set_inputs"
+    comment: "Reset irrigation - high"
+    inputs:
+      reset: true
+
+  - action: "wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Reset irrigation - low"
+    inputs:
+      reset: false
+
+  - action: "assert_outputs"
+    comment: "Should switch off all sections and switch off the pump after the reset signal"
+    expected_outputs:
+      pump: false
+      section_1: false
+      section_2: false
+      section_3: false
+      section_4: false
+      section_5: false
+      section_6: false
+      section_7: false
+      section_8: false
+
+  - action: "wait"
+    duration_ms: 1000
+
+  - action: "assert_outputs"
+    comment: "Should switch off all sections and switch off the pump after the reset signal - re-check after wait"
+    expected_outputs:
+      pump: false
+      section_1: false
+      section_2: false
+      section_3: false
+      section_4: false
+      section_5: false
+      section_6: false
+      section_7: false
+      section_8: false
