@@ -1,75 +1,46 @@
 channel = std::get_current_channel()
 
+section_count = 8
+
+fn disable_all(section_count) {
+    section = 0
+    while (section < section_count) {
+        section += 1
+        std::set_output(str::fmt("section_{}", section), false)
+    }
+}
+
 if (channel == "callback") {
-    std::set_output("section_1", false)
-    std::set_output("section_2", false)
-    std::set_output("section_3", false)
-    std::set_output("section_4", false)
-    std::set_output("section_5", false)
-    std::set_output("section_6", false)
-    std::set_output("section_7", false)
-    std::set_output("section_8", false)
+    disable_all(section_count)
 
     current_section = 0
-
     callback_id = std::get_current_value()
     if (callback_id == 0) {
         std::set_output("pump", true)
         std::callback(0, 1)
         return
-    } else if (callback_id > 0 and callback_id < 9) {
+    } else if (callback_id > 0 and callback_id < (section_count + 1)) {
         current_section = callback_id
-    } else if (callback_id == 9) {
+    } else if (callback_id == (section_count + 1)) {
         std::set_output("pump", false)
         std::set_state("active", false)
         return
     }
 
-    section_output = ""
-    section_enabled_cfg = ""
-    section_duration_cfg = ""
-
-    if (current_section == 1) {
-        section_output = "section_1"
-        section_enabled_cfg = "s1_enabled"
-        section_duration_cfg = "s1_duration"
-    } else if (current_section == 2) {
-        section_output = "section_2"
-        section_enabled_cfg = "s2_enabled"
-        section_duration_cfg = "s2_duration"
-    } else if (current_section == 3) {
-        section_output = "section_3"
-        section_enabled_cfg = "s3_enabled"
-        section_duration_cfg = "s3_duration"
-    } else if (current_section == 4) {
-        section_output = "section_4"
-        section_enabled_cfg = "s4_enabled"
-        section_duration_cfg = "s4_duration"
-    } else if (current_section == 5) {
-        section_output = "section_5"
-        section_enabled_cfg = "s5_enabled"
-        section_duration_cfg = "s5_duration"
-    } else if (current_section == 6) {
-        section_output = "section_6"
-        section_enabled_cfg = "s6_enabled"
-        section_duration_cfg = "s6_duration"
-    } else if (current_section == 7) {
-        section_output = "section_7"
-        section_enabled_cfg = "s7_enabled"
-        section_duration_cfg = "s7_duration"
-    } else if (current_section == 8) {
-        section_output = "section_8"
-        section_enabled_cfg = "s8_enabled"
-        section_duration_cfg = "s8_duration"
-    }
+    section_output = str::fmt("section_{}", current_section)
+    section_enabled_cfg = str::fmt("s{}_enabled", current_section)
+    section_duration_cfg = str::fmt("s{}_duration", current_section)
 
     section_enabled = std::get_config(section_enabled_cfg)
     section_duration = std::get_config(section_duration_cfg)
 
+    if (!section_enabled) {
+        std::callback(0, current_section + 1)
+        return
+    }
+
     std::set_output(section_output, true)
-
     std::callback(section_duration * 1000, current_section + 1)
-
     return
 }
 
@@ -87,6 +58,6 @@ if (channel == "trigger" and input_value) {
 
 if (channel == "reset") {
     std::clear_callback()
-    std::callback(0, 9)
+    std::callback(0, section_count + 1)
     return
 }
