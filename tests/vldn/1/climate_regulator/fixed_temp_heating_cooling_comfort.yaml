@@ -16,19 +16,21 @@ steps:
       air_temp: 21.5
 
   - action: "assert_outputs"
-    comment: "CC out is in idle mode as air_temp = fixed_temp - 0.0"
+    comment: "TD out is in idle mode as air_temp = fixed_temp - 0.0"
     expected_outputs:
-      climate_control: 0
+      target_temp: 21.5
+      temp_deviation: 0
 
   - action: "set_inputs"
     comment: "Enable comfort temperature mode"
     inputs:
-      comfort: 1
+      comfort: true
 
   - action: "assert_outputs"
-    comment: "CC out is in heating mode as air_temp < fixed_temp - 1.0"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 1.0"
     expected_outputs:
-      climate_control: 1.0
+      target_temp: 22.5
+      temp_deviation: 1.0
 
   - action: "set_inputs"
     comment: "Current temperature: 21.0'"
@@ -36,9 +38,10 @@ steps:
       air_temp: 21.0
 
   - action: "assert_outputs"
-    comment: "CC out is in heating mode as air_temp < fixed_temp - 1.5"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 1.5"
     expected_outputs:
-      climate_control: 1.5
+      target_temp: 22.5
+      temp_deviation: 1.5
 
   - action: "set_inputs"
     comment: "Current temperature: 20.5'"
@@ -46,29 +49,32 @@ steps:
       air_temp: 20.5
 
   - action: "assert_outputs"
-    comment: "CC out is in heating mode as air_temp < fixed_temp - 2.0"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 2.0"
     expected_outputs:
-      climate_control: 2.0
+      target_temp: 22.5
+      temp_deviation: 2.0
 
   - action: "set_inputs"
     comment: "Disable comfort temperature mode"
     inputs:
-      comfort: 0
+      comfort: false
 
   - action: "assert_outputs"
-    comment: "CC out is in heating mode as air_temp < fixed_temp - 1.0"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 1.0"
     expected_outputs:
-      climate_control: 1.0
+      target_temp: 21.5
+      temp_deviation: 1.0
 
   - action: "set_inputs"
     comment: "Enable comfort temperature mode"
     inputs:
-      comfort: 1
+      comfort: true
 
   - action: "assert_outputs"
-    comment: "CC out is in heating mode as air_temp < fixed_temp - 2.0"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 2.0"
     expected_outputs:
-      climate_control: 2.0
+      target_temp: 22.5
+      temp_deviation: 2.0
 
   - action: "set_inputs"
     comment: "Current temperature: 20.0'"
@@ -76,9 +82,10 @@ steps:
       air_temp: 20.0
 
   - action: "assert_outputs"
-    comment: "CC out is in heating mode as air_temp < fixed_temp - 2.5"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 2.5"
     expected_outputs:
-      climate_control: 2.5
+      target_temp: 22.5
+      temp_deviation: 2.5
 
   - action: "set_inputs"
     comment: "Current temperature: 19.5'"
@@ -86,9 +93,10 @@ steps:
       air_temp: 19.5
 
   - action: "assert_outputs"
-    comment: "CC out is in heating mode as air_temp < fixed_temp - 3.0"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 3.0"
     expected_outputs:
-      climate_control: 3.0
+      target_temp: 22.5
+      temp_deviation: 3.0
 
   - action: "set_inputs"
     comment: "Current temperature: 18.0'"
@@ -96,9 +104,10 @@ steps:
       air_temp: 18.0
 
   - action: "assert_outputs"
-    comment: "CC out is in heating mode as air_temp < fixed_temp - 4.5"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 4.5"
     expected_outputs:
-      climate_control: 4.5
+      target_temp: 22.5
+      temp_deviation: 4.5
 
   - action: "set_inputs"
     comment: "Current temperature: 18.11'"
@@ -106,9 +115,10 @@ steps:
       air_temp: 18.11
 
   - action: "assert_outputs"
-    comment: "CC out is in heating mode as air_temp < fixed_temp - 4.39"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 4.39"
     expected_outputs:
-      climate_control: 4.39
+      target_temp: 22.5
+      temp_deviation: 4.39
 
   - action: "set_inputs"
     comment: "Current temperature: 22.5'"
@@ -116,9 +126,10 @@ steps:
       air_temp: 22.5
 
   - action: "assert_outputs"
-    comment: "CC out is in idle mode as air_temp = fixed_temp - 0.0"
+    comment: "TD out is in idle mode as air_temp = fixed_temp - 0.0"
     expected_outputs:
-      climate_control: 0
+      target_temp: 22.5
+      temp_deviation: 0
 
   - action: "set_inputs"
     comment: "Current temperature: 23.5'"
@@ -126,9 +137,10 @@ steps:
       air_temp: 23.5
 
   - action: "assert_outputs"
-    comment: "CC out is in idle mode as air_temp = fixed_temp - 0.0"
+    comment: "TD out is in idle mode as air_temp = fixed_temp - 0.0"
     expected_outputs:
-      climate_control: 0
+      target_temp: 23.5
+      temp_deviation: 0
 
   - action: "set_inputs"
     comment: "Current temperature: 24.5'"
@@ -136,9 +148,10 @@ steps:
       air_temp: 24.5
 
   - action: "assert_outputs"
-    comment: "CC out is in idle mode as air_temp = fixed_temp - 0.0"
+    comment: "TD out is in idle mode as air_temp = fixed_temp - 0.0"
     expected_outputs:
-      climate_control: 0
+      target_temp: 24.5
+      temp_deviation: 0
 
   - action: "set_inputs"
     comment: "Current temperature: 25.0'"
@@ -146,9 +159,10 @@ steps:
       air_temp: 25.0
 
   - action: "assert_outputs"
-    comment: "CC out is in cooling mode as air_temp > fixed_temp - -0.5"
+    comment: "TD out is in cooling mode as air_temp > fixed_temp - -0.5"
     expected_outputs:
-      climate_control: -0.5
+      target_temp: 24.5
+      temp_deviation: -0.5
 
   - action: "set_inputs"
     comment: "Current temperature: 25.5'"
@@ -156,9 +170,10 @@ steps:
       air_temp: 25.5
 
   - action: "assert_outputs"
-    comment: "CC out is in cooling mode as air_temp > fixed_temp - -1.0"
+    comment: "TD out is in cooling mode as air_temp > fixed_temp - -1.0"
     expected_outputs:
-      climate_control: -1.0
+      target_temp: 24.5
+      temp_deviation: -1.0
 
   - action: "set_inputs"
     comment: "Current temperature: 26.0'"
@@ -166,9 +181,10 @@ steps:
       air_temp: 26.0
 
   - action: "assert_outputs"
-    comment: "CC out is in cooling mode as air_temp > fixed_temp - -1.5"
+    comment: "TD out is in cooling mode as air_temp > fixed_temp - -1.5"
     expected_outputs:
-      climate_control: -1.5
+      target_temp: 24.5
+      temp_deviation: -1.5
 
   - action: "set_inputs"
     comment: "Current temperature: 26.5'"
@@ -176,9 +192,10 @@ steps:
       air_temp: 26.5
 
   - action: "assert_outputs"
-    comment: "CC out is in cooling mode as air_temp > fixed_temp - -2.0"
+    comment: "TD out is in cooling mode as air_temp > fixed_temp - -2.0"
     expected_outputs:
-      climate_control: -2.0
+      target_temp: 24.5
+      temp_deviation: -2.0
 
   - action: "set_inputs"
     comment: "Current temperature: 28.0'"
@@ -186,9 +203,10 @@ steps:
       air_temp: 28.0
 
   - action: "assert_outputs"
-    comment: "CC out is in cooling mode as air_temp > fixed_temp - -3.5"
+    comment: "TD out is in cooling mode as air_temp > fixed_temp - -3.5"
     expected_outputs:
-      climate_control: -3.5
+      target_temp: 24.5
+      temp_deviation: -3.5
 
   - action: "set_inputs"
     comment: "Current temperature: 28.11'"
@@ -196,6 +214,7 @@ steps:
       air_temp: 28.11
 
   - action: "assert_outputs"
-    comment: "CC out is in cooling mode as air_temp > fixed_temp - -3.61"
+    comment: "TD out is in cooling mode as air_temp > fixed_temp - -3.61"
     expected_outputs:
-      climate_control: -3.61
+      target_temp: 24.5
+      temp_deviation: -3.61

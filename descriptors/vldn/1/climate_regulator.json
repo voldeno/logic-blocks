@@ -1,7 +1,7 @@
 {
-  "name": "Thermostat",
+  "name": "Climate regulator",
   "group": "process",
-  "description": "Thermostat",
+  "description": "Zonal climate regulator - can be used as a thermostat for a specific zone heating or cooling. Output should be provided to a climate regulator hub.",
   "inputs": [
     {
       "id": "air_temp",
@@ -39,7 +39,7 @@
       "id": "comfort",
       "name": "Comfort mode",
       "description": "Activates the comfort temperature mode until the next schedule period change.",
-      "abbrev": "CTM",
+      "abbrev": "COM",
       "type": "BOOLEAN",
       "default": "false"
     },
@@ -47,17 +47,25 @@
       "id": "eco",
       "name": "Eco mode",
       "description": "Activates the eco temperature mode until the next schedule period change.",
-      "abbrev": "ETM",
+      "abbrev": "ECO",
       "type": "BOOLEAN",
       "default": "false"
     }
   ],
   "outputs": [
     {
-      "id": "climate_control",
+      "id": "target_temp",
+      "name": "Target temperature",
+      "description": "The output target temperature",
+      "abbrev": "TT",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "temp_deviation",
+      "name": "Temperature deviation",
       "description": "Output expressing the heating or cooling requirement expressed as a difference between a current and a target temperature. Positive for heating. Negative for cooling.",
-      "name": "Climate control",
-      "abbrev": "CC",
+      "abbrev": "TD",
       "type": "NUMBER",
       "default": "0"
     }
@@ -139,6 +147,13 @@
       "id": "dwc_state",
       "name": "Current DWC state",
       "description": "Used to prevent DWC duration extension on re-sending the same input",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "dwc_lock",
+      "name": "DWC lock state",
+      "description": "DWC lock state",
       "type": "BOOLEAN",
       "default": "false"
     }

@@ -1,0 +1,226 @@
+name: "heating continues below threshold"
+
+config:
+  act_threshold_single: 1
+  act_threshold_sum: 2
+
+steps:
+  - action: "set_inputs"
+    comment: "Set temperature deviations: 0.0, 0.0, 0.0, 0.0"
+    inputs:
+      temp_dev_zone_1: 0.0
+      temp_dev_zone_2: 0.0
+      temp_dev_zone_3: 0.0
+      temp_dev_zone_4: 0.0
+
+  - action: "assert_outputs"
+    comment: "Controller should be in an idle mode"
+    expected_outputs:
+      heating_0: false
+      cooling_0: false
+      heating_1: false
+      cooling_1: false
+      heating_2: false
+      cooling_2: false
+      heating_3: false
+      cooling_3: false
+      heating_4: false
+      cooling_4: false
+
+  - action: "set_inputs"
+    comment: "Set temperature deviations - below thresholds"
+    inputs:
+      temp_dev_zone_1: 0.21
+      temp_dev_zone_2: 0.11
+      temp_dev_zone_3: 0.32
+      temp_dev_zone_4: 0.15
+
+  - action: "assert_outputs"
+    comment: "Controller should be in an idle mode"
+    expected_outputs:
+      heating_0: false
+      cooling_0: false
+      heating_1: false
+      cooling_1: false
+      heating_2: false
+      cooling_2: false
+      heating_3: false
+      cooling_3: false
+      heating_4: false
+      cooling_4: false
+
+  - action: "set_inputs"
+    comment: "Set temperature deviations - equal to sum threshold - all heating - step 1"
+    inputs:
+      temp_dev_zone_1: 0.5
+      temp_dev_zone_2: 0.6
+      temp_dev_zone_3: 0.4
+      temp_dev_zone_4: 0.5
+
+  - action: "assert_outputs"
+    comment: "Controller should be in an heating mode - all heating"
+    expected_outputs:
+      heating_0: true
+      cooling_0: false
+      heating_1: true
+      cooling_1: false
+      heating_2: true
+      cooling_2: false
+      heating_3: true
+      cooling_3: false
+      heating_4: true
+      cooling_4: false
+
+  - action: "set_inputs"
+    comment: "Set temperature deviations - equal to sum threshold - all heating - step 2"
+    inputs:
+      temp_dev_zone_1: 0.4
+      temp_dev_zone_2: 0.5
+      temp_dev_zone_3: 0.3
+      temp_dev_zone_4: 0.4
+
+  - action: "assert_outputs"
+    comment: "Controller should be in an heating mode - all heating"
+    expected_outputs:
+      heating_0: true
+      cooling_0: false
+      heating_1: true
+      cooling_1: false
+      heating_2: true
+      cooling_2: false
+      heating_3: true
+      cooling_3: false
+      heating_4: true
+      cooling_4: false
+
+  - action: "set_inputs"
+    comment: "Set temperature deviations - equal to sum threshold - all heating - step 3"
+    inputs:
+      temp_dev_zone_1: 0.3
+      temp_dev_zone_2: 0.4
+      temp_dev_zone_3: 0.2
+      temp_dev_zone_4: 0.3
+
+  - action: "assert_outputs"
+    comment: "Controller should be in an heating mode - all heating"
+    expected_outputs:
+      heating_0: true
+      cooling_0: false
+      heating_1: true
+      cooling_1: false
+      heating_2: true
+      cooling_2: false
+      heating_3: true
+      cooling_3: false
+      heating_4: true
+      cooling_4: false
+
+  - action: "set_inputs"
+    comment: "Set temperature deviations - equal to sum threshold - all heating - step 4"
+    inputs:
+      temp_dev_zone_1: 0.2
+      temp_dev_zone_2: 0.3
+      temp_dev_zone_3: 0.1
+      temp_dev_zone_4: 0.2
+
+  - action: "assert_outputs"
+    comment: "Controller should be in an heating mode - all heating"
+    expected_outputs:
+      heating_0: true
+      cooling_0: false
+      heating_1: true
+      cooling_1: false
+      heating_2: true
+      cooling_2: false
+      heating_3: true
+      cooling_3: false
+      heating_4: true
+      cooling_4: false
+
+  - action: "set_inputs"
+    comment: "Set temperature deviations - equal to sum threshold - all heating - step 5"
+    inputs:
+      temp_dev_zone_1: 0.1
+      temp_dev_zone_2: 0.2
+      temp_dev_zone_3: 0.0
+      temp_dev_zone_4: 0.1
+
+  - action: "assert_outputs"
+    comment: "Controller should be in an heating mode - all heating"
+    expected_outputs:
+      heating_0: true
+      cooling_0: false
+      heating_1: true
+      cooling_1: false
+      heating_2: true
+      cooling_2: false
+      heating_3: false
+      cooling_3: false
+      heating_4: true
+      cooling_4: false
+
+  - action: "set_inputs"
+    comment: "Set temperature deviations - equal to sum threshold - all heating - step 6"
+    inputs:
+      temp_dev_zone_1: 0.0
+      temp_dev_zone_2: 0.1
+      temp_dev_zone_3: 0.0
+      temp_dev_zone_4: 0.0
+
+  - action: "assert_outputs"
+    comment: "Controller should be in an heating mode - all heating"
+    expected_outputs:
+      heating_0: true
+      cooling_0: false
+      heating_1: false
+      cooling_1: false
+      heating_2: true
+      cooling_2: false
+      heating_3: false
+      cooling_3: false
+      heating_4: false
+      cooling_4: false
+
+  - action: "set_inputs"
+    comment: "Set temperature deviations - equal to sum threshold - all heating - step 7"
+    inputs:
+      temp_dev_zone_1: 0.0
+      temp_dev_zone_2: 0.0
+      temp_dev_zone_3: 0.0
+      temp_dev_zone_4: 0.0
+
+  - action: "assert_outputs"
+    comment: "Controller should be in an heating mode - all heating"
+    expected_outputs:
+      heating_0: false
+      cooling_0: false
+      heating_1: false
+      cooling_1: false
+      heating_2: false
+      cooling_2: false
+      heating_3: false
+      cooling_3: false
+      heating_4: false
+      cooling_4: false
+
+  - action: "set_inputs"
+    comment: "Set temperature deviations - start cooling"
+    inputs:
+      temp_dev_zone_1: 0.0
+      temp_dev_zone_2: -1.1
+      temp_dev_zone_3: 0.0
+      temp_dev_zone_4: 0.0
+
+  - action: "assert_outputs"
+    comment: "Controller should be in a cooling mode"
+    expected_outputs:
+      heating_0: false
+      cooling_0: true
+      heating_1: false
+      cooling_1: false
+      heating_2: false
+      cooling_2: true
+      heating_3: false
+      cooling_3: false
+      heating_4: false
+      cooling_4: false

@@ -18,19 +18,21 @@ steps:
       outside_temp: 15
 
   - action: "assert_outputs"
-    comment: "CC out is in idle mode as air_temp = fixed_temp - 0.0"
+    comment: "TD out is in idle mode as air_temp = fixed_temp - 0.0"
     expected_outputs:
-      climate_control: 0
+      target_temp: 21.5
+      temp_deviation: 0
 
   - action: "set_inputs"
     comment: "Enable comfort temperature mode"
     inputs:
-      comfort: 1
+      comfort: true
 
   - action: "assert_outputs"
-    comment: "CC out is in heating mode as air_temp < fixed_temp - 1.0"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 1.0"
     expected_outputs:
-      climate_control: 1.0
+      target_temp: 22.5
+      temp_deviation: 1.0
 
   - action: "set_inputs"
     comment: "Current temperature: 21.0'"
@@ -38,51 +40,56 @@ steps:
       air_temp: 21.0
 
   - action: "assert_outputs"
-    comment: "CC out is in heating mode as air_temp < fixed_temp - 1.5"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 1.5"
     expected_outputs:
-      climate_control: 1.5
+      target_temp: 22.5
+      temp_deviation: 1.5
 
   - action: "set_inputs"
     comment: "Open window"
     inputs:
-      dwc: 1
+      dwc: true
 
   - action: "wait"
     duration_ms: 900
 
   - action: "assert_outputs"
-    comment: "CC out is still in heating mode as DWC was active for < DWC delay"
+    comment: "TD out is still in heating mode as DWC was active for < DWC delay"
     expected_outputs:
-      climate_control: 1.5
+      target_temp: 22.5
+      temp_deviation: 1.5
 
   - action: "wait"
     duration_ms: 120
 
   - action: "assert_outputs"
-    comment: "CC out is in idle mode as DWC was active for > DWC delay"
+    comment: "TD out is in idle mode as DWC was active for > DWC delay"
     expected_outputs:
-      climate_control: 0.0
+      target_temp: 22.5
+      temp_deviation: 0.0
 
   - action: "set_inputs"
     comment: "Close window"
     inputs:
-      dwc: 0
+      dwc: false
 
   - action: "wait"
     duration_ms: 900
 
   - action: "assert_outputs"
-    comment: "CC out is still in idle mode as DWC was deactivated less than 'DWC delay' ago"
+    comment: "TD out is still in idle mode as DWC was deactivated less than 'DWC delay' ago"
     expected_outputs:
-      climate_control: 0.0
+      target_temp: 22.5
+      temp_deviation: 0.0
 
   - action: "wait"
     duration_ms: 120
 
   - action: "assert_outputs"
-    comment: "CC out is back in heating mode as DWC was deactivated more than 'DWC delay' ago"
+    comment: "TD out is back in heating mode as DWC was deactivated more than 'DWC delay' ago"
     expected_outputs:
-      climate_control: 1.5
+      target_temp: 22.5
+      temp_deviation: 1.5
 
   - action: "set_inputs"
     comment: "Current temperature: 20.5'"
@@ -90,6 +97,7 @@ steps:
       air_temp: 20.5
 
   - action: "assert_outputs"
-    comment: "CC out is in heating mode as air_temp < fixed_temp - 2.0"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 2.0"
     expected_outputs:
-      climate_control: 2.0
+      target_temp: 22.5
+      temp_deviation: 2.0

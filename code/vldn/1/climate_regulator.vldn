@@ -12,9 +12,6 @@ dwc = std::get_input("dwc")
 comfort = std::get_input("comfort")
 eco = std::get_input("eco")
 
-// outputs
-climate_control = std::get_output("climate_control")
-
 // configs
 thermal_mode = std::get_config("thermal_mode") // 0=heating and cooling, 1=heating only, 2=cooling only
 operation_mode = std::get_config("operation_mode") // 0=schedule, 1=manual
@@ -30,18 +27,18 @@ max_floor_temp = std::get_config("max_floor_temp")
 last_dwc_state = std::get_state("dwc_state")
 if (channel == "dwc") {
     // on DWC switch
-    if ((value == 1 and !last_dwc_state) or (value == 0 and last_dwc_state)) {
+    if ((value and !last_dwc_state) or (!value and last_dwc_state)) {
         std::clear_callback()
         std::callback(dwc_delay_sec * 1000 + 5, 0)
         std::set_state("dwc_state_change_ts", now)
-        std::set_state("dwc_state", value == 1)
+        std::set_state("dwc_state", value)
     }
 }
 last_dwc_ts = std::get_state("dwc_state_change_ts")
 dwc_duration_sec = (now - last_dwc_ts) / 1000.0
 
 
-fn calculate_cc(temp_deviation) {
+fn round2decimal(temp_deviation) {
     return math::round(100.0 * temp_deviation) / 100.0
 }
 
@@ -63,11 +60,11 @@ if (operation_mode == 0) { // schedule
     comfort_mode = 3
     target_heating_temp = fixed_temp
     target_cooling_temp = fixed_temp
-    if (comfort == 1) {
+    if (comfort) {
         comfort_mode = 1
         target_heating_temp = comfort_heating_temp
         target_cooling_temp = comfort_cooling_temp
-    } else if (eco == 1) {
+    } else if (eco) {
         comfort_mode = 2
         target_heating_temp = comfort_heating_temp - eco_heating_temp_diff
         target_cooling_temp = comfort_cooling_temp + eco_cooling_temp_diff
@@ -78,23 +75,36 @@ if (operation_mode == 0) { // schedule
 // - chosen thermal mode: 0=idle, 1=heating, 2=cooling
 // - temperature deviation
 chosen_thermal_mode = 0 // idle
+target_temp = air_temp
 temp_deviation = 0.0
 outside_temp_helps = false
+outside_temp_sensor = outside_temp != -1000
 if (air_temp < target_heating_temp and (thermal_mode == 0 or thermal_mode == 1)) {
     chosen_thermal_mode = 1 // heating
-    temp_deviation = target_heating_temp - air_temp // positive
-    outside_temp_helps = outside_temp > target_heating_temp
+    target_temp = target_heating_temp
+    temp_deviation = target_temp - air_temp // positive
+    outside_temp_helps = outside_temp_sensor and (outside_temp > target_heating_temp)
 }
 if (air_temp > target_cooling_temp and (thermal_mode == 0 or thermal_mode == 2)) {
     chosen_thermal_mode = 2 // cooling
-    temp_deviation = target_cooling_temp - air_temp // negative
-    outside_temp_helps = outside_temp < target_cooling_temp
+    target_temp = target_cooling_temp
+    temp_deviation = target_temp - air_temp // negative
+    outside_temp_helps = outside_temp_sensor and (outside_temp < target_cooling_temp)
 }
 
-dwc_lock_active = !outside_temp_helps and ((dwc == 1 and dwc_duration_sec > dwc_delay_sec) or (dwc == 0 and dwc_duration_sec < dwc_delay_sec))
+if (!outside_temp_helps and (dwc and dwc_duration_sec > dwc_delay_sec)) {
+    std::set_state("dwc_lock", true)
+}
+if (std::get_state("dwc_lock") and !dwc and dwc_duration_sec > dwc_delay_sec) {
+    std::set_state("dwc_lock", false)
+}
+dwc_lock_active = std::get_state("dwc_lock")
+
 if (dwc_lock_active) {
-    std::set_output("climate_control", calculate_cc(0.0))
+    std::set_output("temp_deviation", round2decimal(0.0))
+    std::set_output("target_temp", round2decimal(target_temp))
     return
 }
 
-std::set_output("climate_control", calculate_cc(temp_deviation))
+std::set_output("temp_deviation", round2decimal(temp_deviation))
+std::set_output("target_temp", round2decimal(target_temp))
