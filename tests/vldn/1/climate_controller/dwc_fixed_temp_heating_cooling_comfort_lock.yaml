@@ -1,4 +1,4 @@
-name: "fixed temperature, heating & cooling, comfort"
+name: "DWC (lock), fixed temperature, heating & cooling, comfort"
 
 config:
   thermal_mode: 0 # heating and cooling
@@ -15,6 +15,7 @@ steps:
     comment: "Current temperature: 21.5'"
     inputs:
       air_temp: 21.5
+      outside_temp: 15
 
   - action: "assert_outputs"
     comment: "CC out is in idle mode as air_temp = fixed_temp - 0.0"

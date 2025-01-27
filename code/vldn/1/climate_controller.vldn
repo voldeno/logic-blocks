@@ -45,12 +45,6 @@ fn calculate_cc(temp_deviation) {
     return math::round(100.0 * temp_deviation) / 100.0
 }
 
-dwc_lock_active = (dwc == 1 and dwc_duration_sec > dwc_delay_sec) or (dwc == 0 and dwc_duration_sec < dwc_delay_sec)
-if (dwc_lock_active) {
-    std::set_output("climate_control", calculate_cc(0.0))
-    return
-}
-
 if (comfort_cooling_temp <= comfort_heating_temp) {
     // TODO: handle configuration errors
     std::print("comfort_cooling_temp must be > comfort_heating_temp")
@@ -85,13 +79,22 @@ if (operation_mode == 0) { // schedule
 // - temperature deviation
 chosen_thermal_mode = 0 // idle
 temp_deviation = 0.0
+outside_temp_helps = false
 if (air_temp < target_heating_temp and (thermal_mode == 0 or thermal_mode == 1)) {
     chosen_thermal_mode = 1 // heating
     temp_deviation = target_heating_temp - air_temp // positive
+    outside_temp_helps = outside_temp > target_heating_temp
 }
 if (air_temp > target_cooling_temp and (thermal_mode == 0 or thermal_mode == 2)) {
     chosen_thermal_mode = 2 // cooling
     temp_deviation = target_cooling_temp - air_temp // negative
+    outside_temp_helps = outside_temp < target_cooling_temp
+}
+
+dwc_lock_active = !outside_temp_helps and ((dwc == 1 and dwc_duration_sec > dwc_delay_sec) or (dwc == 0 and dwc_duration_sec < dwc_delay_sec))
+if (dwc_lock_active) {
+    std::set_output("climate_control", calculate_cc(0.0))
+    return
 }
 
 std::set_output("climate_control", calculate_cc(temp_deviation))
