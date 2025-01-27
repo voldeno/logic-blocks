@@ -1,0 +1,87 @@
+name: "fixed temperature, cooling only"
+
+config:
+  thermal_mode: 2 # heating only
+  operation_mode: 1 # manual
+  fixed_temp: 21.5
+
+steps:
+  - action: "set_inputs"
+    comment: "Starting state: 19.0'"
+    inputs:
+      air_temp: 19.0
+
+  - action: "assert_outputs"
+    comment: "CC out is idle as air_temp < fixed_temp - 0.0"
+    expected_outputs:
+      climate_control: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 21.5'"
+    inputs:
+      air_temp: 21.5
+
+  - action: "assert_outputs"
+    comment: "CC out is in idle mode as air_temp = fixed_temp - 0.0"
+    expected_outputs:
+      climate_control: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 22.0'"
+    inputs:
+      air_temp: 22.0
+
+  - action: "assert_outputs"
+    comment: "CC out is in cooling mode as air_temp > fixed_temp - -0.5"
+    expected_outputs:
+      climate_control: -0.5
+
+  - action: "set_inputs"
+    comment: "Current temperature: 22.5'"
+    inputs:
+      air_temp: 22.5
+
+  - action: "assert_outputs"
+    comment: "CC out is in cooling mode as air_temp > fixed_temp - -1.0"
+    expected_outputs:
+      climate_control: -1.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 23.0'"
+    inputs:
+      air_temp: 23.0
+
+  - action: "assert_outputs"
+    comment: "CC out is in cooling mode as air_temp > fixed_temp - -1.5"
+    expected_outputs:
+      climate_control: -1.5
+
+  - action: "set_inputs"
+    comment: "Current temperature: 13.5'"
+    inputs:
+      air_temp: 23.5
+
+  - action: "assert_outputs"
+    comment: "CC out is in cooling mode as air_temp > fixed_temp - -2.0"
+    expected_outputs:
+      climate_control: -2.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 25.0'"
+    inputs:
+      air_temp: 25.0
+
+  - action: "assert_outputs"
+    comment: "CC out is in cooling mode as air_temp > fixed_temp - -3.5"
+    expected_outputs:
+      climate_control: -3.5
+
+  - action: "set_inputs"
+    comment: "Current temperature: 25.11'"
+    inputs:
+      air_temp: 25.11
+
+  - action: "assert_outputs"
+    comment: "CC out is in cooling mode as air_temp > fixed_temp - -3.61"
+    expected_outputs:
+      climate_control: -3.61

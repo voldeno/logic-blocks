@@ -1,0 +1,97 @@
+channel = std::get_current_channel()
+value = std::get_current_value()
+now = std::uptime()
+
+// inputs
+air_temp = std::get_input("air_temp")
+floor_temp = std::get_input("floor_temp")
+outside_temp = std::get_input("outside_temp")
+presence = std::get_input("presence")
+presence = std::get_input("presence")
+dwc = std::get_input("dwc")
+comfort = std::get_input("comfort")
+eco = std::get_input("eco")
+
+// outputs
+climate_control = std::get_output("climate_control")
+
+// configs
+thermal_mode = std::get_config("thermal_mode") // 0=heating and cooling, 1=heating only, 2=cooling only
+operation_mode = std::get_config("operation_mode") // 0=schedule, 1=manual
+fixed_temp = std::get_config("fixed_temp")
+comfort_heating_temp = std::get_config("comfort_heating_temp")
+comfort_cooling_temp = std::get_config("comfort_cooling_temp")
+eco_heating_temp_diff = std::get_config("eco_heating_temp_diff")
+eco_cooling_temp_diff = std::get_config("eco_cooling_temp_diff")
+dwc_delay_sec = std::get_config("dwc_delay")
+presence_extension_duration = std::get_config("presence_extension_duration")
+max_floor_temp = std::get_config("max_floor_temp")
+
+last_dwc_state = std::get_state("dwc_state")
+if (channel == "dwc") {
+    // on DWC switch
+    if ((value == 1 and !last_dwc_state) or (value == 0 and last_dwc_state)) {
+        std::clear_callback()
+        std::callback(dwc_delay_sec * 1000 + 5, 0)
+        std::set_state("dwc_state_change_ts", now)
+        std::set_state("dwc_state", value == 1)
+    }
+}
+last_dwc_ts = std::get_state("dwc_state_change_ts")
+dwc_duration_sec = (now - last_dwc_ts) / 1000.0
+
+
+fn calculate_cc(temp_deviation) {
+    return math::round(100.0 * temp_deviation) / 100.0
+}
+
+dwc_lock_active = (dwc == 1 and dwc_duration_sec > dwc_delay_sec) or (dwc == 0 and dwc_duration_sec < dwc_delay_sec)
+if (dwc_lock_active) {
+    std::set_output("climate_control", calculate_cc(0.0))
+    return
+}
+
+if (comfort_cooling_temp <= comfort_heating_temp) {
+    // TODO: handle configuration errors
+    std::print("comfort_cooling_temp must be > comfort_heating_temp")
+    return
+}
+
+// define:
+// - comfort mode: 1=comfort, 2=eco, 3=manual
+// - target temperatures for heating and cooling
+comfort_mode = 0
+target_heating_temp = 0
+target_cooling_temp = 0
+if (operation_mode == 0) { // schedule
+    return // TODO: implement schedule based mode after getting schedule config in place
+} else { // manual mode
+    comfort_mode = 3
+    target_heating_temp = fixed_temp
+    target_cooling_temp = fixed_temp
+    if (comfort == 1) {
+        comfort_mode = 1
+        target_heating_temp = comfort_heating_temp
+        target_cooling_temp = comfort_cooling_temp
+    } else if (eco == 1) {
+        comfort_mode = 2
+        target_heating_temp = comfort_heating_temp - eco_heating_temp_diff
+        target_cooling_temp = comfort_cooling_temp + eco_cooling_temp_diff
+    }
+}
+
+// define:
+// - chosen thermal mode: 0=idle, 1=heating, 2=cooling
+// - temperature deviation
+chosen_thermal_mode = 0 // idle
+temp_deviation = 0.0
+if (air_temp < target_heating_temp and (thermal_mode == 0 or thermal_mode == 1)) {
+    chosen_thermal_mode = 1 // heating
+    temp_deviation = target_heating_temp - air_temp // positive
+}
+if (air_temp > target_cooling_temp and (thermal_mode == 0 or thermal_mode == 2)) {
+    chosen_thermal_mode = 2 // cooling
+    temp_deviation = target_cooling_temp - air_temp // negative
+}
+
+std::set_output("climate_control", calculate_cc(temp_deviation))
