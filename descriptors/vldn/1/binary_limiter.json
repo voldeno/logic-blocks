@@ -28,6 +28,14 @@
       "abbrev": "O",
       "type": "BOOLEAN",
       "default": "false"
+    },
+    {
+      "id": "limit_exceeded",
+      "name": "Limit exceeded",
+      "description": "A boolean output that is true only if the value exceeds the limit set (incl. hysteresis).",
+      "abbrev": "L",
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "config": [
@@ -36,7 +44,14 @@
       "name": "Value limit",
       "description": "The value against which the numeric input is compared. It is a predefined setting that determines the maximum allowable value. If the numeric input exceeds this limit, the output will be set to false.",
       "type": "NUMBER",
-      "default": "0"
+      "default": "0.0"
+    },
+    {
+      "id": "hysteresis",
+      "name": "Hysteresis range",
+      "description": "A margin around the Value Limit that prevents triggering changes unless the input moves outside the defined range.",
+      "type": "NUMBER",
+      "default": "0.5"
     }
   ],
   "state": [
