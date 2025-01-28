@@ -1,0 +1,38 @@
+name: "input high"
+
+config:
+  limit: 11.0
+
+steps:
+  - action: "set_inputs"
+    comment: "Input high, value below the limit"
+    inputs:
+      input: true
+      value: 10.9
+
+  - action: "assert_outputs"
+    comment: "Output high"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Input high, value at the limit"
+    inputs:
+      input: true
+      value: 11.0
+
+  - action: "assert_outputs"
+    comment: "Output high"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Input high, value above the limit"
+    inputs:
+      input: true
+      value: 11.01
+
+  - action: "assert_outputs"
+    comment: "Output low"
+    expected_outputs:
+      output: false

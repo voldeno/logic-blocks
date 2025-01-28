@@ -1,0 +1,1 @@
+std::set_output("output", std::get_input("input") and std::get_input("value") <= std::get_config("limit"))

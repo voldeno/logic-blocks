@@ -1,0 +1,38 @@
+name: "input low"
+
+config:
+  limit: 11.0
+
+steps:
+  - action: "set_inputs"
+    comment: "Input low, value below the limit"
+    inputs:
+      input: false
+      value: 10.9
+
+  - action: "assert_outputs"
+    comment: "Output low"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Input low, value at the limit"
+    inputs:
+      input: false
+      value: 11.0
+
+  - action: "assert_outputs"
+    comment: "Output low"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Input low, value above the limit"
+    inputs:
+      input: false
+      value: 11.01
+
+  - action: "assert_outputs"
+    comment: "Output low"
+    expected_outputs:
+      output: false
