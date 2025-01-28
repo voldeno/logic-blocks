@@ -1,0 +1,59 @@
+name: "DWC (no lock), fixed temperature, heating & cooling, comfort, no outside sensor"
+
+config:
+  thermal_mode: 0 # heating and cooling
+  operation_mode: 1 # manual
+  fixed_temp: 21.5
+  comfort_heating_temp: 22.5
+  comfort_cooling_temp: 24.5
+  eco_heating_temp_diff: 2
+  eco_cooling_temp_diff: 1
+  dwc_delay: 1
+
+steps:
+  - action: "set_inputs"
+    comment: "Current temperature: 21.5'"
+    inputs:
+      air_temp: 21.5
+      outside_temp: -1000 # no outside sensor (default value)
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp = fixed_temp - 0.0"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Enable comfort temperature mode and set temp. to 25.5"
+    inputs:
+      air_temp: 25.5
+      comfort: true
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > fixed_temp - -1.0"
+    expected_outputs:
+      target_temp: 24.5
+      temp_deviation: -1.0
+
+  - action: "set_inputs"
+    comment: "Open window"
+    inputs:
+      dwc: true
+
+  - action: "wait"
+    duration_ms: 900
+
+  - action: "assert_outputs"
+    comment: "TD out is still in cooling mode as DWC was active for < DWC delay"
+    expected_outputs:
+      target_temp: 24.5
+      temp_deviation: -1.0
+
+  - action: "wait"
+    duration_ms: 120
+
+  - action: "assert_outputs"
+    comment: "TD out is going idle mode as there's a default read of the outside temperature, meaning no sensor connected"
+    expected_outputs:
+      target_temp: 24.5
+      temp_deviation: 0.0

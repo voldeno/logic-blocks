@@ -1,0 +1,161 @@
+name: "fixed temperature, heating only"
+
+config:
+  thermal_mode: 0 # heating and cooling
+  operation_mode: 1 # manual
+  fixed_temp: 21.5
+
+steps:
+  - action: "set_inputs"
+    comment: "Current temperature: 21.5'"
+    inputs:
+      air_temp: 21.5
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp = fixed_temp - 0.0"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 21.0'"
+    inputs:
+      air_temp: 21.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 0.5"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: 0.5
+
+  - action: "set_inputs"
+    comment: "Current temperature: 20.5'"
+    inputs:
+      air_temp: 20.5
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 1.0"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: 1.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 20.0'"
+    inputs:
+      air_temp: 20.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 1.5"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: 1.5
+
+  - action: "set_inputs"
+    comment: "Current temperature: 19.5'"
+    inputs:
+      air_temp: 19.5
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 2.0"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: 2.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 18.0'"
+    inputs:
+      air_temp: 18.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 3.5"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: 3.5
+
+  - action: "set_inputs"
+    comment: "Current temperature: 18.11'"
+    inputs:
+      air_temp: 18.11
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < fixed_temp - 3.39"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: 3.39
+
+  - action: "set_inputs"
+    comment: "Current temperature: 21.5'"
+    inputs:
+      air_temp: 21.5
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp = fixed_temp - 0.0"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 22.0'"
+    inputs:
+      air_temp: 22.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > fixed_temp - -0.5"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: -0.5
+
+  - action: "set_inputs"
+    comment: "Current temperature: 22.5'"
+    inputs:
+      air_temp: 22.5
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > fixed_temp - -1.0"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: -1.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 23.0'"
+    inputs:
+      air_temp: 23.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > fixed_temp - -1.5"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: -1.5
+
+  - action: "set_inputs"
+    comment: "Current temperature: 23.5'"
+    inputs:
+      air_temp: 23.5
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > fixed_temp - -2.0"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: -2.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 25.0'"
+    inputs:
+      air_temp: 25.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > fixed_temp - -3.5"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: -3.5
+
+  - action: "set_inputs"
+    comment: "Current temperature: 25.11'"
+    inputs:
+      air_temp: 25.11
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > fixed_temp - -3.61"
+    expected_outputs:
+      target_temp: 21.5
+      temp_deviation: -3.61

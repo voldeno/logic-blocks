@@ -1,0 +1,68 @@
+name: "heat and cool equal in value, cool first"
+
+config:
+  act_threshold_single: 1
+  act_threshold_sum: 2
+
+steps:
+  - action: "set_inputs"
+    comment: "Reset"
+    inputs:
+      temp_dev_zone_1: 0.0
+      temp_dev_zone_2: 0.0
+      temp_dev_zone_3: 0.0
+      temp_dev_zone_4: 0.0
+
+  - action: "assert_outputs"
+    comment: "Controller should be in an idle mode"
+    expected_outputs:
+      heating_0: false
+      cooling_0: false
+      heating_1: false
+      cooling_1: false
+      heating_2: false
+      cooling_2: false
+      heating_3: false
+      cooling_3: false
+      heating_4: false
+      cooling_4: false
+
+  - action: "set_inputs"
+    comment: "Set temperature deviations: -2.0, 0.0, 0.0, 0.0"
+    inputs:
+      temp_dev_zone_1: -2.0
+
+  - action: "assert_outputs"
+    comment: "Controller should be in an idle mode"
+    expected_outputs:
+      heating_0: false
+      cooling_0: true
+      heating_1: false
+      cooling_1: true
+      heating_2: false
+      cooling_2: false
+      heating_3: false
+      cooling_3: false
+      heating_4: false
+      cooling_4: false
+
+  - action: "set_inputs"
+    comment: "Set temperature deviations: -2.0, -1.0, 1.0, 2.0"
+    inputs:
+      temp_dev_zone_2: -1.0
+      temp_dev_zone_3: 1.0
+      temp_dev_zone_4: 2.0
+
+  - action: "assert_outputs"
+    comment: "Controller should be in an idle mode"
+    expected_outputs:
+      heating_0: false
+      cooling_0: true
+      heating_1: false
+      cooling_1: true
+      heating_2: false
+      cooling_2: true
+      heating_3: false
+      cooling_3: false
+      heating_4: false
+      cooling_4: false

@@ -1,0 +1,6 @@
+i1 = std::get_input("input_1")
+i2 = std::get_input("input_2")
+i3 = std::get_input("input_3")
+i4 = std::get_input("input_4")
+
+std::set_output("output", i1 and i2 and i3 and i4)

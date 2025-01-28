@@ -1,0 +1,44 @@
+{
+  "name": "Binary limiter",
+  "group": "process",
+  "description": "A block that takes a binary input and a numeric input, and outputs true only if the binary input is true and the numeric input does not exceed the configured numeric limit.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Input",
+      "description": "A boolean input representing whether the system is actively trying to perform an action (e.g., enable signal or operational state).",
+      "abbrev": "I",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "value",
+      "name": "Compared value",
+      "description": "A numeric input that provides the measured or calculated value to be compared against the configured limit.",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "A boolean output that is true only if the binary input is true and the numeric input does not exceed the configured limit. Otherwise, it outputs false.",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "limit",
+      "name": "Value limit",
+      "description": "The value against which the numeric input is compared. It is a predefined setting that determines the maximum allowable value. If the numeric input exceeds this limit, the output will be set to false.",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "state": [
+  ]
+}

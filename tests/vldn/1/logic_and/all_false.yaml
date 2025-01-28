@@ -1,0 +1,13 @@
+name: "all false"
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      input_1: false
+      input_2: false
+      input_3: false
+      input_4: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
