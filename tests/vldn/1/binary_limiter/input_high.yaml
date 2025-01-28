@@ -2,6 +2,7 @@ name: "input high"
 
 config:
   limit: 11.0
+  hysteresis: 0.0
 
 steps:
   - action: "set_inputs"
