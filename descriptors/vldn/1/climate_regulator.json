@@ -74,15 +74,17 @@
     {
       "id": "thermal_mode",
       "name": "Thermal mode",
-      "description": "Defines the thermal mode: 0=heating and cooling, 1=heating only, 2=cooling only",
-      "type": "NUMBER",
+      "description": "Defines the thermal mode: Heating and cooling, Heating only, Cooling only",
+      "type": "ENUM",
+      "values": ["Heating and cooling", "Heating only", "Cooling only"],
       "default": "0"
     },
     {
       "id": "operation_mode",
       "name": "Operation mode",
-      "description": "Defines the operation mode: 0=schedule, 1=manual",
-      "type": "NUMBER",
+      "description": "Defines the operation mode: Schedule, Manual",
+      "type": "ENUM",
+      "values": ["Schedule", "Manual"],
       "default": "0"
     },
     {
