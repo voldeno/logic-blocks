@@ -130,8 +130,9 @@
     {
       "id": "shading_type",
       "name": "Shading type",
-      "description": "Defines the type of shading device: 0=Venetian blinds, 1=Roller blinds, 2=Curtains (both sides), 3=Curtains (left), 4=Curtains (right), 5=Awning",
-      "type": "NUMBER",
+      "description": "Defines the type of shading device: Venetian blinds, Roller blinds, Curtains (both sides), Curtains (left), Curtains (right), Awning",
+      "type": "ENUM",
+      "values": ["Venetian blinds", "Roller blinds", "Curtains (both sides)", "Curtains (left)", "Curtains (right)", "Awning"],
       "default": "0"
     },
     {
