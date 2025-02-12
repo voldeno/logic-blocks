@@ -37,13 +37,11 @@ if (pressed == 1) {
 
     diff_ms = std::uptime() - std::get_state("last_change_time_ms")
 
-    std::set_output("toggle", !std::get_output("toggle"))
-    std::set_output("on", false)
-    std::set_output("off", true)
-
+    clicked = false
     if (diff_ms <= std::get_config("click_duration_ms")) {
         std::set_output("click", true)
         std::callback(callback_ms, 1)
+        clicked = true
     } else if (diff_ms <= std::get_config("short_press_duration_ms")) {
         std::set_output("short_press", true)
         std::callback(callback_ms, 2)
@@ -51,6 +49,12 @@ if (pressed == 1) {
         std::set_output("long_press", true)
         std::callback(callback_ms, 3)
     }
+
+    if (clicked) {
+        std::set_output("toggle", !std::get_output("toggle"))
+    }
+    std::set_output("on", false)
+    std::set_output("off", true)
 
     std::set_output("hold", false)
 }
