@@ -72,4 +72,4 @@ steps:
       short_press: false
       long_press: false
       hold: false
-      toggle: true
+      toggle: false

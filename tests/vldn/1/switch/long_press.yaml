@@ -36,7 +36,7 @@ steps:
       short_press: false
       long_press: true
       hold: false
-      toggle: true
+      toggle: false
 
   - action: "wait"
     duration_ms: 10
@@ -49,7 +49,7 @@ steps:
       short_press: false
       long_press: true
       hold: false
-      toggle: true
+      toggle: false
 
   - action: "wait"
     duration_ms: 100
@@ -62,4 +62,4 @@ steps:
       short_press: false
       long_press: false
       hold: false
-      toggle: true
+      toggle: false
