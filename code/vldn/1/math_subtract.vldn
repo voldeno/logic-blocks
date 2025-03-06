@@ -1,0 +1,10 @@
+i1 = std::get_input("input_1")
+i2 = std::get_input("input_2")
+i3 = std::get_input("input_3")
+i4 = std::get_input("input_4")
+
+fn round2decimal(temp_deviation) {
+    return math::round(100.0 * temp_deviation) / 100.0
+}
+
+std::set_output("output", round2decimal(i1 - i2 - i3 - i4))

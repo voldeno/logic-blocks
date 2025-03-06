@@ -1,7 +1,7 @@
 {
-  "name": "Sum",
+  "name": "Math::Subtract",
   "group": "process",
-  "description": "Performs summary of block input values",
+  "description": "Subtracts I2, I3 and I4 block input values from the I1 input",
   "inputs": [
     {
       "id": "input_1",

@@ -1,5 +1,5 @@
 {
-  "name": "OR",
+  "name": "Logic::OR",
   "group": "process",
   "description": "OR logic block",
   "inputs": [
