@@ -1,4 +1,4 @@
-// Input registers from Voldeno modules are sent as integers with 1000 multiplier
+// NOTE: Input registers from Voldeno modules are sent as integers with 1000 multiplier
 scale = std::get_config("scale") * 0.001
 offset = std::get_config("offset")
 value = std::get_current_value()

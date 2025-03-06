@@ -1,5 +1,1 @@
-if (std::get_current_value() == 1) {
-    std::set_output("state", true)
-} else {
-    std::set_output("state", false)
-}
+std::set_output("state", std::get_current_value() == 1)
