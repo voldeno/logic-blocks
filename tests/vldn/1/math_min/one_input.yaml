@@ -1,0 +1,34 @@
+name: "one input"
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      input_1: 0
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: 0
+
+  - action: "set_inputs"
+    inputs:
+      input_1: 1
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: 1
+
+  - action: "set_inputs"
+    inputs:
+      input_1: 1.9181
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: 1.92
+
+  - action: "set_inputs"
+    inputs:
+      input_1: 18878171
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: 18878171
