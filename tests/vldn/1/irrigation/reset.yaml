@@ -1,4 +1,4 @@
-name: "base scenario"
+name: "reset"
 
 config:
   s1_enabled: true

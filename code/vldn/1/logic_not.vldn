@@ -1,0 +1,1 @@
+std::set_output("output", !std::get_input("input"))

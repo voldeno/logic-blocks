@@ -1,0 +1,29 @@
+{
+  "name": "Logic::Not",
+  "group": "process",
+  "description": "NOT logic block - negates the input binary value",
+  "inputs": [
+    {
+      "id": "input",
+      "description": "Input",
+      "name": "Input",
+      "abbrev": "I",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "description": "Output",
+      "name": "Output",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "true"
+    }
+  ],
+  "config": [
+  ],
+  "state": [
+  ]
+}

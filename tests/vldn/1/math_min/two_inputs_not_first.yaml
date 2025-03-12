@@ -1,0 +1,38 @@
+name: "two inputs, not first"
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      input_2: 0
+      input_4: 1.2
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: 0
+
+  - action: "set_inputs"
+    inputs:
+      input_2: 1.29
+      input_4: 1.31
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: 1.29
+
+  - action: "set_inputs"
+    inputs:
+      input_2: 1.9181
+      input_4: -1.9181
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: -1.92
+
+  - action: "set_inputs"
+    inputs:
+      input_2: -18878171
+      input_4: -18878172
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: -18878172

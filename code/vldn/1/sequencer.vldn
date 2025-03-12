@@ -1,61 +1,52 @@
+outputs_count = 8
 value = std::get_current_value()
-if (value == false) {
+// react only on a falling edge / after the pulse
+if (value == true) {
     return
 }
 
-channel = std::get_current_channel()
-index = std::get_state("sequence_index")
-max_index = std::get_config("max_index")
-
-new_index = index
-
-if (channel == "reset" and value) {
-    new_index = 0
-    std::set_state("sequence_index", new_index)
+fn reset_all(count) {
+    i = 1
+    while (i <= count) {
+        std::set_output(str::fmt("o{}", i), false)
+        i += 1
+    }
+    std::set_output("off", false)
 }
 
-if (channel == "forward" and value) {
-    new_index = index + 1
+fn move(index, steps) {
+    max_index = std::get_config("max_index")
+    new_index = index + steps
     if (new_index > max_index) {
         new_index = 0
-    }
-
-    std::set_state("sequence_index", new_index)
-}
-
-if (channel == "backward" and value) {
-    new_index = index - 1
-    if (new_index < 0) {
+    } else if (new_index < 0) {
         new_index = max_index
     }
 
     std::set_state("sequence_index", new_index)
+    return new_index
 }
 
-off = false
-o1 = false
-o2 = false
-o3 = false
-o4 = false
+channel = std::get_current_channel()
+index = std::get_state("sequence_index")
 
+new_index = index
+
+if (channel == "reset") {
+    new_index = move(index, -index)
+}
+
+if (channel == "forward") {
+    new_index = move(index, 1)
+}
+
+if (channel == "backward") {
+    new_index = move(index, -1)
+}
+
+reset_all(outputs_count)
 if (new_index == 0) {
-    off = true
+    std::set_output("off", true)
+} else {
+    std::set_output(str::fmt("o{}", new_index), true)
 }
-if (new_index == 1) {
-    o1 = true
-}
-if (new_index == 2) {
-    o2 = true
-}
-if (new_index == 3) {
-    o3 = true
-}
-if (new_index == 4) {
-    o4 = true
-}
-
-std::set_output("off", off)
-std::set_output("o1", o1)
-std::set_output("o2", o2)
-std::set_output("o3", o3)
-std::set_output("o4", o4)

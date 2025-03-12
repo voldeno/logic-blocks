@@ -1,0 +1,275 @@
+name: "forward"
+
+steps:
+  - action: "assert_outputs"
+    comment: "Should start off"
+    expected_outputs:
+      off: true
+      o1: false
+      o2: false
+      o3: false
+      o4: false
+      o5: false
+      o6: false
+      o7: false
+      o8: false
+
+  - action: "set_inputs"
+    comment: "Forward - high"
+    inputs:
+      forward: true
+
+  - action: "wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Forward - low"
+    inputs:
+      forward: false
+
+  - action: "assert_outputs"
+    comment: "Should set the next output high keeping others low"
+    expected_outputs:
+      off: false
+      o1: true
+      o2: false
+      o3: false
+      o4: false
+      o5: false
+      o6: false
+      o7: false
+      o8: false
+
+  - action: "set_inputs"
+    comment: "Forward - high"
+    inputs:
+      forward: true
+
+  - action: "wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Forward - low"
+    inputs:
+      forward: false
+
+  - action: "assert_outputs"
+    comment: "Should set the next output high keeping others low"
+    expected_outputs:
+      off: false
+      o1: false
+      o2: true
+      o3: false
+      o4: false
+      o5: false
+      o6: false
+      o7: false
+      o8: false
+
+  - action: "set_inputs"
+    comment: "Forward - high"
+    inputs:
+      forward: true
+
+  - action: "wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Forward - low"
+    inputs:
+      forward: false
+
+  - action: "assert_outputs"
+    comment: "Should set the next output high keeping others low"
+    expected_outputs:
+      off: false
+      o1: false
+      o2: false
+      o3: true
+      o4: false
+      o5: false
+      o6: false
+      o7: false
+      o8: false
+
+  - action: "set_inputs"
+    comment: "Forward - high"
+    inputs:
+      forward: true
+
+  - action: "wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Forward - low"
+    inputs:
+      forward: false
+
+  - action: "assert_outputs"
+    comment: "Should set the next output high keeping others low"
+    expected_outputs:
+      off: false
+      o1: false
+      o2: false
+      o3: false
+      o4: true
+      o5: false
+      o6: false
+      o7: false
+      o8: false
+
+  - action: "set_inputs"
+    comment: "Forward - high"
+    inputs:
+      forward: true
+
+  - action: "wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Forward - low"
+    inputs:
+      forward: false
+
+  - action: "assert_outputs"
+    comment: "Should set the next output high keeping others low"
+    expected_outputs:
+      off: false
+      o1: false
+      o2: false
+      o3: false
+      o4: false
+      o5: true
+      o6: false
+      o7: false
+      o8: false
+
+  - action: "set_inputs"
+    comment: "Forward - high"
+    inputs:
+      forward: true
+
+  - action: "wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Forward - low"
+    inputs:
+      forward: false
+
+  - action: "assert_outputs"
+    comment: "Should set the next output high keeping others low"
+    expected_outputs:
+      off: false
+      o1: false
+      o2: false
+      o3: false
+      o4: false
+      o5: false
+      o6: true
+      o7: false
+      o8: false
+
+  - action: "set_inputs"
+    comment: "Forward - high"
+    inputs:
+      forward: true
+
+  - action: "wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Forward - low"
+    inputs:
+      forward: false
+
+  - action: "assert_outputs"
+    comment: "Should set the next output high keeping others low"
+    expected_outputs:
+      off: false
+      o1: false
+      o2: false
+      o3: false
+      o4: false
+      o5: false
+      o6: false
+      o7: true
+      o8: false
+
+  - action: "set_inputs"
+    comment: "Forward - high"
+    inputs:
+      forward: true
+
+  - action: "wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Forward - low"
+    inputs:
+      forward: false
+
+  - action: "assert_outputs"
+    comment: "Should set the next output high keeping others low"
+    expected_outputs:
+      off: false
+      o1: false
+      o2: false
+      o3: false
+      o4: false
+      o5: false
+      o6: false
+      o7: false
+      o8: true
+
+  - action: "set_inputs"
+    comment: "Forward - high"
+    inputs:
+      forward: true
+
+  - action: "wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Forward - low"
+    inputs:
+      forward: false
+
+  - action: "assert_outputs"
+    comment: "Should set the next output high keeping others low"
+    expected_outputs:
+      off: true
+      o1: false
+      o2: false
+      o3: false
+      o4: false
+      o5: false
+      o6: false
+      o7: false
+      o8: false
+
+  - action: "set_inputs"
+    comment: "Forward - high"
+    inputs:
+      forward: true
+
+  - action: "wait"
+    duration_ms: 20
+
+  - action: "set_inputs"
+    comment: "Forward - low"
+    inputs:
+      forward: false
+
+  - action: "assert_outputs"
+    comment: "Should set the next output high keeping others low"
+    expected_outputs:
+      off: false
+      o1: true
+      o2: false
+      o3: false
+      o4: false
+      o5: false
+      o6: false
+      o7: false
+      o8: false

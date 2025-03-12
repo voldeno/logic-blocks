@@ -1,5 +1,5 @@
 {
-  "name": "Logic::AND",
+  "name": "Logic::And",
   "group": "process",
   "description": "AND logic block",
   "inputs": [
