@@ -18,22 +18,6 @@
       "abbrev": "I2",
       "type": "NUMBER",
       "default": "0"
-    },
-    {
-      "id": "input_3",
-      "description": "Input #3",
-      "name": "Input #3",
-      "abbrev": "I3",
-      "type": "NUMBER",
-      "default": "0"
-    },
-    {
-      "id": "input_4",
-      "description": "Input #4",
-      "name": "Input #4",
-      "abbrev": "I4",
-      "type": "NUMBER",
-      "default": "0"
     }
   ],
   "outputs": [
