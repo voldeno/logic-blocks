@@ -5,12 +5,10 @@ steps:
     inputs:
       input_1: 1
       input_2: 2
-      input_3: 3
-      input_4: 4
 
   - action: "assert_outputs"
     expected_outputs:
-      output: 10
+      output: 3
 
   - action: "set_inputs"
     inputs:
@@ -18,14 +16,12 @@ steps:
 
   - action: "assert_outputs"
     expected_outputs:
-      output: 10.2
+      output: 3.2
 
   - action: "set_inputs"
     inputs:
-      input_1: 0.1
+      input_1: 0.2
       input_2: -0.1
-      input_3: -0.4
-      input_4: 0.5
 
   - action: "assert_outputs"
     expected_outputs:
@@ -35,8 +31,6 @@ steps:
     inputs:
       input_1: 0
       input_2: 0
-      input_3: 0
-      input_4: 0
 
   - action: "assert_outputs"
     expected_outputs:
@@ -46,9 +40,7 @@ steps:
     inputs:
       input_1: 100000001
       input_2: 100000001
-      input_3: 100000001
-      input_4: 100000001
 
   - action: "assert_outputs"
     expected_outputs:
-      output: 400000004
+      output: 200000002
