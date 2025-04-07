@@ -1,4 +1,4 @@
-name: "wind alarm to fully closed, blinds"
+name: "wind alarm on closed, blinds"
 
 config:
   shading_type: 0 # venetian blinds
@@ -65,6 +65,10 @@ steps:
     comment: "Set wind_alarm input high"
     inputs:
       wind_alarm: true
+
+  - action: "wait"
+    comment: "Wait for callbacks to process"
+    duration_ms: 5
 
   - action: "assert_outputs"
     comment: "Should not move"

@@ -186,9 +186,25 @@
       "default": "0.0"
     },
     {
+      "id": "desired_position",
+      "name": "Desired position",
+      "description": "Desired position. Used only to pass values between callback executions",
+      "type": "NUMBER",
+      "unit" : "%",
+      "default": "0.0"
+    },
+    {
       "id": "slats",
       "name": "Slats position",
       "description": "Raw value of the slats position as a percentage (0-100), not rounded",
+      "type": "NUMBER",
+      "unit" : "%",
+      "default": "0.0"
+    },
+    {
+      "id": "desired_slats",
+      "name": "Desired slats position",
+      "description": "Desired slats position. Used only to pass values between callback executions",
       "type": "NUMBER",
       "unit" : "%",
       "default": "0.0"
@@ -215,6 +231,14 @@
       "description": "Indicates whether the previous movement was in the opening direction",
       "type": "BOOLEAN",
       "default": "false"
+    },
+    {
+      "id": "last_movement_ts",
+      "name": "Last movement timestamp",
+      "description": "Timestamp of the last movement of the shading device used to add a motor lock pause on direction change",
+      "type": "NUMBER",
+      "unit": "milliseconds",
+      "default": "-60000"
     }
   ]
 }

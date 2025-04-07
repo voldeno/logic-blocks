@@ -53,6 +53,10 @@ steps:
     inputs:
       wind_alarm: true
 
+  - action: "wait"
+    comment: "Wait for callbacks to process"
+    duration_ms: 5
+
   - action: "assert_outputs"
     comment: "Should start closing"
     expected_outputs:

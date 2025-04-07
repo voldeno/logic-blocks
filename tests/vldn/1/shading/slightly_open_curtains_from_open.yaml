@@ -48,6 +48,10 @@ steps:
     inputs:
       slightly_open: false
 
+  - action: "wait"
+    comment: "Wait for callbacks to process"
+    duration_ms: 5
+
   - action: "assert_outputs"
     comment: "Should start closing, as the slightly open position is above current"
     expected_outputs:
