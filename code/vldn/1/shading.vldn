@@ -4,7 +4,18 @@ callback_ms_real = 99 // leave a bit room for callback scheduling to get precise
 channel = std::get_current_channel()
 value = std::get_current_value()
 shading_type = std::get_config("shading_type")
-motor_lock_ms = math::round(std::get_config("motor_lock_duration") * 1000)
+
+fn get_motor_lock_ms() {
+    return math::round(std::get_config("motor_lock_duration") * 1000)
+}
+
+fn mark_moving() {
+    if (std::get_output("open") or std::get_output("close")) {
+        std::set_state("last_movement_ts", std::uptime())
+    }
+}
+
+mark_moving()
 
 fn open_close(open) {
     std::clear_callback()
@@ -36,7 +47,137 @@ if (shading_type != 0 and std::get_state("slats") != 0) {
     std::set_state("slats", 0)
 }
 
+if (std::get_state("slats") >= 100 and std::get_state("position") <= 0) {
+    // 0 and 100 position of slats are equal on position == 0
+    std::set_state("slats", 0)
+}
+
+fn calculate_position_diff(position_in) {
+    // position_diff - percentage:
+    // zero - ok
+    // negative - need to move in closing direction
+    // positive - need to move in opening direction
+    position_diff = -100
+    if (position_in != 0) {
+        position_diff = position_in - std::get_state("position")
+    }
+    return position_diff
+}
+
+fn calculate_slats_diff(position_diff, position_in, slats_in) {
+    slats_position_diff = 0
+    if ((slats_in == 0 or slats_in == 100) and position_in == 0) {
+        // no-op
+    } else if (position_diff == 0) {
+        slats_position_diff = slats_in - std::get_state("slats")
+    } else if (position_diff > 0) { // opening, so slats will close (0)
+        slats_position_diff = slats_in
+    } else { // closing, so slats will open (100)
+        slats_position_diff = slats_in - 100
+    }
+    return slats_position_diff
+}
+
+fn calculate_is_next_move_towards_open(position_diff, slats_position_diff) {
+    move_towards_open = false
+    if (position_diff == 0) { // slats only
+        if (slats_position_diff > 0) { // closing direction to start opening slats
+            move_towards_open = false
+        } else { // opening direction to start closing slats
+            move_towards_open = true
+        }
+    } else if (position_diff < 0) { // closing
+        move_towards_open = false
+    } else { // opening
+        move_towards_open = true
+    }
+    return move_towards_open
+}
+
+fn move(position_in, slats_in, shading_type, callback_ms, callback_ms_real) {
+    full_opening_steps = (1000 * std::get_config("opening_duration")) / callback_ms
+    full_opening_steps_left = full_opening_steps * (100 - std::get_state("position")) / 100.0
+    full_closing_steps = (1000 * std::get_config("closing_duration")) / callback_ms
+    slats_full_rotation_steps = (1000 * 2 * std::get_config("return_duration")) / callback_ms
+    if (shading_type != 0) { // slats are present only for venetian blinds
+        slats_full_rotation_steps = 0
+    }
+    slats_full_rotation_steps_left_opening = slats_full_rotation_steps * std::get_state("slats") / 100.0
+    slats_full_rotation_steps_left_closing = slats_full_rotation_steps * (100 - std::get_state("slats")) / 100.0
+    steps_left_opening = math::round(full_opening_steps_left + slats_full_rotation_steps_left_opening)
+    steps_left_closing = math::round(full_closing_steps + slats_full_rotation_steps)
+
+    position_diff = calculate_position_diff(position_in)
+    slats_position_diff = calculate_slats_diff(position_diff, position_in, slats_in)
+
+    callback_id = 0
+    steps_left = 0
+    steps_left_slats = 0
+    if (slats_position_diff == 0) {
+        // no-op
+    } else if (slats_position_diff > 0) {
+        steps_left_slats = slats_full_rotation_steps * slats_position_diff / 100
+    } else {
+        steps_left_slats = slats_full_rotation_steps * -slats_position_diff / 100
+    }
+
+    if (position_diff == 0 and slats_position_diff == 0) {
+        return
+    }
+
+    if (position_diff == 0) { // slats only
+        steps_left = steps_left_slats
+        steps_left_slats = 0
+        if (slats_position_diff > 0) { // closing direction to start opening slats
+            close()
+            callback_id = 2
+        } else { // opening direction to start closing slats
+            open()
+            callback_id = 1
+        }
+    } else if (position_diff < 0) { // closing
+        close()
+        steps_left = full_closing_steps * -position_diff / 100 + slats_full_rotation_steps_left_closing
+        callback_id = 4
+    } else { // opening
+        open()
+        steps_left = full_opening_steps * position_diff / 100 + slats_full_rotation_steps_left_opening
+        callback_id = 3
+    }
+
+    std::set_state("steps_left", steps_left)
+    std::set_state("steps_left_slats", steps_left_slats)
+    std::callback(callback_ms_real, callback_id)
+    return
+}
+
+fn safe_move(position_in, slats_in, shading_type, callback_ms, callback_ms_real) {
+    std::set_state("desired_position", position_in)
+    std::set_state("desired_slats", slats_in)
+    time_since_last_move = std::uptime() - std::get_state("last_movement_ts")
+
+    if (time_since_last_move >= get_motor_lock_ms()) {
+        std::callback(0, 0)
+        return
+    }
+
+    position_diff = calculate_position_diff(position_in)
+    slats_position_diff = calculate_slats_diff(position_diff, position_in, slats_in)
+    next_move_towards_open = calculate_is_next_move_towards_open(position_diff, slats_position_diff)
+
+    if (std::get_state("was_opening") == next_move_towards_open) {
+        std::callback(0, 0)
+    } else {
+        std::callback(get_motor_lock_ms(), 0)
+    }
+}
+
 if (channel == "callback") {
+    if (value == 0) {
+        move(std::get_state("desired_position"), std::get_state("desired_slats"), shading_type, callback_ms, callback_ms_real)
+        return
+    }
+
     steps_left = std::get_state("steps_left")
     steps_left -= 1
     if (steps_left <= 0) {
@@ -148,9 +289,9 @@ if (channel == "callback") {
 
     if (value == 10 or value == 11) { // motor_lock, 10: open to close, 11: close to open
         if (value == 10) {
-            std::callback(motor_lock_ms, 20)
+            std::callback(get_motor_lock_ms(), 20)
         } else {
-            std::callback(motor_lock_ms, 21)
+            std::callback(get_motor_lock_ms(), 21)
         }
         return
     }
@@ -172,91 +313,12 @@ if (channel == "callback") {
     return
 }
 
-if (std::get_state("slats") >= 100 and std::get_state("position") <= 0) {
-    // 0 and 100 position of slats are equal on position == 0
-    std::set_state("slats", 0)
-}
-
-fn move(position_in, slats_in, shading_type, callback_ms, callback_ms_real) {
-    full_opening_steps = (1000 * std::get_config("opening_duration")) / callback_ms
-    full_opening_steps_left = full_opening_steps * (100 - std::get_state("position")) / 100.0
-    full_closing_steps = (1000 * std::get_config("closing_duration")) / callback_ms
-    slats_full_rotation_steps = (1000 * 2 * std::get_config("return_duration")) / callback_ms
-    if (shading_type != 0) { // slats are present only for venetian blinds
-        slats_full_rotation_steps = 0
-    }
-    slats_full_rotation_steps_left_opening = slats_full_rotation_steps * std::get_state("slats") / 100.0
-    slats_full_rotation_steps_left_closing = slats_full_rotation_steps * (100 - std::get_state("slats")) / 100.0
-    steps_left_opening = math::round(full_opening_steps_left + slats_full_rotation_steps_left_opening)
-    steps_left_closing = math::round(full_closing_steps + slats_full_rotation_steps)
-
-    // position_diff - percentage:
-    // zero - ok
-    // negative - need to move in closing direction
-    // positive - need to move in opening direction
-    position_diff = -100
-    if (position_in != 0) {
-        position_diff = position_in - std::get_state("position")
-    }
-
-    slats_position_diff = 0
-    if ((slats_in == 0 or slats_in == 100) and position_in == 0) {
-        // no-op
-    } else if (position_diff == 0) {
-        slats_position_diff = slats_in - std::get_state("slats")
-    } else if (position_diff > 0) { // opening, so slats will close (0)
-        slats_position_diff = slats_in
-    } else { // closing, so slats will open (100)
-        slats_position_diff = slats_in - 100
-    }
-
-    callback_id = 0
-    steps_left = 0
-    steps_left_slats = 0
-    if (slats_position_diff == 0) {
-        // no-op
-    } else if (slats_position_diff > 0) {
-        steps_left_slats = slats_full_rotation_steps * slats_position_diff / 100
-    } else {
-        steps_left_slats = slats_full_rotation_steps * -slats_position_diff / 100
-    }
-
-    if (position_diff == 0 and slats_position_diff == 0) {
-        return
-    }
-
-    if (position_diff == 0) { // slats only
-        steps_left = steps_left_slats
-        steps_left_slats = 0
-        if (slats_position_diff > 0) { // closing direction to start opening slats
-            close()
-            callback_id = 2
-        } else { // opening direction to start closing slats
-            open()
-            callback_id = 1
-        }
-    } else if (position_diff < 0) { // closing
-        close()
-        steps_left = full_closing_steps * -position_diff / 100 + slats_full_rotation_steps_left_closing
-        callback_id = 4
-    } else { // opening
-        open()
-        steps_left = full_opening_steps * position_diff / 100 + slats_full_rotation_steps_left_opening
-        callback_id = 3
-    }
-
-    std::set_state("steps_left", steps_left)
-    std::set_state("steps_left_slats", steps_left_slats)
-    std::callback(callback_ms_real, callback_id)
-    return
-}
-
 if (channel == "position" or channel == "slats") {
     if (std::get_input("wind_alarm") or std::get_input("off") or std::get_input("dwc")) {
         return
     }
     std::clear_callback()
-    move(std::get_input("position"), std::get_input("slats"), shading_type, callback_ms, callback_ms_real)
+    safe_move(std::get_input("position"), std::get_input("slats"), shading_type, callback_ms, callback_ms_real)
     return
 }
 
@@ -266,7 +328,7 @@ if (channel == "part_open") {
     }
     stop()
     if (value) {
-        move(100, 0, shading_type, callback_ms, callback_ms_real)
+        safe_move(100, 0, shading_type, callback_ms, callback_ms_real)
     }
     return
 }
@@ -277,7 +339,7 @@ if (channel == "part_close") {
     }
     stop()
     if (value) {
-        move(0, 0, shading_type, callback_ms, callback_ms_real)
+        safe_move(0, 0, shading_type, callback_ms, callback_ms_real)
     }
     return
 }
@@ -290,7 +352,7 @@ if (channel == "dwc") {
     if (std::get_state("position") <= 0) {
         return
     }
-    move(0, 0, shading_type, callback_ms, callback_ms_real)
+    safe_move(0, 0, shading_type, callback_ms, callback_ms_real)
     return
 }
 
@@ -306,7 +368,7 @@ if (channel == "wind_alarm") {
     if (position_diff < 0) { // closing
         slats = 100 // don't move slats after reaching target position
     }
-    move(std::get_config("wind_alarm_position"), slats, shading_type, callback_ms, callback_ms_real)
+    safe_move(std::get_config("wind_alarm_position"), slats, shading_type, callback_ms, callback_ms_real)
     return
 }
 
@@ -330,9 +392,9 @@ if (channel == "toggle") {
     if (std::get_output("open") or std::get_output("close")) { // stop on movement
         stop()
     } else if (std::get_state("was_opening")) { // toggle to closing
-        move(0, 100, shading_type, callback_ms, callback_ms_real)
+        safe_move(0, 100, shading_type, callback_ms, callback_ms_real)
     } else { // toggle to opening
-        move(100, 0, shading_type, callback_ms, callback_ms_real)
+        safe_move(100, 0, shading_type, callback_ms, callback_ms_real)
     }
     return
 }
@@ -357,7 +419,7 @@ if (channel == "full_open" or channel == "slightly_open") {
         }
     }
 
-    move(position, slats, shading_type, callback_ms, callback_ms_real)
+    safe_move(position, slats, shading_type, callback_ms, callback_ms_real)
     return
 }
 
@@ -370,6 +432,6 @@ if (channel == "full_close") {
         stop()
         return
     }
-    move(0, 0, shading_type, callback_ms, callback_ms_real)
+    safe_move(0, 0, shading_type, callback_ms, callback_ms_real)
     return
 }

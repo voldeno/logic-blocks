@@ -22,6 +22,10 @@ steps:
     inputs:
       toggle: false
 
+  - action: "wait"
+    comment: "Wait for callbacks to process"
+    duration_ms: 5
+
   - action: "assert_outputs"
     comment: "Should start opening"
     expected_outputs:
@@ -101,6 +105,10 @@ steps:
     comment: "Send a pulse to toggle input to start closing - low"
     inputs:
       toggle: false
+
+  - action: "wait"
+    comment: "Wait for callbacks to process"
+    duration_ms: 5
 
   - action: "assert_outputs"
     comment: "Should start closing"
