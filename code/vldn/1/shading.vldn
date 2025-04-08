@@ -9,8 +9,12 @@ fn get_motor_lock_ms() {
     return math::round(std::get_config("motor_lock_duration") * 1000)
 }
 
+fn is_moving() {
+    return std::get_output("open") or std::get_output("close")
+}
+
 fn mark_moving() {
-    if (std::get_output("open") or std::get_output("close")) {
+    if (is_moving()) {
         std::set_state("last_movement_ts", std::uptime())
     }
 }
@@ -389,7 +393,7 @@ if (channel == "toggle") {
         return
     }
 
-    if (std::get_output("open") or std::get_output("close")) { // stop on movement
+    if (is_moving()) { // stop on movement
         stop()
     } else if (std::get_state("was_opening")) { // toggle to closing
         safe_move(0, 100, shading_type, callback_ms, callback_ms_real)
@@ -404,7 +408,7 @@ if (channel == "full_open" or channel == "slightly_open") {
         return
     }
 
-    if (std::get_output("open")) { // stops if in motion
+    if (is_moving()) { // stops if in motion
         stop()
         return
     }
@@ -428,7 +432,7 @@ if (channel == "full_close") {
         return
     }
 
-    if (std::get_output("close")) { // stops if in motion
+    if (is_moving()) { // stops if in motion
         stop()
         return
     }
