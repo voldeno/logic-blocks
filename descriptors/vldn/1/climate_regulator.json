@@ -103,6 +103,7 @@
       "name": "Fixed temperature",
       "description": "Fixed temperature",
       "type": "NUMBER",
+      "unit": "°C",
       "default": "21",
       "visibleWhen": {
         "configId": "operation_mode",
@@ -114,6 +115,7 @@
       "name": "Comfort heating temperature",
       "description": "Comfort heating temperature",
       "type": "NUMBER",
+      "unit": "°C",
       "default": "21",
       "visibleWhen": {
         "configId": "operation_mode",
@@ -125,6 +127,7 @@
       "name": "Comfort cooling temperature",
       "description": "Comfort cooling temperature",
       "type": "NUMBER",
+      "unit": "°C",
       "default": "25",
       "visibleWhen": {
         "configId": "operation_mode",
@@ -136,6 +139,7 @@
       "name": "Eco heating temperature diff",
       "description": "Eco heating temperature diff. below the comfort temp.",
       "type": "NUMBER",
+      "unit": "°C",
       "default": "2",
       "visibleWhen": {
         "configId": "operation_mode",
@@ -147,6 +151,7 @@
       "name": "Eco cooling temperature diff",
       "description": "Eco cooling temperature diff. above the comfort temp.",
       "type": "NUMBER",
+      "unit": "°C",
       "default": "3",
       "visibleWhen": {
         "configId": "operation_mode",
@@ -158,6 +163,7 @@
       "name": "Frost protection temperature",
       "description": "Frost protection temperature. If the temperature is below this temperature, the heating is activated to protect the building.",
       "type": "NUMBER",
+      "unit": "°C",
       "default": "5"
     },
     {
@@ -165,6 +171,7 @@
       "name": "DWC delay in seconds",
       "description": "Door, window contact delay in seconds. Prevents short door, window opening to interrupt the climate control.",
       "type": "NUMBER",
+      "unit": "s",
       "default": "30"
     },
     {
@@ -172,6 +179,7 @@
       "name": "Presence extension duration",
       "description": "Comfort temperature extension duration (in seconds) on presence detection.",
       "type": "NUMBER",
+      "unit": "s",
       "default": "1800"
     }
   ],
