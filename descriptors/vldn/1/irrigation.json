@@ -121,7 +121,7 @@
       "type": "BOOLEAN",
       "unit": "",
       "description": "Controls if the section #2 is enabled",
-      "default": "true"
+      "default": "false"
     },
     {
       "id": "s2_duration",
@@ -141,7 +141,7 @@
       "type": "BOOLEAN",
       "unit": "",
       "description": "Controls if the section #3 is enabled",
-      "default": "true"
+      "default": "false"
     },
     {
       "id": "s3_duration",
@@ -161,7 +161,7 @@
       "type": "BOOLEAN",
       "unit": "",
       "description": "Controls if the section #4 is enabled",
-      "default": "true"
+      "default": "false"
     },
     {
       "id": "s4_duration",
@@ -181,7 +181,7 @@
       "type": "BOOLEAN",
       "unit": "",
       "description": "Controls if the section #5 is enabled",
-      "default": "true"
+      "default": "false"
     },
     {
       "id": "s5_duration",
@@ -201,7 +201,7 @@
       "type": "BOOLEAN",
       "unit": "",
       "description": "Controls if the section #6 is enabled",
-      "default": "true"
+      "default": "false"
     },
     {
       "id": "s6_duration",
@@ -221,7 +221,7 @@
       "type": "BOOLEAN",
       "unit": "",
       "description": "Controls if the section #7 is enabled",
-      "default": "true"
+      "default": "false"
     },
     {
       "id": "s7_duration",
@@ -241,7 +241,7 @@
       "type": "BOOLEAN",
       "unit": "",
       "description": "Controls if the section #8 is enabled",
-      "default": "true"
+      "default": "false"
     },
     {
       "id": "s8_duration",
