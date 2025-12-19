@@ -109,7 +109,11 @@
       "type": "NUMBER",
       "unit": "s",
       "description": "Total irrigation time in seconds for section #1",
-      "default": "600"
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s1_enabled",
+        "values": ["true"]
+      }
     },
     {
       "id": "s2_enabled",
@@ -125,7 +129,11 @@
       "type": "NUMBER",
       "unit": "s",
       "description": "Total irrigation time in seconds for section #2",
-      "default": "600"
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s2_enabled",
+        "values": ["true"]
+      }
     },
     {
       "id": "s3_enabled",
@@ -141,7 +149,11 @@
       "type": "NUMBER",
       "unit": "s",
       "description": "Total irrigation time in seconds for section #3",
-      "default": "600"
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s3_enabled",
+        "values": ["true"]
+      }
     },
     {
       "id": "s4_enabled",
@@ -157,7 +169,11 @@
       "type": "NUMBER",
       "unit": "s",
       "description": "Total irrigation time in seconds for section #4",
-      "default": "600"
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s4_enabled",
+        "values": ["true"]
+      }
     },
     {
       "id": "s5_enabled",
@@ -173,7 +189,11 @@
       "type": "NUMBER",
       "unit": "s",
       "description": "Total irrigation time in seconds for section #5",
-      "default": "600"
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s5_enabled",
+        "values": ["true"]
+      }
     },
     {
       "id": "s6_enabled",
@@ -189,7 +209,11 @@
       "type": "NUMBER",
       "unit": "s",
       "description": "Total irrigation time in seconds for section #6",
-      "default": "600"
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s6_enabled",
+        "values": ["true"]
+      }
     },
     {
       "id": "s7_enabled",
@@ -205,7 +229,11 @@
       "type": "NUMBER",
       "unit": "s",
       "description": "Total irrigation time in seconds for section #7",
-      "default": "600"
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s7_enabled",
+        "values": ["true"]
+      }
     },
     {
       "id": "s8_enabled",
@@ -221,7 +249,11 @@
       "type": "NUMBER",
       "unit": "s",
       "description": "Total irrigation time in seconds for section #8",
-      "default": "600"
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s8_enabled",
+        "values": ["true"]
+      }
     }
   ],
   "state": [
