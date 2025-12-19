@@ -88,6 +88,13 @@
       "default": "0"
     },
     {
+      "id": "schedule_id",
+      "name": "Schedule",
+      "description": "Schedule ID to use for schedule based operation mode",
+      "type": "SCHEDULE",
+      "default": "0"
+    },
+    {
       "id": "fixed_temp",
       "name": "Fixed temperature",
       "description": "Fixed temperature",
