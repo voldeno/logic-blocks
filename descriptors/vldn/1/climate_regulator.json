@@ -88,9 +88,9 @@
       "default": "0"
     },
     {
-      "id": "schedule_id",
+      "id": "schedule",
       "name": "Schedule",
-      "description": "Schedule ID to use for schedule based operation mode",
+      "description": "Schedule to use for schedule based operation mode",
       "type": "SCHEDULE",
       "default": "0",
       "visibleWhen": {
