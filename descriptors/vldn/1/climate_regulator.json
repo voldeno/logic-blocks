@@ -88,45 +88,90 @@
       "default": "0"
     },
     {
+      "id": "schedule",
+      "name": "Schedule",
+      "description": "Schedule to use for schedule based operation mode",
+      "type": "SCHEDULE",
+      "default": "0",
+      "visibleWhen": {
+        "configId": "operation_mode",
+        "values": ["Schedule"]
+      }
+    },
+    {
       "id": "fixed_temp",
       "name": "Fixed temperature",
       "description": "Fixed temperature",
       "type": "NUMBER",
-      "default": "21"
+      "unit": "°C",
+      "default": "21",
+      "visibleWhen": {
+        "configId": "operation_mode",
+        "values": ["Manual"]
+      }
     },
     {
       "id": "comfort_heating_temp",
       "name": "Comfort heating temperature",
       "description": "Comfort heating temperature",
       "type": "NUMBER",
-      "default": "21"
+      "unit": "°C",
+      "default": "21",
+      "visibleWhen": {
+        "configId": "operation_mode",
+        "values": ["Schedule"]
+      }
     },
     {
       "id": "comfort_cooling_temp",
       "name": "Comfort cooling temperature",
       "description": "Comfort cooling temperature",
       "type": "NUMBER",
-      "default": "25"
+      "unit": "°C",
+      "default": "25",
+      "visibleWhen": {
+        "configId": "operation_mode",
+        "values": ["Schedule"]
+      }
     },
     {
       "id": "eco_heating_temp_diff",
       "name": "Eco heating temperature diff",
       "description": "Eco heating temperature diff. below the comfort temp.",
       "type": "NUMBER",
-      "default": "2"
+      "unit": "°C",
+      "default": "2",
+      "visibleWhen": {
+        "configId": "operation_mode",
+        "values": ["Schedule"]
+      }
     },
     {
       "id": "eco_cooling_temp_diff",
       "name": "Eco cooling temperature diff",
       "description": "Eco cooling temperature diff. above the comfort temp.",
       "type": "NUMBER",
-      "default": "3"
+      "unit": "°C",
+      "default": "3",
+      "visibleWhen": {
+        "configId": "operation_mode",
+        "values": ["Schedule"]
+      }
+    },
+    {
+      "id": "frost_protection_temp",
+      "name": "Frost protection temperature",
+      "description": "Frost protection temperature. If the temperature is below this temperature, the heating is activated to protect the building.",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "5"
     },
     {
       "id": "dwc_delay",
       "name": "DWC delay in seconds",
       "description": "Door, window contact delay in seconds. Prevents short door, window opening to interrupt the climate control.",
       "type": "NUMBER",
+      "unit": "s",
       "default": "30"
     },
     {
@@ -134,6 +179,7 @@
       "name": "Presence extension duration",
       "description": "Comfort temperature extension duration (in seconds) on presence detection.",
       "type": "NUMBER",
+      "unit": "s",
       "default": "1800"
     }
   ],
