@@ -1,0 +1,35 @@
+{
+  "name": "Schedule",
+  "group": "process",
+  "description": "Logic block representing a schedule",
+  "inputs": [
+    {
+      "id": "trigger",
+      "description": "Trigger the schedule",
+      "name": "Trigger",
+      "abbrev": "T",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "description": "Output",
+      "name": "Output",
+      "abbrev": "O",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "schedule",
+      "name": "Schedule",
+      "description": "Schedule to use for schedule based operation mode",
+      "type": "SCHEDULE",
+      "default": "0"
+    }
+  ],
+  "state": []
+}

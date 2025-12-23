@@ -1,0 +1,1 @@
+std::set_output("output", schedule::get_entry_type(std::get_config("schedule")))
