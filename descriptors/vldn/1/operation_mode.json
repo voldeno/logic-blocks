@@ -1,0 +1,35 @@
+{
+  "name": "Operation mode",
+  "group": "process",
+  "description": "Logic block to control state of the operation mode",
+  "inputs": [
+    {
+      "id": "state",
+      "description": "State of the operation mode",
+      "name": "State",
+      "abbrev": "S",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "state",
+      "description": "State of the operation mode",
+      "name": "State",
+      "abbrev": "S",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "operation_mode",
+      "name": "Operation mode",
+      "description": "Chosen operation mode to control the state of",
+      "type": "OPERATION_MODE",
+      "default": "0"
+    }
+  ],
+  "state": []
+}
