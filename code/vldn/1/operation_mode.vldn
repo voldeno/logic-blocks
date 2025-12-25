@@ -1,4 +1,4 @@
 mode = std::get_config("operation_mode")
 state = std::get_input("state")
-std::print(str::fmt("mode: {}", mode, state))
+std::print(str::fmt("mode: {}, state: {}", mode, state))
 // operation_mode::set_state(mode, state)
