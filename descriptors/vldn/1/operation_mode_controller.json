@@ -1,7 +1,8 @@
 {
   "name": "Mode controller",
-  "group": "process",
+  "group": "output",
   "description": "Logic block to control state of the operation mode",
+  "ioType": "operation_mode",
   "inputs": [
     {
       "id": "state",
@@ -11,8 +12,6 @@
       "type": "BOOLEAN",
       "default": "false"
     }
-  ],
-  "outputs": [
   ],
   "config": [
     {

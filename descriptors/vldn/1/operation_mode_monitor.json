@@ -1,9 +1,8 @@
 {
   "name": "Mode monitor",
-  "group": "process",
+  "group": "input",
   "description": "Logic block to monitor state of the operation mode",
-  "inputs": [
-  ],
+  "ioType": "operation_mode",
   "outputs": [
     {
       "id": "state",
