@@ -21,6 +21,7 @@ comfort_cooling_temp = std::get_config("comfort_cooling_temp")
 eco_heating_temp_diff = std::get_config("eco_heating_temp_diff")
 eco_cooling_temp_diff = std::get_config("eco_cooling_temp_diff")
 frost_protection_temp = std::get_config("frost_protection_temp")
+overheat_protection_temp = std::get_config("overheat_protection_temp")
 dwc_delay_sec = std::get_config("dwc_delay")
 presence_extension_duration = std::get_config("presence_extension_duration")
 max_floor_temp = std::get_config("max_floor_temp")
@@ -50,7 +51,7 @@ if (comfort_cooling_temp <= comfort_heating_temp) {
 }
 
 // define:
-// - comfort mode: 0=eco, 1=comfort, 2=frost_protection
+// - comfort mode: 0=eco, 1=comfort, 2=protection
 // - target temperatures for heating and cooling
 comfort_mode = 0
 target_heating_temp = 0
@@ -66,9 +67,10 @@ if (operation_mode == 0) { // schedule
         comfort_mode = 1
         target_heating_temp = comfort_heating_temp
         target_cooling_temp = comfort_cooling_temp
-    } else { // frost_protection
+    } else { // protection
         comfort_mode = 2
         target_heating_temp = frost_protection_temp
+        target_cooling_temp = overheat_protection_temp
     }
 } else { // manual mode
     comfort_mode = 3
@@ -90,7 +92,7 @@ if (air_temp < target_heating_temp and (thermal_mode == 0 or thermal_mode == 1))
     temp_deviation = target_temp - air_temp // positive
     outside_temp_helps = outside_temp_sensor and (outside_temp > target_heating_temp)
 }
-if (comfort_mode != 2 and (air_temp > target_cooling_temp and (thermal_mode == 0 or thermal_mode == 2))) {
+if (air_temp > target_cooling_temp and (thermal_mode == 0 or thermal_mode == 2)) {
     chosen_thermal_mode = 2 // cooling
     target_temp = target_cooling_temp
     temp_deviation = target_temp - air_temp // negative

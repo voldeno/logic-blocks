@@ -164,7 +164,23 @@
       "description": "Frost protection temperature. If the temperature is below this temperature, the heating is activated to protect the building.",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "5"
+      "default": "5",
+      "visibleWhen": {
+        "configId": "operation_mode",
+        "values": ["Schedule"]
+      }
+    },
+    {
+      "id": "overheat_protection_temp",
+      "name": "Overheat protection temperature",
+      "description": "Overheat protection temperature. If the temperature is above this temperature, the cooling is activated to protect the building.",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "40",
+      "visibleWhen": {
+        "configId": "operation_mode",
+        "values": ["Schedule"]
+      }
     },
     {
       "id": "dwc_delay",
