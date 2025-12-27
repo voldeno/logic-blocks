@@ -1,5 +1,5 @@
 {
-  "name": "Operation mode",
+  "name": "Mode controller",
   "group": "process",
   "description": "Logic block to control state of the operation mode",
   "inputs": [
@@ -13,14 +13,6 @@
     }
   ],
   "outputs": [
-    {
-      "id": "state",
-      "description": "State of the operation mode",
-      "name": "State",
-      "abbrev": "S",
-      "type": "BOOLEAN",
-      "default": "false"
-    }
   ],
   "config": [
     {

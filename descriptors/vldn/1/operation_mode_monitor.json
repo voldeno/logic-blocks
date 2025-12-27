@@ -1,0 +1,27 @@
+{
+  "name": "Mode monitor",
+  "group": "process",
+  "description": "Logic block to monitor state of the operation mode",
+  "inputs": [
+  ],
+  "outputs": [
+    {
+      "id": "state",
+      "description": "State of the operation mode",
+      "name": "State",
+      "abbrev": "S",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "operation_mode",
+      "name": "Operation mode",
+      "description": "Chosen operation mode to control the state of",
+      "type": "OPERATION_MODE",
+      "default": "0"
+    }
+  ],
+  "state": []
+}
