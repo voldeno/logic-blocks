@@ -105,6 +105,10 @@
       "type": "NUMBER",
       "unit": "°C",
       "default": "21",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": ["Heating and cooling", "Heating only"]
+      },
       "validation": {
         "rules": [
           {
@@ -121,6 +125,10 @@
       "type": "NUMBER",
       "unit": "°C",
       "default": "25",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": ["Heating and cooling", "Cooling only"]
+      },
       "validation": {
         "rules": [
           {
@@ -137,6 +145,10 @@
       "type": "NUMBER",
       "unit": "°C",
       "default": "2",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": ["Heating and cooling", "Heating only"]
+      },
       "validation": {
         "rules": [
           {
@@ -153,6 +165,10 @@
       "type": "NUMBER",
       "unit": "°C",
       "default": "3",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": ["Heating and cooling", "Cooling only"]
+      },
       "validation": {
         "rules": [
           {
@@ -169,6 +185,10 @@
       "type": "NUMBER",
       "unit": "°C",
       "default": "10",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": ["Heating and cooling", "Heating only"]
+      },
       "validation": {
         "rules": [
           {
@@ -189,6 +209,10 @@
       "type": "NUMBER",
       "unit": "°C",
       "default": "40",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": ["Heating and cooling", "Cooling only"]
+      },
       "validation": {
         "rules": [
           {
