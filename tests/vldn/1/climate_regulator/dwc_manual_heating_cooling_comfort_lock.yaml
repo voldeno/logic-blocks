@@ -1,4 +1,4 @@
-name: "DWC (no lock), fixed temperature, heating & cooling, comfort"
+name: "DWC (lock), manual, heating & cooling, comfort"
 
 config:
   thermal_mode: 0 # heating and cooling
@@ -15,7 +15,7 @@ steps:
     comment: "Current temperature: 21.5'"
     inputs:
       air_temp: 21.5
-      outside_temp: 30
+      outside_temp: 15
 
   - action: "assert_outputs"
     comment: "TD out is in idle mode as air_temp = fixed_temp - 0.0"
@@ -60,43 +60,10 @@ steps:
       temp_deviation: 1.5
 
   - action: "wait"
-    duration_ms: 500
+    duration_ms: 120
 
   - action: "assert_outputs"
-    comment: "TD out is not going idle mode even though DWC was active for > DWC delay, as outside temp. is higher than the target"
-    expected_outputs:
-      target_temp: 22.5
-      temp_deviation: 1.5
-
-  - action: "set_inputs"
-    comment: "Decrease outside temperature to affect negatively the heating"
-    inputs:
-      outside_temp: 10
-
-  - action: "assert_outputs"
-    comment: "TD out is idle mode as DWC is active long enough and outside temp. decreased below the target"
-    expected_outputs:
-      target_temp: 22.5
-      temp_deviation: 0.0
-
-  - action: "set_inputs"
-    comment: "Increase outside temperature to affect positively the heating"
-    inputs:
-      outside_temp: 30
-
-  - action: "assert_outputs"
-    comment: "TD out is still in an idle mode to prevent fluctuations"
-    expected_outputs:
-      target_temp: 22.5
-      temp_deviation: 0.0
-
-  - action: "set_inputs"
-    comment: "Decrease outside temperature to affect negatively the heating"
-    inputs:
-      outside_temp: 10
-
-  - action: "assert_outputs"
-    comment: "TD out is still in an idle mode to prevent fluctuations"
+    comment: "TD out is in idle mode as DWC was active for > DWC delay"
     expected_outputs:
       target_temp: 22.5
       temp_deviation: 0.0
@@ -110,7 +77,7 @@ steps:
     duration_ms: 900
 
   - action: "assert_outputs"
-    comment: "TD out is idle mode as DWC was deactivated less than 'DWC delay' ago"
+    comment: "TD out is still in idle mode as DWC was deactivated less than 'DWC delay' ago"
     expected_outputs:
       target_temp: 22.5
       temp_deviation: 0.0

@@ -1,0 +1,343 @@
+name: "manual, heating & cooling, protection"
+
+config:
+  thermal_mode: 0 # heating and cooling
+  operation_mode: 1 # manual
+  comfort_heating_temp: 22.5
+  comfort_cooling_temp: 24.5
+  eco_heating_temp_diff: 2
+  eco_cooling_temp_diff: 1
+  frost_protection_temp: 5
+  overheat_protection_temp: 40
+
+steps:
+  - action: "set_inputs"
+    comment: "Current temperature: 10.0'"
+    inputs:
+      air_temp: 10.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp < eco_heating_temp - 10.5"
+    expected_outputs:
+      target_temp: 20.5
+      temp_deviation: 10.5
+
+  - action: "set_inputs"
+    comment: "Enable protection mode"
+    inputs:
+      protection: true
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp > protection_min_temp (5.0) - 0.0"
+    expected_outputs:
+      target_temp: 10.0
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 6.0'"
+    inputs:
+      air_temp: 6.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp > protection_min_temp (5.0) - 0.0"
+    expected_outputs:
+      target_temp: 6.0
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 5.5'"
+    inputs:
+      air_temp: 5.5
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp > protection_min_temp (5.0) - 0.0"
+    expected_outputs:
+      target_temp: 5.5
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 5.1'"
+    inputs:
+      air_temp: 5.1
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp > protection_min_temp (5.0) - 0.0"
+    expected_outputs:
+      target_temp: 5.1
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 5.0'"
+    inputs:
+      air_temp: 5.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp = protection_min_temp (5.0) - 0.0"
+    expected_outputs:
+      target_temp: 5.0
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 4.9'"
+    inputs:
+      air_temp: 4.9
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < protection_min_temp (5.0) - 0.1"
+    expected_outputs:
+      target_temp: 5.0
+      temp_deviation: 0.1
+
+  - action: "set_inputs"
+    comment: "Current temperature: 4.5'"
+    inputs:
+      air_temp: 4.5
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < protection_min_temp (5.0) - 0.5"
+    expected_outputs:
+      target_temp: 5.0
+      temp_deviation: 0.5
+
+  - action: "set_inputs"
+    comment: "Current temperature: 4.0'"
+    inputs:
+      air_temp: 4.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < protection_min_temp (5.0) - 1.0"
+    expected_outputs:
+      target_temp: 5.0
+      temp_deviation: 1.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 3.0'"
+    inputs:
+      air_temp: 3.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < protection_min_temp (5.0) - 2.0"
+    expected_outputs:
+      target_temp: 5.0
+      temp_deviation: 2.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 1.0'"
+    inputs:
+      air_temp: 1.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < protection_min_temp (5.0) - 4.0"
+    expected_outputs:
+      target_temp: 5.0
+      temp_deviation: 4.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 0.0'"
+    inputs:
+      air_temp: 0.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < protection_min_temp (5.0) - 5.0"
+    expected_outputs:
+      target_temp: 5.0
+      temp_deviation: 5.0
+
+  - action: "set_inputs"
+    comment: "Disable protection mode"
+    inputs:
+      protection: false
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as protection is disabled and air_temp > eco_heating_temp - 10.5"
+    expected_outputs:
+      target_temp: 20.5
+      temp_deviation: 20.5
+
+  - action: "set_inputs"
+    comment: "Enable protection mode"
+    inputs:
+      protection: true
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < protection_min_temp (5.0) - 5.0"
+    expected_outputs:
+      target_temp: 5.0
+      temp_deviation: 5.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 5.0'"
+    inputs:
+      air_temp: 5.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp = protection_min_temp (5.0) - 0.0"
+    expected_outputs:
+      target_temp: 5.0
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 10.0'"
+    inputs:
+      air_temp: 10.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp > protection_min_temp (5.0) - 0.0"
+    expected_outputs:
+      target_temp: 10.0
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 20.0'"
+    inputs:
+      air_temp: 20.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp > protection_min_temp (5.0) - 0.0"
+    expected_outputs:
+      target_temp: 20.0
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 35.0'"
+    inputs:
+      air_temp: 35.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp < protection_max_temp (40.0) - 0.0"
+    expected_outputs:
+      target_temp: 35.0
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 39.0'"
+    inputs:
+      air_temp: 39.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp < protection_max_temp (40.0) - 0.0"
+    expected_outputs:
+      target_temp: 39.0
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 39.9'"
+    inputs:
+      air_temp: 39.9
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp < protection_max_temp (40.0) - 0.0"
+    expected_outputs:
+      target_temp: 39.9
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 40.0'"
+    inputs:
+      air_temp: 40.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp = protection_max_temp (40.0) - 0.0"
+    expected_outputs:
+      target_temp: 40.0
+      temp_deviation: 0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 40.1'"
+    inputs:
+      air_temp: 40.1
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > protection_max_temp (40.0) - -0.1"
+    expected_outputs:
+      target_temp: 40.0
+      temp_deviation: -0.1
+
+  - action: "set_inputs"
+    comment: "Current temperature: 40.5'"
+    inputs:
+      air_temp: 40.5
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > protection_max_temp (40.0) - -0.5"
+    expected_outputs:
+      target_temp: 40.0
+      temp_deviation: -0.5
+
+  - action: "set_inputs"
+    comment: "Current temperature: 41.0'"
+    inputs:
+      air_temp: 41.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > protection_max_temp (40.0) - -1.0"
+    expected_outputs:
+      target_temp: 40.0
+      temp_deviation: -1.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 42.0'"
+    inputs:
+      air_temp: 42.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > protection_max_temp (40.0) - -2.0"
+    expected_outputs:
+      target_temp: 40.0
+      temp_deviation: -2.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 45.0'"
+    inputs:
+      air_temp: 45.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > protection_max_temp (40.0) - -5.0"
+    expected_outputs:
+      target_temp: 40.0
+      temp_deviation: -5.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 50.0'"
+    inputs:
+      air_temp: 50.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > protection_max_temp (40.0) - -10.0"
+    expected_outputs:
+      target_temp: 40.0
+      temp_deviation: -10.0
+
+  - action: "set_inputs"
+    comment: "Disable protection mode"
+    inputs:
+      protection: false
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as protection is disabled and air_temp > eco_cooling_temp - 0.0"
+    expected_outputs:
+      target_temp: 25.5
+      temp_deviation: -24.5
+
+  - action: "set_inputs"
+    comment: "Enable protection mode"
+    inputs:
+      protection: true
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as air_temp > protection_max_temp (40.0) - -10.0"
+    expected_outputs:
+      target_temp: 40.0
+      temp_deviation: -10.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 40.0'"
+    inputs:
+      air_temp: 40.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in idle mode as air_temp = protection_max_temp (40.0) - 0.0"
+    expected_outputs:
+      target_temp: 40.0
+      temp_deviation: 0
+
