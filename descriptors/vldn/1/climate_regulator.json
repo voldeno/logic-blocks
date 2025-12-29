@@ -104,7 +104,16 @@
       "description": "Comfort heating temperature",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "21"
+      "default": "21",
+      "validation": {
+        "rules": [
+          {
+            "type": "lte",
+            "configId": "comfort_cooling_temp",
+            "message": "Comfort heating temperature must be less than or equal to comfort cooling temperature"
+          }
+        ]
+      }
     },
     {
       "id": "comfort_cooling_temp",
@@ -112,7 +121,16 @@
       "description": "Comfort cooling temperature",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "25"
+      "default": "25",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "configId": "comfort_heating_temp",
+            "message": "Comfort cooling temperature must be greater than or equal to comfort heating temperature"
+          }
+        ]
+      }
     },
     {
       "id": "eco_heating_temp_diff",
@@ -120,7 +138,16 @@
       "description": "Eco heating temperature diff. below the comfort temp.",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "2"
+      "default": "2",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0,
+            "message": "Eco heating temperature diff must be greater than or equal to 0"
+          }
+        ]
+      }
     },
     {
       "id": "eco_cooling_temp_diff",
@@ -128,7 +155,16 @@
       "description": "Eco cooling temperature diff. above the comfort temp.",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "3"
+      "default": "3",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0,
+            "message": "Eco cooling temperature diff must be greater than or equal to 0"
+          }
+        ]
+      }
     },
     {
       "id": "frost_protection_temp",
@@ -152,7 +188,16 @@
       "description": "Door, window contact delay in seconds. Prevents short door, window opening to interrupt the climate control.",
       "type": "NUMBER",
       "unit": "s",
-      "default": "30"
+      "default": "30",
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0,
+            "message": "DWC delay must be greater than 0"
+          }
+        ]
+      }
     },
     {
       "id": "presence_extension_duration",
@@ -164,6 +209,15 @@
       "visibleWhen": {
         "configId": "operation_mode",
         "values": ["Schedule"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0,
+            "message": "Presence extension duration must be greater than or equal to 0"
+          }
+        ]
       }
     }
   ],
