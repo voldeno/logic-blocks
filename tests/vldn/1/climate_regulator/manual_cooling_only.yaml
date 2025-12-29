@@ -1,9 +1,12 @@
-name: "fixed temperature, cooling only"
+name: "manual, cooling only"
 
 config:
-  thermal_mode: 2 # heating only
+  thermal_mode: 2 # cooling only
   operation_mode: 1 # manual
-  fixed_temp: 21.5
+  comfort_heating_temp: 21.5
+  comfort_cooling_temp: 21.5
+  eco_heating_temp_diff: 0
+  eco_cooling_temp_diff: 0
 
 steps:
   - action: "set_inputs"

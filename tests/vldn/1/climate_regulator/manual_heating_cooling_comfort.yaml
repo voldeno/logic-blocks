@@ -1,9 +1,8 @@
-name: "fixed temperature, heating & cooling, comfort"
+name: "manual, heating & cooling, comfort"
 
 config:
   thermal_mode: 0 # heating and cooling
   operation_mode: 1 # manual
-  fixed_temp: 21.5
   comfort_heating_temp: 22.5
   comfort_cooling_temp: 24.5
   eco_heating_temp_diff: 2
@@ -16,7 +15,7 @@ steps:
       air_temp: 21.5
 
   - action: "assert_outputs"
-    comment: "TD out is in idle mode as air_temp = fixed_temp - 0.0"
+    comment: "TD out is in idle mode as air_temp > eco_heating_temp - 0.0"
     expected_outputs:
       target_temp: 21.5
       temp_deviation: 0
@@ -27,7 +26,7 @@ steps:
       comfort: true
 
   - action: "assert_outputs"
-    comment: "TD out is in heating mode as air_temp < fixed_temp - 1.0"
+    comment: "TD out is in heating mode as air_temp < comfort_heating_temp - 1.0"
     expected_outputs:
       target_temp: 22.5
       temp_deviation: 1.0
@@ -38,7 +37,7 @@ steps:
       air_temp: 21.0
 
   - action: "assert_outputs"
-    comment: "TD out is in heating mode as air_temp < fixed_temp - 1.5"
+    comment: "TD out is in heating mode as air_temp < comfort_heating_temp - 1.5"
     expected_outputs:
       target_temp: 22.5
       temp_deviation: 1.5
@@ -49,7 +48,7 @@ steps:
       air_temp: 20.5
 
   - action: "assert_outputs"
-    comment: "TD out is in heating mode as air_temp < fixed_temp - 2.0"
+    comment: "TD out is in heating mode as air_temp < comfort_heating_temp - 2.0"
     expected_outputs:
       target_temp: 22.5
       temp_deviation: 2.0
@@ -60,10 +59,10 @@ steps:
       comfort: false
 
   - action: "assert_outputs"
-    comment: "TD out is in heating mode as air_temp < fixed_temp - 1.0"
+    comment: "TD out is in heating mode as air_temp = eco_heating_temp - 0.0"
     expected_outputs:
-      target_temp: 21.5
-      temp_deviation: 1.0
+      target_temp: 20.5
+      temp_deviation: 0.0
 
   - action: "set_inputs"
     comment: "Enable comfort temperature mode"
@@ -71,7 +70,7 @@ steps:
       comfort: true
 
   - action: "assert_outputs"
-    comment: "TD out is in heating mode as air_temp < fixed_temp - 2.0"
+    comment: "TD out is in heating mode as air_temp < comfort_heating_temp - 2.0"
     expected_outputs:
       target_temp: 22.5
       temp_deviation: 2.0
@@ -82,7 +81,7 @@ steps:
       air_temp: 20.0
 
   - action: "assert_outputs"
-    comment: "TD out is in heating mode as air_temp < fixed_temp - 2.5"
+    comment: "TD out is in heating mode as air_temp < comfort_heating_temp - 2.5"
     expected_outputs:
       target_temp: 22.5
       temp_deviation: 2.5
@@ -93,7 +92,7 @@ steps:
       air_temp: 19.5
 
   - action: "assert_outputs"
-    comment: "TD out is in heating mode as air_temp < fixed_temp - 3.0"
+    comment: "TD out is in heating mode as air_temp < comfort_heating_temp - 3.0"
     expected_outputs:
       target_temp: 22.5
       temp_deviation: 3.0
@@ -104,7 +103,7 @@ steps:
       air_temp: 18.0
 
   - action: "assert_outputs"
-    comment: "TD out is in heating mode as air_temp < fixed_temp - 4.5"
+    comment: "TD out is in heating mode as air_temp < comfort_heating_temp - 4.5"
     expected_outputs:
       target_temp: 22.5
       temp_deviation: 4.5
@@ -115,7 +114,7 @@ steps:
       air_temp: 18.11
 
   - action: "assert_outputs"
-    comment: "TD out is in heating mode as air_temp < fixed_temp - 4.39"
+    comment: "TD out is in heating mode as air_temp < comfort_heating_temp - 4.39"
     expected_outputs:
       target_temp: 22.5
       temp_deviation: 4.39
@@ -126,7 +125,7 @@ steps:
       air_temp: 22.5
 
   - action: "assert_outputs"
-    comment: "TD out is in idle mode as air_temp = fixed_temp - 0.0"
+    comment: "TD out is in idle mode as air_temp = comfort_heating_temp - 0.0"
     expected_outputs:
       target_temp: 22.5
       temp_deviation: 0
@@ -137,7 +136,7 @@ steps:
       air_temp: 23.5
 
   - action: "assert_outputs"
-    comment: "TD out is in idle mode as air_temp = fixed_temp - 0.0"
+    comment: "TD out is in idle mode as air_temp > comfort_heating_temp - 0.0"
     expected_outputs:
       target_temp: 23.5
       temp_deviation: 0
@@ -148,7 +147,7 @@ steps:
       air_temp: 24.5
 
   - action: "assert_outputs"
-    comment: "TD out is in idle mode as air_temp = fixed_temp - 0.0"
+    comment: "TD out is in idle mode as air_temp > comfort_heating_temp - 0.0"
     expected_outputs:
       target_temp: 24.5
       temp_deviation: 0
@@ -159,7 +158,7 @@ steps:
       air_temp: 25.0
 
   - action: "assert_outputs"
-    comment: "TD out is in cooling mode as air_temp > fixed_temp - -0.5"
+    comment: "TD out is in cooling mode as air_temp > comfort_cooling_temp - -0.5"
     expected_outputs:
       target_temp: 24.5
       temp_deviation: -0.5
@@ -170,7 +169,7 @@ steps:
       air_temp: 25.5
 
   - action: "assert_outputs"
-    comment: "TD out is in cooling mode as air_temp > fixed_temp - -1.0"
+    comment: "TD out is in cooling mode as air_temp > comfort_cooling_temp - -1.0"
     expected_outputs:
       target_temp: 24.5
       temp_deviation: -1.0
@@ -181,7 +180,7 @@ steps:
       air_temp: 26.0
 
   - action: "assert_outputs"
-    comment: "TD out is in cooling mode as air_temp > fixed_temp - -1.5"
+    comment: "TD out is in cooling mode as air_temp > comfort_cooling_temp - -1.5"
     expected_outputs:
       target_temp: 24.5
       temp_deviation: -1.5
@@ -192,7 +191,7 @@ steps:
       air_temp: 26.5
 
   - action: "assert_outputs"
-    comment: "TD out is in cooling mode as air_temp > fixed_temp - -2.0"
+    comment: "TD out is in cooling mode as air_temp > comfort_cooling_temp - -2.0"
     expected_outputs:
       target_temp: 24.5
       temp_deviation: -2.0
@@ -203,7 +202,7 @@ steps:
       air_temp: 28.0
 
   - action: "assert_outputs"
-    comment: "TD out is in cooling mode as air_temp > fixed_temp - -3.5"
+    comment: "TD out is in cooling mode as air_temp > comfort_cooling_temp - -3.5"
     expected_outputs:
       target_temp: 24.5
       temp_deviation: -3.5
@@ -214,7 +213,7 @@ steps:
       air_temp: 28.11
 
   - action: "assert_outputs"
-    comment: "TD out is in cooling mode as air_temp > fixed_temp - -3.61"
+    comment: "TD out is in cooling mode as air_temp > comfort_cooling_temp - -3.61"
     expected_outputs:
       target_temp: 24.5
       temp_deviation: -3.61

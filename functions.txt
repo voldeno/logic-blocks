@@ -13,3 +13,8 @@ std::set_register, 1
 std::set_state, 2
 std::uptime, 0
 time::now, 0
+schedule::get_entry_type, 1
+schedule::get_entry_value, 1
+schedule::get_operation_mode, 1
+operation_mode::get_state, 1
+operation_mode::set_state, 2

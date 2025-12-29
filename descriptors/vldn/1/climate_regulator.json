@@ -23,7 +23,7 @@
       "id": "presence",
       "name": "Presence",
       "description": "Extends the comfort temperature period when high. Switches from eco to comfort after a specified configuration parameter.",
-      "abbrev": "P",
+      "abbrev": "PRE",
       "type": "BOOLEAN",
       "default": "false"
     },
@@ -44,10 +44,10 @@
       "default": "false"
     },
     {
-      "id": "eco",
-      "name": "Eco mode",
-      "description": "Activates the eco temperature mode until the next schedule period change.",
-      "abbrev": "ECO",
+      "id": "protection",
+      "name": "Protection mode",
+      "description": "Activates the protection temperature mode to protect the building from frost or overheat.",
+      "abbrev": "PRO",
       "type": "BOOLEAN",
       "default": "false"
     }
@@ -99,28 +99,12 @@
       }
     },
     {
-      "id": "fixed_temp",
-      "name": "Fixed temperature",
-      "description": "Fixed temperature",
-      "type": "NUMBER",
-      "unit": "°C",
-      "default": "21",
-      "visibleWhen": {
-        "configId": "operation_mode",
-        "values": ["Manual"]
-      }
-    },
-    {
       "id": "comfort_heating_temp",
       "name": "Comfort heating temperature",
       "description": "Comfort heating temperature",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "21",
-      "visibleWhen": {
-        "configId": "operation_mode",
-        "values": ["Schedule"]
-      }
+      "default": "21"
     },
     {
       "id": "comfort_cooling_temp",
@@ -128,11 +112,7 @@
       "description": "Comfort cooling temperature",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "25",
-      "visibleWhen": {
-        "configId": "operation_mode",
-        "values": ["Schedule"]
-      }
+      "default": "25"
     },
     {
       "id": "eco_heating_temp_diff",
@@ -140,11 +120,7 @@
       "description": "Eco heating temperature diff. below the comfort temp.",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "2",
-      "visibleWhen": {
-        "configId": "operation_mode",
-        "values": ["Schedule"]
-      }
+      "default": "2"
     },
     {
       "id": "eco_cooling_temp_diff",
@@ -152,11 +128,7 @@
       "description": "Eco cooling temperature diff. above the comfort temp.",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "3",
-      "visibleWhen": {
-        "configId": "operation_mode",
-        "values": ["Schedule"]
-      }
+      "default": "3"
     },
     {
       "id": "frost_protection_temp",
@@ -165,6 +137,14 @@
       "type": "NUMBER",
       "unit": "°C",
       "default": "5"
+    },
+    {
+      "id": "overheat_protection_temp",
+      "name": "Overheat protection temperature",
+      "description": "Overheat protection temperature. If the temperature is above this temperature, the cooling is activated to protect the building.",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "40"
     },
     {
       "id": "dwc_delay",
@@ -180,7 +160,11 @@
       "description": "Comfort temperature extension duration (in seconds) on presence detection.",
       "type": "NUMBER",
       "unit": "s",
-      "default": "1800"
+      "default": "1800",
+      "visibleWhen": {
+        "configId": "operation_mode",
+        "values": ["Schedule"]
+      }
     }
   ],
   "state": [

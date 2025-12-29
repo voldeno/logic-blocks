@@ -1,0 +1,93 @@
+name: "DWC, manual, heating & cooling, protection"
+
+config:
+  thermal_mode: 0 # heating and cooling
+  operation_mode: 1 # manual
+  comfort_heating_temp: 22.5
+  comfort_cooling_temp: 24.5
+  eco_heating_temp_diff: 2
+  eco_cooling_temp_diff: 1
+  frost_protection_temp: 5
+  overheat_protection_temp: 40
+  dwc_delay: 1
+
+steps:
+  - action: "set_inputs"
+    comment: "Current temperature: 4.0'"
+    inputs:
+      air_temp: 4.0
+      outside_temp: 0
+
+  - action: "set_inputs"
+    comment: "Enable protection mode"
+    inputs:
+      comfort: false
+      protection: true
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as air_temp < protection_min_temp (5.0) - 1.0"
+    expected_outputs:
+      target_temp: 5.0
+      temp_deviation: 1.0
+
+  - action: "set_inputs"
+    comment: "Open window (DWC active)"
+    inputs:
+      dwc: true
+
+  - action: "wait"
+    duration_ms: 1100
+
+  - action: "assert_outputs"
+    comment: "TD out is still in heating mode as protection is active regardless of DWC"
+    expected_outputs:
+      target_temp: 5.0
+      temp_deviation: 1.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 3.0'"
+    inputs:
+      air_temp: 3.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in heating mode as protection works even with DWC active"
+    expected_outputs:
+      target_temp: 5.0
+      temp_deviation: 2.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 41.0'"
+    inputs:
+      air_temp: 41.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as protection works even with DWC active"
+    expected_outputs:
+      target_temp: 40.0
+      temp_deviation: -1.0
+
+  - action: "set_inputs"
+    comment: "Current temperature: 45.0'"
+    inputs:
+      air_temp: 45.0
+
+  - action: "assert_outputs"
+    comment: "TD out is in cooling mode as protection works even with DWC active"
+    expected_outputs:
+      target_temp: 40.0
+      temp_deviation: -5.0
+
+  - action: "set_inputs"
+    comment: "Close window"
+    inputs:
+      dwc: false
+
+  - action: "wait"
+    duration_ms: 1100
+
+  - action: "assert_outputs"
+    comment: "TD out is still in cooling mode as protection continues to work"
+    expected_outputs:
+      target_temp: 40.0
+      temp_deviation: -5.0
+

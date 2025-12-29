@@ -1,0 +1,3 @@
+mode = std::get_config("operation_mode")
+state = std::get_input("state")
+operation_mode::set_state(mode, state)

@@ -1,4 +1,4 @@
-name: "DWC (no lock), fixed temperature, heating & cooling, comfort, no outside sensor"
+name: "DWC (no lock), manual, heating & cooling, comfort, no outside sensor"
 
 config:
   thermal_mode: 0 # heating and cooling
