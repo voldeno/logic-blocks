@@ -5,12 +5,24 @@ limit = std::get_config("limit")
 hysteresis = std::get_config("hysteresis")
 
 new_limit_exceeded = false
-if (value <= (limit - hysteresis)) {
-    new_limit_exceeded = false
-} else if ((value > (limit - hysteresis)) and (value < (limit + hysteresis))) {
-    new_limit_exceeded = limit_exceeded
-} else if (value >= (limit + hysteresis)) {
-    new_limit_exceeded = true
+if (limit >= 0) {
+    // Positive limit: exceeded when value is too high
+    if (value <= (limit - hysteresis)) {
+        new_limit_exceeded = false
+    } else if ((value > (limit - hysteresis)) and (value < (limit + hysteresis))) {
+        new_limit_exceeded = limit_exceeded
+    } else if (value >= (limit + hysteresis)) {
+        new_limit_exceeded = true
+    }
+} else {
+    // Negative limit: exceeded when value is too low (more negative)
+    if (value >= (limit + hysteresis)) {
+        new_limit_exceeded = false
+    } else if ((value > (limit - hysteresis)) and (value < (limit + hysteresis))) {
+        new_limit_exceeded = limit_exceeded
+    } else if (value <= (limit - hysteresis)) {
+        new_limit_exceeded = true
+    }
 }
 
 std::set_output("limit_exceeded", new_limit_exceeded)

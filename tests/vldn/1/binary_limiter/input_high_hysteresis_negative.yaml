@@ -1,0 +1,169 @@
+name: "input high, hysteresis, negative limit"
+
+config:
+  limit: -11.0
+  hysteresis: 0.5
+
+steps:
+  - action: "set_inputs"
+    comment: "Reset"
+    inputs:
+      input: false
+      value: 0
+
+  - action: "set_inputs"
+    comment: "Input high, value above the limit (less negative)"
+    inputs:
+      input: true
+      value: -10.9
+
+  - action: "assert_outputs"
+    comment: "Output high"
+    expected_outputs:
+      output: true
+      limit_exceeded: false
+
+  - action: "set_inputs"
+    comment: "Input high, value at the limit"
+    inputs:
+      input: true
+      value: -11.0
+
+  - action: "assert_outputs"
+    comment: "Output high"
+    expected_outputs:
+      output: true
+      limit_exceeded: false
+
+  - action: "set_inputs"
+    comment: "Input high, value below the limit (more negative)"
+    inputs:
+      input: true
+      value: -11.01
+
+  - action: "assert_outputs"
+    comment: "Output high, in hysteresis"
+    expected_outputs:
+      output: true
+      limit_exceeded: false
+
+  - action: "set_inputs"
+    comment: "Input high, value below the limit (more negative)"
+    inputs:
+      input: true
+      value: -11.49
+
+  - action: "assert_outputs"
+    comment: "Output high, in hysteresis"
+    expected_outputs:
+      output: true
+      limit_exceeded: false
+
+  - action: "set_inputs"
+    comment: "Input high, value below the limit (more negative)"
+    inputs:
+      input: true
+      value: -11.5
+
+  - action: "assert_outputs"
+    comment: "Output low, below hysteresis (too negative)"
+    expected_outputs:
+      output: false
+      limit_exceeded: true
+
+  - action: "set_inputs"
+    comment: "Input high, value below the limit, in hysteresis going up (less negative)"
+    inputs:
+      input: true
+      value: -11.49
+
+  - action: "assert_outputs"
+    comment: "Output low, in hysteresis, going up"
+    expected_outputs:
+      output: false
+      limit_exceeded: true
+
+  - action: "set_inputs"
+    comment: "Input high, value at the limit, in hysteresis going up"
+    inputs:
+      input: true
+      value: -11.0
+
+  - action: "assert_outputs"
+    comment: "Output low, in hysteresis, going up"
+    expected_outputs:
+      output: false
+      limit_exceeded: true
+
+  - action: "set_inputs"
+    comment: "Input high, value above the limit, in hysteresis going up"
+    inputs:
+      input: true
+      value: -10.51
+
+  - action: "assert_outputs"
+    comment: "Output low, in hysteresis, going up"
+    expected_outputs:
+      output: false
+      limit_exceeded: true
+
+  - action: "set_inputs"
+    comment: "Input high, value above the limit, above the hysteresis range"
+    inputs:
+      input: true
+      value: -10.50
+
+  - action: "assert_outputs"
+    comment: "Output high"
+    expected_outputs:
+      output: true
+      limit_exceeded: false
+
+  - action: "set_inputs"
+    comment: "Input high, value above the limit, above the hysteresis range"
+    inputs:
+      input: true
+      value: -10.40
+
+  - action: "assert_outputs"
+    comment: "Output high"
+    expected_outputs:
+      output: true
+      limit_exceeded: false
+
+  - action: "set_inputs"
+    comment: "Input high, value at the limit, in hysteresis going down"
+    inputs:
+      input: true
+      value: -11.0
+
+  - action: "assert_outputs"
+    comment: "Output high"
+    expected_outputs:
+      output: true
+      limit_exceeded: false
+
+  - action: "set_inputs"
+    comment: "Input high, value below the limit, in hysteresis going down"
+    inputs:
+      input: true
+      value: -11.49
+
+  - action: "assert_outputs"
+    comment: "Output high"
+    expected_outputs:
+      output: true
+      limit_exceeded: false
+
+  - action: "set_inputs"
+    comment: "Input high, value below the limit (too negative)"
+    inputs:
+      input: true
+      value: -11.5
+
+  - action: "assert_outputs"
+    comment: "Output low, below hysteresis"
+    expected_outputs:
+      output: false
+      limit_exceeded: true
+
