@@ -124,14 +124,30 @@
       "name": "Activation threshold - single",
       "description": "Threshold of the single input temperature deviation below which the block stays idle. After activation the block aims to zero all the temp. deviations.",
       "type": "NUMBER",
-      "default": "1.0"
+      "default": "1.0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
     },
     {
       "id": "act_threshold_sum",
       "name": "Activation threshold - sum",
       "description": "Threshold of the sum of all temperature deviation inputs below which the block stays idle. After activation the block aims to zero all the temp. deviations.",
       "type": "NUMBER",
-      "default": "2.0"
+      "default": "2.0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
     }
   ],
   "state": [

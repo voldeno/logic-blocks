@@ -83,7 +83,15 @@
       "type": "NUMBER",
       "description": "Duration of a click in ms",
       "unit": "ms",
-      "default": "500"
+      "default": "500",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
     },
     {
       "id": "short_press_duration_ms",
@@ -91,7 +99,19 @@
       "type": "NUMBER",
       "description": "Duration of a short press in ms",
       "unit": "ms",
-      "default": "1000"
+      "default": "1000",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          },
+          {
+            "type": "gt",
+            "configId": "click_duration_ms"
+          }
+        ]
+      }
     },
     {
       "id": "long_press_duration_ms",
@@ -99,7 +119,19 @@
       "type": "NUMBER",
       "description": "Duration of a long press in ms",
       "unit": "ms",
-      "default": "5000"
+      "default": "5000",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          },
+          {
+            "type": "gt",
+            "configId": "short_press_duration_ms"
+          }
+        ]
+      }
     },
     {
       "id": "hold_duration_ms",
@@ -107,7 +139,15 @@
       "type": "NUMBER",
       "description": "Duration of a hold in ms",
       "unit": "ms",
-      "default": "1000"
+      "default": "1000",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
     }
   ],
   "state": [

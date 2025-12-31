@@ -113,6 +113,14 @@
       "visibleWhen": {
         "configId": "s1_enabled",
         "values": ["true"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
       }
     },
     {
@@ -133,6 +141,14 @@
       "visibleWhen": {
         "configId": "s2_enabled",
         "values": ["true"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
       }
     },
     {
@@ -153,6 +169,14 @@
       "visibleWhen": {
         "configId": "s3_enabled",
         "values": ["true"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
       }
     },
     {
@@ -173,6 +197,14 @@
       "visibleWhen": {
         "configId": "s4_enabled",
         "values": ["true"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
       }
     },
     {
@@ -193,6 +225,14 @@
       "visibleWhen": {
         "configId": "s5_enabled",
         "values": ["true"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
       }
     },
     {
@@ -213,6 +253,14 @@
       "visibleWhen": {
         "configId": "s6_enabled",
         "values": ["true"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
       }
     },
     {
@@ -233,6 +281,14 @@
       "visibleWhen": {
         "configId": "s7_enabled",
         "values": ["true"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
       }
     },
     {
@@ -253,6 +309,14 @@
       "visibleWhen": {
         "configId": "s8_enabled",
         "values": ["true"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
       }
     }
   ],

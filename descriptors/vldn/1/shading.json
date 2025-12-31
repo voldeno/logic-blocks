@@ -141,7 +141,15 @@
       "description": "The time taken to fully open the shading device, in seconds",
       "type": "NUMBER",
       "unit" : "s",
-      "default": "80"
+      "default": "80",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
     },
     {
       "id": "closing_duration",
@@ -149,7 +157,15 @@
       "description": "The time taken to fully close the shading device, in seconds",
       "type": "NUMBER",
       "unit" : "s",
-      "default": "80"
+      "default": "80",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
     },
     {
       "id": "return_duration",
@@ -157,15 +173,35 @@
       "description": "Return duration to position the shading device slightly open from fully open position. For venetian blinds, duration for horizontal alignment of slats.",
       "type": "NUMBER",
       "unit" : "s",
-      "default": "0.8"
+      "default": "0.8",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
     },
     {
       "id": "wind_alarm_position",
       "name": "Wind alarm position",
-      "description": "The position of the shading device during wind alarm activation, as a percentage of fully open",
+      "description": "The position of the shading device during wind alarm activation, as a percentage of fully open (0-100)",
       "type": "NUMBER",
       "unit" : "%",
-      "default": "0"
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          },
+          {
+            "type": "lte",
+            "value": 100
+          }
+        ]
+      }
     },
     {
       "id": "motor_lock_duration",
@@ -173,7 +209,15 @@
       "description": "Time required to release the motor lock between direction changes, in seconds",
       "type": "NUMBER",
       "unit" : "s",
-      "default": "0.5"
+      "default": "0.5",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
     }
   ],
   "state": [

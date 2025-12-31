@@ -104,7 +104,19 @@
       "description": "Comfort heating temperature",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "21"
+      "default": "21",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": ["Heating and cooling", "Heating only"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "lte",
+            "configId": "comfort_cooling_temp"
+          }
+        ]
+      }
     },
     {
       "id": "comfort_cooling_temp",
@@ -112,7 +124,19 @@
       "description": "Comfort cooling temperature",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "25"
+      "default": "25",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": ["Heating and cooling", "Cooling only"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "configId": "comfort_heating_temp"
+          }
+        ]
+      }
     },
     {
       "id": "eco_heating_temp_diff",
@@ -120,7 +144,19 @@
       "description": "Eco heating temperature diff. below the comfort temp.",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "2"
+      "default": "2",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": ["Heating and cooling", "Heating only"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
     },
     {
       "id": "eco_cooling_temp_diff",
@@ -128,7 +164,19 @@
       "description": "Eco cooling temperature diff. above the comfort temp.",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "3"
+      "default": "3",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": ["Heating and cooling", "Cooling only"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
     },
     {
       "id": "frost_protection_temp",
@@ -136,7 +184,23 @@
       "description": "Frost protection temperature. If the temperature is below this temperature, the heating is activated to protect the building.",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "5"
+      "default": "10",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": ["Heating and cooling", "Heating only"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 5
+          },
+          {
+            "type": "lt",
+            "configId": "comfort_heating_temp"
+          }
+        ]
+      }
     },
     {
       "id": "overheat_protection_temp",
@@ -144,7 +208,19 @@
       "description": "Overheat protection temperature. If the temperature is above this temperature, the cooling is activated to protect the building.",
       "type": "NUMBER",
       "unit": "°C",
-      "default": "40"
+      "default": "40",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": ["Heating and cooling", "Cooling only"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "configId": "comfort_cooling_temp"
+          }
+        ]
+      }
     },
     {
       "id": "dwc_delay",
@@ -152,7 +228,15 @@
       "description": "Door, window contact delay in seconds. Prevents short door, window opening to interrupt the climate control.",
       "type": "NUMBER",
       "unit": "s",
-      "default": "30"
+      "default": "30",
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
     },
     {
       "id": "presence_extension_duration",
@@ -164,6 +248,14 @@
       "visibleWhen": {
         "configId": "operation_mode",
         "values": ["Schedule"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
       }
     }
   ],

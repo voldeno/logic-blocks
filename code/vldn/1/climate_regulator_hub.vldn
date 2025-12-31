@@ -77,7 +77,13 @@ if (was_active) {
     } else if (dev_sum < 0) {
         mode = 2
     } else {
-        mode = 0 // FIXME: this might be problematic for inputs like +1, -1, +2, -2
+        if (dev_sum_heat > 0) {
+            // this covers unlikely case of inputs like +1, -1, +2, -2
+            // chosing heating as a preference
+            mode = 1
+        } else {
+            mode = 0
+        }
     }
 }
 
