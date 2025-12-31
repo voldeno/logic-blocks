@@ -283,6 +283,14 @@
       "default": "false"
     },
     {
+      "id": "last_activation_ts",
+      "name": "Last execution timestamp",
+      "type": "NUMBER",
+      "unit": "s",
+      "description": "Last execution timestamp in seconds from epoch",
+      "default": "0"
+    },
+    {
       "id": "next_activation_ts",
       "name": "Next execution timestamp",
       "type": "NUMBER",
