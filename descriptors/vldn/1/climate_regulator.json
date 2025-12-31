@@ -281,6 +281,14 @@
       "description": "DWC lock state",
       "type": "BOOLEAN",
       "default": "false"
+    },
+    {
+      "id": "next_activation_ts",
+      "name": "Next execution timestamp",
+      "type": "NUMBER",
+      "unit": "s",
+      "description": "Next execution timestamp in seconds from epoch",
+      "default": "0"
     }
   ]
 }
