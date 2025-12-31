@@ -2,6 +2,7 @@
   "name": "Climate regulator",
   "group": "process",
   "description": "Zonal climate regulator - can be used as a thermostat for a specific zone heating or cooling. Output should be provided to a climate regulator hub.",
+  "ioType": "scheduler",
   "inputs": [
     {
       "id": "air_temp",
