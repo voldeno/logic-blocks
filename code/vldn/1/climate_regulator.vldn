@@ -3,9 +3,8 @@ value = std::get_current_value()
 now = std::uptime()
 
 if (channel == "calculate_activation_ts") {
-    // TODO: add proper schedule fn
-    std::print("calculating next activation")
-    next = time::now() + 1
+    next = schedule::get_next_activation_ts()
+    std::print(str::fmt("calculating next activation: {}", next))
     std::set_state("next_activation_ts", next)
     return
 }
