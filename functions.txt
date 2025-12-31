@@ -15,6 +15,7 @@ std::uptime, 0
 time::now, 0
 schedule::get_entry_type, 1
 schedule::get_entry_value, 1
+schedule::get_next_activation_ts, 1
 schedule::get_operation_mode, 1
 operation_mode::get_state, 1
 operation_mode::set_state, 2
