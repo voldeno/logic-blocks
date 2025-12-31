@@ -4,10 +4,13 @@ now = std::uptime()
 
 if (channel == "calculate_activation_ts") {
     // TODO: add proper schedule fn
+    std::print("calculating next activation")
     next = time::now() + 1
     std::set_state("next_activation_ts", next)
     return
 }
+
+std::print(str::fmt("current channel: {}", channel))
 
 // inputs
 air_temp = std::get_input("air_temp")
