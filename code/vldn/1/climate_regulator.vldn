@@ -2,6 +2,13 @@ channel = std::get_current_channel()
 value = std::get_current_value()
 now = std::uptime()
 
+if (channel == "calculate_activation_ts") {
+    // TODO: add proper schedule fn
+    next = time::now() + 1
+    std::set_state("next_activation_ts", next)
+    return
+}
+
 // inputs
 air_temp = std::get_input("air_temp")
 floor_temp = std::get_input("floor_temp")
