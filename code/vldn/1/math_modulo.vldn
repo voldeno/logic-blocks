@@ -1,0 +1,7 @@
+i1 = std::get_input("input_1")
+i2 = std::get_input("input_2")
+if (i2 != 0) {
+    std::set_output("output", i1 % i2)
+} else {
+    std::set_output("output", 0)
+}

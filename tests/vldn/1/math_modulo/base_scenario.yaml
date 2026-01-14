@@ -1,0 +1,83 @@
+name: "base scenario"
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      input_1: 7
+      input_2: 3
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: 1
+
+  - action: "set_inputs"
+    inputs:
+      input_1: 10
+      input_2: 3
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: 1
+
+  - action: "set_inputs"
+    inputs:
+      input_1: 8
+      input_2: 4
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: 0
+
+  - action: "set_inputs"
+    inputs:
+      input_1: -7
+      input_2: 3
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: -1
+
+  - action: "set_inputs"
+    inputs:
+      input_1: 7
+      input_2: -3
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: 1
+
+  - action: "set_inputs"
+    inputs:
+      input_1: -7
+      input_2: -3
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: -1
+
+  - action: "set_inputs"
+    inputs:
+      input_1: 0
+      input_2: 5
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: 0
+
+  - action: "set_inputs"
+    inputs:
+      input_1: 5
+      input_2: 0
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: 0
+
+  - action: "set_inputs"
+    inputs:
+      input_1: 7.5
+      input_2: 3
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: 1.5
