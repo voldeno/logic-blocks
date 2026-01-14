@@ -7,7 +7,7 @@ config:
 steps:
   - action: "set_inputs"
     inputs:
-      trigger: false
+      input: false
 
   - action: "assert_outputs"
     expected_outputs:
@@ -15,7 +15,7 @@ steps:
 
   - action: "set_inputs"
     inputs:
-      trigger: true
+      input: true
 
   - action: "wait"
     duration_ms: 300
@@ -23,7 +23,7 @@ steps:
   # Cancel the delay on by changing input to false before delay completes
   - action: "set_inputs"
     inputs:
-      trigger: false
+      input: false
 
   - action: "wait"
     duration_ms: 200
@@ -44,7 +44,7 @@ steps:
   # Now trigger again and let it complete
   - action: "set_inputs"
     inputs:
-      trigger: true
+      input: true
 
   - action: "wait"
     duration_ms: 1100
@@ -56,14 +56,14 @@ steps:
   # Cancel delay off
   - action: "set_inputs"
     inputs:
-      trigger: false
+      input: false
 
   - action: "wait"
     duration_ms: 200
 
   - action: "set_inputs"
     inputs:
-      trigger: true
+      input: true
 
   - action: "wait"
     duration_ms: 400

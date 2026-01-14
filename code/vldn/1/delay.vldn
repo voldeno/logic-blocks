@@ -22,12 +22,12 @@ if (channel == "callback") {
 }
 
 // Handle input changes - detect edges
-if (channel == "trigger") {
-    last_trigger_state = std::get_state("last_trigger_state")
+if (channel == "input") {
+    last_input_state = std::get_state("last_input_state")
     
     // Only react to state changes (edges)
-    if (value != last_trigger_state) {
-        std::set_state("last_trigger_state", value)
+    if (value != last_input_state) {
+        std::set_state("last_input_state", value)
         
         if (value) {
             // Input went high - schedule delay on
