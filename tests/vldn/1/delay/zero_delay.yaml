@@ -1,0 +1,32 @@
+name: "zero_delay"
+
+config:
+  don: 0
+  doff: 0
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      trigger: true
+
+  # With zero delay, output should be immediate
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  # With zero delay, output should be immediate
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false

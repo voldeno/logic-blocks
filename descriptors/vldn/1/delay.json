@@ -1,0 +1,68 @@
+{
+  "name": "Delay",
+  "group": "process",
+  "description": "Delays the output state changes based on switch-on and switch-off delay durations",
+  "inputs": [
+    {
+      "id": "trigger",
+      "name": "Trigger",
+      "description": "Input signal that triggers the delayed output. When high, output will be delayed by 'don' duration. When low, output will be delayed by 'doff' duration.",
+      "abbrev": "Tr",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Delayed output signal. Switches ON after 'don' delay when trigger goes high, and switches OFF after 'doff' delay when trigger goes low.",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "don",
+      "name": "Duration switch-on delay",
+      "description": "Delay duration before the output is switched ON when input goes high",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "1",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "doff",
+      "name": "Duration switch-off delay",
+      "description": "Delay duration before the output is switched OFF when input goes low",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "1",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "last_trigger_state",
+      "name": "Last trigger state",
+      "description": "Stores the previous state of the trigger input to detect edges",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}
