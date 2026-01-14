@@ -1,0 +1,58 @@
+name: "base_scenario"
+
+config:
+  don: 0.3
+  doff: 0.2
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "wait"
+    duration_ms: 150
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 150
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 100
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
