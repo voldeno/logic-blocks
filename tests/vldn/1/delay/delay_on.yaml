@@ -1,0 +1,36 @@
+name: "delay_on"
+
+config:
+  don: 0.5
+  doff: 0.3
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "wait"
+    duration_ms: 400
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "wait"
+    duration_ms: 150
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true

@@ -1,0 +1,74 @@
+name: "cancellation"
+
+config:
+  don: 1.0
+  doff: 0.5
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "wait"
+    duration_ms: 300
+
+  # Cancel the delay on by changing input to false before delay completes
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "wait"
+    duration_ms: 200
+
+  # Output should still be false (delay on was cancelled)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "wait"
+    duration_ms: 400
+
+  # After doff delay, output should be false
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  # Now trigger again and let it complete
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "wait"
+    duration_ms: 1100
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  # Cancel delay off
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "wait"
+    duration_ms: 200
+
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "wait"
+    duration_ms: 400
+
+  # Output should still be true (delay off was cancelled, delay on completed)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true

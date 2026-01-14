@@ -1,0 +1,68 @@
+{
+  "name": "Delay",
+  "group": "process",
+  "description": "Delays the output state changes based on switch-on and switch-off delay durations",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Input",
+      "description": "Input signal that triggers the delayed output. When high, output will be delayed by 'don' duration. When low, output will be delayed by 'doff' duration.",
+      "abbrev": "I",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Delayed output signal. Switches ON after 'don' delay when input goes high, and switches OFF after 'doff' delay when input goes low.",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "don",
+      "name": "Duration switch-on delay",
+      "description": "Delay duration before the output is switched ON when input goes high",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "1",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "doff",
+      "name": "Duration switch-off delay",
+      "description": "Delay duration before the output is switched OFF when input goes low",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "1",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "last_input_state",
+      "name": "Last input state",
+      "description": "Stores the previous state of the input to detect edges",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}
