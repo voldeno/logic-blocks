@@ -1,7 +1,7 @@
 name: "threshold mode on < off (inverted)"
 
 config:
-  mode: "Threshold (On/Off)"
+  mode: 1 # Threshold (On/Off)
   value_on: 45.0
   value_off: 55.0
 

@@ -1,7 +1,7 @@
 name: "threshold mode on > off"
 
 config:
-  mode: "Threshold (On/Off)"
+  mode: 1 # Threshold (On/Off)
   value_on: 55.0
   value_off: 45.0
 

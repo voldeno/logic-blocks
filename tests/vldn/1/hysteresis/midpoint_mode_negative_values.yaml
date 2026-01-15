@@ -1,7 +1,7 @@
 name: "midpoint mode with negative values"
 
 config:
-  mode: "Midpoint + Hysteresis"
+  mode: 0 # Midpoint + Hysteresis
   midpoint: -10.0
   hysteresis: 2.0
 

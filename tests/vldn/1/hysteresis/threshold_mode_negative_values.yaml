@@ -1,7 +1,7 @@
 name: "threshold mode with negative values"
 
 config:
-  mode: "Threshold (On/Off)"
+  mode: 1 # Threshold (On/Off)
   value_on: -8.0
   value_off: -12.0
 

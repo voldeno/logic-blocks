@@ -1,7 +1,7 @@
 name: "midpoint mode basic"
 
 config:
-  mode: "Midpoint + Hysteresis"
+  mode: 0 # Midpoint + Hysteresis
   midpoint: 50.0
   hysteresis: 5.0
 
