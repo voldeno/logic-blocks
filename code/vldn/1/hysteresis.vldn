@@ -1,0 +1,49 @@
+value = std::get_input("value")
+output = std::get_output("output")
+mode = std::get_config("mode") // 0=midpoint+hysteresis, 1=threshold
+
+new_output = false
+
+if (mode == 0) { // Midpoint + Hysteresis
+    midpoint = std::get_config("midpoint")
+    hysteresis = std::get_config("hysteresis")
+    
+    threshold_on = midpoint + hysteresis
+    threshold_off = midpoint - hysteresis
+    
+    if (value >= threshold_on) {
+        new_output = true
+    } else if (value <= threshold_off) {
+        new_output = false
+    } else {
+        // In hysteresis range, maintain current state
+        new_output = output
+    }
+} else if (mode == 1) { // Threshold (On/Off)
+    value_on = std::get_config("value_on")
+    value_off = std::get_config("value_off")
+    
+    if (value_on > value_off) {
+        // Standard hysteresis: on when high, off when low
+        if (value >= value_on) {
+            new_output = true
+        } else if (value <= value_off) {
+            new_output = false
+        } else {
+            // In hysteresis range, maintain current state
+            new_output = output
+        }
+    } else {
+        // Inverted hysteresis: on when low, off when high (value_off > value_on)
+        if (value <= value_on) {
+            new_output = true
+        } else if (value >= value_off) {
+            new_output = false
+        } else {
+            // In hysteresis range, maintain current state
+            new_output = output
+        }
+    }
+}
+
+std::set_output("output", new_output)

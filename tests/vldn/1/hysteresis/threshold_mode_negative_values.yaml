@@ -1,0 +1,97 @@
+name: "threshold mode with negative values"
+
+config:
+  mode: "Threshold (On/Off)"
+  value_on: -8.0
+  value_off: -12.0
+
+steps:
+  - action: "set_inputs"
+    comment: "Reset to very low value"
+    inputs:
+      value: -50.0
+
+  - action: "assert_outputs"
+    comment: "Output should be off"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Value below value_off"
+    inputs:
+      value: -13.0
+
+  - action: "assert_outputs"
+    comment: "Output still off"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Value at value_off"
+    inputs:
+      value: -12.0
+
+  - action: "assert_outputs"
+    comment: "Output still off"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Value in hysteresis range"
+    inputs:
+      value: -10.0
+
+  - action: "assert_outputs"
+    comment: "Output still off (in hysteresis)"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Value at value_on"
+    inputs:
+      value: -8.0
+
+  - action: "assert_outputs"
+    comment: "Output turns on"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Value above value_on"
+    inputs:
+      value: -5.0
+
+  - action: "assert_outputs"
+    comment: "Output stays on"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Value back in hysteresis range"
+    inputs:
+      value: -10.0
+
+  - action: "assert_outputs"
+    comment: "Output stays on (in hysteresis)"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Value at value_off"
+    inputs:
+      value: -12.0
+
+  - action: "assert_outputs"
+    comment: "Output turns off"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Value below value_off"
+    inputs:
+      value: -15.0
+
+  - action: "assert_outputs"
+    comment: "Output stays off"
+    expected_outputs:
+      output: false
