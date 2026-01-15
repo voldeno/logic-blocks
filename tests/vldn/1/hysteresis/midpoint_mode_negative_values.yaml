@@ -1,0 +1,87 @@
+name: "midpoint mode with negative values"
+
+config:
+  mode: 0 # Midpoint + Hysteresis
+  midpoint: -10.0
+  hysteresis: 2.0
+
+steps:
+  - action: "set_inputs"
+    comment: "Reset to very low value"
+    inputs:
+      value: -50.0
+
+  - action: "assert_outputs"
+    comment: "Output should be off"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Value below lower threshold (-12)"
+    inputs:
+      value: -13.0
+
+  - action: "assert_outputs"
+    comment: "Output still off"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Value at lower threshold (-12)"
+    inputs:
+      value: -12.0
+
+  - action: "assert_outputs"
+    comment: "Output turns off at threshold"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Value in hysteresis range"
+    inputs:
+      value: -10.0
+
+  - action: "assert_outputs"
+    comment: "Output still off (in hysteresis)"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Value at upper threshold (-8)"
+    inputs:
+      value: -8.0
+
+  - action: "assert_outputs"
+    comment: "Output turns on"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Value above upper threshold"
+    inputs:
+      value: -5.0
+
+  - action: "assert_outputs"
+    comment: "Output stays on"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Value back in hysteresis range"
+    inputs:
+      value: -10.0
+
+  - action: "assert_outputs"
+    comment: "Output stays on (in hysteresis)"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Value at lower threshold (-12)"
+    inputs:
+      value: -12.0
+
+  - action: "assert_outputs"
+    comment: "Output turns off"
+    expected_outputs:
+      output: false
