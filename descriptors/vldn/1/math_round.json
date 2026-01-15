@@ -1,0 +1,29 @@
+{
+  "name": "Math::Round",
+  "group": "process",
+  "description": "Rounds the input value to the nearest integer",
+  "inputs": [
+    {
+      "id": "input",
+      "description": "Input",
+      "name": "Input",
+      "abbrev": "I",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "description": "Output",
+      "name": "Output",
+      "abbrev": "O",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+  ],
+  "state": [
+  ]
+}

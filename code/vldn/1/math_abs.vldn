@@ -1,0 +1,6 @@
+value = std::get_input("input")
+if (value < 0) {
+    std::set_output("output", -value)
+} else {
+    std::set_output("output", value)
+}
