@@ -1,3 +1,13 @@
+
+extern fn std::next_activation_at() {
+    operation_mode = std::get_config("operation_mode") 
+    if (operation_mode == 0) { // schedule
+        schedule_id = std::get_config("schedule")
+        return schedule::get_next_activation_ts(schedule_id)
+    }
+    return 0
+}
+
 channel = std::get_current_channel()
 value = std::get_current_value()
 now = std::uptime()
@@ -23,15 +33,6 @@ overheat_protection_temp = std::get_config("overheat_protection_temp")
 dwc_delay_sec = std::get_config("dwc_delay")
 presence_extension_duration = std::get_config("presence_extension_duration")
 
-if (channel == "calculate_activation_ts") {
-    next = 0
-    if (operation_mode == 0) { // schedule
-        schedule_id = std::get_config("schedule")
-        next = schedule::get_next_activation_ts(schedule_id)
-    }
-    std::set_state("next_activation_ts", next)
-    return
-}
 
 last_dwc_state = std::get_state("dwc_state")
 if (channel == "dwc") {

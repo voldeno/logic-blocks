@@ -1,12 +1,6 @@
-channel = std::get_current_channel()
 
-if (channel == "calculate_activation_ts") {
-    next = time::now() + std::get_config("interval")
-    std::set_state("next_activation_ts", next)
-    return
+extern fn std::next_activation_at() {
+    return time::now() + std::get_config("interval")
 }
 
-if (channel == "activate") {
-    std::set_output("pulse", !std::get_output("pulse"))
-    return
-}
+std::set_output("pulse", !std::get_output("pulse"))
