@@ -1,0 +1,36 @@
+{
+  "name": "Toggle",
+  "group": "process",
+  "description": "Converts a monostable pulse input into a bi-stable toggle output. Each rising edge on the input toggles the output state.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Input",
+      "description": "Pulse input signal. On each rising edge (false to true transition), the output will toggle its state.",
+      "abbrev": "I",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Bi-stable output that toggles its state on each input pulse.",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+  ],
+  "state": [
+    {
+      "id": "last_input_state",
+      "name": "Last input state",
+      "description": "Stores the previous state of the input to detect rising edges",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}

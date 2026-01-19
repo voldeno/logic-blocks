@@ -1,0 +1,74 @@
+name: "base scenario"
+
+steps:
+  # Initial state - output should be false
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  # First pulse - output should toggle to true
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  # Release pulse - output should remain true (bi-stable)
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  # Second pulse - output should toggle to false
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  # Release pulse - output should remain false
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  # Third pulse - output should toggle back to true
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  # Multiple consecutive true inputs (no edge) - output should not change
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  # Release and fourth pulse - output should toggle to false
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
