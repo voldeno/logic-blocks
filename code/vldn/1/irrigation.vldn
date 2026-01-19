@@ -10,14 +10,13 @@ fn disable_all(section_count) {
     }
 }
 
-if (channel == "callback") {
+extern fn onCallback(section_count, callback_id) {
     disable_all(section_count)
 
     current_section = 0
-    callback_id = std::get_current_value()
     if (callback_id == 0) {
         std::set_output("pump", true)
-        std::callback(0, 1)
+        callback::set(0, "onCallback", section_count, 1)
         return
     } else if (callback_id > 0 and callback_id < (section_count + 1)) {
         current_section = callback_id
@@ -35,12 +34,12 @@ if (channel == "callback") {
     section_duration = std::get_config(section_duration_cfg)
 
     if (!section_enabled) {
-        std::callback(0, current_section + 1)
+        callback::set(0, "onCallback", section_count, current_section + 1)
         return
     }
 
     std::set_output(section_output, true)
-    std::callback(section_duration * 1000, current_section + 1)
+    callback::set(section_duration * 1000, "onCallback", section_count, current_section + 1)
     return
 }
 
@@ -52,12 +51,12 @@ if (channel == "trigger" and input_value) {
     }
 
     std::set_state("active", true)
-    std::callback(0, 0)
+    callback::set(0, "onCallback", section_count, 0)
     return
 }
 
 if (channel == "reset") {
-    std::clear_callback()
-    std::callback(0, section_count + 1)
+    callback::clear()
+    callback::set(0, "onCallback", section_count, section_count + 1)
     return
 }

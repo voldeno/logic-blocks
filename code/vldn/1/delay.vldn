@@ -5,7 +5,7 @@ don_ms = math::round(std::get_config("don") * 1000)
 doff_ms = math::round(std::get_config("doff") * 1000)
 
 // Handle callback execution
-if (channel == "callback") {
+extern fn onCallback(value) {
     if (value == 1) {
         // Delay on callback - set output to true
         std::set_output("output", true)
@@ -31,18 +31,18 @@ if (channel == "input") {
         
         if (value) {
             // Input went high - schedule delay on
-            std::clear_callback()
+            callback::clear()
             if (don_ms > 0) {
-                std::callback(don_ms, 1)
+                callback::set(don_ms, "onCallback", 1)
             } else {
                 // If delay is 0, set output immediately
                 std::set_output("output", true)
             }
         } else {
             // Input went low - schedule delay off
-            std::clear_callback()
+            callback::clear()
             if (doff_ms > 0) {
-                std::callback(doff_ms, 2)
+                callback::set(doff_ms, "onCallback", 2)
             } else {
                 // If delay is 0, set output immediately
                 std::set_output("output", false)

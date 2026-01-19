@@ -1,8 +1,7 @@
 callback_ms = 100
 channel = std::get_current_channel()
 
-if (channel == "callback") {
-    callback_id = std::get_current_value()
+extern fn onCallback(callback_id, callback_ms) {
     if (callback_id == 1) {
         std::set_output("click", false)
     } else if (callback_id == 2) {
@@ -13,10 +12,10 @@ if (channel == "callback") {
         if (std::get_output("on") == true) {
             if (std::get_output("hold")) {
                 std::set_output("hold", false)
-                std::callback(std::get_config("hold_duration_ms"), 10)
+                callback::set(std::get_config("hold_duration_ms"), "onCallback", 10, callback_ms)
             } else if (!std::get_output("hold")) {
                 std::set_output("hold", true)
-                std::callback(callback_ms, 10) // schedule callback to switch off the hold pulse
+                callback::set(callback_ms, "onCallback", 10, callback_ms) // schedule callback to switch off the hold pulse
             }
         }
     }
@@ -31,23 +30,23 @@ if (pressed == 1) {
     std::set_output("on", true)
     std::set_output("off", false)
 
-    std::callback(std::get_config("hold_duration_ms"), 10)
+    callback::set(std::get_config("hold_duration_ms"), "onCallback", 10, callback_ms)
 } else {
-    std::clear_callback()
+    callback::clear()
 
     diff_ms = std::uptime() - std::get_state("last_change_time_ms")
 
     clicked = false
     if (diff_ms <= std::get_config("click_duration_ms")) {
         std::set_output("click", true)
-        std::callback(callback_ms, 1)
+        callback::set(callback_ms, "onCallback", 1, callback_ms)
         clicked = true
     } else if (diff_ms <= std::get_config("short_press_duration_ms")) {
         std::set_output("short_press", true)
-        std::callback(callback_ms, 2)
+        callback::set(callback_ms, "onCallback", 2, callback_ms)
     } else if (diff_ms <= std::get_config("long_press_duration_ms")) {
         std::set_output("long_press", true)
-        std::callback(callback_ms, 3)
+        callback::set(callback_ms, "onCallback", 3, callback_ms)
     }
 
     if (clicked) {
