@@ -1,1 +1,1 @@
-std::set_output("state", std::get_current_value() == 1)
+output::set("state", input::value() == 1)

@@ -1,6 +1,6 @@
-value = std::get_input("input")
+value = input::get("input")
 if (value < 0) {
-    std::set_output("output", -value)
+    output::set("output", -value)
 } else {
-    std::set_output("output", value)
+    output::set("output", value)
 }

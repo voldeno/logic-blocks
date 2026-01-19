@@ -1,8 +1,8 @@
-in = std::get_input("input")
-value = std::get_input("value")
-limit_exceeded = std::get_output("limit_exceeded")
-limit = std::get_config("limit")
-hysteresis = std::get_config("hysteresis")
+in = input::get("input")
+value = input::get("value")
+limit_exceeded = output::get("limit_exceeded")
+limit = config::get("limit")
+hysteresis = config::get("hysteresis")
 
 new_limit_exceeded = false
 if (limit >= 0) {
@@ -25,5 +25,5 @@ if (limit >= 0) {
     }
 }
 
-std::set_output("limit_exceeded", new_limit_exceeded)
-std::set_output("output", in and !new_limit_exceeded)
+output::set("limit_exceeded", new_limit_exceeded)
+output::set("output", in and !new_limit_exceeded)

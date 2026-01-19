@@ -1,8 +1,8 @@
-i1 = std::get_input("input_1")
-i2 = std::get_input("input_2")
+i1 = input::get("input_1")
+i2 = input::get("input_2")
 
 fn round2decimal(value) {
     return math::round(100.0 * value) / 100.0
 }
 
-std::set_output("output", round2decimal(i1 + i2))
+output::set("output", round2decimal(i1 + i2))

@@ -1,25 +1,25 @@
 zones = 4
 
-heating_was_active = std::get_output("heating_0")
-cooling_was_active = std::get_output("cooling_0")
+heating_was_active = output::get("heating_0")
+cooling_was_active = output::get("cooling_0")
 was_active = heating_was_active or cooling_was_active
 
-act_threshold_single = std::get_config("act_threshold_single")
-act_threshold_sum = std::get_config("act_threshold_sum")
+act_threshold_single = config::get("act_threshold_single")
+act_threshold_sum = config::get("act_threshold_sum")
 
 fn heating(zone) {
-    std::set_output(str::fmt("heating_{}", zone), true)
-    std::set_output(str::fmt("cooling_{}", zone), false)
+    output::set(str::fmt("heating_{}", zone), true)
+    output::set(str::fmt("cooling_{}", zone), false)
 }
 
 fn cooling(zone) {
-    std::set_output(str::fmt("heating_{}", zone), false)
-    std::set_output(str::fmt("cooling_{}", zone), true)
+    output::set(str::fmt("heating_{}", zone), false)
+    output::set(str::fmt("cooling_{}", zone), true)
 }
 
 fn idle(zone) {
-    std::set_output(str::fmt("heating_{}", zone), false)
-    std::set_output(str::fmt("cooling_{}", zone), false)
+    output::set(str::fmt("heating_{}", zone), false)
+    output::set(str::fmt("cooling_{}", zone), false)
 }
 
 fn round2dec(value) {
@@ -39,7 +39,7 @@ dev_sum_heat = 0.0
 dev_sum_cool = 0.0
 mode = 0 // 0=idle, 1=heating, 2=cooling
 while (zone < zones) {
-    zonal_temp_dev = std::get_input(str::fmt("temp_dev_zone_{}", zone + 1))
+    zonal_temp_dev = input::get(str::fmt("temp_dev_zone_{}", zone + 1))
     dev_sum += zonal_temp_dev
     if (zonal_temp_dev > 0) {
         dev_sum_heat += zonal_temp_dev
@@ -91,7 +91,7 @@ zone = 0
 dev_sum = 0.0
 single_input_threshold_exceeded = false
 while (zone < zones) {
-    zonal_temp_dev = std::get_input(str::fmt("temp_dev_zone_{}", zone + 1))
+    zonal_temp_dev = input::get(str::fmt("temp_dev_zone_{}", zone + 1))
     if (mode == 1 and zonal_temp_dev > 0) {
         if (zonal_temp_dev >= act_threshold_single) {
             single_input_threshold_exceeded = true
@@ -126,7 +126,7 @@ if (any_threshold_exceeded or was_active) {
 zone = 1
 while (zone <= zones) {
     if (any_threshold_exceeded or was_active) {
-        zonal_temp_dev = std::get_input(str::fmt("temp_dev_zone_{}", zone))
+        zonal_temp_dev = input::get(str::fmt("temp_dev_zone_{}", zone))
         if (zonal_temp_dev > 0 and mode == 1) {
             heating(zone)
         } else if (zonal_temp_dev < 0 and mode == 2) {

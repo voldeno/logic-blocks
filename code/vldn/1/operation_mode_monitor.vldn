@@ -1,3 +1,3 @@
-mode = std::get_config("operation_mode")
+mode = config::get("operation_mode")
 state = operation_mode::get_state(mode)
-std::set_output("state", state)
+output::set("state", state)

@@ -1,59 +1,58 @@
 callback_ms = 100
-channel = std::get_current_channel()
+channel = input::channel()
 
 extern fn onCallback(callback_id, callback_ms) {
     if (callback_id == 1) {
-        std::set_output("click", false)
+        output::set("click", false)
     } else if (callback_id == 2) {
-        std::set_output("short_press", false)
+        output::set("short_press", false)
     } else if (callback_id == 3) {
-        std::set_output("long_press", false)
+        output::set("long_press", false)
     } else if (callback_id == 10) { // hold check
-        if (std::get_output("on") == true) {
-            if (std::get_output("hold")) {
-                std::set_output("hold", false)
-                callback::set(std::get_config("hold_duration_ms"), "onCallback", 10, callback_ms)
-            } else if (!std::get_output("hold")) {
-                std::set_output("hold", true)
+        if (output::get("on") == true) {
+            if (output::get("hold")) {
+                output::set("hold", false)
+                callback::set(config::get("hold_duration_ms"), "onCallback", 10, callback_ms)
+            } else if (!output::get("hold")) {
+                output::set("hold", true)
                 callback::set(callback_ms, "onCallback", 10, callback_ms) // schedule callback to switch off the hold pulse
             }
         }
     }
-    return
 }
 
-pressed = std::get_current_value()
-now = std::uptime()
+pressed = input::value()
+now = time::uptime()
 
 if (pressed == 1) {
-    std::set_state("last_change_time_ms", now)
-    std::set_output("on", true)
-    std::set_output("off", false)
+    state::set("last_change_time_ms", now)
+    output::set("on", true)
+    output::set("off", false)
 
-    callback::set(std::get_config("hold_duration_ms"), "onCallback", 10, callback_ms)
+    callback::set(config::get("hold_duration_ms"), "onCallback", 10, callback_ms)
 } else {
     callback::clear()
 
-    diff_ms = std::uptime() - std::get_state("last_change_time_ms")
+    diff_ms = time::uptime() - state::get("last_change_time_ms")
 
     clicked = false
-    if (diff_ms <= std::get_config("click_duration_ms")) {
-        std::set_output("click", true)
+    if (diff_ms <= config::get("click_duration_ms")) {
+        output::set("click", true)
         callback::set(callback_ms, "onCallback", 1, callback_ms)
         clicked = true
-    } else if (diff_ms <= std::get_config("short_press_duration_ms")) {
-        std::set_output("short_press", true)
+    } else if (diff_ms <= config::get("short_press_duration_ms")) {
+        output::set("short_press", true)
         callback::set(callback_ms, "onCallback", 2, callback_ms)
-    } else if (diff_ms <= std::get_config("long_press_duration_ms")) {
-        std::set_output("long_press", true)
+    } else if (diff_ms <= config::get("long_press_duration_ms")) {
+        output::set("long_press", true)
         callback::set(callback_ms, "onCallback", 3, callback_ms)
     }
 
     if (clicked) {
-        std::set_output("toggle", !std::get_output("toggle"))
+        output::toggle("toggle")
     }
-    std::set_output("on", false)
-    std::set_output("off", true)
+    output::set("on", false)
+    output::set("off", true)
 
-    std::set_output("hold", false)
+    output::set("hold", false)
 }

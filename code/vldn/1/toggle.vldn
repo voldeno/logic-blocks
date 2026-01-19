@@ -1,15 +1,15 @@
-channel = std::get_current_channel()
-value = std::get_current_value()
+channel = input::channel()
+value = input::value()
 
 // Handle input changes - detect rising edges only
 if (channel == "input") {
-    last_input_state = std::get_state("last_input_state")
+    last_input_state = state::get("last_input_state")
     
     // Only react to rising edge (false -> true)
     if (value and !last_input_state) {
         // Toggle the output
-        std::set_output("output", !std::get_output("output"))
+        output::toggle("output")
     }
     
-    std::set_state("last_input_state", value)
+    state::set("last_input_state", value)
 }

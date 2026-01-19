@@ -1,2 +1,2 @@
-value = std::get_input("input")
-std::set_output("output", math::round(value))
+value = input::get("input")
+output::set("output", math::round(value))

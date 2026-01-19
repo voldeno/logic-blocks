@@ -2,7 +2,7 @@ i = 1
 sum = 0.0
 divider = 0
 while (i<=4) {
-    input = std::get_input(str::fmt("input_{}", i))
+    input = input::get(str::fmt("input_{}", i))
     // check if input was provided any value by comparing to a default value of min(i64)
     hasValue = input != -9223372036854775807
     if (hasValue) {
@@ -17,7 +17,7 @@ fn round2decimal(value) {
 }
 
 if (divider == 0) {
-    std::set_output("output", 0)
+    output::set("output", 0)
 } else {
-    std::set_output("output", round2decimal(sum / divider))
+    output::set("output", round2decimal(sum / divider))
 }

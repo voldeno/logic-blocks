@@ -1,11 +1,11 @@
-open = std::get_input("open_contact")
-tilted = std::get_input("tilted_contact")
+open = input::get("open_contact")
+tilted = input::get("tilted_contact")
 closed = !open and !tilted
-locked = std::get_input("locked_contact")
+locked = input::get("locked_contact")
 secured = closed and locked
 
-std::set_output("open", open)
-std::set_output("tilted", tilted and !open)
-std::set_output("closed", closed)
-std::set_output("locked", locked)
-std::set_output("secured", secured)
+output::set("open", open)
+output::set("tilted", tilted and !open)
+output::set("closed", closed)
+output::set("locked", locked)
+output::set("secured", secured)

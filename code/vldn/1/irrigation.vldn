@@ -1,4 +1,4 @@
-channel = std::get_current_channel()
+channel = input::channel()
 
 section_count = 8
 
@@ -6,7 +6,7 @@ fn disable_all(section_count) {
     section = 0
     while (section < section_count) {
         section += 1
-        std::set_output(str::fmt("section_{}", section), false)
+        output::set(str::fmt("section_{}", section), false)
     }
 }
 
@@ -15,14 +15,14 @@ extern fn onCallback(section_count, callback_id) {
 
     current_section = 0
     if (callback_id == 0) {
-        std::set_output("pump", true)
+        output::set("pump", true)
         callback::set(0, "onCallback", section_count, 1)
         return
     } else if (callback_id > 0 and callback_id < (section_count + 1)) {
         current_section = callback_id
     } else if (callback_id == (section_count + 1)) {
-        std::set_output("pump", false)
-        std::set_state("active", false)
+        output::set("pump", false)
+        state::set("active", false)
         return
     }
 
@@ -30,27 +30,26 @@ extern fn onCallback(section_count, callback_id) {
     section_enabled_cfg = str::fmt("s{}_enabled", current_section)
     section_duration_cfg = str::fmt("s{}_duration", current_section)
 
-    section_enabled = std::get_config(section_enabled_cfg)
-    section_duration = std::get_config(section_duration_cfg)
+    section_enabled = config::get(section_enabled_cfg)
+    section_duration = config::get(section_duration_cfg)
 
     if (!section_enabled) {
         callback::set(0, "onCallback", section_count, current_section + 1)
         return
     }
 
-    std::set_output(section_output, true)
+    output::set(section_output, true)
     callback::set(section_duration * 1000, "onCallback", section_count, current_section + 1)
-    return
 }
 
-input_value = std::get_current_value()
+input_value = input::value()
 
 if (channel == "trigger" and input_value) {
-    if (std::get_state("active")) {
+    if (state::get("active")) {
         return
     }
 
-    std::set_state("active", true)
+    state::set("active", true)
     callback::set(0, "onCallback", section_count, 0)
     return
 }
