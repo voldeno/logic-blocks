@@ -1,53 +1,52 @@
-channel = std::get_current_channel()
-value = std::get_current_value()
+channel = input::channel()
+value = input::value()
 
-don_ms = math::round(std::get_config("don") * 1000)
-doff_ms = math::round(std::get_config("doff") * 1000)
+don_ms = math::round(config::get("don") * 1000)
+doff_ms = math::round(config::get("doff") * 1000)
 
 // Handle callback execution
-if (channel == "callback") {
+extern fn onCallback(value) {
     if (value == 1) {
         // Delay on callback - set output to true
-        std::set_output("output", true)
+        output::set("output", true)
         return
     }
     
     if (value == 2) {
         // Delay off callback - set output to false
-        std::set_output("output", false)
+        output::set("output", false)
         return
     }
-    
-    return
 }
 
 // Handle input changes - detect edges
 if (channel == "input") {
-    last_input_state = std::get_state("last_input_state")
+    last_input_state = state::get("last_input_state")
     
     // Only react to state changes (edges)
     if (value != last_input_state) {
-        std::set_state("last_input_state", value)
+        state::set("last_input_state", value)
         
         if (value) {
             // Input went high - schedule delay on
-            std::clear_callback()
+            callback::clear()
             if (don_ms > 0) {
-                std::callback(don_ms, 1)
+                callback::set(don_ms, "onCallback", 1)
             } else {
                 // If delay is 0, set output immediately
-                std::set_output("output", true)
+                output::set("output", true)
             }
         } else {
             // Input went low - schedule delay off
-            std::clear_callback()
+            callback::clear()
             if (doff_ms > 0) {
-                std::callback(doff_ms, 2)
+                callback::set(doff_ms, "onCallback", 2)
             } else {
                 // If delay is 0, set output immediately
-                std::set_output("output", false)
+                output::set("output", false)
             }
         }
     }
     return
 }
+

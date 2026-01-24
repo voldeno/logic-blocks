@@ -1,113 +1,119 @@
-channel = std::get_current_channel()
-value = std::get_current_value()
-now = std::uptime()
 
-// inputs
-air_temp = std::get_input("air_temp")
-floor_temp = std::get_input("floor_temp")
-outside_temp = std::get_input("outside_temp")
-presence = std::get_input("presence")
-dwc = std::get_input("dwc")
-comfort_forced = std::get_input("comfort")
-protection_forced = std::get_input("protection")
-
-// configs
-thermal_mode = std::get_config("thermal_mode") // 0=heating and cooling, 1=heating only, 2=cooling only
-operation_mode = std::get_config("operation_mode") // 0=schedule, 1=manual
-comfort_heating_temp = std::get_config("comfort_heating_temp")
-comfort_cooling_temp = std::get_config("comfort_cooling_temp")
-eco_heating_temp_diff = std::get_config("eco_heating_temp_diff")
-eco_cooling_temp_diff = std::get_config("eco_cooling_temp_diff")
-frost_protection_temp = std::get_config("frost_protection_temp")
-overheat_protection_temp = std::get_config("overheat_protection_temp")
-dwc_delay_sec = std::get_config("dwc_delay")
-presence_extension_duration = std::get_config("presence_extension_duration")
-
-if (channel == "calculate_activation_ts") {
-    next = 0
+extern fn std::next_activation_at() {
+    operation_mode = config::get("operation_mode") 
     if (operation_mode == 0) { // schedule
-        schedule_id = std::get_config("schedule")
-        next = schedule::get_next_activation_ts(schedule_id)
+        schedule_id = config::get("schedule")
+        return schedule::get_next_activation_ts(schedule_id)
     }
-    std::set_state("next_activation_ts", next)
-    return
+    return 0
 }
 
-last_dwc_state = std::get_state("dwc_state")
-if (channel == "dwc") {
-    // on DWC switch
-    if ((value and !last_dwc_state) or (!value and last_dwc_state)) {
-        std::clear_callback()
-        std::callback(dwc_delay_sec * 1000 + 5, 0)
-        std::set_state("dwc_state_change_ts", now)
-        std::set_state("dwc_state", value)
+extern fn process() {
+    channel = input::channel()
+    value = input::value()
+    now = time::uptime()
+
+    // inputs
+    air_temp = input::get("air_temp")
+    floor_temp = input::get("floor_temp")
+    outside_temp = input::get("outside_temp")
+    presence = input::get("presence")
+    dwc = input::get("dwc")
+    comfort_forced = input::get("comfort")
+    protection_forced = input::get("protection")
+
+    // configs
+    thermal_mode = config::get("thermal_mode") // 0=heating and cooling, 1=heating only, 2=cooling only
+    operation_mode = config::get("operation_mode") // 0=schedule, 1=manual
+    comfort_heating_temp = config::get("comfort_heating_temp")
+    comfort_cooling_temp = config::get("comfort_cooling_temp")
+    eco_heating_temp_diff = config::get("eco_heating_temp_diff")
+    eco_cooling_temp_diff = config::get("eco_cooling_temp_diff")
+    frost_protection_temp = config::get("frost_protection_temp")
+    overheat_protection_temp = config::get("overheat_protection_temp")
+    dwc_delay_sec = config::get("dwc_delay")
+    presence_extension_duration = config::get("presence_extension_duration")
+
+
+    last_dwc_state = state::get("dwc_state")
+    if (channel == "dwc") {
+        // on DWC switch
+        if ((value and !last_dwc_state) or (!value and last_dwc_state)) {
+            callback::clear()
+            callback::set(dwc_delay_sec * 1000 + 5, "process")
+            state::set("dwc_state_change_ts", now)
+            state::set("dwc_state", value)
+        }
     }
-}
-last_dwc_ts = std::get_state("dwc_state_change_ts")
-dwc_duration_sec = (now - last_dwc_ts) / 1000.0
+    last_dwc_ts = state::get("dwc_state_change_ts")
+    dwc_duration_sec = (now - last_dwc_ts) / 1000.0
 
-fn round2decimal(temp_deviation) {
-    return math::round(100.0 * temp_deviation) / 100.0
+    fn round2decimal(temp_deviation) {
+        return math::round(100.0 * temp_deviation) / 100.0
+    }
+
+    // define:
+    // - comfort mode: 0=eco, 1=comfort, 2=protection
+    // - target temperatures for heating and cooling
+    comfort_mode = 0
+    target_heating_temp = 0
+    target_cooling_temp = 0
+
+    if (operation_mode == 0) { // schedule
+        schedule_id = config::get("schedule")
+        comfort_mode = schedule::get_entry_type(schedule_id)
+    }
+
+    if (comfort_mode == 1 or comfort_forced) { // comfort
+        target_heating_temp = comfort_heating_temp
+        target_cooling_temp = comfort_cooling_temp
+    } else if (comfort_mode == 2 or protection_forced) { // protection
+        target_heating_temp = frost_protection_temp
+        target_cooling_temp = overheat_protection_temp
+    } else { // no entry - default: eco
+        target_heating_temp = comfort_heating_temp - eco_heating_temp_diff
+        target_cooling_temp = comfort_cooling_temp + eco_cooling_temp_diff
+    }
+
+    // define:
+    // - chosen thermal mode: 0=idle, 1=heating, 2=cooling
+    // - temperature deviation
+    chosen_thermal_mode = 0 // idle
+    target_temp = air_temp
+    temp_deviation = 0.0
+    outside_temp_helps = false
+    outside_temp_sensor = outside_temp != -1000
+    if (air_temp < target_heating_temp and (thermal_mode == 0 or thermal_mode == 1)) {
+        chosen_thermal_mode = 1 // heating
+        target_temp = target_heating_temp
+        temp_deviation = target_temp - air_temp // positive
+        outside_temp_helps = outside_temp_sensor and (outside_temp > target_heating_temp)
+    }
+    if (air_temp > target_cooling_temp and (thermal_mode == 0 or thermal_mode == 2)) {
+        chosen_thermal_mode = 2 // cooling
+        target_temp = target_cooling_temp
+        temp_deviation = target_temp - air_temp // negative
+        outside_temp_helps = outside_temp_sensor and (outside_temp < target_cooling_temp)
+    }
+
+    if (!outside_temp_helps and (dwc and dwc_duration_sec > dwc_delay_sec)) {
+        state::set("dwc_lock", true)
+    }
+    if (state::get("dwc_lock") and !dwc and dwc_duration_sec > dwc_delay_sec) {
+        state::set("dwc_lock", false)
+    }
+    dwc_lock_active = state::get("dwc_lock")
+
+    protective_action_required = air_temp < frost_protection_temp or air_temp > overheat_protection_temp
+    if (dwc_lock_active and !protective_action_required) {
+        output::set("temp_deviation", round2decimal(0.0))
+        output::set("target_temp", round2decimal(target_temp))
+        return
+    }
+
+    output::set("temp_deviation", round2decimal(temp_deviation))
+    output::set("target_temp", round2decimal(target_temp))
+
 }
 
-// define:
-// - comfort mode: 0=eco, 1=comfort, 2=protection
-// - target temperatures for heating and cooling
-comfort_mode = 0
-target_heating_temp = 0
-target_cooling_temp = 0
-
-if (operation_mode == 0) { // schedule
-    schedule_id = std::get_config("schedule")
-    comfort_mode = schedule::get_entry_type(schedule_id)
-}
-
-if (comfort_mode == 1 or comfort_forced) { // comfort
-    target_heating_temp = comfort_heating_temp
-    target_cooling_temp = comfort_cooling_temp
-} else if (comfort_mode == 2 or protection_forced) { // protection
-    target_heating_temp = frost_protection_temp
-    target_cooling_temp = overheat_protection_temp
-} else { // no entry - default: eco
-    target_heating_temp = comfort_heating_temp - eco_heating_temp_diff
-    target_cooling_temp = comfort_cooling_temp + eco_cooling_temp_diff
-}
-
-// define:
-// - chosen thermal mode: 0=idle, 1=heating, 2=cooling
-// - temperature deviation
-chosen_thermal_mode = 0 // idle
-target_temp = air_temp
-temp_deviation = 0.0
-outside_temp_helps = false
-outside_temp_sensor = outside_temp != -1000
-if (air_temp < target_heating_temp and (thermal_mode == 0 or thermal_mode == 1)) {
-    chosen_thermal_mode = 1 // heating
-    target_temp = target_heating_temp
-    temp_deviation = target_temp - air_temp // positive
-    outside_temp_helps = outside_temp_sensor and (outside_temp > target_heating_temp)
-}
-if (air_temp > target_cooling_temp and (thermal_mode == 0 or thermal_mode == 2)) {
-    chosen_thermal_mode = 2 // cooling
-    target_temp = target_cooling_temp
-    temp_deviation = target_temp - air_temp // negative
-    outside_temp_helps = outside_temp_sensor and (outside_temp < target_cooling_temp)
-}
-
-if (!outside_temp_helps and (dwc and dwc_duration_sec > dwc_delay_sec)) {
-    std::set_state("dwc_lock", true)
-}
-if (std::get_state("dwc_lock") and !dwc and dwc_duration_sec > dwc_delay_sec) {
-    std::set_state("dwc_lock", false)
-}
-dwc_lock_active = std::get_state("dwc_lock")
-
-protective_action_required = air_temp < frost_protection_temp or air_temp > overheat_protection_temp
-if (dwc_lock_active and !protective_action_required) {
-    std::set_output("temp_deviation", round2decimal(0.0))
-    std::set_output("target_temp", round2decimal(target_temp))
-    return
-}
-
-std::set_output("temp_deviation", round2decimal(temp_deviation))
-std::set_output("target_temp", round2decimal(target_temp))
+process()

@@ -1,1 +1,1 @@
-std::set_output("output", !std::get_input("input"))
+output::set("output", !input::get("input"))

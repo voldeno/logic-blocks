@@ -1,7 +1,7 @@
-value = std::get_input("input")
+value = input::get("input")
 rounded = math::round(value)
 if (value > rounded) {
-    std::set_output("output", rounded + 1.0)
+    output::set("output", rounded + 1.0)
 } else {
-    std::set_output("output", rounded)
+    output::set("output", rounded)
 }
