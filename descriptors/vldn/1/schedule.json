@@ -27,6 +27,7 @@
       "name": "Schedule",
       "description": "Schedule to use for time-based activation",
       "type": "SCHEDULE",
+      "subtype": "ON_OFF",
       "default": "0"
     }
   ],

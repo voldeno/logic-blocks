@@ -93,6 +93,7 @@
       "name": "Schedule",
       "description": "Schedule to use for schedule based operation mode",
       "type": "SCHEDULE",
+      "subtype": "CLIMATE",
       "default": "0",
       "visibleWhen": {
         "configId": "operation_mode",
