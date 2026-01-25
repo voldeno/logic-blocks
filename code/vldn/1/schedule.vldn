@@ -1,0 +1,9 @@
+
+extern fn std::next_activation_at() {
+    schedule_id = config::get("schedule")
+    return schedule::get_next_activation_ts(schedule_id)
+}
+
+schedule_id = config::get("schedule")
+output::set("output", schedule::get_entry_type(schedule_id) > 0)
+output::set("value", schedule::get_entry_value(schedule_id))
