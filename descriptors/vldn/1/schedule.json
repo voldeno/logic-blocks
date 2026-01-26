@@ -1,0 +1,52 @@
+{
+  "name": "Schedule",
+  "group": "input",
+  "description": "Timer switch with freely adjustable schedule. The block outputs a state (active/inactive) and an analog value based on the current schedule entry.",
+  "ioType": "scheduler",
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Digital output: active (true) when schedule entry is on, inactive (false) when off or no entry",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "Analog output: value from the current schedule entry",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "schedule",
+      "name": "Schedule",
+      "description": "Schedule to use for time-based activation",
+      "type": "SCHEDULE",
+      "subtype": "ON_OFF",
+      "default": "0"
+    }
+  ],
+  "state": [
+    {
+      "id": "last_activation_ts",
+      "name": "Last execution timestamp",
+      "type": "NUMBER",
+      "unit": "s",
+      "description": "Last execution timestamp in seconds from epoch",
+      "default": "0"
+    },
+    {
+      "id": "next_activation_ts",
+      "name": "Next execution timestamp",
+      "type": "NUMBER",
+      "unit": "s",
+      "description": "Next execution timestamp in seconds from epoch",
+      "default": "0"
+    }
+  ]
+}
