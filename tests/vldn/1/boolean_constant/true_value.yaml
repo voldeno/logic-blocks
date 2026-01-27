@@ -1,0 +1,12 @@
+name: "true value"
+
+config:
+  value: true
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      register: 0
+  - action: "assert_outputs"
+    expected_outputs:
+      state: true
