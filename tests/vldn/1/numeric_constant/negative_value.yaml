@@ -1,0 +1,12 @@
+name: "negative value"
+
+config:
+  value: -123.456
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      register: 0
+  - action: "assert_outputs"
+    expected_outputs:
+      value: -123.456

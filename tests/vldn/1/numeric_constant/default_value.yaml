@@ -1,0 +1,9 @@
+name: "default value"
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      register: 0
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 0

@@ -1,0 +1,12 @@
+name: "base scenario"
+
+config:
+  value: 42.5
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      register: 0
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 42.5

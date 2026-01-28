@@ -1,0 +1,27 @@
+{
+  "name": "Numeric constant",
+  "group": "input",
+  "description": "Provides a constant numeric value configured by the user",
+  "ioType": "constant",
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "description": "Constant numeric value",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "value",
+      "name": "Value",
+      "type": "NUMBER",
+      "description": "The constant numeric value to output",
+      "default": "0"
+    }
+  ],
+  "state": [
+  ]
+}
