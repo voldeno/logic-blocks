@@ -1,0 +1,56 @@
+name: "equal"
+
+config:
+  operator: 2 # Equal
+  operand: 10.0
+
+steps:
+  - action: "set_inputs"
+    comment: "Value below operand"
+    inputs:
+      value: 9.99
+
+  - action: "assert_outputs"
+    comment: "Output false"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Value equal to operand"
+    inputs:
+      value: 10.0
+
+  - action: "assert_outputs"
+    comment: "Output true"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Value above operand"
+    inputs:
+      value: 10.01
+
+  - action: "assert_outputs"
+    comment: "Output false"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Value is zero, operand is not zero"
+    inputs:
+      value: 0.0
+
+  - action: "assert_outputs"
+    comment: "Output false"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Negative value, not equal to operand"
+    inputs:
+      value: -10.0
+
+  - action: "assert_outputs"
+    comment: "Output false"
+    expected_outputs:
+      output: false

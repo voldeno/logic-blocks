@@ -1,0 +1,77 @@
+name: "between (inclusive range)"
+
+config:
+  operator: 6 # Between
+  operand: 10.0
+  operand_2: 20.0
+
+steps:
+  - action: "set_inputs"
+    comment: "Value below range"
+    inputs:
+      value: 9.99
+
+  - action: "assert_outputs"
+    comment: "Output false"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Value at lower bound"
+    inputs:
+      value: 10.0
+
+  - action: "assert_outputs"
+    comment: "Output true (inclusive)"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Value inside range"
+    inputs:
+      value: 15.0
+
+  - action: "assert_outputs"
+    comment: "Output true"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Value at upper bound"
+    inputs:
+      value: 20.0
+
+  - action: "assert_outputs"
+    comment: "Output true (inclusive)"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Value above range"
+    inputs:
+      value: 20.01
+
+  - action: "assert_outputs"
+    comment: "Output false"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Negative value, below range"
+    inputs:
+      value: -5.0
+
+  - action: "assert_outputs"
+    comment: "Output false"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Value well above range"
+    inputs:
+      value: 100.0
+
+  - action: "assert_outputs"
+    comment: "Output false"
+    expected_outputs:
+      output: false
