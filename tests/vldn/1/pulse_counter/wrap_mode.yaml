@@ -1,0 +1,129 @@
+name: "wrap mode"
+
+config:
+  start_value: 0
+  lower_limit: 0
+  upper_limit: 3
+  overflow_mode: 1 # Wrap
+
+steps:
+  # Count up to upper limit
+  - action: "set_inputs"
+    comment: "Increment 1"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 1
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  - action: "set_inputs"
+    comment: "Increment 2"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 2
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  - action: "set_inputs"
+    comment: "Increment 3 - at upper limit"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 3
+      at_upper_limit: true
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Next increment wraps to lower limit
+  - action: "set_inputs"
+    comment: "Increment wraps to lower limit"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value wrapped to 0"
+    expected_outputs:
+      value: 0
+      at_upper_limit: false
+      at_lower_limit: true
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Continue incrementing after wrap
+  - action: "set_inputs"
+    comment: "Increment after wrap"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value is 1 after wrap"
+    expected_outputs:
+      value: 1
+      at_upper_limit: false
+      at_lower_limit: false
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Now test wrap in the other direction: decrement below lower limit
+  # First go back to 0
+  - action: "set_inputs"
+    comment: "Decrement to 0"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 0
+      at_lower_limit: true
+
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+
+  # Decrement wraps to upper limit
+  - action: "set_inputs"
+    comment: "Decrement wraps to upper limit"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    comment: "Value wrapped to 3"
+    expected_outputs:
+      value: 3
+      at_upper_limit: true
+      at_lower_limit: false
+
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+
+  # Continue decrementing after wrap
+  - action: "set_inputs"
+    comment: "Decrement after wrap"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    comment: "Value is 2 after wrap"
+    expected_outputs:
+      value: 2
+      at_upper_limit: false
+      at_lower_limit: false
