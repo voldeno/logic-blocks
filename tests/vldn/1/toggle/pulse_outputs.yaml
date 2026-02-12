@@ -1,0 +1,127 @@
+name: "pulse outputs timing"
+
+steps:
+  # Initial state
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+      on: false
+      off: false
+
+  # Toggle on - should emit "on" pulse
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+      on: true
+      off: false
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # After 50ms - on pulse should still be active (100ms pulse width)
+  - action: "wait"
+    duration_ms: 50
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+      on: true
+      off: false
+
+  # After another 60ms (total 110ms) - on pulse should have ended
+  - action: "wait"
+    duration_ms: 60
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+      on: false
+      off: false
+
+  # Toggle off - should emit "off" pulse
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+      on: false
+      off: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # After 50ms - off pulse should still be active
+  - action: "wait"
+    duration_ms: 50
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+      on: false
+      off: true
+
+  # After another 60ms (total 110ms) - off pulse should have ended
+  - action: "wait"
+    duration_ms: 60
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+      on: false
+      off: false
+
+  # Test pulse via "on" input
+  - action: "set_inputs"
+    inputs:
+      on: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+      on: true
+      off: false
+
+  - action: "set_inputs"
+    inputs:
+      on: false
+
+  - action: "wait"
+    duration_ms: 110
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+      on: false
+      off: false
+
+  # Test pulse via "off" input
+  - action: "set_inputs"
+    inputs:
+      off: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+      on: false
+      off: true
+
+  - action: "set_inputs"
+    inputs:
+      off: false
+
+  - action: "wait"
+    duration_ms: 110
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+      on: false
+      off: false

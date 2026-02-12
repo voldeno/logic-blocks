@@ -1,0 +1,84 @@
+name: "off input"
+
+steps:
+  # Initial state - output should be false
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+      on: false
+      off: false
+
+  # Turn output on first via toggle
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # Rising edge on "off" input - output should turn off
+  - action: "set_inputs"
+    inputs:
+      off: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+      off: true
+
+  # Release "off" input
+  - action: "set_inputs"
+    inputs:
+      off: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  # "off" when already off - no change, no pulse
+  - action: "wait"
+    duration_ms: 150
+
+  - action: "set_inputs"
+    inputs:
+      off: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+      off: false
+
+  - action: "set_inputs"
+    inputs:
+      off: false
+
+  # Turn on via "on" input, then turn off via "off" input
+  - action: "set_inputs"
+    inputs:
+      on: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      on: false
+
+  - action: "set_inputs"
+    inputs:
+      off: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+      off: true
+
+  - action: "set_inputs"
+    inputs:
+      off: false
