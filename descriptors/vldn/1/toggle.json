@@ -7,7 +7,7 @@
       "id": "input",
       "name": "Toggle",
       "description": "Pulse input signal. On each rising edge (false to true transition), the output will toggle its state.",
-      "abbrev": "Tg",
+      "abbrev": "TG",
       "type": "BOOLEAN",
       "default": "false"
     },
@@ -15,7 +15,7 @@
       "id": "on",
       "name": "On",
       "description": "Switches the output (O) on. Only reacts to a rising edge.",
-      "abbrev": "On",
+      "abbrev": "ON",
       "type": "BOOLEAN",
       "default": "false"
     },
@@ -23,7 +23,7 @@
       "id": "off",
       "name": "Off",
       "description": "Pulse: Resets the output (O) to off. When held on: Block is locked and all other inputs are ignored. Dominant input.",
-      "abbrev": "Off",
+      "abbrev": "OFF",
       "type": "BOOLEAN",
       "default": "false"
     }
@@ -41,7 +41,7 @@
       "id": "on",
       "name": "On",
       "description": "Pulse when output (O) is switched on. Fixed 100ms pulse width.",
-      "abbrev": "On",
+      "abbrev": "ON",
       "type": "BOOLEAN",
       "default": "false"
     },
@@ -49,7 +49,7 @@
       "id": "off",
       "name": "Off",
       "description": "Pulse when output (O) is switched off. Fixed 100ms pulse width.",
-      "abbrev": "Off",
+      "abbrev": "OFF",
       "type": "BOOLEAN",
       "default": "false"
     }
