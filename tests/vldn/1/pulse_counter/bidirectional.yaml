@@ -1,0 +1,241 @@
+name: "bidirectional counting"
+
+config:
+  start_value: 5
+  lower_limit: 0
+  upper_limit: 10
+  overflow_mode: 0 # Clamp
+
+steps:
+  # Initialize counter to start_value via reset pulse
+  - action: "set_inputs"
+    comment: "Reset to initialize counter to start_value (5)"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Value is 5 (start_value)"
+    expected_outputs:
+      value: 5
+      at_upper_limit: false
+      at_lower_limit: false
+
+  - action: "set_inputs"
+    comment: "Release reset"
+    inputs:
+      reset: false
+
+  # Increment twice
+  - action: "set_inputs"
+    comment: "Increment"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 6
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  - action: "set_inputs"
+    comment: "Increment"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 7
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Decrement three times
+  - action: "set_inputs"
+    comment: "Decrement"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 6
+
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+
+  - action: "set_inputs"
+    comment: "Decrement"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 5
+
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+
+  - action: "set_inputs"
+    comment: "Decrement"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 4
+
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+
+  # Increment once
+  - action: "set_inputs"
+    comment: "Increment"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 5
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Decrement all the way to lower limit
+  - action: "set_inputs"
+    inputs:
+      decrement: true
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+  - action: "set_inputs"
+    inputs:
+      decrement: true
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+  - action: "set_inputs"
+    inputs:
+      decrement: true
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+  - action: "set_inputs"
+    inputs:
+      decrement: true
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+  - action: "set_inputs"
+    comment: "Decrement to lower limit"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    comment: "Value at lower limit"
+    expected_outputs:
+      value: 0
+      at_lower_limit: true
+      at_upper_limit: false
+
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+
+  # Increment back up from lower limit
+  - action: "set_inputs"
+    comment: "Increment from lower limit"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 1
+      at_lower_limit: false
+      at_upper_limit: false
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Increment all the way to upper limit
+  - action: "set_inputs"
+    inputs:
+      increment: true
+  - action: "set_inputs"
+    inputs:
+      increment: false
+  - action: "set_inputs"
+    inputs:
+      increment: true
+  - action: "set_inputs"
+    inputs:
+      increment: false
+  - action: "set_inputs"
+    inputs:
+      increment: true
+  - action: "set_inputs"
+    inputs:
+      increment: false
+  - action: "set_inputs"
+    inputs:
+      increment: true
+  - action: "set_inputs"
+    inputs:
+      increment: false
+  - action: "set_inputs"
+    inputs:
+      increment: true
+  - action: "set_inputs"
+    inputs:
+      increment: false
+  - action: "set_inputs"
+    inputs:
+      increment: true
+  - action: "set_inputs"
+    inputs:
+      increment: false
+  - action: "set_inputs"
+    inputs:
+      increment: true
+  - action: "set_inputs"
+    inputs:
+      increment: false
+  - action: "set_inputs"
+    inputs:
+      increment: true
+  - action: "set_inputs"
+    inputs:
+      increment: false
+  - action: "set_inputs"
+    comment: "Increment to upper limit"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value at upper limit"
+    expected_outputs:
+      value: 10
+      at_upper_limit: true
+      at_lower_limit: false
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Decrement from upper limit
+  - action: "set_inputs"
+    comment: "Decrement from upper limit"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 9
+      at_upper_limit: false
+      at_lower_limit: false

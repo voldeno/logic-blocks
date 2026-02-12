@@ -1,0 +1,187 @@
+name: "reset"
+
+config:
+  start_value: 5
+  lower_limit: 0
+  upper_limit: 10
+  overflow_mode: 0 # Clamp
+
+steps:
+  # Initialize counter to start_value via reset pulse
+  - action: "set_inputs"
+    comment: "Reset to initialize counter to start_value (5)"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Value is 5 (start_value)"
+    expected_outputs:
+      value: 5
+      at_upper_limit: false
+      at_lower_limit: false
+
+  - action: "set_inputs"
+    comment: "Release reset"
+    inputs:
+      reset: false
+
+  # Increment a few times
+  - action: "set_inputs"
+    comment: "Increment"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 6
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  - action: "set_inputs"
+    comment: "Increment"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 7
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Reset the counter
+  - action: "set_inputs"
+    comment: "Rising edge on reset"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Value restored to start_value"
+    expected_outputs:
+      value: 5
+      at_upper_limit: false
+      at_lower_limit: false
+
+  # Release reset
+  - action: "set_inputs"
+    comment: "Release reset"
+    inputs:
+      reset: false
+
+  - action: "assert_outputs"
+    comment: "Value unchanged after release"
+    expected_outputs:
+      value: 5
+
+  # Verify counter continues working after reset
+  - action: "set_inputs"
+    comment: "Increment after reset"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value incremented from start_value"
+    expected_outputs:
+      value: 6
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Decrement below start_value
+  - action: "set_inputs"
+    comment: "Decrement"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 5
+
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+
+  - action: "set_inputs"
+    comment: "Decrement below start_value"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    comment: "Value can go below start_value"
+    expected_outputs:
+      value: 4
+
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+
+  # Reset again from below start_value
+  - action: "set_inputs"
+    comment: "Reset from below start_value"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Value restored to start_value"
+    expected_outputs:
+      value: 5
+
+  - action: "set_inputs"
+    inputs:
+      reset: false
+
+  # Test reset at limits - first go to upper limit
+  - action: "set_inputs"
+    inputs:
+      increment: true
+  - action: "set_inputs"
+    inputs:
+      increment: false
+  - action: "set_inputs"
+    inputs:
+      increment: true
+  - action: "set_inputs"
+    inputs:
+      increment: false
+  - action: "set_inputs"
+    inputs:
+      increment: true
+  - action: "set_inputs"
+    inputs:
+      increment: false
+  - action: "set_inputs"
+    inputs:
+      increment: true
+  - action: "set_inputs"
+    inputs:
+      increment: false
+  - action: "set_inputs"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value at 10 (upper limit)"
+    expected_outputs:
+      value: 10
+      at_upper_limit: true
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Reset from upper limit
+  - action: "set_inputs"
+    comment: "Reset from upper limit"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Value restored to start_value from upper limit"
+    expected_outputs:
+      value: 5
+      at_upper_limit: false
+      at_lower_limit: false

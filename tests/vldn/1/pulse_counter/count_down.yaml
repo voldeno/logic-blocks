@@ -1,0 +1,113 @@
+name: "count down with clamp"
+
+config:
+  start_value: 3
+  lower_limit: 0
+  upper_limit: 3
+  overflow_mode: 0 # Clamp
+
+steps:
+  # Initialize counter to start_value via reset pulse
+  - action: "set_inputs"
+    comment: "Reset to initialize counter to start_value (3)"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Value is 3 (start_value = upper_limit)"
+    expected_outputs:
+      value: 3
+      at_upper_limit: true
+      at_lower_limit: false
+
+  - action: "set_inputs"
+    comment: "Release reset"
+    inputs:
+      reset: false
+
+  # First decrement pulse
+  - action: "set_inputs"
+    comment: "Rising edge on decrement"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    comment: "Value decremented to 2"
+    expected_outputs:
+      value: 2
+      at_upper_limit: false
+      at_lower_limit: false
+
+  # Release decrement
+  - action: "set_inputs"
+    comment: "Release decrement"
+    inputs:
+      decrement: false
+
+  - action: "assert_outputs"
+    comment: "Value unchanged at 2"
+    expected_outputs:
+      value: 2
+
+  # Second decrement pulse
+  - action: "set_inputs"
+    comment: "Rising edge on decrement"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    comment: "Value decremented to 1"
+    expected_outputs:
+      value: 1
+      at_upper_limit: false
+      at_lower_limit: false
+
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+
+  # Third decrement pulse - reaches lower limit
+  - action: "set_inputs"
+    comment: "Rising edge on decrement"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    comment: "Value decremented to 0 (lower limit)"
+    expected_outputs:
+      value: 0
+      at_upper_limit: false
+      at_lower_limit: true
+
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+
+  # Fourth decrement pulse - should clamp at lower limit
+  - action: "set_inputs"
+    comment: "Rising edge on decrement, already at lower limit"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    comment: "Value clamped at 0"
+    expected_outputs:
+      value: 0
+      at_upper_limit: false
+      at_lower_limit: true
+
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+
+  # Fifth decrement pulse - still clamped
+  - action: "set_inputs"
+    comment: "Another decrement while clamped"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    comment: "Value still clamped at 0"
+    expected_outputs:
+      value: 0
+      at_lower_limit: true

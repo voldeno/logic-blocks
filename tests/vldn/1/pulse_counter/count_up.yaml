@@ -1,0 +1,103 @@
+name: "count up with clamp"
+
+config:
+  start_value: 0
+  lower_limit: 0
+  upper_limit: 3
+  overflow_mode: 0 # Clamp
+
+steps:
+  # Initial state - outputs at descriptor defaults
+  - action: "assert_outputs"
+    comment: "Initial value is 0"
+    expected_outputs:
+      value: 0
+      at_upper_limit: false
+      at_lower_limit: false
+
+  # First increment pulse
+  - action: "set_inputs"
+    comment: "Rising edge on increment"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value incremented to 1"
+    expected_outputs:
+      value: 1
+      at_upper_limit: false
+      at_lower_limit: false
+
+  # Release increment
+  - action: "set_inputs"
+    comment: "Release increment"
+    inputs:
+      increment: false
+
+  - action: "assert_outputs"
+    comment: "Value unchanged at 1"
+    expected_outputs:
+      value: 1
+
+  # Second increment pulse
+  - action: "set_inputs"
+    comment: "Rising edge on increment"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value incremented to 2"
+    expected_outputs:
+      value: 2
+      at_upper_limit: false
+      at_lower_limit: false
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Third increment pulse - reaches upper limit
+  - action: "set_inputs"
+    comment: "Rising edge on increment"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value incremented to 3 (upper limit)"
+    expected_outputs:
+      value: 3
+      at_upper_limit: true
+      at_lower_limit: false
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Fourth increment pulse - should clamp at upper limit
+  - action: "set_inputs"
+    comment: "Rising edge on increment, already at upper limit"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value clamped at 3"
+    expected_outputs:
+      value: 3
+      at_upper_limit: true
+      at_lower_limit: false
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Fifth increment pulse - still clamped
+  - action: "set_inputs"
+    comment: "Another increment while clamped"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value still clamped at 3"
+    expected_outputs:
+      value: 3
+      at_upper_limit: true

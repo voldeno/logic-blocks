@@ -1,0 +1,159 @@
+name: "edge detection"
+
+config:
+  start_value: 0
+  lower_limit: 0
+  upper_limit: 10
+  overflow_mode: 0 # Clamp
+
+steps:
+  # Verify initial state
+  - action: "assert_outputs"
+    comment: "Initial value is 0"
+    expected_outputs:
+      value: 0
+
+  # First rising edge - should increment
+  - action: "set_inputs"
+    comment: "Rising edge on increment"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value incremented to 1"
+    expected_outputs:
+      value: 1
+
+  # Hold increment high - should NOT increment again
+  - action: "set_inputs"
+    comment: "Increment still held high (no edge)"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value still 1 (no rising edge)"
+    expected_outputs:
+      value: 1
+
+  # Hold again - still no change
+  - action: "set_inputs"
+    comment: "Increment still held high (no edge)"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value still 1"
+    expected_outputs:
+      value: 1
+
+  # Release and re-trigger - should increment
+  - action: "set_inputs"
+    comment: "Release increment"
+    inputs:
+      increment: false
+
+  - action: "set_inputs"
+    comment: "New rising edge on increment"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    comment: "Value incremented to 2"
+    expected_outputs:
+      value: 2
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Same test for decrement
+  - action: "set_inputs"
+    comment: "Rising edge on decrement"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    comment: "Value decremented to 1"
+    expected_outputs:
+      value: 1
+
+  # Hold decrement high - should NOT decrement again
+  - action: "set_inputs"
+    comment: "Decrement still held high (no edge)"
+    inputs:
+      decrement: true
+
+  - action: "assert_outputs"
+    comment: "Value still 1 (no rising edge)"
+    expected_outputs:
+      value: 1
+
+  - action: "set_inputs"
+    inputs:
+      decrement: false
+
+  # Same test for reset
+  - action: "set_inputs"
+    comment: "Increment to 1"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 2
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  - action: "set_inputs"
+    comment: "Rising edge on reset"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Value reset to 0"
+    expected_outputs:
+      value: 0
+
+  # Hold reset high - should NOT reset again (already at start_value anyway)
+  # Increment while reset is released, then re-trigger reset
+  - action: "set_inputs"
+    inputs:
+      reset: false
+
+  - action: "set_inputs"
+    comment: "Increment after reset"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 1
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  - action: "set_inputs"
+    inputs:
+      increment: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 2
+
+  - action: "set_inputs"
+    inputs:
+      increment: false
+
+  # Now re-trigger reset
+  - action: "set_inputs"
+    comment: "New rising edge on reset"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Value reset to 0 again"
+    expected_outputs:
+      value: 0
