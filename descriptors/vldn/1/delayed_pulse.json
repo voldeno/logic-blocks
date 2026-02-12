@@ -1,0 +1,68 @@
+{
+  "name": "Delayed Pulse",
+  "group": "process",
+  "description": "Generates a delayed pulse at the output when triggered by a rising edge on the input",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Input",
+      "description": "Input trigger signal. A rising edge starts the delayed pulse sequence.",
+      "abbrev": "I",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Output pulse signal. Goes high after the configured delay duration and stays high for the configured pulse duration.",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "delay",
+      "name": "Duration of delay",
+      "description": "Delay duration before the output pulse is generated after a rising edge on the input",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "2",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "pulse",
+      "name": "Duration of output pulse",
+      "description": "Duration of the output pulse that is generated after the delay",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.1",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "last_input_state",
+      "name": "Last input state",
+      "description": "Stores the previous state of the input to detect rising edges",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}
