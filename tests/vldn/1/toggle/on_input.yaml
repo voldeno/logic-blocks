@@ -1,0 +1,69 @@
+name: "on input"
+
+steps:
+  # Initial state - output should be false
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+      on: false
+      off: false
+
+  # Rising edge on "on" input - output should turn on
+  - action: "set_inputs"
+    inputs:
+      on: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+      on: true
+      off: false
+
+  # Release "on" input - output should remain on (bi-stable)
+  - action: "set_inputs"
+    inputs:
+      on: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  # Another rising edge on "on" when already on - no change
+  - action: "set_inputs"
+    inputs:
+      on: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      on: false
+
+  # Toggle off first, then use "on" to turn back on
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # Now use "on" input to turn on again
+  - action: "set_inputs"
+    inputs:
+      on: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+      on: true
+
+  - action: "set_inputs"
+    inputs:
+      on: false

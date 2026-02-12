@@ -1,0 +1,125 @@
+name: "off dominant - block locked when off held"
+
+steps:
+  # Initial state
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  # Turn output on via toggle
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # Hold "off" input high - this turns off output and locks block
+  - action: "set_inputs"
+    inputs:
+      off: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+      off: true
+
+  # While off is held, toggle input should be ignored
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # While off is held, "on" input should be ignored
+  - action: "set_inputs"
+    inputs:
+      on: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      on: false
+
+  # Release "off" - block unlocks but output stays off
+  - action: "set_inputs"
+    inputs:
+      off: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  # After unlock, toggle should work again
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # After unlock, "on" should work again
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "set_inputs"
+    inputs:
+      on: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      on: false
+
+  # Verify no false edge after unlock: "on" was pulsed during lock,
+  # input state was tracked, so re-pulsing "on" should still work
+  - action: "set_inputs"
+    inputs:
+      off: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      off: false
+
+  - action: "set_inputs"
+    inputs:
+      on: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
