@@ -1,0 +1,44 @@
+name: "falling_edge_ignored"
+
+config:
+  delay: 0.2
+  pulse: 0.2
+
+steps:
+  # Start with input high so we can test falling edge
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "wait"
+    duration_ms: 250
+
+  # Delay complete, pulse active
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 250
+
+  # Pulse complete
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  # Falling edge - should NOT trigger any new pulse
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "wait"
+    duration_ms: 300
+
+  # Output should remain false - falling edge does not trigger
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false

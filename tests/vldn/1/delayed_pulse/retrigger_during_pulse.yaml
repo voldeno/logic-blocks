@@ -1,0 +1,66 @@
+name: "retrigger_during_pulse"
+
+config:
+  delay: 0.3
+  pulse: 0.4
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  # First trigger
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "wait"
+    duration_ms: 350
+
+  # Pulse active (delay=300ms complete, pulse started)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  # Release input to prepare for retrigger
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # Retrigger during pulse - should reset: output goes false, new delay starts (t=350ms)
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  # Output should be false (reset by retrigger)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "wait"
+    duration_ms: 200
+
+  # Still in new delay phase (200ms < 300ms delay)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "wait"
+    duration_ms: 150
+
+  # New delay complete, new pulse active (350ms > 300ms delay)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 450
+
+  # New pulse complete (750ms > 700ms pulse end from retrigger)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
