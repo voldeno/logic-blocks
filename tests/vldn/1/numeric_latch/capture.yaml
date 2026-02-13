@@ -1,0 +1,112 @@
+name: "capture"
+
+config:
+  default_value: 0
+
+steps:
+  # Initial state - output at default
+  - action: "assert_outputs"
+    comment: "Output starts at 0 (descriptor default)"
+    expected_outputs:
+      value: 0
+
+  # Set a value on the input without triggering capture
+  - action: "set_inputs"
+    comment: "Set input value to 42, no capture trigger"
+    inputs:
+      value: 42
+
+  - action: "assert_outputs"
+    comment: "Output unchanged (no capture)"
+    expected_outputs:
+      value: 0
+
+  # Trigger capture
+  - action: "set_inputs"
+    comment: "Rising edge on capture"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to 42"
+    expected_outputs:
+      value: 42
+
+  # Release capture
+  - action: "set_inputs"
+    comment: "Release capture"
+    inputs:
+      capture: false
+
+  - action: "assert_outputs"
+    comment: "Output still holds 42"
+    expected_outputs:
+      value: 42
+
+  # Change input value - output should not change
+  - action: "set_inputs"
+    comment: "Change input value to 99"
+    inputs:
+      value: 99
+
+  - action: "assert_outputs"
+    comment: "Output still holds 42 (no new capture)"
+    expected_outputs:
+      value: 42
+
+  # Change input again
+  - action: "set_inputs"
+    comment: "Change input value to -10.5"
+    inputs:
+      value: -10.5
+
+  - action: "assert_outputs"
+    comment: "Output still holds 42"
+    expected_outputs:
+      value: 42
+
+  # Capture again with new value
+  - action: "set_inputs"
+    comment: "Rising edge on capture"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to -10.5"
+    expected_outputs:
+      value: -10.5
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  # Change input and capture a third time
+  - action: "set_inputs"
+    comment: "Change input value to 0"
+    inputs:
+      value: 0
+
+  - action: "set_inputs"
+    comment: "Rising edge on capture"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to 0"
+    expected_outputs:
+      value: 0
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  # Verify output holds after further input changes
+  - action: "set_inputs"
+    comment: "Change input value to 1000"
+    inputs:
+      value: 1000
+
+  - action: "assert_outputs"
+    comment: "Output still holds 0"
+    expected_outputs:
+      value: 0

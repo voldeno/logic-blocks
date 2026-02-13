@@ -1,0 +1,124 @@
+name: "edge detection"
+
+config:
+  default_value: 0
+
+steps:
+  # Set input value
+  - action: "set_inputs"
+    comment: "Set input value to 10"
+    inputs:
+      value: 10
+
+  # Capture with rising edge
+  - action: "set_inputs"
+    comment: "Rising edge on capture"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to 10"
+    expected_outputs:
+      value: 10
+
+  # Change input while capture is still held high
+  - action: "set_inputs"
+    comment: "Change input value to 20 while capture still high"
+    inputs:
+      value: 20
+
+  - action: "assert_outputs"
+    comment: "Output still 10 (no rising edge on capture)"
+    expected_outputs:
+      value: 10
+
+  # Hold capture high again (re-send same state)
+  - action: "set_inputs"
+    comment: "Capture still held high (no edge)"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output still 10 (no rising edge)"
+    expected_outputs:
+      value: 10
+
+  # Release and re-trigger capture
+  - action: "set_inputs"
+    comment: "Release capture"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "New rising edge on capture"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to 20 (new value captured)"
+    expected_outputs:
+      value: 20
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  # Same test for reset: hold high should not re-trigger
+  - action: "set_inputs"
+    comment: "Capture a value first"
+    inputs:
+      value: 50
+
+  - action: "set_inputs"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: 50
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  # Reset with rising edge
+  - action: "set_inputs"
+    comment: "Rising edge on reset"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Output reset to 0"
+    expected_outputs:
+      value: 0
+
+  # Capture a new value while reset is held high - reset should block since it returns early
+  - action: "set_inputs"
+    comment: "Release reset"
+    inputs:
+      reset: false
+
+  # Now capture again to verify reset edge detection
+  - action: "set_inputs"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to 50 (current input value)"
+    expected_outputs:
+      value: 50
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  # Re-trigger reset
+  - action: "set_inputs"
+    comment: "New rising edge on reset"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Output reset to 0 again"
+    expected_outputs:
+      value: 0
