@@ -1,0 +1,93 @@
+name: "reset"
+
+config:
+  default_value: 5.0
+
+steps:
+  # Set input value and capture it
+  - action: "set_inputs"
+    comment: "Set input value to 42"
+    inputs:
+      value: 42
+
+  - action: "set_inputs"
+    comment: "Capture the value"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to 42"
+    expected_outputs:
+      value: 42
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  # Reset the output
+  - action: "set_inputs"
+    comment: "Rising edge on reset"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Output reset to default_value (5.0)"
+    expected_outputs:
+      value: 5.0
+
+  # Release reset
+  - action: "set_inputs"
+    comment: "Release reset"
+    inputs:
+      reset: false
+
+  - action: "assert_outputs"
+    comment: "Output still holds default_value"
+    expected_outputs:
+      value: 5.0
+
+  # Verify capture works after reset
+  - action: "set_inputs"
+    comment: "Change input value to -20"
+    inputs:
+      value: -20
+
+  - action: "set_inputs"
+    comment: "Capture after reset"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to -20"
+    expected_outputs:
+      value: -20
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  # Reset again
+  - action: "set_inputs"
+    comment: "Reset again"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Output reset to default_value (5.0) again"
+    expected_outputs:
+      value: 5.0
+
+  - action: "set_inputs"
+    inputs:
+      reset: false
+
+  # Verify input value changes don't affect output after reset
+  - action: "set_inputs"
+    comment: "Change input value to 100"
+    inputs:
+      value: 100
+
+  - action: "assert_outputs"
+    comment: "Output still holds default_value"
+    expected_outputs:
+      value: 5.0

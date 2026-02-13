@@ -1,0 +1,66 @@
+{
+  "name": "Numeric latch",
+  "group": "process",
+  "description": "Captures a numeric input value on a trigger pulse and holds it at the output until the next capture or reset.",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "The numeric input value available for capture.",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "capture",
+      "name": "Capture",
+      "description": "Pulse input. Rising edge latches the current input value to the output.",
+      "abbrev": "C",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "reset",
+      "name": "Reset",
+      "description": "Pulse input. Rising edge resets the output to the configured default value. Dominant input.",
+      "abbrev": "R",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "The latched numeric value. Holds the last captured value until the next capture or reset.",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "default_value",
+      "name": "Default value",
+      "description": "The value restored to the output on reset.",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_capture",
+      "name": "Previous capture state",
+      "description": "Stores the previous state of the capture input to detect rising edges.",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "prev_reset",
+      "name": "Previous reset state",
+      "description": "Stores the previous state of the reset input to detect rising edges.",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}

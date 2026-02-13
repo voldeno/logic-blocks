@@ -1,0 +1,30 @@
+channel = input::channel()
+value = input::value()
+
+// Handle "reset" input first (dominant input)
+if (channel == "reset") {
+    prev_reset = state::get("prev_reset")
+
+    if (value and !prev_reset) {
+        // Rising edge on reset - restore default value
+        output::set("value", config::get("default_value"))
+    }
+
+    state::set("prev_reset", value)
+    return
+}
+
+// Handle "capture" input
+if (channel == "capture") {
+    prev_capture = state::get("prev_capture")
+
+    if (value and !prev_capture) {
+        // Rising edge on capture - latch current input value to output
+        output::set("value", input::get("value"))
+    }
+
+    state::set("prev_capture", value)
+    return
+}
+
+// "value" input changes are ignored - output holds until next capture or reset
