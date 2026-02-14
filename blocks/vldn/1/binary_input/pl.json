@@ -1,0 +1,12 @@
+{
+  "description": "Wejście binarne modułu Voldeno",
+  "outputs": [
+    {
+      "id": "state",
+      "name": "Stan",
+      "description": "Wartość binarna"
+    }
+  ],
+  "config": [],
+  "state": []
+}
