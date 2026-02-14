@@ -1,0 +1,72 @@
+{
+  "name": "Numeric latch",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "capture",
+      "abbrev": "C",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "trigger",
+      "abbrev": "T",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "reset",
+      "abbrev": "R",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "default_value",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "trigger_on_capture",
+      "type": "BOOLEAN",
+      "default": "true"
+    }
+  ],
+  "state": [
+    {
+      "id": "captured_value",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "prev_capture",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "prev_trigger",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "prev_reset",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}

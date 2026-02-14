@@ -1,0 +1,21 @@
+{
+  "name": "Numeric constant",
+  "group": "input",
+  "ioType": "constant",
+  "outputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "value",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "state": []
+}

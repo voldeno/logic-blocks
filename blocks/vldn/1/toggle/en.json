@@ -1,0 +1,55 @@
+{
+  "description": "Converts a monostable pulse input into a bi-stable toggle output. Each rising edge on the input toggles the output state. Supports explicit on/off inputs and emits pulse outputs on state transitions.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Toggle",
+      "description": "Pulse input signal. On each rising edge (false to true transition), the output will toggle its state."
+    },
+    {
+      "id": "on",
+      "name": "On",
+      "description": "Switches the output (O) on. Only reacts to a rising edge."
+    },
+    {
+      "id": "off",
+      "name": "Off",
+      "description": "Pulse: Resets the output (O) to off. When held on: Block is locked and all other inputs are ignored. Dominant input."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Bi-stable output that toggles its state on each input pulse."
+    },
+    {
+      "id": "on",
+      "name": "On",
+      "description": "Pulse when output (O) is switched on. Fixed 100ms pulse width."
+    },
+    {
+      "id": "off",
+      "name": "Off",
+      "description": "Pulse when output (O) is switched off. Fixed 100ms pulse width."
+    }
+  ],
+  "config": [],
+  "state": [
+    {
+      "id": "last_input_state",
+      "name": "Last input state",
+      "description": "Stores the previous state of the toggle input to detect rising edges"
+    },
+    {
+      "id": "last_on_state",
+      "name": "Last on state",
+      "description": "Stores the previous state of the on input to detect rising edges"
+    },
+    {
+      "id": "last_off_state",
+      "name": "Last off state",
+      "description": "Stores the previous state of the off input to detect rising edges and lock state"
+    }
+  ]
+}

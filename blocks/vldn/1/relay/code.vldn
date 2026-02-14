@@ -1,0 +1,5 @@
+if (input::get("state")) {
+    register::set(1)
+} else {
+    register::set(0)
+}

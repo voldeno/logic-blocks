@@ -1,0 +1,151 @@
+{
+  "description": "Irrigation system",
+  "inputs": [
+    {
+      "id": "trigger",
+      "name": "Trigger",
+      "description": ""
+    },
+    {
+      "id": "reset",
+      "name": "Reset",
+      "description": ""
+    }
+  ],
+  "outputs": [
+    {
+      "id": "pump",
+      "name": "Pump",
+      "description": "Output for pump control"
+    },
+    {
+      "id": "section_1",
+      "name": "Section #1",
+      "description": "Output for section #1 valve control"
+    },
+    {
+      "id": "section_2",
+      "name": "Section #2",
+      "description": "Output for section #2 valve control"
+    },
+    {
+      "id": "section_3",
+      "name": "Section #3",
+      "description": "Output for section #3 valve control"
+    },
+    {
+      "id": "section_4",
+      "name": "Section #4",
+      "description": "Output for section #4 valve control"
+    },
+    {
+      "id": "section_5",
+      "name": "Section #5",
+      "description": "Output for section #5 valve control"
+    },
+    {
+      "id": "section_6",
+      "name": "Section #6",
+      "description": "Output for section #6 valve control"
+    },
+    {
+      "id": "section_7",
+      "name": "Section #7",
+      "description": "Output for section #7 valve control"
+    },
+    {
+      "id": "section_8",
+      "name": "Section #8",
+      "description": "Output for section #8 valve control"
+    }
+  ],
+  "config": [
+    {
+      "id": "s1_enabled",
+      "name": "S1 enabled",
+      "description": "Controls if the section #1 is enabled"
+    },
+    {
+      "id": "s1_duration",
+      "name": "S1 duration",
+      "description": "Total irrigation time in seconds for section #1"
+    },
+    {
+      "id": "s2_enabled",
+      "name": "S2 enabled",
+      "description": "Controls if the section #2 is enabled"
+    },
+    {
+      "id": "s2_duration",
+      "name": "S2 duration",
+      "description": "Total irrigation time in seconds for section #2"
+    },
+    {
+      "id": "s3_enabled",
+      "name": "S3 enabled",
+      "description": "Controls if the section #3 is enabled"
+    },
+    {
+      "id": "s3_duration",
+      "name": "S3 duration",
+      "description": "Total irrigation time in seconds for section #3"
+    },
+    {
+      "id": "s4_enabled",
+      "name": "S4 enabled",
+      "description": "Controls if the section #4 is enabled"
+    },
+    {
+      "id": "s4_duration",
+      "name": "S4 duration",
+      "description": "Total irrigation time in seconds for section #4"
+    },
+    {
+      "id": "s5_enabled",
+      "name": "S5 enabled",
+      "description": "Controls if the section #5 is enabled"
+    },
+    {
+      "id": "s5_duration",
+      "name": "S5 duration",
+      "description": "Total irrigation time in seconds for section #5"
+    },
+    {
+      "id": "s6_enabled",
+      "name": "S6 enabled",
+      "description": "Controls if the section #6 is enabled"
+    },
+    {
+      "id": "s6_duration",
+      "name": "S6 duration",
+      "description": "Total irrigation time in seconds for section #6"
+    },
+    {
+      "id": "s7_enabled",
+      "name": "S7 enabled",
+      "description": "Controls if the section #7 is enabled"
+    },
+    {
+      "id": "s7_duration",
+      "name": "S7 duration",
+      "description": "Total irrigation time in seconds for section #7"
+    },
+    {
+      "id": "s8_enabled",
+      "name": "S8 enabled",
+      "description": "Controls if the section #8 is enabled"
+    },
+    {
+      "id": "s8_duration",
+      "name": "S8 duration",
+      "description": "Total irrigation time in seconds for section #8"
+    }
+  ],
+  "state": [
+    {
+      "id": "active",
+      "name": "active",
+      "description": "Is irrigation currently active"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+channel = input::channel()
+value = input::value()
+
+don_ms = math::round(config::get("don") * 1000)
+doff_ms = math::round(config::get("doff") * 1000)
+
+// Handle callback execution
+extern fn onCallback(value) {
+    if (value == 1) {
+        // Delay on callback - set output to true
+        output::set("output", true)
+        return
+    }
+    
+    if (value == 2) {
+        // Delay off callback - set output to false
+        output::set("output", false)
+        return
+    }
+}
+
+// Handle input changes - detect edges
+if (channel == "input") {
+    last_input_state = state::get("last_input_state")
+    
+    // Only react to state changes (edges)
+    if (value != last_input_state) {
+        state::set("last_input_state", value)
+        
+        if (value) {
+            // Input went high - schedule delay on
+            callback::clear()
+            if (don_ms > 0) {
+                callback::set(don_ms, "onCallback", 1)
+            } else {
+                // If delay is 0, set output immediately
+                output::set("output", true)
+            }
+        } else {
+            // Input went low - schedule delay off
+            callback::clear()
+            if (doff_ms > 0) {
+                callback::set(doff_ms, "onCallback", 2)
+            } else {
+                // If delay is 0, set output immediately
+                output::set("output", false)
+            }
+        }
+    }
+    return
+}
+

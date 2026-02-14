@@ -1,0 +1,58 @@
+{
+  "name": "Door, window",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "open_contact",
+      "abbrev": "OC",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "tilted_contact",
+      "abbrev": "TC",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "locked_contact",
+      "abbrev": "LC",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "open",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "tilted",
+      "abbrev": "T",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "closed",
+      "abbrev": "C",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "locked",
+      "abbrev": "L",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "secured",
+      "abbrev": "S",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [],
+  "state": []
+}

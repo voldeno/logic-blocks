@@ -1,0 +1,41 @@
+{
+  "name": "PulseAt",
+  "group": "input",
+  "ioType": "scheduler",
+  "outputs": [
+    {
+      "id": "pulse",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "interval",
+      "type": "NUMBER",
+      "unit": "",
+      "default": "1"
+    }
+  ],
+  "state": [
+    {
+      "id": "last_output",
+      "type": "BOOLEAN",
+      "unit": "",
+      "default": "false"
+    },
+    {
+      "id": "last_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    },
+    {
+      "id": "next_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    }
+  ]
+}

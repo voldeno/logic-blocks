@@ -1,0 +1,283 @@
+{
+  "name": "Climate regulator",
+  "group": "process",
+  "ioType": "scheduler",
+  "inputs": [
+    {
+      "id": "air_temp",
+      "abbrev": "AT",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "outside_temp",
+      "abbrev": "OT",
+      "type": "NUMBER",
+      "default": "-1000"
+    },
+    {
+      "id": "presence",
+      "abbrev": "PRE",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "dwc",
+      "abbrev": "DWC",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "comfort",
+      "abbrev": "COM",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "protection",
+      "abbrev": "PRO",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "target_temp",
+      "abbrev": "TT",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "temp_deviation",
+      "abbrev": "TD",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "thermal_mode",
+      "type": "ENUM",
+      "values": [
+        "Heating and cooling",
+        "Heating only",
+        "Cooling only"
+      ],
+      "default": "0"
+    },
+    {
+      "id": "operation_mode",
+      "type": "ENUM",
+      "values": [
+        "Schedule",
+        "Manual"
+      ],
+      "default": "0"
+    },
+    {
+      "id": "schedule",
+      "type": "SCHEDULE",
+      "subtype": "CLIMATE",
+      "default": "0",
+      "visibleWhen": {
+        "configId": "operation_mode",
+        "values": [
+          "Schedule"
+        ]
+      }
+    },
+    {
+      "id": "comfort_heating_temp",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "21",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": [
+          "Heating and cooling",
+          "Heating only"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "lte",
+            "configId": "comfort_cooling_temp"
+          }
+        ]
+      }
+    },
+    {
+      "id": "comfort_cooling_temp",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "25",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": [
+          "Heating and cooling",
+          "Cooling only"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "configId": "comfort_heating_temp"
+          }
+        ]
+      }
+    },
+    {
+      "id": "eco_heating_temp_diff",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "2",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": [
+          "Heating and cooling",
+          "Heating only"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "eco_cooling_temp_diff",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "3",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": [
+          "Heating and cooling",
+          "Cooling only"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "frost_protection_temp",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "10",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": [
+          "Heating and cooling",
+          "Heating only"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 5
+          },
+          {
+            "type": "lt",
+            "configId": "comfort_heating_temp"
+          }
+        ]
+      }
+    },
+    {
+      "id": "overheat_protection_temp",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "40",
+      "visibleWhen": {
+        "configId": "thermal_mode",
+        "values": [
+          "Heating and cooling",
+          "Cooling only"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "configId": "comfort_cooling_temp"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dwc_delay",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "30",
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "presence_extension_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "1800",
+      "visibleWhen": {
+        "configId": "operation_mode",
+        "values": [
+          "Schedule"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "dwc_state_change_ts",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "dwc_state",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "dwc_lock",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "last_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    },
+    {
+      "id": "next_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    }
+  ]
+}

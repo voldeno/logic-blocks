@@ -1,0 +1,69 @@
+{
+  "description": "Logic block representing a wall switch",
+  "outputs": [
+    {
+      "id": "click",
+      "name": "Click",
+      "description": "Active on a click"
+    },
+    {
+      "id": "short_press",
+      "name": "Short press",
+      "description": "Active on a short press"
+    },
+    {
+      "id": "long_press",
+      "name": "Long press",
+      "description": "Active on a long press"
+    },
+    {
+      "id": "hold",
+      "name": "Hold",
+      "description": "Active on a hold"
+    },
+    {
+      "id": "toggle",
+      "name": "Toggle",
+      "description": "Toggle output, active after a click"
+    },
+    {
+      "id": "on",
+      "name": "ON",
+      "description": "Active when switch is on"
+    },
+    {
+      "id": "off",
+      "name": "OFF",
+      "description": "Active when switch is off"
+    }
+  ],
+  "config": [
+    {
+      "id": "click_duration_ms",
+      "name": "clickDuration",
+      "description": "Duration of a click in ms"
+    },
+    {
+      "id": "short_press_duration_ms",
+      "name": "shortPressDuration",
+      "description": "Duration of a short press in ms"
+    },
+    {
+      "id": "long_press_duration_ms",
+      "name": "longPressDuration",
+      "description": "Duration of a long press in ms"
+    },
+    {
+      "id": "hold_duration_ms",
+      "name": "holdDuration",
+      "description": "Duration of a hold in ms"
+    }
+  ],
+  "state": [
+    {
+      "id": "last_change_time_ms",
+      "name": "lastChangeTime",
+      "description": "some description"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "name": "Sequencer",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "forward",
+      "abbrev": "Fwd",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "backward",
+      "abbrev": "Bwd",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "reset",
+      "abbrev": "Rst",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "off",
+      "abbrev": "Off",
+      "type": "BOOLEAN",
+      "default": "true"
+    },
+    {
+      "id": "o1",
+      "abbrev": "O1",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "o2",
+      "abbrev": "O2",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "o3",
+      "abbrev": "O3",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "o4",
+      "abbrev": "O4",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "o5",
+      "abbrev": "O5",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "o6",
+      "abbrev": "O6",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "o7",
+      "abbrev": "O7",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "o8",
+      "abbrev": "O8",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "max_index",
+      "type": "NUMBER",
+      "default": "8"
+    }
+  ],
+  "state": [
+    {
+      "id": "sequence_index",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ]
+}

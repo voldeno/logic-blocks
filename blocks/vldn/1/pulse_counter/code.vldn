@@ -1,0 +1,74 @@
+channel = input::channel()
+value = input::value()
+
+// Handle "reset" input first (dominant input)
+if (channel == "reset") {
+    prev_reset = state::get("prev_reset")
+
+    if (value and !prev_reset) {
+        // Rising edge on reset - restore start value
+        start_value = config::get("start_value")
+        output::set("value", start_value)
+        output::set("at_upper_limit", start_value == config::get("upper_limit"))
+        output::set("at_lower_limit", start_value == config::get("lower_limit"))
+    }
+
+    state::set("prev_reset", value)
+    return
+}
+
+// Handle "increment" input
+if (channel == "increment") {
+    prev_increment = state::get("prev_increment")
+
+    if (value and !prev_increment) {
+        // Rising edge on increment
+        current = output::get("value")
+        upper_limit = config::get("upper_limit")
+        lower_limit = config::get("lower_limit")
+        overflow_mode = config::get("overflow_mode") // 0=Clamp, 1=Wrap
+
+        if (current < upper_limit) {
+            current = current + 1
+        } else if (overflow_mode == 1) {
+            // Wrap around to lower limit
+            current = lower_limit
+        }
+        // else: Clamp - no change
+
+        output::set("value", current)
+        output::set("at_upper_limit", current == upper_limit)
+        output::set("at_lower_limit", current == lower_limit)
+    }
+
+    state::set("prev_increment", value)
+    return
+}
+
+// Handle "decrement" input
+if (channel == "decrement") {
+    prev_decrement = state::get("prev_decrement")
+
+    if (value and !prev_decrement) {
+        // Rising edge on decrement
+        current = output::get("value")
+        upper_limit = config::get("upper_limit")
+        lower_limit = config::get("lower_limit")
+        overflow_mode = config::get("overflow_mode") // 0=Clamp, 1=Wrap
+
+        if (current > lower_limit) {
+            current = current - 1
+        } else if (overflow_mode == 1) {
+            // Wrap around to upper limit
+            current = upper_limit
+        }
+        // else: Clamp - no change
+
+        output::set("value", current)
+        output::set("at_upper_limit", current == upper_limit)
+        output::set("at_lower_limit", current == lower_limit)
+    }
+
+    state::set("prev_decrement", value)
+    return
+}

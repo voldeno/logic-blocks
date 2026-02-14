@@ -1,0 +1,57 @@
+{
+  "name": "Delayed Pulse",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "input",
+      "abbrev": "I",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "delay",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "2",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "pulse",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.1",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "last_input_state",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}

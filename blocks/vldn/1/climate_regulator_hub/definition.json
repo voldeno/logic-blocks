@@ -1,0 +1,121 @@
+{
+  "name": "Climate regulator hub",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "temp_dev_zone_1",
+      "abbrev": "TD1",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "temp_dev_zone_2",
+      "abbrev": "TD2",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "temp_dev_zone_3",
+      "abbrev": "TD3",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "temp_dev_zone_4",
+      "abbrev": "TD4",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "heating_0",
+      "abbrev": "H",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "cooling_0",
+      "abbrev": "C",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "heating_1",
+      "abbrev": "H1",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "cooling_1",
+      "abbrev": "C1",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "heating_2",
+      "abbrev": "H2",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "cooling_2",
+      "abbrev": "C2",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "heating_3",
+      "abbrev": "H3",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "cooling_3",
+      "abbrev": "C3",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "heating_4",
+      "abbrev": "H4",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "cooling_4",
+      "abbrev": "C4",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "act_threshold_single",
+      "type": "NUMBER",
+      "default": "1.0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "act_threshold_sum",
+      "type": "NUMBER",
+      "default": "2.0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": []
+}

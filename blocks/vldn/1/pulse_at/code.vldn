@@ -1,0 +1,7 @@
+
+extern fn std::next_activation_at() {
+    return time::now() + config::get("interval")
+}
+
+output::toggle("pulse")
+

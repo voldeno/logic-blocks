@@ -1,0 +1,236 @@
+{
+  "name": "Shading",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "toggle",
+      "abbrev": "T",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "part_open",
+      "abbrev": "PO",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "part_close",
+      "abbrev": "PC",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "full_open",
+      "abbrev": "FO",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "full_close",
+      "abbrev": "FC",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "slightly_open",
+      "abbrev": "SO",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "wind_alarm",
+      "abbrev": "WA",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "dwc",
+      "abbrev": "DWC",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "off",
+      "abbrev": "OFF",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "position",
+      "abbrev": "P",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "slats",
+      "abbrev": "S",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "open",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "close",
+      "abbrev": "C",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "position",
+      "abbrev": "P",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "slats",
+      "abbrev": "S",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "shading_type",
+      "type": "ENUM",
+      "values": [
+        "Venetian blinds",
+        "Roller blinds",
+        "Curtains (both sides)",
+        "Curtains (left)",
+        "Curtains (right)",
+        "Awning"
+      ],
+      "default": "0"
+    },
+    {
+      "id": "opening_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "80",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "closing_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "80",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "return_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.8",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "wind_alarm_position",
+      "type": "NUMBER",
+      "unit": "%",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          },
+          {
+            "type": "lte",
+            "value": 100
+          }
+        ]
+      }
+    },
+    {
+      "id": "motor_lock_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.5",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "position",
+      "type": "NUMBER",
+      "unit": "%",
+      "default": "0.0"
+    },
+    {
+      "id": "desired_position",
+      "type": "NUMBER",
+      "unit": "%",
+      "default": "0.0"
+    },
+    {
+      "id": "slats",
+      "type": "NUMBER",
+      "unit": "%",
+      "default": "0.0"
+    },
+    {
+      "id": "desired_slats",
+      "type": "NUMBER",
+      "unit": "%",
+      "default": "0.0"
+    },
+    {
+      "id": "steps_left",
+      "type": "NUMBER",
+      "unit": "steps",
+      "default": "0"
+    },
+    {
+      "id": "steps_left_slats",
+      "type": "NUMBER",
+      "unit": "steps",
+      "default": "0"
+    },
+    {
+      "id": "was_opening",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "last_movement_ts",
+      "type": "NUMBER",
+      "unit": "milliseconds",
+      "default": "-60000"
+    }
+  ]
+}

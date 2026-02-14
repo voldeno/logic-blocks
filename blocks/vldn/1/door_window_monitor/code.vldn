@@ -1,0 +1,11 @@
+open = input::get("open_contact")
+tilted = input::get("tilted_contact")
+closed = !open and !tilted
+locked = input::get("locked_contact")
+secured = closed and locked
+
+output::set("open", open)
+output::set("tilted", tilted and !open)
+output::set("closed", closed)
+output::set("locked", locked)
+output::set("secured", secured)

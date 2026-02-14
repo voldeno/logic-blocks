@@ -1,0 +1,142 @@
+zones = 4
+
+heating_was_active = output::get("heating_0")
+cooling_was_active = output::get("cooling_0")
+was_active = heating_was_active or cooling_was_active
+
+act_threshold_single = config::get("act_threshold_single")
+act_threshold_sum = config::get("act_threshold_sum")
+
+fn heating(zone) {
+    output::set(str::fmt("heating_{}", zone), true)
+    output::set(str::fmt("cooling_{}", zone), false)
+}
+
+fn cooling(zone) {
+    output::set(str::fmt("heating_{}", zone), false)
+    output::set(str::fmt("cooling_{}", zone), true)
+}
+
+fn idle(zone) {
+    output::set(str::fmt("heating_{}", zone), false)
+    output::set(str::fmt("cooling_{}", zone), false)
+}
+
+fn round2dec(value) {
+    return math::round(100 * value) / 100.0
+}
+
+fn abs(value) {
+    if (value < 0) {
+        return -value
+    }
+    return value
+}
+
+zone = 0
+dev_sum = 0.0
+dev_sum_heat = 0.0
+dev_sum_cool = 0.0
+mode = 0 // 0=idle, 1=heating, 2=cooling
+while (zone < zones) {
+    zonal_temp_dev = input::get(str::fmt("temp_dev_zone_{}", zone + 1))
+    dev_sum += zonal_temp_dev
+    if (zonal_temp_dev > 0) {
+        dev_sum_heat += zonal_temp_dev
+    }
+    if (zonal_temp_dev < 0) {
+        dev_sum_cool -= zonal_temp_dev
+    }
+    zone += 1
+}
+
+dev_sum = round2dec(dev_sum)
+dev_sum_heat = round2dec(dev_sum_heat)
+dev_sum_cool = round2dec(dev_sum_cool)
+
+if (was_active) {
+    // switch off all outputs when reached the heating or cooling target
+    if ((heating_was_active and dev_sum_heat == 0.0) or (cooling_was_active and dev_sum_cool == 0.0)) {
+        zone = 0
+        while (zone <= zones) {
+            idle(zone)
+            zone += 1
+        }
+        return
+    }
+
+    if (heating_was_active) {
+        mode = 1
+    } else {
+        mode = 2
+    }
+} else {
+    // was in an idle mode - we need to decide on heating or cooling mode
+    if (dev_sum > 0) {
+        mode = 1
+    } else if (dev_sum < 0) {
+        mode = 2
+    } else {
+        if (dev_sum_heat > 0) {
+            // this covers unlikely case of inputs like +1, -1, +2, -2
+            // chosing heating as a preference
+            mode = 1
+        } else {
+            mode = 0
+        }
+    }
+}
+
+zone = 0
+dev_sum = 0.0
+single_input_threshold_exceeded = false
+while (zone < zones) {
+    zonal_temp_dev = input::get(str::fmt("temp_dev_zone_{}", zone + 1))
+    if (mode == 1 and zonal_temp_dev > 0) {
+        if (zonal_temp_dev >= act_threshold_single) {
+            single_input_threshold_exceeded = true
+        }
+        dev_sum += zonal_temp_dev
+    }
+    if (mode == 2 and zonal_temp_dev < 0) {
+        if (-zonal_temp_dev >= act_threshold_single) {
+            single_input_threshold_exceeded = true
+        }
+        dev_sum -= zonal_temp_dev
+    }
+
+    zone += 1
+}
+
+sum_threshold_exceeded = dev_sum >= act_threshold_sum
+any_threshold_exceeded = single_input_threshold_exceeded or sum_threshold_exceeded
+
+if (any_threshold_exceeded or was_active) {
+    if (mode == 1) {
+        heating(0)
+    } else if (mode == 2) {
+        cooling(0)
+    } else {
+        idle(0)
+    }
+} else {
+    idle(0)
+}
+
+zone = 1
+while (zone <= zones) {
+    if (any_threshold_exceeded or was_active) {
+        zonal_temp_dev = input::get(str::fmt("temp_dev_zone_{}", zone))
+        if (zonal_temp_dev > 0 and mode == 1) {
+            heating(zone)
+        } else if (zonal_temp_dev < 0 and mode == 2) {
+            cooling(zone)
+        } else {
+            idle(zone)
+        }
+    } else {
+        idle(zone)
+    }
+
+    zone += 1
+}

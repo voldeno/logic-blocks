@@ -1,0 +1,23 @@
+{
+  "description": "Numeric input of Voldeno module",
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "Numeric value"
+    }
+  ],
+  "config": [
+    {
+      "id": "scale",
+      "name": "scale",
+      "description": "Scale"
+    },
+    {
+      "id": "offset",
+      "name": "offset",
+      "description": "Offset"
+    }
+  ],
+  "state": []
+}

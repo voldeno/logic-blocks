@@ -1,0 +1,24 @@
+{
+  "description": "Returns the remainder after dividing I1 by I2",
+  "inputs": [
+    {
+      "id": "input_1",
+      "name": "Input #1",
+      "description": "Input #1 (dividend)"
+    },
+    {
+      "id": "input_2",
+      "name": "Input #2",
+      "description": "Input #2 (divisor)"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Output"
+    }
+  ],
+  "config": [],
+  "state": []
+}

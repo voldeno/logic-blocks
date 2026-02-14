@@ -1,0 +1,1 @@
+output::set("state", config::get("value"))

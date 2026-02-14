@@ -1,0 +1,6 @@
+value = input::get("input")
+if (value < 0) {
+    output::set("output", -value)
+} else {
+    output::set("output", value)
+}

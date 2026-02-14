@@ -1,0 +1,19 @@
+{
+  "description": "NOT logic block - negates the input binary value",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Input",
+      "description": "Input"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Output"
+    }
+  ],
+  "config": [],
+  "state": []
+}

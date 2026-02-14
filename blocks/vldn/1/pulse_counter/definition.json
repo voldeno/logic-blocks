@@ -1,0 +1,115 @@
+{
+  "name": "Pulse counter",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "increment",
+      "abbrev": "I+",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "decrement",
+      "abbrev": "I-",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "reset",
+      "abbrev": "R",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "at_upper_limit",
+      "abbrev": "UL",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "at_lower_limit",
+      "abbrev": "LL",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "start_value",
+      "type": "NUMBER",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "configId": "lower_limit"
+          },
+          {
+            "type": "lte",
+            "configId": "upper_limit"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lower_limit",
+      "type": "NUMBER",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "lt",
+            "configId": "upper_limit"
+          }
+        ]
+      }
+    },
+    {
+      "id": "upper_limit",
+      "type": "NUMBER",
+      "default": "1000",
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "configId": "lower_limit"
+          }
+        ]
+      }
+    },
+    {
+      "id": "overflow_mode",
+      "type": "ENUM",
+      "values": [
+        "Clamp",
+        "Wrap"
+      ],
+      "default": "0"
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_increment",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "prev_decrement",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "prev_reset",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}

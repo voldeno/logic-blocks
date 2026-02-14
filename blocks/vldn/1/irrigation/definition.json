@@ -1,0 +1,292 @@
+{
+  "name": "Irrigation",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "trigger",
+      "abbrev": "T",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "reset",
+      "abbrev": "R",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "pump",
+      "abbrev": "P",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "section_1",
+      "abbrev": "S1",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "section_2",
+      "abbrev": "S2",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "section_3",
+      "abbrev": "S3",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "section_4",
+      "abbrev": "S4",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "section_5",
+      "abbrev": "S5",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "section_6",
+      "abbrev": "S6",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "section_7",
+      "abbrev": "S7",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "section_8",
+      "abbrev": "S8",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "s1_enabled",
+      "type": "BOOLEAN",
+      "unit": "",
+      "default": "true"
+    },
+    {
+      "id": "s1_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s1_enabled",
+        "values": [
+          "true"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "s2_enabled",
+      "type": "BOOLEAN",
+      "unit": "",
+      "default": "false"
+    },
+    {
+      "id": "s2_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s2_enabled",
+        "values": [
+          "true"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "s3_enabled",
+      "type": "BOOLEAN",
+      "unit": "",
+      "default": "false"
+    },
+    {
+      "id": "s3_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s3_enabled",
+        "values": [
+          "true"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "s4_enabled",
+      "type": "BOOLEAN",
+      "unit": "",
+      "default": "false"
+    },
+    {
+      "id": "s4_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s4_enabled",
+        "values": [
+          "true"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "s5_enabled",
+      "type": "BOOLEAN",
+      "unit": "",
+      "default": "false"
+    },
+    {
+      "id": "s5_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s5_enabled",
+        "values": [
+          "true"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "s6_enabled",
+      "type": "BOOLEAN",
+      "unit": "",
+      "default": "false"
+    },
+    {
+      "id": "s6_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s6_enabled",
+        "values": [
+          "true"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "s7_enabled",
+      "type": "BOOLEAN",
+      "unit": "",
+      "default": "false"
+    },
+    {
+      "id": "s7_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s7_enabled",
+        "values": [
+          "true"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "s8_enabled",
+      "type": "BOOLEAN",
+      "unit": "",
+      "default": "false"
+    },
+    {
+      "id": "s8_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "600",
+      "visibleWhen": {
+        "configId": "s8_enabled",
+        "values": [
+          "true"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "active",
+      "type": "BOOLEAN",
+      "unit": "",
+      "default": "false"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "description": "A threshold switch with hysteresis that analyzes an analog input value and switches a digital output accordingly. The hysteresis prevents frequent toggling when the value fluctuates around the threshold.",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "A numeric input that provides the measured or calculated value to be compared against the configured thresholds."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "A boolean output that switches based on the input value and configured thresholds with hysteresis."
+    }
+  ],
+  "config": [
+    {
+      "id": "mode",
+      "name": "Hysteresis mode",
+      "description": "Defines how the hysteresis is configured: either using a midpoint with hysteresis range, or explicit on/off thresholds."
+    },
+    {
+      "id": "midpoint",
+      "name": "Midpoint value",
+      "description": "The center point of the hysteresis range. Output turns on when value exceeds midpoint + hysteresis, and turns off when value falls below midpoint - hysteresis."
+    },
+    {
+      "id": "hysteresis",
+      "name": "Hysteresis range",
+      "description": "The range around the midpoint that creates the hysteresis effect. Must be greater than 0. Output switches at midpoint ± hysteresis."
+    },
+    {
+      "id": "value_on",
+      "name": "Value output turns on",
+      "description": "The threshold value at which the output turns on. If value_on > value_off, output activates when value rises above this threshold. If value_on < value_off, output activates when value falls below this threshold."
+    },
+    {
+      "id": "value_off",
+      "name": "Value output turns off",
+      "description": "The threshold value at which the output turns off. If value_on > value_off, output deactivates when value falls below this threshold. If value_on < value_off, output deactivates when value rises above this threshold."
+    }
+  ],
+  "state": []
+}

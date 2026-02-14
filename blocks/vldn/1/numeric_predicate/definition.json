@@ -1,0 +1,73 @@
+{
+  "name": "Numeric predicate",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "operator",
+      "type": "ENUM",
+      "values": [
+        "Greater than",
+        "Greater or equal",
+        "Equal",
+        "Not equal",
+        "Less than",
+        "Less or equal",
+        "Between"
+      ],
+      "default": "0"
+    },
+    {
+      "id": "operand",
+      "type": "NUMBER",
+      "default": "0.0",
+      "visibleWhen": {
+        "configId": "operator",
+        "values": [
+          "Greater than",
+          "Greater or equal",
+          "Equal",
+          "Not equal",
+          "Less than",
+          "Less or equal",
+          "Between"
+        ]
+      }
+    },
+    {
+      "id": "operand_2",
+      "type": "NUMBER",
+      "default": "0.0",
+      "visibleWhen": {
+        "configId": "operator",
+        "values": [
+          "Between"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "configId": "operand"
+          }
+        ]
+      }
+    }
+  ],
+  "state": []
+}

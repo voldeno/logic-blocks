@@ -1,0 +1,90 @@
+{
+  "description": "Central, climate regulator hub - aggregates the heating or cooling requirements from zonal climate regulators and decides which should be enabled.",
+  "inputs": [
+    {
+      "id": "temp_dev_zone_1",
+      "name": "Temperature deviation, zone 1",
+      "description": "Input for the temperature deviation output of a zonal climate controller - zone 1"
+    },
+    {
+      "id": "temp_dev_zone_2",
+      "name": "Temperature deviation, zone 2",
+      "description": "Input for the temperature deviation output of a zonal climate controller - zone 2"
+    },
+    {
+      "id": "temp_dev_zone_3",
+      "name": "Temperature deviation, zone 3",
+      "description": "Input for the temperature deviation output of a zonal climate controller - zone 3"
+    },
+    {
+      "id": "temp_dev_zone_4",
+      "name": "Temperature deviation, zone 4",
+      "description": "Input for the temperature deviation output of a zonal climate controller - zone 4"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "heating_0",
+      "name": "Heating",
+      "description": "Heating output, central"
+    },
+    {
+      "id": "cooling_0",
+      "name": "Cooling",
+      "description": "Cooling output, central"
+    },
+    {
+      "id": "heating_1",
+      "name": "Heating, zone 1",
+      "description": "Heating output, zone 1"
+    },
+    {
+      "id": "cooling_1",
+      "name": "Cooling, zone 1",
+      "description": "Cooling output, zone 1"
+    },
+    {
+      "id": "heating_2",
+      "name": "Heating, zone 2",
+      "description": "Heating output, zone 2"
+    },
+    {
+      "id": "cooling_2",
+      "name": "Cooling, zone 2",
+      "description": "Cooling output, zone 2"
+    },
+    {
+      "id": "heating_3",
+      "name": "Heating, zone 3",
+      "description": "Heating output, zone 3"
+    },
+    {
+      "id": "cooling_3",
+      "name": "Cooling, zone 3",
+      "description": "Cooling output, zone 3"
+    },
+    {
+      "id": "heating_4",
+      "name": "Heating, zone 4",
+      "description": "Heating output, zone 4"
+    },
+    {
+      "id": "cooling_4",
+      "name": "Cooling, zone 4",
+      "description": "Cooling output, zone 4"
+    }
+  ],
+  "config": [
+    {
+      "id": "act_threshold_single",
+      "name": "Activation threshold - single",
+      "description": "Threshold of the single input temperature deviation below which the block stays idle. After activation the block aims to zero all the temp. deviations."
+    },
+    {
+      "id": "act_threshold_sum",
+      "name": "Activation threshold - sum",
+      "description": "Threshold of the sum of all temperature deviation inputs below which the block stays idle. After activation the block aims to zero all the temp. deviations."
+    }
+  ],
+  "state": []
+}

@@ -1,0 +1,61 @@
+channel = input::channel()
+
+section_count = 8
+
+fn disable_all(section_count) {
+    section = 0
+    while (section < section_count) {
+        section += 1
+        output::set(str::fmt("section_{}", section), false)
+    }
+}
+
+extern fn onCallback(section_count, callback_id) {
+    disable_all(section_count)
+
+    current_section = 0
+    if (callback_id == 0) {
+        output::set("pump", true)
+        callback::set(0, "onCallback", section_count, 1)
+        return
+    } else if (callback_id > 0 and callback_id < (section_count + 1)) {
+        current_section = callback_id
+    } else if (callback_id == (section_count + 1)) {
+        output::set("pump", false)
+        state::set("active", false)
+        return
+    }
+
+    section_output = str::fmt("section_{}", current_section)
+    section_enabled_cfg = str::fmt("s{}_enabled", current_section)
+    section_duration_cfg = str::fmt("s{}_duration", current_section)
+
+    section_enabled = config::get(section_enabled_cfg)
+    section_duration = config::get(section_duration_cfg)
+
+    if (!section_enabled) {
+        callback::set(0, "onCallback", section_count, current_section + 1)
+        return
+    }
+
+    output::set(section_output, true)
+    callback::set(section_duration * 1000, "onCallback", section_count, current_section + 1)
+}
+
+input_value = input::value()
+
+if (channel == "trigger" and input_value) {
+    if (state::get("active")) {
+        return
+    }
+
+    state::set("active", true)
+    callback::set(0, "onCallback", section_count, 0)
+    return
+}
+
+if (channel == "reset") {
+    callback::clear()
+    callback::set(0, "onCallback", section_count, section_count + 1)
+    return
+}

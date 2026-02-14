@@ -1,0 +1,138 @@
+{
+  "name": "Switch",
+  "group": "input",
+  "ioType": "register",
+  "ioRegisterFilters": [
+    {
+      "moduleId": 3,
+      "registerIds": [
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "id": "click",
+      "abbrev": "C",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "short_press",
+      "abbrev": "SP",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "long_press",
+      "abbrev": "LP",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "hold",
+      "abbrev": "H",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "toggle",
+      "abbrev": "TG",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "on",
+      "abbrev": "ON",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "off",
+      "abbrev": "OFF",
+      "type": "BOOLEAN",
+      "default": "true"
+    }
+  ],
+  "config": [
+    {
+      "id": "click_duration_ms",
+      "type": "NUMBER",
+      "unit": "ms",
+      "default": "500",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "short_press_duration_ms",
+      "type": "NUMBER",
+      "unit": "ms",
+      "default": "1000",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          },
+          {
+            "type": "gt",
+            "configId": "click_duration_ms"
+          }
+        ]
+      }
+    },
+    {
+      "id": "long_press_duration_ms",
+      "type": "NUMBER",
+      "unit": "ms",
+      "default": "5000",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          },
+          {
+            "type": "gt",
+            "configId": "short_press_duration_ms"
+          }
+        ]
+      }
+    },
+    {
+      "id": "hold_duration_ms",
+      "type": "NUMBER",
+      "unit": "ms",
+      "default": "1000",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "last_change_time_ms",
+      "type": "NUMBER",
+      "unit": "ms",
+      "default": "0"
+    }
+  ]
+}
