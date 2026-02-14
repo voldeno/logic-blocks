@@ -2,6 +2,7 @@ name: "reset"
 
 config:
   default_value: 5.0
+  trigger_on_capture: true
 
 steps:
   # Set input value and capture it

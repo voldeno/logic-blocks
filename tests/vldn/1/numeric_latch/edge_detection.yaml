@@ -2,6 +2,7 @@ name: "edge detection"
 
 config:
   default_value: 0
+  trigger_on_capture: true
 
 steps:
   # Set input value
