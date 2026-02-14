@@ -1,0 +1,136 @@
+name: "trigger"
+
+config:
+  default_value: 0
+  trigger_on_capture: false
+
+steps:
+  # Set input value and capture it (should NOT go to output)
+  - action: "set_inputs"
+    comment: "Set input value to 42"
+    inputs:
+      value: 42
+
+  - action: "set_inputs"
+    comment: "Capture the value (trigger_on_capture is false)"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output unchanged (capture does not auto-send)"
+    expected_outputs:
+      value: 0
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  # Trigger sends captured value to output
+  - action: "set_inputs"
+    comment: "Rising edge on trigger"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output now shows captured value 42"
+    expected_outputs:
+      value: 42
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  # Change input, capture again, verify output unchanged until trigger
+  - action: "set_inputs"
+    comment: "Change input value to -7.5"
+    inputs:
+      value: -7.5
+
+  - action: "set_inputs"
+    comment: "Capture new value"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output still holds 42 (no auto-send)"
+    expected_outputs:
+      value: 42
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  # Trigger sends the new captured value
+  - action: "set_inputs"
+    comment: "Rising edge on trigger"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output now shows -7.5"
+    expected_outputs:
+      value: -7.5
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  # Trigger re-sends the same value (even if output already holds it)
+  - action: "set_inputs"
+    comment: "Rising edge on trigger again (same captured value)"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output still -7.5 (re-sent)"
+    expected_outputs:
+      value: -7.5
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  # Trigger without any new capture still sends last captured value
+  - action: "set_inputs"
+    comment: "Change input value to 999 (not captured)"
+    inputs:
+      value: 999
+
+  - action: "set_inputs"
+    comment: "Rising edge on trigger (no new capture)"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output still -7.5 (last captured value, not current input)"
+    expected_outputs:
+      value: -7.5
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  # Reset clears captured value, trigger after reset sends default
+  - action: "set_inputs"
+    comment: "Reset"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Output reset to 0"
+    expected_outputs:
+      value: 0
+
+  - action: "set_inputs"
+    inputs:
+      reset: false
+
+  - action: "set_inputs"
+    comment: "Trigger after reset (sends default captured value)"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output still 0 (captured value was reset to default)"
+    expected_outputs:
+      value: 0

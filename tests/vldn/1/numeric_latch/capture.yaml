@@ -2,6 +2,7 @@ name: "capture"
 
 config:
   default_value: 0
+  trigger_on_capture: true
 
 steps:
   # Initial state - output at default

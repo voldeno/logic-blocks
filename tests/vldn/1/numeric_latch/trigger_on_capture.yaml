@@ -1,0 +1,127 @@
+name: "trigger on capture config"
+
+config:
+  default_value: 0
+  trigger_on_capture: false
+
+steps:
+  # With trigger_on_capture = false: capture stores internally only
+  - action: "set_inputs"
+    comment: "Set input value to 10"
+    inputs:
+      value: 10
+
+  - action: "set_inputs"
+    comment: "Capture (trigger_on_capture is false)"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output unchanged (auto-send disabled)"
+    expected_outputs:
+      value: 0
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  # Trigger explicitly sends the captured value
+  - action: "set_inputs"
+    comment: "Trigger sends captured value"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output now 10"
+    expected_outputs:
+      value: 10
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  # Capture another value - still should not auto-send
+  - action: "set_inputs"
+    comment: "Change input to 20"
+    inputs:
+      value: 20
+
+  - action: "set_inputs"
+    comment: "Capture again"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output still 10 (auto-send disabled)"
+    expected_outputs:
+      value: 10
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "Trigger to send new value"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output now 20"
+    expected_outputs:
+      value: 20
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  # Multiple captures without trigger - only last capture is sent
+  - action: "set_inputs"
+    inputs:
+      value: 100
+
+  - action: "set_inputs"
+    inputs:
+      capture: true
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    inputs:
+      value: 200
+
+  - action: "set_inputs"
+    inputs:
+      capture: true
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    inputs:
+      value: 300
+
+  - action: "set_inputs"
+    inputs:
+      capture: true
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "assert_outputs"
+    comment: "Output still 20 (no trigger yet)"
+    expected_outputs:
+      value: 20
+
+  - action: "set_inputs"
+    comment: "Trigger sends last captured value (300)"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output now 300 (last captured value)"
+    expected_outputs:
+      value: 300
