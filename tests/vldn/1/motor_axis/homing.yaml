@@ -123,3 +123,32 @@ steps:
       homed: true
       moving: false
       position: 0
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Test homing when already at home position (home_switch already active)
+  - action: "set_inputs"
+    comment: "Home switch is already active before homing"
+    inputs:
+      home_switch: true
+
+  - action: "set_inputs"
+    comment: "Trigger homing while already at home"
+    inputs:
+      home: true
+
+  - action: "assert_outputs"
+    comment: "Homing completes immediately (switch already active)"
+    expected_outputs:
+      forward: false
+      reverse: false
+      homed: true
+      moving: false
+      position: 0
+      at_target: true
+
+  - action: "set_inputs"
+    inputs:
+      home: false

@@ -35,6 +35,21 @@ fn evaluate_target(target, position) {
     }
 }
 
+fn complete_homing() {
+    stop_motors()
+    output::set("position", 0)
+    output::set("homed", true)
+    state::set("is_homing", false)
+
+    // Evaluate current target and start moving if needed
+    target = input::get("target")
+    if (target != 0) {
+        evaluate_target(target, 0)
+    } else {
+        output::set("at_target", true)
+    }
+}
+
 // Handle "stop" input first (dominant input)
 if (channel == "stop") {
     prev_stop = state::get("prev_stop")
@@ -49,6 +64,13 @@ if (channel == "stop") {
     return
 }
 
+// Check home_switch on every execution during homing (level-triggered)
+// This ensures homing completes even if the switch was already active
+if (state::get("is_homing") and input::get("home_switch")) {
+    complete_homing()
+    return
+}
+
 // Handle "home" input
 if (channel == "home") {
     prev_home = state::get("prev_home")
@@ -59,38 +81,20 @@ if (channel == "home") {
         output::set("at_target", false)
         state::set("is_homing", true)
 
-        home_direction = config::get("home_direction") // 0=Forward, 1=Reverse
-        if (home_direction == 0) {
-            start_forward()
+        // Check if already at home position
+        if (input::get("home_switch")) {
+            complete_homing()
         } else {
-            start_reverse()
+            home_direction = config::get("home_direction") // 0=Forward, 1=Reverse
+            if (home_direction == 0) {
+                start_forward()
+            } else {
+                start_reverse()
+            }
         }
     }
 
     state::set("prev_home", value)
-    return
-}
-
-// Handle "home_switch" input
-if (channel == "home_switch") {
-    is_homing = state::get("is_homing")
-
-    if (is_homing and value) {
-        // Home switch activated during homing - homing complete
-        stop_motors()
-        output::set("position", 0)
-        output::set("homed", true)
-        state::set("is_homing", false)
-
-        // Evaluate current target and start moving if needed
-        target = input::get("target")
-        if (target != 0) {
-            evaluate_target(target, 0)
-        } else {
-            output::set("at_target", true)
-        }
-    }
-
     return
 }
 
