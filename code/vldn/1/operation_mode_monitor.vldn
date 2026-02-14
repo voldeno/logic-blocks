@@ -1,3 +1,0 @@
-mode = config::get("operation_mode")
-state = operation_mode::get_state(mode)
-output::set("state", state)

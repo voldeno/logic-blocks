@@ -1,7 +1,0 @@
-value = input::get("input")
-rounded = math::round(value)
-if (value < rounded) {
-    output::set("output", rounded - 1.0)
-} else {
-    output::set("output", rounded)
-}

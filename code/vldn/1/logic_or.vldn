@@ -1,6 +1,0 @@
-i1 = input::get("input_1")
-i2 = input::get("input_2")
-i3 = input::get("input_3")
-i4 = input::get("input_4")
-
-output::set("output", i1 or i2 or i3 or i4)

@@ -1,1 +1,0 @@
-output::set("state", input::value() == 1)

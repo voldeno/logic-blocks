@@ -1,5 +1,0 @@
-// NOTE: Input registers from Voldeno modules are sent as integers with 1000 multiplier
-scale = config::get("scale") * 0.001
-offset = config::get("offset")
-value = input::value()
-output::set("value", math::round((value * scale + offset) * 1000) / 1000)
