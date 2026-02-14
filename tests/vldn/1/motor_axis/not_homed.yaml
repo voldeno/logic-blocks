@@ -76,17 +76,31 @@ steps:
       home_switch: true
 
   - action: "assert_outputs"
-    comment: "Homing complete, now evaluates target=5, drives forward"
+    comment: "Homing complete, target reset - motor stopped at position 0"
     expected_outputs:
       homed: true
       position: 0
-      forward: true
+      forward: false
       reverse: false
-      moving: true
+      moving: false
+      at_target: true
 
   - action: "set_inputs"
     inputs:
       home_switch: false
+
+  # After homing, must re-send target to start movement
+  - action: "set_inputs"
+    comment: "Set target to 5 after homing"
+    inputs:
+      target: 5
+
+  - action: "assert_outputs"
+    comment: "Motor now drives forward to target"
+    expected_outputs:
+      forward: true
+      moving: true
+      at_target: false
 
   # Encoder pulses now count
   - action: "set_inputs"

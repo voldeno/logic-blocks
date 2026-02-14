@@ -39,15 +39,8 @@ fn complete_homing() {
     stop_motors()
     output::set("position", 0)
     output::set("homed", true)
+    output::set("at_target", true)
     state::set("is_homing", false)
-
-    // Evaluate current target and start moving if needed
-    target = input::get("target")
-    if (target != 0) {
-        evaluate_target(target, 0)
-    } else {
-        output::set("at_target", true)
-    }
 }
 
 // Handle "stop" input first (dominant input)
