@@ -1,0 +1,81 @@
+{
+  "description": "Blok logiczny reprezentujący sekwencję",
+  "inputs": [
+    {
+      "id": "forward",
+      "name": "Do przodu",
+      "description": ""
+    },
+    {
+      "id": "backward",
+      "name": "Do tyłu",
+      "description": ""
+    },
+    {
+      "id": "reset",
+      "name": "Resetuj",
+      "description": ""
+    }
+  ],
+  "outputs": [
+    {
+      "id": "off",
+      "name": "Wyłączony",
+      "description": ""
+    },
+    {
+      "id": "o1",
+      "name": "Wyjście #1",
+      "description": ""
+    },
+    {
+      "id": "o2",
+      "name": "Wyjście #2",
+      "description": ""
+    },
+    {
+      "id": "o3",
+      "name": "Wyjście #3",
+      "description": ""
+    },
+    {
+      "id": "o4",
+      "name": "Wyjście #4",
+      "description": ""
+    },
+    {
+      "id": "o5",
+      "name": "Wyjście #5",
+      "description": ""
+    },
+    {
+      "id": "o6",
+      "name": "Wyjście #6",
+      "description": ""
+    },
+    {
+      "id": "o7",
+      "name": "Wyjście #7",
+      "description": ""
+    },
+    {
+      "id": "o8",
+      "name": "Wyjście #8",
+      "description": ""
+    }
+  ],
+  "config": [
+    {
+      "id": "max_index",
+      "name": "Maksymalny indeks",
+      "description": ""
+    }
+  ],
+  "state": [
+    {
+      "id": "sequence_index",
+      "name": "Indeks sekwencji",
+      "description": ""
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Dostarcza stałą wartość logiczną skonfigurowaną przez użytkownika",
+  "outputs": [
+    {
+      "id": "state",
+      "name": "Stan",
+      "description": "Stała wartość logiczna"
+    }
+  ],
+  "config": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Stała wartość logiczna do wyprowadzenia"
+    }
+  ],
+  "state": []
+}

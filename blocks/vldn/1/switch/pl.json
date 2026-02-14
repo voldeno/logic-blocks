@@ -1,0 +1,69 @@
+{
+  "description": "Blok logiczny reprezentujący przełącznik ścienny",
+  "outputs": [
+    {
+      "id": "click",
+      "name": "Kliknięcie",
+      "description": "Aktywne przy kliknięciu"
+    },
+    {
+      "id": "short_press",
+      "name": "Krótkie naciśnięcie",
+      "description": "Aktywne przy krótkim naciśnięciu"
+    },
+    {
+      "id": "long_press",
+      "name": "Długie naciśnięcie",
+      "description": "Aktywne przy długim naciśnięciu"
+    },
+    {
+      "id": "hold",
+      "name": "Przytrzymanie",
+      "description": "Aktywne przy przytrzymaniu"
+    },
+    {
+      "id": "toggle",
+      "name": "Przełącznik",
+      "description": "Wyjście przełączające, aktywne po kliknięciu"
+    },
+    {
+      "id": "on",
+      "name": "Włączony",
+      "description": "Aktywne gdy przełącznik jest włączony"
+    },
+    {
+      "id": "off",
+      "name": "Wyłączony",
+      "description": "Aktywne gdy przełącznik jest wyłączony"
+    }
+  ],
+  "config": [
+    {
+      "id": "click_duration_ms",
+      "name": "Czas kliknięcia",
+      "description": "Czas trwania kliknięcia w ms"
+    },
+    {
+      "id": "short_press_duration_ms",
+      "name": "Czas krótkiego naciśnięcia",
+      "description": "Czas trwania krótkiego naciśnięcia w ms"
+    },
+    {
+      "id": "long_press_duration_ms",
+      "name": "Czas długiego naciśnięcia",
+      "description": "Czas trwania długiego naciśnięcia w ms"
+    },
+    {
+      "id": "hold_duration_ms",
+      "name": "Czas przytrzymania",
+      "description": "Czas trwania przytrzymania w ms"
+    }
+  ],
+  "state": [
+    {
+      "id": "last_change_time_ms",
+      "name": "Czas ostatniej zmiany",
+      "description": "Czas ostatniej zmiany stanu"
+    }
+  ]
+}

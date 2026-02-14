@@ -1,0 +1,18 @@
+{
+  "description": "Blok logiczny do monitorowania stanu trybu pracy",
+  "outputs": [
+    {
+      "id": "state",
+      "name": "Stan",
+      "description": "Stan trybu pracy"
+    }
+  ],
+  "config": [
+    {
+      "id": "operation_mode",
+      "name": "Tryb pracy",
+      "description": "Wybrany tryb pracy do monitorowania stanu"
+    }
+  ],
+  "state": []
+}

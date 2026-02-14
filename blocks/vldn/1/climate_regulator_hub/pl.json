@@ -1,0 +1,26 @@
+{
+  "description": "Centralny hub regulatora klimatu - agreguje wymagania ogrzewania lub chłodzenia ze strefowych regulatorów klimatu i decyduje, które powinny być włączone.",
+  "inputs": [
+    {"id": "temp_dev_zone_1", "name": "Odchylenie temp., strefa 1", "description": "Wejście dla wyjścia odchylenia temperatury strefowego regulatora klimatu - strefa 1"},
+    {"id": "temp_dev_zone_2", "name": "Odchylenie temp., strefa 2", "description": "Wejście dla wyjścia odchylenia temperatury strefowego regulatora klimatu - strefa 2"},
+    {"id": "temp_dev_zone_3", "name": "Odchylenie temp., strefa 3", "description": "Wejście dla wyjścia odchylenia temperatury strefowego regulatora klimatu - strefa 3"},
+    {"id": "temp_dev_zone_4", "name": "Odchylenie temp., strefa 4", "description": "Wejście dla wyjścia odchylenia temperatury strefowego regulatora klimatu - strefa 4"}
+  ],
+  "outputs": [
+    {"id": "heating_0", "name": "Ogrzewanie", "description": "Wyjście ogrzewania, centralne"},
+    {"id": "cooling_0", "name": "Chłodzenie", "description": "Wyjście chłodzenia, centralne"},
+    {"id": "heating_1", "name": "Ogrzewanie, strefa 1", "description": "Wyjście ogrzewania, strefa 1"},
+    {"id": "cooling_1", "name": "Chłodzenie, strefa 1", "description": "Wyjście chłodzenia, strefa 1"},
+    {"id": "heating_2", "name": "Ogrzewanie, strefa 2", "description": "Wyjście ogrzewania, strefa 2"},
+    {"id": "cooling_2", "name": "Chłodzenie, strefa 2", "description": "Wyjście chłodzenia, strefa 2"},
+    {"id": "heating_3", "name": "Ogrzewanie, strefa 3", "description": "Wyjście ogrzewania, strefa 3"},
+    {"id": "cooling_3", "name": "Chłodzenie, strefa 3", "description": "Wyjście chłodzenia, strefa 3"},
+    {"id": "heating_4", "name": "Ogrzewanie, strefa 4", "description": "Wyjście ogrzewania, strefa 4"},
+    {"id": "cooling_4", "name": "Chłodzenie, strefa 4", "description": "Wyjście chłodzenia, strefa 4"}
+  ],
+  "config": [
+    {"id": "act_threshold_single", "name": "Próg aktywacji - pojedynczy", "description": "Próg pojedynczego odchylenia temperatury poniżej którego blok pozostaje w stanie bezczynności"},
+    {"id": "act_threshold_sum", "name": "Próg aktywacji - suma", "description": "Próg sumy wszystkich wejść odchylenia temperatury poniżej którego blok pozostaje w stanie bezczynności"}
+  ],
+  "state": []
+}

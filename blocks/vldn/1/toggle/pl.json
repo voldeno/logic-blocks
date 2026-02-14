@@ -1,0 +1,55 @@
+{
+  "description": "Konwertuje monostabilny impuls wejściowy na bistabilne wyjście przełączające. Każde zbocze narastające na wejściu przełącza stan wyjścia.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Przełącz",
+      "description": "Sygnał wejściowy impulsu. Przy każdym zboczu narastającym wyjście zmienia swój stan."
+    },
+    {
+      "id": "on",
+      "name": "Włącz",
+      "description": "Włącza wyjście (O). Reaguje tylko na zbocze narastające."
+    },
+    {
+      "id": "off",
+      "name": "Wyłącz",
+      "description": "Impuls: Resetuje wyjście do stanu wyłączonego. Przy ciągłym stanie wysokim: Blok jest zablokowany. Wejście dominujące."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Bistabilne wyjście, które przełącza swój stan przy każdym impulsie wejściowym."
+    },
+    {
+      "id": "on",
+      "name": "Włączony",
+      "description": "Impuls gdy wyjście jest włączane. Stała szerokość impulsu 100ms."
+    },
+    {
+      "id": "off",
+      "name": "Wyłączony",
+      "description": "Impuls gdy wyjście jest wyłączane. Stała szerokość impulsu 100ms."
+    }
+  ],
+  "config": [],
+  "state": [
+    {
+      "id": "last_input_state",
+      "name": "Ostatni stan wejścia",
+      "description": "Przechowuje poprzedni stan wejścia przełączającego"
+    },
+    {
+      "id": "last_on_state",
+      "name": "Ostatni stan włączenia",
+      "description": "Przechowuje poprzedni stan wejścia włączenia"
+    },
+    {
+      "id": "last_off_state",
+      "name": "Ostatni stan wyłączenia",
+      "description": "Przechowuje poprzedni stan wejścia wyłączenia"
+    }
+  ]
+}

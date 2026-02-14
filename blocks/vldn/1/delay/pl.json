@@ -1,0 +1,36 @@
+{
+  "description": "Opóźnia zmiany stanu wyjścia w oparciu o czasy opóźnienia włączenia i wyłączenia",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Wejście",
+      "description": "Sygnał wejściowy wyzwalający opóźnione wyjście."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Opóźniony sygnał wyjściowy."
+    }
+  ],
+  "config": [
+    {
+      "id": "don",
+      "name": "Opóźnienie włączenia",
+      "description": "Czas opóźnienia przed włączeniem wyjścia"
+    },
+    {
+      "id": "doff",
+      "name": "Opóźnienie wyłączenia",
+      "description": "Czas opóźnienia przed wyłączeniem wyjścia"
+    }
+  ],
+  "state": [
+    {
+      "id": "last_input_state",
+      "name": "Ostatni stan wejścia",
+      "description": "Przechowuje poprzedni stan wejścia"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "description": "Ocenia wartość numeryczną względem skonfigurowanego operatora porównania, zwracając wynik logiczny.",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Wartość numeryczna do oceny."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Wyjście logiczne, prawdziwe gdy wartość spełnia porównanie."
+    }
+  ],
+  "config": [
+    {
+      "id": "operator",
+      "name": "Operator",
+      "description": "Operator porównania."
+    },
+    {
+      "id": "operand",
+      "name": "Operand",
+      "description": "Wartość referencyjna do porównania."
+    },
+    {
+      "id": "operand_2",
+      "name": "Operand 2",
+      "description": "Górna granica zakresu dla operatora 'Między'."
+    }
+  ],
+  "state": []
+}

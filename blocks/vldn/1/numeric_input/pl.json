@@ -1,0 +1,23 @@
+{
+  "description": "Wejście numeryczne modułu Voldeno",
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Wartość numeryczna"
+    }
+  ],
+  "config": [
+    {
+      "id": "scale",
+      "name": "Skala",
+      "description": "Skala"
+    },
+    {
+      "id": "offset",
+      "name": "Przesunięcie",
+      "description": "Przesunięcie"
+    }
+  ],
+  "state": []
+}

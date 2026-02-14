@@ -1,0 +1,40 @@
+{
+  "description": "Steruje urządzeniami zacieniającymi takimi jak żaluzje, zasłony i markizy",
+  "inputs": [
+    {"id": "toggle", "name": "Przełącz", "description": "Przełącza między stanami otwierania, zatrzymania i zamykania za pomocą jednego przycisku"},
+    {"id": "part_open", "name": "Częściowe otwarcie", "description": "Aktywuje otwieranie gdy przycisk jest wciśnięty i przytrzymany"},
+    {"id": "part_close", "name": "Częściowe zamknięcie", "description": "Aktywuje zamykanie gdy przycisk jest wciśnięty i przytrzymany"},
+    {"id": "full_open", "name": "Pełne otwarcie", "description": "W pełni otwiera urządzenie zacieniające; zatrzymuje ruch jeśli już w ruchu"},
+    {"id": "full_close", "name": "Pełne zamknięcie", "description": "W pełni zamyka urządzenie zacieniające; zatrzymuje ruch jeśli już w ruchu"},
+    {"id": "slightly_open", "name": "Lekkie otwarcie", "description": "Żaluzje weneckie zamykają się całkowicie i przesuwają lamele do pozycji poziomej. Rolety, zasłony i markizy przesuwają się do pozycji lekkiego otwarcia."},
+    {"id": "wind_alarm", "name": "Alarm wiatrowy", "description": "Przesuwa zacienianie do bezpiecznej pozycji podczas silnego wiatru i blokuje sterowanie"},
+    {"id": "dwc", "name": "Kontakt drzwi/okna", "description": "Automatycznie otwiera urządzenie zacieniające gdy wykryto otwarte drzwi lub okno"},
+    {"id": "off", "name": "Wyłącz", "description": "Zatrzymuje ruch urządzenia zacieniającego gdy aktywne i blokuje inne operacje"},
+    {"id": "position", "name": "Pozycja", "description": "Przesuwa urządzenie zacieniające do określonej pozycji jako procent (0=zamknięte, 100=otwarte)"},
+    {"id": "slats", "name": "Lamele", "description": "Przesuwa lamele żaluzji weneckich do określonego kąta jako procent (0=pionowo, 50=poziomo, 100=zamknięte)"}
+  ],
+  "outputs": [
+    {"id": "open", "name": "Otwieranie", "description": "Aktywuje się gdy urządzenie zacieniające powinno się otwierać"},
+    {"id": "close", "name": "Zamykanie", "description": "Aktywuje się gdy urządzenie zacieniające powinno się zamykać"},
+    {"id": "position", "name": "Pozycja", "description": "Reprezentuje bieżącą pozycję urządzenia zacieniającego jako procent (0=zamknięte, 100=otwarte)"},
+    {"id": "slats", "name": "Pozycja lameli", "description": "Reprezentuje bieżący kąt lameli jako procent (0=pionowo, 50=poziomo, 100=zamknięte)"}
+  ],
+  "config": [
+    {"id": "shading_type", "name": "Typ zacieniania", "description": "Określa typ urządzenia: Żaluzje weneckie, Rolety, Zasłony (obie strony), Zasłony (lewa), Zasłony (prawa), Markiza"},
+    {"id": "opening_duration", "name": "Czas otwierania", "description": "Czas potrzebny do pełnego otwarcia urządzenia, w sekundach"},
+    {"id": "closing_duration", "name": "Czas zamykania", "description": "Czas potrzebny do pełnego zamknięcia urządzenia, w sekundach"},
+    {"id": "return_duration", "name": "Czas powrotu", "description": "Czas powrotu do pozycji lekkiego otwarcia z pozycji w pełni otwartej"},
+    {"id": "wind_alarm_position", "name": "Pozycja alarmu wiatrowego", "description": "Pozycja urządzenia podczas aktywacji alarmu wiatrowego, jako procent (0-100)"},
+    {"id": "motor_lock_duration", "name": "Czas blokady silnika", "description": "Czas wymagany do zwolnienia blokady silnika między zmianami kierunku, w sekundach"}
+  ],
+  "state": [
+    {"id": "position", "name": "Pozycja", "description": "Surowa wartość pozycji wyjściowej jako procent (0-100)"},
+    {"id": "desired_position", "name": "Żądana pozycja", "description": "Żądana pozycja do przekazywania między wywołaniami"},
+    {"id": "slats", "name": "Pozycja lameli", "description": "Surowa wartość pozycji lameli jako procent (0-100)"},
+    {"id": "desired_slats", "name": "Żądana pozycja lameli", "description": "Żądana pozycja lameli do przekazywania między wywołaniami"},
+    {"id": "steps_left", "name": "Pozostałe kroki", "description": "Liczba kroków pozostałych do zakończenia bieżącego ruchu"},
+    {"id": "steps_left_slats", "name": "Pozostałe kroki dla lameli", "description": "Liczba kroków pozostałych do zakończenia bieżącego ruchu dla lameli"},
+    {"id": "was_opening", "name": "Był otwierany", "description": "Wskazuje czy poprzedni ruch był w kierunku otwierania"},
+    {"id": "last_movement_ts", "name": "Znacznik czasu ostatniego ruchu", "description": "Znacznik czasu ostatniego ruchu używany do pauzy blokady silnika"}
+  ]
+}

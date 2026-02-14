@@ -1,0 +1,49 @@
+{
+  "description": "Monitor drzwi i okien",
+  "inputs": [
+    {
+      "id": "open_contact",
+      "name": "Kontakt otwarcia",
+      "description": "Kontakt otwarcia drzwi/okna"
+    },
+    {
+      "id": "tilted_contact",
+      "name": "Kontakt uchylenia",
+      "description": "Kontakt uchylenia drzwi/okna"
+    },
+    {
+      "id": "locked_contact",
+      "name": "Kontakt zamknięcia",
+      "description": "Kontakt zamknięcia drzwi/okna"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "open",
+      "name": "Otwarte",
+      "description": "Aktywne gdy drzwi lub okno jest otwarte"
+    },
+    {
+      "id": "tilted",
+      "name": "Uchylone",
+      "description": "Aktywne gdy drzwi lub okno jest uchylone"
+    },
+    {
+      "id": "closed",
+      "name": "Zamknięte",
+      "description": "Aktywne gdy drzwi lub okno nie jest ani otwarte ani uchylone"
+    },
+    {
+      "id": "locked",
+      "name": "Zablokowane",
+      "description": "Aktywne gdy drzwi lub okno jest zablokowane"
+    },
+    {
+      "id": "secured",
+      "name": "Zabezpieczone",
+      "description": "Aktywne gdy drzwi lub okno jest zamknięte i zablokowane"
+    }
+  ],
+  "config": [],
+  "state": []
+}
