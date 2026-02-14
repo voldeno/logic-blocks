@@ -1,0 +1,126 @@
+name: "not homed"
+
+config:
+  home_direction: 1 # Reverse
+  position_tolerance: 0
+
+steps:
+  # Initial state - not homed
+  - action: "assert_outputs"
+    comment: "Not homed initially"
+    expected_outputs:
+      homed: false
+      moving: false
+
+  # Set target before homing - should be ignored
+  - action: "set_inputs"
+    comment: "Set target to 10 before homing"
+    inputs:
+      target: 10
+
+  - action: "assert_outputs"
+    comment: "Motor does not move (not homed)"
+    expected_outputs:
+      forward: false
+      reverse: false
+      moving: false
+      homed: false
+
+  # Change target again - still ignored
+  - action: "set_inputs"
+    comment: "Set target to 50"
+    inputs:
+      target: 50
+
+  - action: "assert_outputs"
+    comment: "Motor still does not move"
+    expected_outputs:
+      forward: false
+      reverse: false
+      moving: false
+
+  # Now home the axis (reverse direction configured)
+  - action: "set_inputs"
+    comment: "Trigger homing"
+    inputs:
+      home: true
+
+  - action: "assert_outputs"
+    comment: "Motor drives reverse (home_direction=Reverse)"
+    expected_outputs:
+      forward: false
+      reverse: true
+      moving: true
+      homed: false
+
+  - action: "set_inputs"
+    inputs:
+      home: false
+
+  # Target changes during homing should be ignored
+  - action: "set_inputs"
+    comment: "Change target during homing"
+    inputs:
+      target: 5
+
+  - action: "assert_outputs"
+    comment: "Motor still homing in reverse, target change ignored"
+    expected_outputs:
+      reverse: true
+      moving: true
+
+  # Home switch activates
+  - action: "set_inputs"
+    comment: "Home switch activates"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homing complete, now evaluates target=5, drives forward"
+    expected_outputs:
+      homed: true
+      position: 0
+      forward: true
+      reverse: false
+      moving: true
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Encoder pulses now count
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position at 5 = target, motor stopped"
+    expected_outputs:
+      position: 5
+      at_target: true
+      forward: false
+      moving: false

@@ -1,0 +1,165 @@
+name: "stop"
+
+config:
+  home_direction: 0 # Forward
+  position_tolerance: 0
+
+steps:
+  # Home first
+  - action: "set_inputs"
+    inputs:
+      home: true
+  - action: "set_inputs"
+    inputs:
+      home: false
+  - action: "set_inputs"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homed"
+    expected_outputs:
+      homed: true
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Start moving to target
+  - action: "set_inputs"
+    comment: "Set target to 10"
+    inputs:
+      target: 10
+
+  - action: "assert_outputs"
+    comment: "Moving forward"
+    expected_outputs:
+      forward: true
+      moving: true
+
+  # Count a few pulses
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position at 3"
+    expected_outputs:
+      position: 3
+      moving: true
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  # Stop during movement
+  - action: "set_inputs"
+    comment: "Rising edge on stop"
+    inputs:
+      stop: true
+
+  - action: "assert_outputs"
+    comment: "Motor stopped, position and homed preserved"
+    expected_outputs:
+      forward: false
+      reverse: false
+      moving: false
+      position: 3
+      homed: true
+
+  - action: "set_inputs"
+    inputs:
+      stop: false
+
+  # Setting a new target should resume movement
+  - action: "set_inputs"
+    comment: "Set new target to 5"
+    inputs:
+      target: 5
+
+  - action: "assert_outputs"
+    comment: "Motor starts driving forward again"
+    expected_outputs:
+      forward: true
+      moving: true
+
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position at 5 = target"
+    expected_outputs:
+      position: 5
+      at_target: true
+      moving: false
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  # Test stop during homing
+  - action: "set_inputs"
+    comment: "Start homing"
+    inputs:
+      home: true
+
+  - action: "assert_outputs"
+    comment: "Homing in progress"
+    expected_outputs:
+      forward: true
+      moving: true
+      homed: false
+
+  - action: "set_inputs"
+    inputs:
+      home: false
+
+  # Stop during homing
+  - action: "set_inputs"
+    comment: "Stop during homing"
+    inputs:
+      stop: true
+
+  - action: "assert_outputs"
+    comment: "Motor stopped, homing cancelled, homed remains false"
+    expected_outputs:
+      forward: false
+      reverse: false
+      moving: false
+      homed: false
+
+  - action: "set_inputs"
+    inputs:
+      stop: false
+
+  # After stop during homing, target changes should be ignored (not homed)
+  - action: "set_inputs"
+    comment: "Set target while not homed"
+    inputs:
+      target: 10
+
+  - action: "assert_outputs"
+    comment: "Motor does not move (not homed)"
+    expected_outputs:
+      forward: false
+      reverse: false
+      moving: false

@@ -1,0 +1,146 @@
+channel = input::channel()
+value = input::value()
+
+fn stop_motors() {
+    output::set("forward", false)
+    output::set("reverse", false)
+    output::set("moving", false)
+}
+
+fn start_forward() {
+    output::set("forward", true)
+    output::set("reverse", false)
+    output::set("moving", true)
+}
+
+fn start_reverse() {
+    output::set("forward", false)
+    output::set("reverse", true)
+    output::set("moving", true)
+}
+
+fn evaluate_target(target, position) {
+    tolerance = config::get("position_tolerance")
+    diff = target - position
+
+    if (diff > tolerance) {
+        start_forward()
+        output::set("at_target", false)
+    } else if (diff < (0 - tolerance)) {
+        start_reverse()
+        output::set("at_target", false)
+    } else {
+        stop_motors()
+        output::set("at_target", true)
+    }
+}
+
+// Handle "stop" input first (dominant input)
+if (channel == "stop") {
+    prev_stop = state::get("prev_stop")
+
+    if (value and !prev_stop) {
+        // Rising edge on stop - stop all movement, cancel homing
+        stop_motors()
+        state::set("is_homing", false)
+    }
+
+    state::set("prev_stop", value)
+    return
+}
+
+// Handle "home" input
+if (channel == "home") {
+    prev_home = state::get("prev_home")
+
+    if (value and !prev_home) {
+        // Rising edge on home - start homing sequence
+        output::set("homed", false)
+        output::set("at_target", false)
+        state::set("is_homing", true)
+
+        home_direction = config::get("home_direction") // 0=Forward, 1=Reverse
+        if (home_direction == 0) {
+            start_forward()
+        } else {
+            start_reverse()
+        }
+    }
+
+    state::set("prev_home", value)
+    return
+}
+
+// Handle "home_switch" input
+if (channel == "home_switch") {
+    is_homing = state::get("is_homing")
+
+    if (is_homing and value) {
+        // Home switch activated during homing - homing complete
+        stop_motors()
+        output::set("position", 0)
+        output::set("homed", true)
+        state::set("is_homing", false)
+
+        // Evaluate current target and start moving if needed
+        target = input::get("target")
+        if (target != 0) {
+            evaluate_target(target, 0)
+        } else {
+            output::set("at_target", true)
+        }
+    }
+
+    return
+}
+
+// Handle "encoder" input
+if (channel == "encoder") {
+    prev_encoder = state::get("prev_encoder")
+
+    if (value and !prev_encoder) {
+        // Rising edge on encoder - count if motor is driving and not homing
+        is_homing = state::get("is_homing")
+        is_forward = output::get("forward")
+        is_reverse = output::get("reverse")
+
+        if (!is_homing and (is_forward or is_reverse)) {
+            position = output::get("position")
+
+            if (is_forward) {
+                position = position + 1
+            } else {
+                position = position - 1
+            }
+
+            output::set("position", position)
+
+            // Check if at target
+            target = input::get("target")
+            tolerance = config::get("position_tolerance")
+            diff = target - position
+
+            if (diff >= (0 - tolerance) and diff <= tolerance) {
+                stop_motors()
+                output::set("at_target", true)
+            }
+        }
+    }
+
+    state::set("prev_encoder", value)
+    return
+}
+
+// Handle "target" input
+if (channel == "target") {
+    homed = output::get("homed")
+    is_homing = state::get("is_homing")
+
+    if (homed and !is_homing) {
+        // Only respond to target changes when homed and not homing
+        position = output::get("position")
+        evaluate_target(value, position)
+    }
+
+    return
+}

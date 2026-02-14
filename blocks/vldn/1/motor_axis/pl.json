@@ -1,0 +1,96 @@
+{
+  "description": "Jednosiowy sterownik silnika ze sprzężeniem zwrotnym z enkodera i obsługą bazowania. Napędza silnik do pozycji docelowej, zliczając impulsy enkodera.",
+  "inputs": [
+    {
+      "id": "target",
+      "name": "Cel",
+      "description": "Pozycja docelowa w impulsach enkodera. Ruch rozpoczyna się automatycznie po bazowaniu."
+    },
+    {
+      "id": "encoder",
+      "name": "Enkoder",
+      "description": "Surowe wejście impulsów enkodera. Każde zbocze narastające liczy jeden krok w bieżącym kierunku silnika."
+    },
+    {
+      "id": "home",
+      "name": "Bazowanie",
+      "description": "Wejście impulsowe. Zbocze narastające rozpoczyna sekwencję bazowania, poruszając silnik w skonfigurowanym kierunku aż do aktywacji czujnika bazowego."
+    },
+    {
+      "id": "home_switch",
+      "name": "Czujnik bazowy",
+      "description": "Aktywny (true), gdy oś znajduje się w pozycji bazowej/referencyjnej. Używany podczas bazowania do wykrywania osiągnięcia punktu referencyjnego."
+    },
+    {
+      "id": "stop",
+      "name": "Stop",
+      "description": "Wejście impulsowe. Zbocze narastające zatrzymuje wszelki ruch i anuluje bazowanie. Wejście dominujące. Pozycja i status bazowania są zachowywane."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "forward",
+      "name": "Do przodu",
+      "description": "Aktywne, gdy silnik powinien napędzać w kierunku dodatnim."
+    },
+    {
+      "id": "reverse",
+      "name": "Do tyłu",
+      "description": "Aktywne, gdy silnik powinien napędzać w kierunku ujemnym."
+    },
+    {
+      "id": "position",
+      "name": "Pozycja",
+      "description": "Bieżąca pozycja w impulsach enkodera."
+    },
+    {
+      "id": "at_target",
+      "name": "Na celu",
+      "description": "Prawda, gdy bieżąca pozycja mieści się w skonfigurowanej tolerancji od pozycji docelowej."
+    },
+    {
+      "id": "homed",
+      "name": "Zbazowany",
+      "description": "Prawda po pomyślnym zakończeniu sekwencji bazowania."
+    },
+    {
+      "id": "moving",
+      "name": "W ruchu",
+      "description": "Prawda, gdy silnik aktywnie napędza w dowolnym kierunku."
+    }
+  ],
+  "config": [
+    {
+      "id": "home_direction",
+      "name": "Kierunek bazowania",
+      "description": "Kierunek silnika podczas sekwencji bazowania."
+    },
+    {
+      "id": "position_tolerance",
+      "name": "Tolerancja pozycji",
+      "description": "Maksymalna dopuszczalna odległość od pozycji docelowej, aby uznać ją za osiągniętą. 0 oznacza dokładne dopasowanie."
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_encoder",
+      "name": "Poprzedni stan enkodera",
+      "description": "Przechowuje poprzedni stan wejścia enkodera w celu wykrywania zboczy narastających."
+    },
+    {
+      "id": "prev_home",
+      "name": "Poprzedni stan bazowania",
+      "description": "Przechowuje poprzedni stan wejścia bazowania w celu wykrywania zboczy narastających."
+    },
+    {
+      "id": "prev_stop",
+      "name": "Poprzedni stan stopu",
+      "description": "Przechowuje poprzedni stan wejścia stopu w celu wykrywania zboczy narastających."
+    },
+    {
+      "id": "is_homing",
+      "name": "Bazowanie w toku",
+      "description": "Prawda, gdy sekwencja bazowania jest w trakcie realizacji."
+    }
+  ]
+}
