@@ -15,5 +15,11 @@
     }
   ],
   "config": [],
-  "state": []
+  "state": [
+    {
+      "id": "token",
+      "name": "Token",
+      "description": "Token"
+    }
+  ]
 }

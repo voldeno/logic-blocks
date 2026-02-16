@@ -14,5 +14,11 @@
       "description": "Chosen operation mode to control the state of"
     }
   ],
-  "state": []
+  "state": [
+    {
+      "id": "token",
+      "name": "Token",
+      "description": "Token"
+    }
+  ]
 }
