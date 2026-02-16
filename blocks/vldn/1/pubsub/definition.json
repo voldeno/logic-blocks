@@ -18,5 +18,11 @@
     }
   ],
   "config": [],
-  "state": []
+  "state": [
+    {
+      "id": "token",
+      "type": "STRING",
+      "default": ""
+    }
+  ]
 }
