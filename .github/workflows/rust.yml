@@ -13,6 +13,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Check scripts
-      run: validator --funcs functions.txt --resources .
+      run: validator --resources blocks
     - name: Run tests
-      run: logic_tests_runner --resources .
+      run: logic_tests_runner --resources blocks 
