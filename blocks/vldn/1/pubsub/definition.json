@@ -5,8 +5,8 @@
     {
       "id": "input",
       "abbrev": "I",
-      "type": "NUMBER",
-      "default": "0"
+      "type": "STRING",
+      "default": ""
     }
   ],
   "outputs": [

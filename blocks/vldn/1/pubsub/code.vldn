@@ -1,7 +1,8 @@
 state::set("token", "token_value")
 token = state::get("token")
+msg = input::get("input")
 std::print(str::fmt("token: {}", token))
 std::print(token)
-std::print(str::fmt("token (static): {}", "xxx"))
+std::print(msg)
 
-output::set("output", input::get("input"))
+output::set("output", msg)
