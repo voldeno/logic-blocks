@@ -1,0 +1,19 @@
+{
+  "description": "Blok logiczny NOT - neguje wejściową wartość logiczną",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Wejście",
+      "description": "Wejście"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Wyjście"
+    }
+  ],
+  "config": [],
+  "state": []
+}

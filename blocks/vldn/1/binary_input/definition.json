@@ -1,0 +1,30 @@
+{
+  "name": "Binary input",
+  "group": "input",
+  "ioType": "register",
+  "ioRegisterFilters": [
+    {
+      "moduleId": 3,
+      "registerIds": [
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "id": "state",
+      "abbrev": "S",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [],
+  "state": []
+}

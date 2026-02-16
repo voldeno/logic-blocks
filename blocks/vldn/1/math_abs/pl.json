@@ -1,0 +1,19 @@
+{
+  "description": "Zwraca wartość bezwzględną wejścia",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Wejście",
+      "description": "Wejście"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Wyjście"
+    }
+  ],
+  "config": [],
+  "state": []
+}

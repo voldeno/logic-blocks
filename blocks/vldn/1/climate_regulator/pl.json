@@ -1,0 +1,35 @@
+{
+  "description": "Strefowy regulator klimatu - może być używany jako termostat dla ogrzewania lub chłodzenia określonej strefy. Wyjście powinno być podłączone do centralnego regulatora klimatu.",
+  "inputs": [
+    {"id": "air_temp", "name": "Temperatura powietrza", "description": "Bieżąca temperatura powietrza"},
+    {"id": "outside_temp", "name": "Temperatura zewnętrzna", "description": "Bieżąca temperatura zewnętrzna"},
+    {"id": "presence", "name": "Obecność", "description": "Wydłuża okres temperatury komfortowej gdy wysoki. Przełącza z trybu eko na komfort."},
+    {"id": "dwc", "name": "Kontakt drzwi/okna", "description": "Jeśli aktywny dłużej niż skonfigurowany czas: wyłącza ogrzewanie/chłodzenie przy otwartych drzwiach lub oknie"},
+    {"id": "comfort", "name": "Tryb komfortowy", "description": "Aktywuje tryb temperatury komfortowej do następnej zmiany okresu harmonogramu"},
+    {"id": "protection", "name": "Tryb ochronny", "description": "Aktywuje tryb temperatury ochronnej aby chronić budynek przed mrozem lub przegrzaniem"}
+  ],
+  "outputs": [
+    {"id": "target_temp", "name": "Temperatura docelowa", "description": "Wyjściowa temperatura docelowa"},
+    {"id": "temp_deviation", "name": "Odchylenie temperatury", "description": "Wyjście wyrażające zapotrzebowanie na ogrzewanie lub chłodzenie jako różnicę temperatur. Dodatnie dla ogrzewania. Ujemne dla chłodzenia."}
+  ],
+  "config": [
+    {"id": "thermal_mode", "name": "Tryb termiczny", "description": "Określa tryb termiczny: Ogrzewanie i chłodzenie, Tylko ogrzewanie, Tylko chłodzenie"},
+    {"id": "operation_mode", "name": "Tryb pracy", "description": "Określa tryb pracy: Harmonogram, Ręczny"},
+    {"id": "schedule", "name": "Harmonogram", "description": "Harmonogram do użycia dla trybu pracy opartego na harmonogramie"},
+    {"id": "comfort_heating_temp", "name": "Temperatura ogrzewania komfortowego", "description": "Temperatura ogrzewania komfortowego"},
+    {"id": "comfort_cooling_temp", "name": "Temperatura chłodzenia komfortowego", "description": "Temperatura chłodzenia komfortowego"},
+    {"id": "eco_heating_temp_diff", "name": "Różnica temp. ogrzewania eko", "description": "Różnica temperatury ogrzewania eko poniżej temperatury komfortowej"},
+    {"id": "eco_cooling_temp_diff", "name": "Różnica temp. chłodzenia eko", "description": "Różnica temperatury chłodzenia eko powyżej temperatury komfortowej"},
+    {"id": "frost_protection_temp", "name": "Temperatura ochrony przed mrozem", "description": "Temperatura ochrony przed mrozem. Poniżej tej wartości aktywowane jest ogrzewanie."},
+    {"id": "overheat_protection_temp", "name": "Temperatura ochrony przed przegrzaniem", "description": "Temperatura ochrony przed przegrzaniem. Powyżej tej wartości aktywowane jest chłodzenie."},
+    {"id": "dwc_delay", "name": "Opóźnienie kontaktu drzwi/okna", "description": "Opóźnienie kontaktu drzwi/okna w sekundach"},
+    {"id": "presence_extension_duration", "name": "Czas przedłużenia obecności", "description": "Czas przedłużenia temperatury komfortowej (w sekundach) przy wykryciu obecności"}
+  ],
+  "state": [
+    {"id": "dwc_state_change_ts", "name": "Znacznik czasu ostatniej zmiany stanu kontaktu", "description": ""},
+    {"id": "dwc_state", "name": "Bieżący stan kontaktu drzwi/okna", "description": "Używany aby zapobiec przedłużeniu czasu kontaktu przy ponownym wysłaniu tego samego wejścia"},
+    {"id": "dwc_lock", "name": "Stan blokady kontaktu drzwi/okna", "description": "Stan blokady kontaktu drzwi/okna"},
+    {"id": "last_activation_ts", "name": "Ostatni znacznik czasu wykonania", "description": "Ostatni znacznik czasu wykonania w sekundach od epoki"},
+    {"id": "next_activation_ts", "name": "Następny znacznik czasu wykonania", "description": "Następny znacznik czasu wykonania w sekundach od epoki"}
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Math::Ceil",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "input",
+      "abbrev": "I",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [],
+  "state": []
+}

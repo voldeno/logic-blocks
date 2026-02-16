@@ -1,0 +1,41 @@
+{
+  "name": "Schedule",
+  "group": "input",
+  "ioType": "scheduler",
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "schedule",
+      "type": "SCHEDULE",
+      "subtype": "ON_OFF",
+      "default": "0"
+    }
+  ],
+  "state": [
+    {
+      "id": "last_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    },
+    {
+      "id": "next_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    }
+  ]
+}

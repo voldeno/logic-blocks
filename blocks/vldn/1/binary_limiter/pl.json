@@ -1,0 +1,40 @@
+{
+  "description": "Blok przyjmujący wejście binarne i numeryczne, który zwraca prawdę tylko wtedy, gdy wejście binarne jest prawdziwe, a wartość numeryczna nie przekracza skonfigurowanego limitu.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Wejście",
+      "description": "Wejście logiczne określające, czy system aktywnie próbuje wykonać akcję (np. sygnał włączenia lub stan operacyjny)."
+    },
+    {
+      "id": "value",
+      "name": "Porównywana wartość",
+      "description": "Wejście numeryczne dostarczające zmierzoną lub obliczoną wartość do porównania ze skonfigurowanym limitem."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Wyjście logiczne, które jest prawdziwe tylko wtedy, gdy wejście binarne jest prawdziwe, a wartość numeryczna nie przekracza skonfigurowanego limitu. W przeciwnym razie zwraca fałsz."
+    },
+    {
+      "id": "limit_exceeded",
+      "name": "Limit przekroczony",
+      "description": "Wyjście logiczne, które jest prawdziwe tylko wtedy, gdy wartość przekracza ustawiony limit (z uwzględnieniem histerezy)."
+    }
+  ],
+  "config": [
+    {
+      "id": "limit",
+      "name": "Limit wartości",
+      "description": "Wartość, z którą porównywane jest wejście numeryczne. Jest to wstępnie zdefiniowane ustawienie określające maksymalną dopuszczalną wartość. Jeśli wejście numeryczne przekroczy ten limit, wyjście zostanie ustawione na fałsz."
+    },
+    {
+      "id": "hysteresis",
+      "name": "Zakres histerezy",
+      "description": "Margines wokół limitu wartości, który zapobiega wyzwalaniu zmian, dopóki wartość wejściowa nie wyjdzie poza zdefiniowany zakres."
+    }
+  ],
+  "state": []
+}

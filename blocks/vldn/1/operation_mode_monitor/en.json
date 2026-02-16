@@ -1,0 +1,18 @@
+{
+  "description": "Logic block to monitor state of the operation mode",
+  "outputs": [
+    {
+      "id": "state",
+      "name": "State",
+      "description": "State of the operation mode"
+    }
+  ],
+  "config": [
+    {
+      "id": "operation_mode",
+      "name": "Operation mode",
+      "description": "Chosen operation mode to control the state of"
+    }
+  ],
+  "state": []
+}

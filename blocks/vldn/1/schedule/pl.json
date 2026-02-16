@@ -1,0 +1,34 @@
+{
+  "description": "Przełącznik czasowy z dowolnie regulowanym harmonogramem.",
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Wyjście cyfrowe: aktywne gdy wpis harmonogramu jest włączony"
+    },
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Wyjście analogowe: wartość z bieżącego wpisu harmonogramu"
+    }
+  ],
+  "config": [
+    {
+      "id": "schedule",
+      "name": "Harmonogram",
+      "description": "Harmonogram do użycia dla aktywacji opartej na czasie"
+    }
+  ],
+  "state": [
+    {
+      "id": "last_activation_ts",
+      "name": "Ostatni znacznik czasu wykonania",
+      "description": "Ostatni znacznik czasu wykonania"
+    },
+    {
+      "id": "next_activation_ts",
+      "name": "Następny znacznik czasu wykonania",
+      "description": "Następny znacznik czasu wykonania"
+    }
+  ]
+}

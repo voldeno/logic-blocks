@@ -1,0 +1,12 @@
+{
+  "description": "Relay output of Voldeno module",
+  "inputs": [
+    {
+      "id": "state",
+      "name": "State",
+      "description": "Desired state of the relay output"
+    }
+  ],
+  "config": [],
+  "state": []
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Mode controller",
+  "group": "output",
+  "ioType": "operation_mode",
+  "inputs": [
+    {
+      "id": "state",
+      "abbrev": "S",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "operation_mode",
+      "type": "OPERATION_MODE",
+      "default": "0"
+    }
+  ],
+  "state": []
+}

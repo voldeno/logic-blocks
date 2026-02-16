@@ -1,0 +1,76 @@
+{
+  "description": "Zlicza impulsy zboczy narastających w górę i/lub w dół w konfigurowalnych limitach.",
+  "inputs": [
+    {
+      "id": "increment",
+      "name": "Inkrementuj",
+      "description": "Wejście impulsowe. Każde zbocze narastające zwiększa licznik o 1."
+    },
+    {
+      "id": "decrement",
+      "name": "Dekrementuj",
+      "description": "Wejście impulsowe. Każde zbocze narastające zmniejsza licznik o 1."
+    },
+    {
+      "id": "reset",
+      "name": "Resetuj",
+      "description": "Wejście impulsowe. Zbocze narastające resetuje licznik."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Bieżąca wartość licznika."
+    },
+    {
+      "id": "at_upper_limit",
+      "name": "Przy górnym limicie",
+      "description": "Prawda gdy licznik równa się górnemu limitowi."
+    },
+    {
+      "id": "at_lower_limit",
+      "name": "Przy dolnym limicie",
+      "description": "Prawda gdy licznik równa się dolnemu limitowi."
+    }
+  ],
+  "config": [
+    {
+      "id": "start_value",
+      "name": "Wartość początkowa",
+      "description": "Początkowa wartość licznika."
+    },
+    {
+      "id": "lower_limit",
+      "name": "Dolny limit",
+      "description": "Minimalna wartość licznika."
+    },
+    {
+      "id": "upper_limit",
+      "name": "Górny limit",
+      "description": "Maksymalna wartość licznika."
+    },
+    {
+      "id": "overflow_mode",
+      "name": "Tryb przepełnienia",
+      "description": "Zachowanie przy osiągnięciu limitu."
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_increment",
+      "name": "Poprzedni stan inkrementacji",
+      "description": "Przechowuje poprzedni stan wejścia inkrementacji."
+    },
+    {
+      "id": "prev_decrement",
+      "name": "Poprzedni stan dekrementacji",
+      "description": "Przechowuje poprzedni stan wejścia dekrementacji."
+    },
+    {
+      "id": "prev_reset",
+      "name": "Poprzedni stan resetu",
+      "description": "Przechowuje poprzedni stan wejścia resetu."
+    }
+  ]
+}

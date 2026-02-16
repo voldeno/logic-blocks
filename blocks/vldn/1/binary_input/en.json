@@ -1,0 +1,12 @@
+{
+  "description": "Binary input of Voldeno module",
+  "outputs": [
+    {
+      "id": "state",
+      "name": "State",
+      "description": "Binary value"
+    }
+  ],
+  "config": [],
+  "state": []
+}

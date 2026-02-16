@@ -1,0 +1,24 @@
+{
+  "description": "Zwraca resztę z dzielenia I1 przez I2",
+  "inputs": [
+    {
+      "id": "input_1",
+      "name": "Wejście #1",
+      "description": "Wejście #1 (dzielna)"
+    },
+    {
+      "id": "input_2",
+      "name": "Wejście #2",
+      "description": "Wejście #2 (dzielnik)"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Wyjście"
+    }
+  ],
+  "config": [],
+  "state": []
+}

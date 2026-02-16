@@ -1,0 +1,45 @@
+{
+  "description": "Przełącznik progowy z histerezą, który analizuje analogową wartość wejściową i odpowiednio przełącza wyjście cyfrowe.",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Wejście numeryczne do porównania ze skonfigurowanymi progami."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Wyjście logiczne przełączające się w oparciu o wartość wejściową i progi z histerezą."
+    }
+  ],
+  "config": [
+    {
+      "id": "mode",
+      "name": "Tryb histerezy",
+      "description": "Określa sposób konfiguracji histerezy."
+    },
+    {
+      "id": "midpoint",
+      "name": "Wartość środkowa",
+      "description": "Punkt centralny zakresu histerezy."
+    },
+    {
+      "id": "hysteresis",
+      "name": "Zakres histerezy",
+      "description": "Zakres wokół punktu środkowego tworzący efekt histerezy."
+    },
+    {
+      "id": "value_on",
+      "name": "Wartość włączenia",
+      "description": "Wartość progowa przy której wyjście się włącza."
+    },
+    {
+      "id": "value_off",
+      "name": "Wartość wyłączenia",
+      "description": "Wartość progowa przy której wyjście się wyłącza."
+    }
+  ],
+  "state": []
+}

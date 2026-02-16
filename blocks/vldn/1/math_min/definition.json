@@ -1,0 +1,40 @@
+{
+  "name": "Math::Min",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "input_1",
+      "abbrev": "I1",
+      "type": "NUMBER",
+      "default": "-9223372036854775807"
+    },
+    {
+      "id": "input_2",
+      "abbrev": "I2",
+      "type": "NUMBER",
+      "default": "-9223372036854775807"
+    },
+    {
+      "id": "input_3",
+      "abbrev": "I3",
+      "type": "NUMBER",
+      "default": "-9223372036854775807"
+    },
+    {
+      "id": "input_4",
+      "abbrev": "I4",
+      "type": "NUMBER",
+      "default": "-9223372036854775807"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [],
+  "state": []
+}

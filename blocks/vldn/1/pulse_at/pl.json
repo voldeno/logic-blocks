@@ -1,0 +1,34 @@
+{
+  "description": "Wysyła impuls o określonym czasie",
+  "outputs": [
+    {
+      "id": "pulse",
+      "name": "Impuls",
+      "description": "Wyjście impulsowe"
+    }
+  ],
+  "config": [
+    {
+      "id": "interval",
+      "name": "Interwał",
+      "description": "Interwał impulsu w sekundach"
+    }
+  ],
+  "state": [
+    {
+      "id": "last_output",
+      "name": "Ostatnie wyjście",
+      "description": "Ostatnia wartość wyjściowa"
+    },
+    {
+      "id": "last_activation_ts",
+      "name": "Ostatni znacznik czasu wykonania",
+      "description": "Ostatni znacznik czasu wykonania"
+    },
+    {
+      "id": "next_activation_ts",
+      "name": "Następny znacznik czasu wykonania",
+      "description": "Następny znacznik czasu wykonania"
+    }
+  ]
+}

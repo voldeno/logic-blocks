@@ -1,0 +1,21 @@
+{
+  "name": "Boolean constant",
+  "group": "input",
+  "ioType": "constant",
+  "outputs": [
+    {
+      "id": "state",
+      "abbrev": "S",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "value",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "state": []
+}

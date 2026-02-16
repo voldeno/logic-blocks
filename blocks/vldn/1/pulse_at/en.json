@@ -1,0 +1,34 @@
+{
+  "description": "Sends a pulse at specified time",
+  "outputs": [
+    {
+      "id": "pulse",
+      "name": "Pulse",
+      "description": "Pulse output"
+    }
+  ],
+  "config": [
+    {
+      "id": "interval",
+      "name": "Interval",
+      "description": "Pulse interval in seconds"
+    }
+  ],
+  "state": [
+    {
+      "id": "last_output",
+      "name": "Last output",
+      "description": "Last output value"
+    },
+    {
+      "id": "last_activation_ts",
+      "name": "Last execution timestamp",
+      "description": "Last execution timestamp in seconds from epoch"
+    },
+    {
+      "id": "next_activation_ts",
+      "name": "Next execution timestamp",
+      "description": "Next execution timestamp in seconds from epoch"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "name": "Hysteresis",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "mode",
+      "type": "ENUM",
+      "values": [
+        "Midpoint + Hysteresis",
+        "Threshold (On/Off)"
+      ],
+      "default": "0"
+    },
+    {
+      "id": "midpoint",
+      "type": "NUMBER",
+      "default": "50.0",
+      "visibleWhen": {
+        "configId": "mode",
+        "values": [
+          "Midpoint + Hysteresis"
+        ]
+      }
+    },
+    {
+      "id": "hysteresis",
+      "type": "NUMBER",
+      "default": "5.0",
+      "visibleWhen": {
+        "configId": "mode",
+        "values": [
+          "Midpoint + Hysteresis"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "value_on",
+      "type": "NUMBER",
+      "default": "55.0",
+      "visibleWhen": {
+        "configId": "mode",
+        "values": [
+          "Threshold (On/Off)"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "neq",
+            "configId": "value_off"
+          }
+        ]
+      }
+    },
+    {
+      "id": "value_off",
+      "type": "NUMBER",
+      "default": "45.0",
+      "visibleWhen": {
+        "configId": "mode",
+        "values": [
+          "Threshold (On/Off)"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "neq",
+            "configId": "value_on"
+          }
+        ]
+      }
+    }
+  ],
+  "state": []
+}

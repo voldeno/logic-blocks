@@ -1,0 +1,12 @@
+{
+  "description": "Wyjście przekaźnikowe modułu Voldeno",
+  "inputs": [
+    {
+      "id": "state",
+      "name": "Stan",
+      "description": "Żądany stan wyjścia przekaźnikowego"
+    }
+  ],
+  "config": [],
+  "state": []
+}

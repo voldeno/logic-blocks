@@ -1,0 +1,22 @@
+{
+  "name": "Logic::Not",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "input",
+      "abbrev": "I",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "true"
+    }
+  ],
+  "config": [],
+  "state": []
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Provides a constant numeric value configured by the user",
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "Constant numeric value"
+    }
+  ],
+  "config": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "The constant numeric value to output"
+    }
+  ],
+  "state": []
+}

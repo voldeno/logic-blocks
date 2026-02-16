@@ -1,0 +1,28 @@
+{
+  "name": "Math::Modulo",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "input_1",
+      "abbrev": "I1",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "input_2",
+      "abbrev": "I2",
+      "type": "NUMBER",
+      "default": "1"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [],
+  "state": []
+}

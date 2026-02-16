@@ -1,0 +1,49 @@
+{
+  "description": "Door and window monitor",
+  "inputs": [
+    {
+      "id": "open_contact",
+      "name": "Open contact",
+      "description": "Open door window contact"
+    },
+    {
+      "id": "tilted_contact",
+      "name": "Tilted contact",
+      "description": "Tilted door window contact"
+    },
+    {
+      "id": "locked_contact",
+      "name": "Locked contact",
+      "description": "Locked door window contact"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "open",
+      "name": "Open",
+      "description": "Active when door or window is open"
+    },
+    {
+      "id": "tilted",
+      "name": "Tilted",
+      "description": "Active when door or window is tilted"
+    },
+    {
+      "id": "closed",
+      "name": "Closed",
+      "description": "Active when door or window neither open nor tilted"
+    },
+    {
+      "id": "locked",
+      "name": "Locked",
+      "description": "Active when door or window is locked"
+    },
+    {
+      "id": "secured",
+      "name": "Secured",
+      "description": "Active when door or window is closed and locked"
+    }
+  ],
+  "config": [],
+  "state": []
+}

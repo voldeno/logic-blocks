@@ -1,0 +1,21 @@
+{
+  "name": "Mode monitor",
+  "group": "input",
+  "ioType": "operation_mode",
+  "outputs": [
+    {
+      "id": "state",
+      "abbrev": "S",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "operation_mode",
+      "type": "OPERATION_MODE",
+      "default": "0"
+    }
+  ],
+  "state": []
+}

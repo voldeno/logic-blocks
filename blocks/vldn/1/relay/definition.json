@@ -1,0 +1,39 @@
+{
+  "name": "Relay",
+  "group": "output",
+  "ioType": "register",
+  "ioRegisterFilters": [
+    {
+      "moduleId": 2,
+      "registerIds": [
+        100,
+        101,
+        102,
+        103
+      ]
+    },
+    {
+      "moduleId": 3,
+      "registerIds": [
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "state",
+      "abbrev": "S",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [],
+  "state": []
+}

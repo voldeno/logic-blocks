@@ -1,0 +1,19 @@
+{
+  "description": "Rounds the input value down to the nearest integer",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Input",
+      "description": "Input"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Output"
+    }
+  ],
+  "config": [],
+  "state": []
+}

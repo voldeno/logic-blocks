@@ -1,0 +1,45 @@
+{
+  "name": "Binary limiter",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "input",
+      "abbrev": "I",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "limit_exceeded",
+      "abbrev": "L",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "limit",
+      "type": "NUMBER",
+      "default": "0.0"
+    },
+    {
+      "id": "hysteresis",
+      "type": "NUMBER",
+      "default": "0.5"
+    }
+  ],
+  "state": []
+}

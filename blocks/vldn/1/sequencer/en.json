@@ -1,0 +1,81 @@
+{
+  "description": "Logic block representing a sequence",
+  "inputs": [
+    {
+      "id": "forward",
+      "name": "Forward",
+      "description": ""
+    },
+    {
+      "id": "backward",
+      "name": "backward",
+      "description": ""
+    },
+    {
+      "id": "reset",
+      "name": "reset",
+      "description": ""
+    }
+  ],
+  "outputs": [
+    {
+      "id": "off",
+      "name": "Off",
+      "description": ""
+    },
+    {
+      "id": "o1",
+      "name": "Output #1",
+      "description": ""
+    },
+    {
+      "id": "o2",
+      "name": "Output #2",
+      "description": ""
+    },
+    {
+      "id": "o3",
+      "name": "Output #3",
+      "description": ""
+    },
+    {
+      "id": "o4",
+      "name": "Output #4",
+      "description": ""
+    },
+    {
+      "id": "o5",
+      "name": "Output #5",
+      "description": ""
+    },
+    {
+      "id": "o6",
+      "name": "Output #6",
+      "description": ""
+    },
+    {
+      "id": "o7",
+      "name": "Output #7",
+      "description": ""
+    },
+    {
+      "id": "o8",
+      "name": "Output #8",
+      "description": ""
+    }
+  ],
+  "config": [
+    {
+      "id": "max_index",
+      "name": "Max index",
+      "description": ""
+    }
+  ],
+  "state": [
+    {
+      "id": "sequence_index",
+      "name": "Sequence index",
+      "description": ""
+    }
+  ]
+}

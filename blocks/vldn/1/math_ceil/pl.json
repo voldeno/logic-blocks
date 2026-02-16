@@ -1,0 +1,19 @@
+{
+  "description": "Zaokrągla wartość wejściową w górę do najbliższej liczby całkowitej",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Wejście",
+      "description": "Wejście"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Wyjście"
+    }
+  ],
+  "config": [],
+  "state": []
+}

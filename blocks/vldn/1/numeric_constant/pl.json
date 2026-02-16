@@ -1,0 +1,18 @@
+{
+  "description": "Dostarcza stałą wartość numeryczną skonfigurowaną przez użytkownika",
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Stała wartość numeryczna"
+    }
+  ],
+  "config": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Stała wartość numeryczna do wyprowadzenia"
+    }
+  ],
+  "state": []
+}

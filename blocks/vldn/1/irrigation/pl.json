@@ -1,0 +1,39 @@
+{
+  "description": "System nawadniania",
+  "inputs": [
+    {"id": "trigger", "name": "Wyzwól", "description": ""},
+    {"id": "reset", "name": "Resetuj", "description": ""}
+  ],
+  "outputs": [
+    {"id": "pump", "name": "Pompa", "description": "Wyjście sterowania pompą"},
+    {"id": "section_1", "name": "Sekcja #1", "description": "Wyjście sterowania zaworem sekcji #1"},
+    {"id": "section_2", "name": "Sekcja #2", "description": "Wyjście sterowania zaworem sekcji #2"},
+    {"id": "section_3", "name": "Sekcja #3", "description": "Wyjście sterowania zaworem sekcji #3"},
+    {"id": "section_4", "name": "Sekcja #4", "description": "Wyjście sterowania zaworem sekcji #4"},
+    {"id": "section_5", "name": "Sekcja #5", "description": "Wyjście sterowania zaworem sekcji #5"},
+    {"id": "section_6", "name": "Sekcja #6", "description": "Wyjście sterowania zaworem sekcji #6"},
+    {"id": "section_7", "name": "Sekcja #7", "description": "Wyjście sterowania zaworem sekcji #7"},
+    {"id": "section_8", "name": "Sekcja #8", "description": "Wyjście sterowania zaworem sekcji #8"}
+  ],
+  "config": [
+    {"id": "s1_enabled", "name": "S1 włączona", "description": "Określa czy sekcja #1 jest włączona"},
+    {"id": "s1_duration", "name": "S1 czas trwania", "description": "Całkowity czas nawadniania w sekundach dla sekcji #1"},
+    {"id": "s2_enabled", "name": "S2 włączona", "description": "Określa czy sekcja #2 jest włączona"},
+    {"id": "s2_duration", "name": "S2 czas trwania", "description": "Całkowity czas nawadniania w sekundach dla sekcji #2"},
+    {"id": "s3_enabled", "name": "S3 włączona", "description": "Określa czy sekcja #3 jest włączona"},
+    {"id": "s3_duration", "name": "S3 czas trwania", "description": "Całkowity czas nawadniania w sekundach dla sekcji #3"},
+    {"id": "s4_enabled", "name": "S4 włączona", "description": "Określa czy sekcja #4 jest włączona"},
+    {"id": "s4_duration", "name": "S4 czas trwania", "description": "Całkowity czas nawadniania w sekundach dla sekcji #4"},
+    {"id": "s5_enabled", "name": "S5 włączona", "description": "Określa czy sekcja #5 jest włączona"},
+    {"id": "s5_duration", "name": "S5 czas trwania", "description": "Całkowity czas nawadniania w sekundach dla sekcji #5"},
+    {"id": "s6_enabled", "name": "S6 włączona", "description": "Określa czy sekcja #6 jest włączona"},
+    {"id": "s6_duration", "name": "S6 czas trwania", "description": "Całkowity czas nawadniania w sekundach dla sekcji #6"},
+    {"id": "s7_enabled", "name": "S7 włączona", "description": "Określa czy sekcja #7 jest włączona"},
+    {"id": "s7_duration", "name": "S7 czas trwania", "description": "Całkowity czas nawadniania w sekundach dla sekcji #7"},
+    {"id": "s8_enabled", "name": "S8 włączona", "description": "Określa czy sekcja #8 jest włączona"},
+    {"id": "s8_duration", "name": "S8 czas trwania", "description": "Całkowity czas nawadniania w sekundach dla sekcji #8"}
+  ],
+  "state": [
+    {"id": "active", "name": "Aktywny", "description": "Czy nawadnianie jest obecnie aktywne"}
+  ]
+}
