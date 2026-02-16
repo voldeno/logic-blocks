@@ -1,19 +1,20 @@
 {
-  "description": "TBP",
+  "description": "Publishes a message to a pubsub topic",
+  "inputs": [
+    {
+      "id": "msg",
+      "name": "Message",
+      "description": "Message to publish"
+    }
+  ],
   "outputs": [
     {
-      "id": "state",
-      "name": "State",
-      "description": "State of the operation mode"
+      "id": "status",
+      "name": "Status",
+      "description": "Status of the publication"
     }
   ],
-  "config": [
-    {
-      "id": "operation_mode",
-      "name": "Operation mode",
-      "description": "Chosen operation mode to control the state of"
-    }
-  ],
+  "config": [],
   "state": [
     {
       "id": "token",

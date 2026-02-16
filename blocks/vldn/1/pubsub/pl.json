@@ -1,17 +1,17 @@
 {
-  "description": "Blok logiczny do monitorowania stanu trybu pracy",
+  "description": "Blok do opublikowania wiadomości w pubsub",
   "inputs": [
     {
-      "id": "input",
-      "name": "Stan",
-      "description": "Stan trybu pracy"
+      "id": "msg",
+      "name": "Wiadomość",
+      "description": "Wiadomość do opublikowania"
     }
   ],
   "outputs": [
     {
-      "id": "output",
-      "name": "Stan",
-      "description": "Stan trybu pracy"
+      "id": "status",
+      "name": "Status",
+      "description": "Status publikacji"
     }
   ],
   "config": [],

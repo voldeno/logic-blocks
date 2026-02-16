@@ -3,16 +3,16 @@
   "group": "process",
   "inputs": [
     {
-      "id": "input",
-      "abbrev": "I",
+      "id": "msg",
+      "abbrev": "MSG",
       "type": "STRING",
       "default": ""
     }
   ],
   "outputs": [
     {
-      "id": "output",
-      "abbrev": "O",
+      "id": "status",
+      "abbrev": "S",
       "type": "NUMBER",
       "default": "0"
     }
