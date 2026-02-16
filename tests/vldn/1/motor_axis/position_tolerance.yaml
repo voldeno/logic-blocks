@@ -1,0 +1,254 @@
+name: "position tolerance"
+
+config:
+  home_direction: 0 # Forward
+  position_tolerance: 2
+
+steps:
+  # Home first
+  - action: "set_inputs"
+    inputs:
+      home: true
+  - action: "set_inputs"
+    inputs:
+      home: false
+  - action: "set_inputs"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homed"
+    expected_outputs:
+      homed: true
+      position: 0
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Set target to 10
+  - action: "set_inputs"
+    comment: "Set target to 10 (tolerance=2, so 8-12 is at_target)"
+    inputs:
+      target: 10
+
+  - action: "assert_outputs"
+    comment: "Moving forward"
+    expected_outputs:
+      forward: true
+      moving: true
+      at_target: false
+
+  # Count 7 pulses (position=7, target=10, diff=3 > tolerance=2)
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position 7, diff=3 > tolerance=2, still moving"
+    expected_outputs:
+      position: 7
+      forward: true
+      moving: true
+      at_target: false
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  # Pulse 8 (position=8, diff=2 <= tolerance=2, at_target!)
+  - action: "set_inputs"
+    comment: "Encoder pulse to position 8"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position 8, diff=2 <= tolerance=2, at target, stopped"
+    expected_outputs:
+      position: 8
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  # Set target far away - should start moving again
+  - action: "set_inputs"
+    comment: "Set target to 20"
+    inputs:
+      target: 20
+
+  - action: "assert_outputs"
+    comment: "Moving forward, diff=12 > tolerance"
+    expected_outputs:
+      forward: true
+      moving: true
+      at_target: false
+
+  # Count to position 18 (diff=2 <= tolerance)
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    comment: "Encoder pulse to position 18"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position 18, diff=2 <= tolerance, at target, stopped"
+    expected_outputs:
+      position: 18
+      forward: false
+      moving: false
+      at_target: true
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  # Test tolerance in reverse direction
+  - action: "set_inputs"
+    comment: "Set target to 10 (reverse, diff=-8)"
+    inputs:
+      target: 10
+
+  - action: "assert_outputs"
+    comment: "Moving reverse"
+    expected_outputs:
+      reverse: true
+      moving: true
+      at_target: false
+
+  # Count 6 reverse pulses (position=12, diff=-2 within tolerance)
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+  - action: "set_inputs"
+    comment: "Encoder pulse to position 12"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position 12, diff=-2, abs(diff)=2 <= tolerance, at target, stopped"
+    expected_outputs:
+      position: 12
+      reverse: false
+      moving: false
+      at_target: true

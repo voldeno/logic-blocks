@@ -1,0 +1,161 @@
+name: "move to target"
+
+config:
+  home_direction: 0 # Forward
+  position_tolerance: 0
+
+steps:
+  # Home first
+  - action: "set_inputs"
+    comment: "Trigger homing"
+    inputs:
+      home: true
+
+  - action: "set_inputs"
+    inputs:
+      home: false
+
+  - action: "set_inputs"
+    comment: "Home switch activates"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homing complete"
+    expected_outputs:
+      homed: true
+      position: 0
+      at_target: true
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Set target to 3
+  - action: "set_inputs"
+    comment: "Set target to 3"
+    inputs:
+      target: 3
+
+  - action: "assert_outputs"
+    comment: "Motor starts driving forward"
+    expected_outputs:
+      forward: true
+      reverse: false
+      moving: true
+      at_target: false
+
+  # Simulate 3 encoder pulses
+  - action: "set_inputs"
+    comment: "Encoder pulse 1"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position 1, still moving"
+    expected_outputs:
+      position: 1
+      forward: true
+      moving: true
+      at_target: false
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  - action: "set_inputs"
+    comment: "Encoder pulse 2"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position 2, still moving"
+    expected_outputs:
+      position: 2
+      forward: true
+      moving: true
+      at_target: false
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  - action: "set_inputs"
+    comment: "Encoder pulse 3"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position 3 = target, motor stopped"
+    expected_outputs:
+      position: 3
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  # Now set target to 1 (reverse direction)
+  - action: "set_inputs"
+    comment: "Set target to 1 (reverse)"
+    inputs:
+      target: 1
+
+  - action: "assert_outputs"
+    comment: "Motor drives reverse"
+    expected_outputs:
+      forward: false
+      reverse: true
+      moving: true
+      at_target: false
+
+  # Simulate 2 encoder pulses (position decrements)
+  - action: "set_inputs"
+    comment: "Encoder pulse (reverse)"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position 2, still moving"
+    expected_outputs:
+      position: 2
+      at_target: false
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  - action: "set_inputs"
+    comment: "Encoder pulse (reverse)"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position 1 = target, motor stopped"
+    expected_outputs:
+      position: 1
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  # Set target to same position (should not move)
+  - action: "set_inputs"
+    comment: "Set target to current position"
+    inputs:
+      target: 1
+
+  - action: "assert_outputs"
+    comment: "Already at target, no movement"
+    expected_outputs:
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true

@@ -1,0 +1,96 @@
+{
+  "description": "Single-axis motor controller with encoder feedback and homing support. Drives a motor to a target position by counting encoder pulses.",
+  "inputs": [
+    {
+      "id": "target",
+      "name": "Target",
+      "description": "Target position in encoder counts. Movement starts automatically after homing."
+    },
+    {
+      "id": "encoder",
+      "name": "Encoder",
+      "description": "Raw encoder pulse input. Each rising edge counts one step in the current motor direction."
+    },
+    {
+      "id": "home",
+      "name": "Home",
+      "description": "Pulse input. Rising edge starts the homing sequence, moving the motor in the configured direction until the home switch activates."
+    },
+    {
+      "id": "home_switch",
+      "name": "Home switch",
+      "description": "Active (true) when the axis is at the home/reference position. Used during homing to detect arrival at the reference point."
+    },
+    {
+      "id": "stop",
+      "name": "Stop",
+      "description": "Pulse input. Rising edge stops all movement and cancels homing. Dominant input. Position and homed status are preserved."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "forward",
+      "name": "Forward",
+      "description": "Active when the motor should drive in the positive direction."
+    },
+    {
+      "id": "reverse",
+      "name": "Reverse",
+      "description": "Active when the motor should drive in the negative direction."
+    },
+    {
+      "id": "position",
+      "name": "Position",
+      "description": "Current position in encoder counts."
+    },
+    {
+      "id": "at_target",
+      "name": "At target",
+      "description": "True when the current position is within the configured tolerance of the target."
+    },
+    {
+      "id": "homed",
+      "name": "Homed",
+      "description": "True after a successful homing sequence has completed."
+    },
+    {
+      "id": "moving",
+      "name": "Moving",
+      "description": "True when the motor is actively driving in either direction."
+    }
+  ],
+  "config": [
+    {
+      "id": "home_direction",
+      "name": "Home direction",
+      "description": "Motor direction during the homing sequence."
+    },
+    {
+      "id": "position_tolerance",
+      "name": "Position tolerance",
+      "description": "Maximum acceptable distance from the target position to be considered at target. 0 means exact match."
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_encoder",
+      "name": "Previous encoder state",
+      "description": "Stores the previous state of the encoder input to detect rising edges."
+    },
+    {
+      "id": "prev_home",
+      "name": "Previous home state",
+      "description": "Stores the previous state of the home input to detect rising edges."
+    },
+    {
+      "id": "prev_stop",
+      "name": "Previous stop state",
+      "description": "Stores the previous state of the stop input to detect rising edges."
+    },
+    {
+      "id": "is_homing",
+      "name": "Is homing",
+      "description": "True while the homing sequence is in progress."
+    }
+  ]
+}

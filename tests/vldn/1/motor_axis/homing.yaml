@@ -1,0 +1,154 @@
+name: "homing sequence"
+
+config:
+  home_direction: 0 # Forward
+  position_tolerance: 0
+
+steps:
+  # Initial state - not homed, not moving
+  - action: "assert_outputs"
+    comment: "Initial state"
+    expected_outputs:
+      forward: false
+      reverse: false
+      position: 0
+      at_target: false
+      homed: false
+      moving: false
+
+  # Trigger homing
+  - action: "set_inputs"
+    comment: "Rising edge on home"
+    inputs:
+      home: true
+
+  - action: "assert_outputs"
+    comment: "Motor drives forward (home_direction=Forward), homing in progress"
+    expected_outputs:
+      forward: true
+      reverse: false
+      homed: false
+      moving: true
+
+  - action: "set_inputs"
+    inputs:
+      home: false
+
+  # Simulate encoder pulses during homing (should be ignored for position counting)
+  - action: "set_inputs"
+    comment: "Encoder pulse during homing"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position unchanged during homing"
+    expected_outputs:
+      position: 0
+      forward: true
+      moving: true
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  - action: "set_inputs"
+    comment: "Another encoder pulse during homing"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Position still unchanged during homing"
+    expected_outputs:
+      position: 0
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  # Home switch activates
+  - action: "set_inputs"
+    comment: "Home switch activates"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homing complete: motor stopped, position zeroed, homed flag set"
+    expected_outputs:
+      forward: false
+      reverse: false
+      position: 0
+      homed: true
+      moving: false
+      at_target: true
+
+  - action: "set_inputs"
+    comment: "Home switch deactivates (axis moves away)"
+    inputs:
+      home_switch: false
+
+  # Verify homed status persists
+  - action: "assert_outputs"
+    comment: "Homed status persists"
+    expected_outputs:
+      homed: true
+
+  # Re-homing should work
+  - action: "set_inputs"
+    comment: "Trigger homing again"
+    inputs:
+      home: true
+
+  - action: "assert_outputs"
+    comment: "Homing restarts, homed cleared"
+    expected_outputs:
+      forward: true
+      reverse: false
+      homed: false
+      moving: true
+
+  - action: "set_inputs"
+    inputs:
+      home: false
+
+  - action: "set_inputs"
+    comment: "Home switch activates again"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homing complete again"
+    expected_outputs:
+      forward: false
+      reverse: false
+      homed: true
+      moving: false
+      position: 0
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Test homing when already at home position (home_switch already active)
+  - action: "set_inputs"
+    comment: "Home switch is already active before homing"
+    inputs:
+      home_switch: true
+
+  - action: "set_inputs"
+    comment: "Trigger homing while already at home"
+    inputs:
+      home: true
+
+  - action: "assert_outputs"
+    comment: "Homing completes immediately (switch already active)"
+    expected_outputs:
+      forward: false
+      reverse: false
+      homed: true
+      moving: false
+      position: 0
+      at_target: true
+
+  - action: "set_inputs"
+    inputs:
+      home: false

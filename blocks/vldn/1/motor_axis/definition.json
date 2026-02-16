@@ -1,0 +1,117 @@
+{
+  "name": "Motor axis",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "target",
+      "abbrev": "TG",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "encoder",
+      "abbrev": "E",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "home",
+      "abbrev": "H",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "home_switch",
+      "abbrev": "HS",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "stop",
+      "abbrev": "S",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "forward",
+      "abbrev": "F",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "reverse",
+      "abbrev": "R",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "position",
+      "abbrev": "P",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "at_target",
+      "abbrev": "AT",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "homed",
+      "abbrev": "HD",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "moving",
+      "abbrev": "M",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "home_direction",
+      "type": "ENUM",
+      "values": ["Forward", "Reverse"],
+      "default": "0"
+    },
+    {
+      "id": "position_tolerance",
+      "type": "NUMBER",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_encoder",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "prev_home",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "prev_stop",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "is_homing",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}
