@@ -1,0 +1,40 @@
+{
+  "description": "Formats a text string from a configurable pattern, substituting placeholders with numeric input values.",
+  "inputs": [
+    {
+      "id": "v1",
+      "name": "Value 1",
+      "description": "First numeric value to substitute into the pattern."
+    },
+    {
+      "id": "v2",
+      "name": "Value 2",
+      "description": "Second numeric value to substitute into the pattern."
+    },
+    {
+      "id": "v3",
+      "name": "Value 3",
+      "description": "Third numeric value to substitute into the pattern."
+    },
+    {
+      "id": "v4",
+      "name": "Value 4",
+      "description": "Fourth numeric value to substitute into the pattern."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "text",
+      "name": "Text",
+      "description": "The formatted text string with placeholders replaced by input values."
+    }
+  ],
+  "config": [
+    {
+      "id": "pattern",
+      "name": "Pattern",
+      "description": "Format pattern string. Use {} as a placeholder for each input value in order (e.g. \"Temperature: {} C, Humidity: {} %\")."
+    }
+  ],
+  "state": []
+}

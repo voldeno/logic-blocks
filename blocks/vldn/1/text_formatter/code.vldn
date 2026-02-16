@@ -1,0 +1,7 @@
+pattern = config::get("pattern")
+v1 = input::get("v1")
+v2 = input::get("v2")
+v3 = input::get("v3")
+v4 = input::get("v4")
+output::set("text", str::fmt(pattern, v1))
+// output::set("text", str::fmt(pattern, v1, v2, v3, v4))

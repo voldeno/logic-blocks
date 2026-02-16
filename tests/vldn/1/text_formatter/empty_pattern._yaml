@@ -1,0 +1,22 @@
+name: "empty_pattern"
+
+config:
+  pattern: "no args"
+
+steps:
+  # Empty pattern produces empty output
+  - action: "assert_outputs"
+    comment: "Empty pattern yields empty string"
+    expected_outputs:
+      text: ""
+
+  # Setting inputs does not affect empty pattern output
+  - action: "set_inputs"
+    comment: "Set v1 to 42"
+    inputs:
+      v1: 42
+
+  - action: "assert_outputs"
+    comment: "Output still empty - no placeholders in pattern"
+    expected_outputs:
+      text: "no args"

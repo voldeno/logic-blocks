@@ -1,0 +1,15 @@
+name: "no_args"
+
+config:
+  pattern: "no args"
+
+steps:
+  - action: "set_inputs"
+    comment: "Set v1 to 42"
+    inputs:
+      v1: 42
+
+  - action: "assert_outputs"
+    comment: "Output is equal to pattern"
+    expected_outputs:
+      text: "no args"

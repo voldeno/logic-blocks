@@ -1,0 +1,45 @@
+name: "basic_format"
+
+config:
+  pattern: "value: {}"
+
+steps:
+  # Initial state - output is empty string
+  - action: "assert_outputs"
+    comment: "Output starts as formatted with default input values"
+    expected_outputs:
+      text: ""
+
+  # Set first input value
+  - action: "set_inputs"
+    comment: "Set v1 to 42"
+    inputs:
+      v1: 42
+
+  - action: "assert_outputs"
+    comment: "Output reflects v1"
+    expected_outputs:
+      text: "value: 42"
+
+  # Change value
+  - action: "set_inputs"
+    comment: "Set v1 to -7.5"
+    inputs:
+      v1: -7.5
+
+  - action: "assert_outputs"
+    comment: "Output reflects updated v1"
+    expected_outputs:
+      text: "value: -7.500000"
+
+  # Two placeholders
+  - action: "set_inputs"
+    comment: "Update pattern to use two values and set v2"
+    inputs:
+      v1: 25
+      v2: 60
+
+  - action: "assert_outputs"
+    comment: "Output reflects v1 only since pattern has one placeholder"
+    expected_outputs:
+      text: "value: 25"
