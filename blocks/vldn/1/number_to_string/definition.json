@@ -1,0 +1,22 @@
+{
+  "name": "Number to string",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "text",
+      "abbrev": "T",
+      "type": "STRING",
+      "default": ""
+    }
+  ],
+  "config": [],
+  "state": []
+}

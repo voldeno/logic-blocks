@@ -1,0 +1,30 @@
+{
+  "description": "Converts a boolean value to a configurable text label.",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "Boolean value to convert to string."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "text",
+      "name": "Text",
+      "description": "Text label corresponding to the boolean state."
+    }
+  ],
+  "config": [
+    {
+      "id": "true_text",
+      "name": "True text",
+      "description": "Text to output when the input is true."
+    },
+    {
+      "id": "false_text",
+      "name": "False text",
+      "description": "Text to output when the input is false."
+    }
+  ],
+  "state": []
+}

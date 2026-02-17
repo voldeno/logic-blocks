@@ -1,0 +1,33 @@
+{
+  "name": "Boolean to string",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "text",
+      "abbrev": "T",
+      "type": "STRING",
+      "default": ""
+    }
+  ],
+  "config": [
+    {
+      "id": "true_text",
+      "type": "STRING",
+      "default": "true"
+    },
+    {
+      "id": "false_text",
+      "type": "STRING",
+      "default": "false"
+    }
+  ],
+  "state": []
+}

@@ -1,0 +1,31 @@
+name: "defaults"
+
+config:
+  true_text: "true"
+  false_text: "false"
+
+steps:
+  - action: "assert_outputs"
+    comment: "Default input is false"
+    expected_outputs:
+      text: "false"
+
+  - action: "set_inputs"
+    comment: "Set value to true"
+    inputs:
+      value: true
+
+  - action: "assert_outputs"
+    comment: "Output shows true text"
+    expected_outputs:
+      text: "true"
+
+  - action: "set_inputs"
+    comment: "Set value back to false"
+    inputs:
+      value: false
+
+  - action: "assert_outputs"
+    comment: "Output shows false text"
+    expected_outputs:
+      text: "false"

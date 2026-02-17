@@ -1,0 +1,1 @@
+output::set("text", str::fmt("{}", input::get("value")))

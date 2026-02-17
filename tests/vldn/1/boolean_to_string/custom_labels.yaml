@@ -1,0 +1,31 @@
+name: "custom_labels"
+
+config:
+  true_text: "ON"
+  false_text: "OFF"
+
+steps:
+  - action: "assert_outputs"
+    comment: "Default input is false"
+    expected_outputs:
+      text: "OFF"
+
+  - action: "set_inputs"
+    comment: "Set value to true"
+    inputs:
+      value: true
+
+  - action: "assert_outputs"
+    comment: "Output shows custom true label"
+    expected_outputs:
+      text: "ON"
+
+  - action: "set_inputs"
+    comment: "Set value back to false"
+    inputs:
+      value: false
+
+  - action: "assert_outputs"
+    comment: "Output shows custom false label"
+    expected_outputs:
+      text: "OFF"
