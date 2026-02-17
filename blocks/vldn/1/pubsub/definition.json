@@ -3,8 +3,8 @@
   "group": "process",
   "inputs": [
     {
-      "id": "msg",
-      "abbrev": "MSG",
+      "id": "message",
+      "abbrev": "M",
       "type": "STRING",
       "default": ""
     }
@@ -15,12 +15,96 @@
       "abbrev": "S",
       "type": "NUMBER",
       "default": "0"
+    },
+    {
+      "id": "success",
+      "abbrev": "OK",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "buffered",
+      "abbrev": "B",
+      "type": "NUMBER",
+      "default": "0"
     }
   ],
-  "config": [],
+  "config": [
+    {
+      "id": "service_account_key",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "project_id",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "topic",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "batch_timeout",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "1",
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "batch_size",
+      "type": "NUMBER",
+      "default": "10",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 1
+          },
+          {
+            "type": "lte",
+            "value": 100
+          }
+        ]
+      }
+    }
+  ],
   "state": [
     {
       "id": "token",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "token_expiry",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "phase",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "buffer",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "buffer_count",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "pending_payload",
       "type": "STRING",
       "default": ""
     }

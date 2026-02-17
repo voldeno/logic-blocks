@@ -1,25 +1,86 @@
 {
-  "description": "Blok do opublikowania wiadomości w pubsub",
+  "description": "Publikuje wiadomości do tematu Google Cloud Pub/Sub. Buforuje przychodzące wiadomości i wysyła je po osiągnięciu rozmiaru partii lub upływie limitu czasu, w zależności co nastąpi pierwsze.",
   "inputs": [
     {
-      "id": "msg",
+      "id": "message",
       "name": "Wiadomość",
-      "description": "Wiadomość do opublikowania"
+      "description": "Treść wiadomości do opublikowania. Każda zmiana dodaje nową wartość do wewnętrznego bufora."
     }
   ],
   "outputs": [
     {
       "id": "status",
       "name": "Status",
-      "description": "Status publikacji"
+      "description": "Kod statusu HTTP ostatniego żądania publikacji. 0 oznacza, że żadna publikacja nie została jeszcze wykonana."
+    },
+    {
+      "id": "success",
+      "name": "Sukces",
+      "description": "Prawda, jeśli ostatnie żądanie publikacji zwróciło HTTP 200."
+    },
+    {
+      "id": "buffered",
+      "name": "Buforowane",
+      "description": "Liczba wiadomości aktualnie oczekujących w buforze."
     }
   ],
-  "config": [],
+  "config": [
+    {
+      "id": "service_account_key",
+      "name": "Klucz konta usługi",
+      "description": "Pełna zawartość JSON pliku klucza konta usługi GCP używanego do uwierzytelniania."
+    },
+    {
+      "id": "project_id",
+      "name": "ID projektu",
+      "description": "Identyfikator projektu Google Cloud."
+    },
+    {
+      "id": "topic",
+      "name": "Temat",
+      "description": "Nazwa tematu Pub/Sub, do którego mają być publikowane wiadomości."
+    },
+    {
+      "id": "batch_timeout",
+      "name": "Limit czasu partii",
+      "description": "Maksymalny czas w sekundach przechowywania wiadomości przed opróżnieniem bufora."
+    },
+    {
+      "id": "batch_size",
+      "name": "Rozmiar partii",
+      "description": "Maksymalna liczba wiadomości w buforze przed natychmiastowym opróżnieniem."
+    }
+  ],
   "state": [
     {
       "id": "token",
       "name": "Token",
-      "description": "Token"
+      "description": "Zbuforowany token dostępu OAuth2."
+    },
+    {
+      "id": "token_expiry",
+      "name": "Wygaśnięcie tokena",
+      "description": "Znacznik czasu Unix wygaśnięcia zbuforowanego tokena."
+    },
+    {
+      "id": "phase",
+      "name": "Faza",
+      "description": "Śledzenie operacji asynchronicznej: 0 = bezczynny, 1 = oczekiwanie na token, 2 = oczekiwanie na odpowiedź publikacji."
+    },
+    {
+      "id": "buffer",
+      "name": "Bufor",
+      "description": "Zgromadzone wpisy wiadomości jako fragmenty JSON oddzielone przecinkami."
+    },
+    {
+      "id": "buffer_count",
+      "name": "Licznik bufora",
+      "description": "Liczba wiadomości aktualnie w buforze."
+    },
+    {
+      "id": "pending_payload",
+      "name": "Oczekujący ładunek",
+      "description": "Pełna treść żądania HTTP w trakcie publikacji."
     }
   ]
 }
