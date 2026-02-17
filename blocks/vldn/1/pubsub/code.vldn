@@ -29,12 +29,12 @@ fn do_publish() {
     topic = config::get("topic")
     url = str::fmt("https://pubsub.googleapis.com/v1/projects/{}/topics/{}:publish", project_id, topic)
 
-    // client = http::client()
-    // http::set_method(client, "POST")
-    // http::set_header(client, "Content-Type", "application/json")
-    // http::set_header(client, "Authorization", str::fmt("Bearer {}", token))
-    // http::set_body(client, payload)
-    // http::call(client, url)
+    client = http::client()
+    http::set_method(client, "POST")
+    http::set_header(client, "Content-Type", "application/json")
+    http::set_header(client, "Authorization", str::fmt("Bearer {}", token))
+    http::set_body(client, payload)
+    http::call(client, url)
 
     std::print(str::fmt("payload: {}", payload))
     std::print(str::fmt("url: {}", url))
@@ -49,11 +49,11 @@ fn request_token() {
 
     std::print(str::fmt("jwt: {}", jwt))
 
-    // client = http::client()
-    // http::set_method(client, "POST")
-    // http::set_header(client, "Content-Type", "application/x-www-form-urlencoded")
-    // http::set_body(client, str::fmt("grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion={}", jwt))
-    // http::call(client, "https://oauth2.googleapis.com/token")
+    client = http::client()
+    http::set_method(client, "POST")
+    http::set_header(client, "Content-Type", "application/x-www-form-urlencoded")
+    http::set_body(client, str::fmt("grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion={}", jwt))
+    http::call(client, "https://oauth2.googleapis.com/token")
 
     state::set("phase", 1)
 }
