@@ -27,7 +27,7 @@ steps:
   - action: "assert_outputs"
     comment: "Output reflects updated v1"
     expected_outputs:
-      text: "value: -7.500000"
+      text: "value: -7.5"
 
   # Change pattern dynamically
   - action: "set_inputs"
@@ -38,4 +38,4 @@ steps:
   - action: "assert_outputs"
     comment: "New pattern applied with current v1"
     expected_outputs:
-      text: "temperature: -7.500000 C"
+      text: "temperature: -7.5 C"

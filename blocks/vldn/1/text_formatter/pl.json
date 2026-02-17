@@ -1,5 +1,5 @@
 {
-  "description": "Formatuje tekst na podstawie wzorca z wejścia, podstawiając wartości liczbowe w miejsce znaczników.",
+  "description": "Formatuje tekst na podstawie wzorca z wejścia, podstawiając wartości w miejsce znaczników.",
   "inputs": [
     {
       "id": "pattern",
@@ -9,22 +9,22 @@
     {
       "id": "v1",
       "name": "Wartość 1",
-      "description": "Pierwsza wartość liczbowa podstawiana do wzorca."
+      "description": "Pierwsza wartość podstawiana do wzorca."
     },
     {
       "id": "v2",
       "name": "Wartość 2",
-      "description": "Druga wartość liczbowa podstawiana do wzorca."
+      "description": "Druga wartość podstawiana do wzorca."
     },
     {
       "id": "v3",
       "name": "Wartość 3",
-      "description": "Trzecia wartość liczbowa podstawiana do wzorca."
+      "description": "Trzecia wartość podstawiana do wzorca."
     },
     {
       "id": "v4",
       "name": "Wartość 4",
-      "description": "Czwarta wartość liczbowa podstawiana do wzorca."
+      "description": "Czwarta wartość podstawiana do wzorca."
     }
   ],
   "outputs": [

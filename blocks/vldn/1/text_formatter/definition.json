@@ -11,26 +11,26 @@
     {
       "id": "v1",
       "abbrev": "1",
-      "type": "NUMBER",
-      "default": "0"
+      "type": "STRING",
+      "default": ""
     },
     {
       "id": "v2",
       "abbrev": "2",
-      "type": "NUMBER",
-      "default": "0"
+      "type": "STRING",
+      "default": ""
     },
     {
       "id": "v3",
       "abbrev": "3",
-      "type": "NUMBER",
-      "default": "0"
+      "type": "STRING",
+      "default": ""
     },
     {
       "id": "v4",
       "abbrev": "4",
-      "type": "NUMBER",
-      "default": "0"
+      "type": "STRING",
+      "default": ""
     }
   ],
   "outputs": [

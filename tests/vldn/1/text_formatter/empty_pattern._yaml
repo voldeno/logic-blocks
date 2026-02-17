@@ -1,7 +1,5 @@
 name: "empty_pattern"
 
-config: {}
-
 steps:
   # Empty pattern (default) produces empty output
   - action: "assert_outputs"
