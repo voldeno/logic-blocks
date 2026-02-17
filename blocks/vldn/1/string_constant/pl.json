@@ -1,0 +1,18 @@
+{
+  "description": "Dostarcza stałą wartość tekstową skonfigurowaną przez użytkownika",
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Stała wartość tekstowa"
+    }
+  ],
+  "config": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Stała wartość tekstowa do wyprowadzenia"
+    }
+  ],
+  "state": []
+}
