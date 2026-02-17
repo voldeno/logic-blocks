@@ -27,6 +27,12 @@
       "abbrev": "B",
       "type": "NUMBER",
       "default": "0"
+    },
+    {
+      "id": "dropped",
+      "abbrev": "D",
+      "type": "NUMBER",
+      "default": "0"
     }
   ],
   "config": [
@@ -75,6 +81,23 @@
           }
         ]
       }
+    },
+    {
+      "id": "max_buffer_size",
+      "type": "NUMBER",
+      "default": "20",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 10
+          },
+          {
+            "type": "lte",
+            "value": 100
+          }
+        ]
+      }
     }
   ],
   "state": [
@@ -107,6 +130,11 @@
       "id": "pending_payload",
       "type": "STRING",
       "default": ""
+    },
+    {
+      "id": "pending_count",
+      "type": "NUMBER",
+      "default": "0"
     }
   ]
 }

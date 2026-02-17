@@ -35,18 +35,12 @@ fn do_publish() {
     http::set_body(client, payload)
     http::call(client, url)
 
-    std::print(str::fmt("payload: {}", payload))
-    std::print(str::fmt("url: {}", url))
-    std::print(str::fmt("token: {}", token))
-
     state::set("phase", 2)
 }
 
 // ---- Helper: request a new OAuth2 access token ----
 fn request_token() {
     jwt = build_jwt()
-
-    std::print(str::fmt("jwt: {}", jwt))
 
     client = http::client()
     http::set_method(client, "POST")
@@ -72,6 +66,7 @@ fn start_flush() {
     // Snapshot buffer into pending payload and reset buffer
     buffer = state::get("buffer")
     state::set("pending_payload", str::fmt("""{"messages":[{}]}""", buffer))
+    state::set("pending_count", buffer_count)
     state::set("buffer", "")
     state::set("buffer_count", 0)
     output::set("buffered", 0)
@@ -87,11 +82,18 @@ fn start_flush() {
 
 // ---- Helper: add a message to the buffer ----
 fn add_to_buffer(message) {
+    buffer_count = state::get("buffer_count")
+
+    // Drop message if buffer is at capacity
+    if (buffer_count >= config::get("max_buffer_size")) {
+        output::set("dropped", output::get("dropped") + 1)
+        return
+    }
+
     msg_b64 = base64::encode(message)
     entry = str::fmt("""{"data":"{}"}""", msg_b64)
 
     buffer = state::get("buffer")
-    buffer_count = state::get("buffer_count")
 
     if (buffer_count == 0) {
         state::set("buffer", entry)
@@ -126,12 +128,6 @@ extern fn onFlush(value) {
 extern fn http::on_response(status, body, headers) {
     phase = state::get("phase")
 
-    std::print("Response:")
-    std::print(str::fmt("phase: {}", phase))
-    std::print(str::fmt("status: {}", status))
-    std::print(str::fmt("body: {}", body))
-    std::print(str::fmt("headers: {}", headers))
-
     if (phase == 1) {
         // Token response
         if (status == 200) {
@@ -140,10 +136,12 @@ extern fn http::on_response(status, body, headers) {
             state::set("token_expiry", time::now() + 3500)
             do_publish()
         } else {
-            // Token request failed
+            // Token request failed - drop the pending batch
             state::set("phase", 0)
             output::set("status", status)
             output::set("success", false)
+            output::set("dropped", output::get("dropped") + state::get("pending_count"))
+            state::set("pending_count", 0)
         }
         return
     }
@@ -153,6 +151,14 @@ extern fn http::on_response(status, body, headers) {
         state::set("phase", 0)
         output::set("status", status)
         output::set("success", status == 200)
+
+        if (status == 200) {
+            state::set("pending_count", 0)
+        } else {
+            // Publish failed - drop the pending batch
+            output::set("dropped", output::get("dropped") + state::get("pending_count"))
+            state::set("pending_count", 0)
+        }
 
         // If new messages accumulated during the HTTP round-trip, handle them
         buffer_count = state::get("buffer_count")

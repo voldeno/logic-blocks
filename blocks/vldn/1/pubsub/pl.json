@@ -22,6 +22,11 @@
       "id": "buffered",
       "name": "Buforowane",
       "description": "Liczba wiadomości aktualnie oczekujących w buforze."
+    },
+    {
+      "id": "dropped",
+      "name": "Odrzucone",
+      "description": "Łączna liczba wiadomości odrzuconych z powodu przepełnienia bufora lub błędów publikacji."
     }
   ],
   "config": [
@@ -49,6 +54,11 @@
       "id": "batch_size",
       "name": "Rozmiar partii",
       "description": "Maksymalna liczba wiadomości w buforze przed natychmiastowym opróżnieniem."
+    },
+    {
+      "id": "max_buffer_size",
+      "name": "Maks. rozmiar bufora",
+      "description": "Twardy limit liczby wiadomości w buforze. Nowe wiadomości są odrzucane po osiągnięciu tego limitu."
     }
   ],
   "state": [
@@ -81,6 +91,11 @@
       "id": "pending_payload",
       "name": "Oczekujący ładunek",
       "description": "Pełna treść żądania HTTP w trakcie publikacji."
+    },
+    {
+      "id": "pending_count",
+      "name": "Licznik oczekujących",
+      "description": "Liczba wiadomości w bieżącej oczekującej partii publikacji."
     }
   ]
 }

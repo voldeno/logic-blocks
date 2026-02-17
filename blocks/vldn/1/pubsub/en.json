@@ -22,6 +22,11 @@
       "id": "buffered",
       "name": "Buffered",
       "description": "Number of messages currently waiting in the buffer."
+    },
+    {
+      "id": "dropped",
+      "name": "Dropped",
+      "description": "Cumulative count of messages dropped due to buffer overflow or publish failures."
     }
   ],
   "config": [
@@ -49,6 +54,11 @@
       "id": "batch_size",
       "name": "Batch size",
       "description": "Maximum number of messages in the buffer before an immediate flush is triggered."
+    },
+    {
+      "id": "max_buffer_size",
+      "name": "Max buffer size",
+      "description": "Hard cap on how many messages can sit in the buffer. New messages are dropped when this limit is reached."
     }
   ],
   "state": [
@@ -81,6 +91,11 @@
       "id": "pending_payload",
       "name": "Pending payload",
       "description": "The full HTTP request body being published."
+    },
+    {
+      "id": "pending_count",
+      "name": "Pending count",
+      "description": "Number of messages in the current pending publish batch."
     }
   ]
 }
