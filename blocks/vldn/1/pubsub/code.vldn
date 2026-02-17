@@ -127,6 +127,12 @@ extern fn onFlush(value) {
 extern fn http::on_response(status, body, headers) {
     phase = state::get("phase")
 
+    std::print("Response:")
+    std::print(str::fmt("phase: {}", phase))
+    std::print(str::fmt("status: {}", status))
+    std::print(str::fmt("body: {}", body))
+    std::print(str::fmt("headers: {}", headers))
+
     if (phase == 1) {
         // Token response
         if (status == 200) {
