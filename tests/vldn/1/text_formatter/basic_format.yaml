@@ -1,14 +1,11 @@
 name: "basic_format"
 
-config:
-  pattern: "value: {}"
-
 steps:
-  # Initial state - output is empty string
-  - action: "assert_outputs"
-    comment: "Output starts as formatted with default input values"
-    expected_outputs:
-      text: ""
+  # Set pattern first
+  - action: "set_inputs"
+    comment: "Provide the pattern via input"
+    inputs:
+      pattern: "value: {}"
 
   # Set first input value
   - action: "set_inputs"
@@ -32,14 +29,13 @@ steps:
     expected_outputs:
       text: "value: -7.500000"
 
-  # Two placeholders
+  # Change pattern dynamically
   - action: "set_inputs"
-    comment: "Update pattern to use two values and set v2"
+    comment: "Change pattern to include units"
     inputs:
-      v1: 25
-      v2: 60
+      pattern: "temperature: {} C"
 
   - action: "assert_outputs"
-    comment: "Output reflects v1 only since pattern has one placeholder"
+    comment: "New pattern applied with current v1"
     expected_outputs:
-      text: "value: 25"
+      text: "temperature: -7.500000 C"

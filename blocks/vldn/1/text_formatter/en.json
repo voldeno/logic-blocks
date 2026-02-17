@@ -1,6 +1,11 @@
 {
-  "description": "Formats a text string from a configurable pattern, substituting placeholders with numeric input values.",
+  "description": "Formats a text string from an input pattern, substituting placeholders with numeric input values.",
   "inputs": [
+    {
+      "id": "pattern",
+      "name": "Pattern",
+      "description": "Format pattern string. Use {} as a placeholder for each input value in order (e.g. \"Temperature: {} C, Humidity: {} %\"). Can be provided by a String constant block."
+    },
     {
       "id": "v1",
       "name": "Value 1",
@@ -29,12 +34,6 @@
       "description": "The formatted text string with placeholders replaced by input values."
     }
   ],
-  "config": [
-    {
-      "id": "pattern",
-      "name": "Pattern",
-      "description": "Format pattern string. Use {} as a placeholder for each input value in order (e.g. \"Temperature: {} C, Humidity: {} %\")."
-    }
-  ],
+  "config": [],
   "state": []
 }

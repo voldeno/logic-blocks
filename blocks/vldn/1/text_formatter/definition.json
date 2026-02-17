@@ -3,6 +3,12 @@
   "group": "process",
   "inputs": [
     {
+      "id": "pattern",
+      "abbrev": "P",
+      "type": "STRING",
+      "default": ""
+    },
+    {
       "id": "v1",
       "abbrev": "1",
       "type": "NUMBER",
@@ -35,12 +41,6 @@
       "default": ""
     }
   ],
-  "config": [
-    {
-      "id": "pattern",
-      "type": "STRING",
-      "default": ""
-    }
-  ],
+  "config": [],
   "state": []
 }

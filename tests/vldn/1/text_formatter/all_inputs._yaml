@@ -1,14 +1,13 @@
 name: "all_inputs"
 
-config:
-  pattern: "a={}, b={}, c={}, d={}"
+config: {}
 
 steps:
-  # Initial state - all inputs are 0
-  - action: "assert_outputs"
-    comment: "All inputs default to 0"
-    expected_outputs:
-      text: "a=0, b=0, c=0, d=0"
+  # Set pattern with 4 placeholders
+  - action: "set_inputs"
+    comment: "Provide the pattern via input"
+    inputs:
+      pattern: "a={}, b={}, c={}, d={}"
 
   # Set all four inputs
   - action: "set_inputs"
