@@ -1,7 +1,5 @@
 name: "all_inputs"
 
-config: {}
-
 steps:
   # Set pattern with 4 placeholders
   - action: "set_inputs"
