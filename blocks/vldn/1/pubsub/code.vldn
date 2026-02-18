@@ -105,18 +105,17 @@ fn add_to_buffer(message) {
     state::set("buffer_count", buffer_count)
     output::set("buffered", buffer_count)
 
-    // Arm flush timeout when the first message enters an empty buffer
-    if (buffer_count == 1) {
-        timeout_ms = math::round(config::get("batch_timeout") * 1000)
-        callback::clear()
-        callback::set(timeout_ms, "onFlush", 0)
+    // Only manage callbacks when no HTTP call is in flight (callback slot is free)
+    if (state::get("phase") == 0) {
+        if (buffer_count >= config::get("batch_size")) {
+            callback::clear()
+            start_flush()
+        } else if (buffer_count == 1) {
+            timeout_ms = math::round(config::get("batch_timeout") * 1000)
+            callback::set(timeout_ms, "onFlush", 0)
+        }
     }
-
-    // Flush immediately if batch size reached
-    if (buffer_count >= config::get("batch_size")) {
-        callback::clear()
-        start_flush()
-    }
+    // When phase != 0, messages just accumulate; http::on_response will handle them
 }
 
 // ---- Flush timeout callback ----
@@ -142,6 +141,17 @@ extern fn http::on_response(status, body, headers) {
             output::set("success", false)
             output::set("dropped", output::get("dropped") + state::get("pending_count"))
             state::set("pending_count", 0)
+
+            // Re-arm timeout for any messages that accumulated during the round-trip
+            buffer_count = state::get("buffer_count")
+            if (buffer_count >= config::get("batch_size")) {
+                callback::clear()
+                start_flush()
+            } else if (buffer_count > 0) {
+                callback::clear()
+                timeout_ms = math::round(config::get("batch_timeout") * 1000)
+                callback::set(timeout_ms, "onFlush", 0)
+            }
         }
         return
     }
@@ -165,8 +175,12 @@ extern fn http::on_response(status, body, headers) {
         if (buffer_count >= config::get("batch_size")) {
             callback::clear()
             start_flush()
+        } else if (buffer_count > 0) {
+            // Re-arm timeout in case the previous one fired while publish was in flight
+            callback::clear()
+            timeout_ms = math::round(config::get("batch_timeout") * 1000)
+            callback::set(timeout_ms, "onFlush", 0)
         }
-        // Otherwise, the timeout callback armed when the first new message arrived will handle it
         return
     }
 }
