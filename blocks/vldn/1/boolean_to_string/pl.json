@@ -1,0 +1,30 @@
+{
+  "description": "Konwertuje wartość logiczną na konfigurowalną etykietę tekstową.",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Wartość logiczna do konwersji na tekst."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "text",
+      "name": "Tekst",
+      "description": "Etykieta tekstowa odpowiadająca stanowi logicznemu."
+    }
+  ],
+  "config": [
+    {
+      "id": "true_text",
+      "name": "Tekst dla prawdy",
+      "description": "Tekst wyświetlany, gdy wartość wejściowa jest prawdziwa."
+    },
+    {
+      "id": "false_text",
+      "name": "Tekst dla fałszu",
+      "description": "Tekst wyświetlany, gdy wartość wejściowa jest fałszywa."
+    }
+  ],
+  "state": []
+}

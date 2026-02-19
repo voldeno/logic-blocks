@@ -1,0 +1,18 @@
+{
+  "description": "Provides a constant string value configured by the user",
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "Constant string value"
+    }
+  ],
+  "config": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "The constant string value to output"
+    }
+  ],
+  "state": []
+}

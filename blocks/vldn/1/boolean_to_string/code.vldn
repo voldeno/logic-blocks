@@ -1,0 +1,7 @@
+value = input::get("value")
+
+if (value) {
+    output::set("text", config::get("true_text"))
+} else {
+    output::set("text", config::get("false_text"))
+}

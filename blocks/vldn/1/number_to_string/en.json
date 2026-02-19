@@ -1,0 +1,19 @@
+{
+  "description": "Converts a numeric value to its string representation.",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "Numeric value to convert to string."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "text",
+      "name": "Text",
+      "description": "The numeric value formatted as a string."
+    }
+  ],
+  "config": [],
+  "state": []
+}

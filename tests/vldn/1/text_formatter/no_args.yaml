@@ -1,0 +1,17 @@
+name: "no_args"
+
+steps:
+  - action: "set_inputs"
+    comment: "Set pattern with no placeholders"
+    inputs:
+      pattern: "no args"
+
+  - action: "set_inputs"
+    comment: "Set v1 to 42"
+    inputs:
+      v1: "42"
+
+  - action: "assert_outputs"
+    comment: "Output is equal to pattern, v1 ignored"
+    expected_outputs:
+      text: "no args"

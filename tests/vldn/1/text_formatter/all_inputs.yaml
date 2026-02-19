@@ -1,0 +1,45 @@
+name: "all_inputs"
+
+steps:
+  # Set pattern with 4 placeholders
+  - action: "set_inputs"
+    comment: "Provide the pattern via input"
+    inputs:
+      pattern: "a={}, b={}, c={}, d={}"
+
+  # Set all four inputs
+  - action: "set_inputs"
+    comment: "Set all four inputs to distinct values"
+    inputs:
+      v1: 10
+      v2: 20
+      v3: 30
+      v4: 40
+
+  - action: "assert_outputs"
+    comment: "All values substituted in order"
+    expected_outputs:
+      text: "a=10, b=20, c=30, d=40"
+
+  # Update only v3
+  - action: "set_inputs"
+    comment: "Change v3 to 99.9"
+    inputs:
+      v3: 99.9
+
+  - action: "assert_outputs"
+    comment: "Only v3 changed in output"
+    expected_outputs:
+      text: "a=10, b=20, c=99.9, d=40"
+
+  # Set negative values
+  - action: "set_inputs"
+    comment: "Set v1 and v4 to negative values"
+    inputs:
+      v1: -5
+      v4: -100
+
+  - action: "assert_outputs"
+    comment: "Negative values formatted correctly"
+    expected_outputs:
+      text: "a=-5, b=20, c=99.9, d=-100"

@@ -1,0 +1,21 @@
+{
+  "name": "String constant",
+  "group": "input",
+  "ioType": "constant",
+  "outputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "STRING",
+      "default": ""
+    }
+  ],
+  "config": [
+    {
+      "id": "value",
+      "type": "STRING",
+      "default": ""
+    }
+  ],
+  "state": []
+}

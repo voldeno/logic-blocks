@@ -1,0 +1,19 @@
+pattern = input::get("pattern")
+v1 = input::get("v1")
+v2 = input::get("v2")
+v3 = input::get("v3")
+v4 = input::get("v4")
+
+count = str::count(pattern, "{}")
+
+if (count == 0) {
+    output::set("text", pattern)
+} else if (count == 1) {
+    output::set("text", str::fmt(pattern, v1))
+} else if (count == 2) {
+    output::set("text", str::fmt(pattern, v1, v2))
+} else if (count == 3) {
+    output::set("text", str::fmt(pattern, v1, v2, v3))
+} else {
+    output::set("text", str::fmt(pattern, v1, v2, v3, v4))
+}

@@ -1,0 +1,41 @@
+name: "basic_format"
+
+steps:
+  # Set pattern first
+  - action: "set_inputs"
+    comment: "Provide the pattern via input"
+    inputs:
+      pattern: "value: {}"
+
+  # Set first input value
+  - action: "set_inputs"
+    comment: "Set v1 to 42"
+    inputs:
+      v1: 42
+
+  - action: "assert_outputs"
+    comment: "Output reflects v1"
+    expected_outputs:
+      text: "value: 42"
+
+  # Change value
+  - action: "set_inputs"
+    comment: "Set v1 to -7.5"
+    inputs:
+      v1: -7.5
+
+  - action: "assert_outputs"
+    comment: "Output reflects updated v1"
+    expected_outputs:
+      text: "value: -7.5"
+
+  # Change pattern dynamically
+  - action: "set_inputs"
+    comment: "Change pattern to include units"
+    inputs:
+      pattern: "temperature: {} C"
+
+  - action: "assert_outputs"
+    comment: "New pattern applied with current v1"
+    expected_outputs:
+      text: "temperature: -7.5 C"

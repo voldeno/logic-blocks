@@ -1,0 +1,39 @@
+{
+  "description": "Formats a text string from an input pattern, substituting placeholders with input values.",
+  "inputs": [
+    {
+      "id": "pattern",
+      "name": "Pattern",
+      "description": "Format pattern string. Use {} as a placeholder for each input value in order (e.g. \"Temperature: {} C, Humidity: {} %\"). Can be provided by a String constant block."
+    },
+    {
+      "id": "v1",
+      "name": "Value 1",
+      "description": "First value to substitute into the pattern."
+    },
+    {
+      "id": "v2",
+      "name": "Value 2",
+      "description": "Second value to substitute into the pattern."
+    },
+    {
+      "id": "v3",
+      "name": "Value 3",
+      "description": "Third value to substitute into the pattern."
+    },
+    {
+      "id": "v4",
+      "name": "Value 4",
+      "description": "Fourth value to substitute into the pattern."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "text",
+      "name": "Text",
+      "description": "The formatted text string with placeholders replaced by input values."
+    }
+  ],
+  "config": [],
+  "state": []
+}

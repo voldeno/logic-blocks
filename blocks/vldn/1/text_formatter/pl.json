@@ -1,0 +1,39 @@
+{
+  "description": "Formatuje tekst na podstawie wzorca z wejścia, podstawiając wartości w miejsce znaczników.",
+  "inputs": [
+    {
+      "id": "pattern",
+      "name": "Wzorzec",
+      "description": "Wzorzec formatowania tekstu. Użyj {} jako znacznika dla kolejnych wartości wejściowych (np. \"Temperatura: {} C, Wilgotność: {} %\"). Może być dostarczony przez blok Stała tekstowa."
+    },
+    {
+      "id": "v1",
+      "name": "Wartość 1",
+      "description": "Pierwsza wartość podstawiana do wzorca."
+    },
+    {
+      "id": "v2",
+      "name": "Wartość 2",
+      "description": "Druga wartość podstawiana do wzorca."
+    },
+    {
+      "id": "v3",
+      "name": "Wartość 3",
+      "description": "Trzecia wartość podstawiana do wzorca."
+    },
+    {
+      "id": "v4",
+      "name": "Wartość 4",
+      "description": "Czwarta wartość podstawiana do wzorca."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "text",
+      "name": "Tekst",
+      "description": "Sformatowany tekst z podstawionymi wartościami wejściowymi."
+    }
+  ],
+  "config": [],
+  "state": []
+}

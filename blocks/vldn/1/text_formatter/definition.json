@@ -1,0 +1,46 @@
+{
+  "name": "Text formatter",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "pattern",
+      "abbrev": "P",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "v1",
+      "abbrev": "1",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "v2",
+      "abbrev": "2",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "v3",
+      "abbrev": "3",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "v4",
+      "abbrev": "4",
+      "type": "STRING",
+      "default": ""
+    }
+  ],
+  "outputs": [
+    {
+      "id": "text",
+      "abbrev": "T",
+      "type": "STRING",
+      "default": ""
+    }
+  ],
+  "config": [],
+  "state": []
+}

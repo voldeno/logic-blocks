@@ -1,0 +1,101 @@
+{
+  "description": "Publishes messages to a Google Cloud Pub/Sub topic. Batches incoming messages and flushes when the batch size is reached or the timeout expires, whichever comes first.",
+  "inputs": [
+    {
+      "id": "message",
+      "name": "Message",
+      "description": "Message content to publish. Each change adds the new value to the internal buffer."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "status",
+      "name": "Status",
+      "description": "HTTP status code of the last publish request. 0 means no publish has been attempted yet."
+    },
+    {
+      "id": "success",
+      "name": "Success",
+      "description": "True if the last publish request returned HTTP 200."
+    },
+    {
+      "id": "buffered",
+      "name": "Buffered",
+      "description": "Number of messages currently waiting in the buffer."
+    },
+    {
+      "id": "dropped",
+      "name": "Dropped",
+      "description": "Cumulative count of messages dropped due to buffer overflow or publish failures."
+    }
+  ],
+  "config": [
+    {
+      "id": "service_account_key",
+      "name": "Service account key",
+      "description": "Full JSON content of the GCP service account key file used for authentication."
+    },
+    {
+      "id": "project_id",
+      "name": "Project ID",
+      "description": "Google Cloud project ID."
+    },
+    {
+      "id": "topic",
+      "name": "Topic",
+      "description": "Pub/Sub topic name to publish messages to."
+    },
+    {
+      "id": "batch_timeout",
+      "name": "Batch timeout",
+      "description": "Maximum time in seconds to hold messages before flushing the buffer."
+    },
+    {
+      "id": "batch_size",
+      "name": "Batch size",
+      "description": "Maximum number of messages in the buffer before an immediate flush is triggered."
+    },
+    {
+      "id": "max_buffer_size",
+      "name": "Max buffer size",
+      "description": "Hard cap on how many messages can sit in the buffer. New messages are dropped when this limit is reached."
+    }
+  ],
+  "state": [
+    {
+      "id": "token",
+      "name": "Token",
+      "description": "Cached OAuth2 access token."
+    },
+    {
+      "id": "token_expiry",
+      "name": "Token expiry",
+      "description": "Unix timestamp when the cached token expires."
+    },
+    {
+      "id": "phase",
+      "name": "Phase",
+      "description": "Async operation tracker: 0 = idle, 1 = awaiting token, 2 = awaiting publish response."
+    },
+    {
+      "id": "buffer",
+      "name": "Buffer",
+      "description": "Accumulated message entries as comma-separated JSON fragments."
+    },
+    {
+      "id": "buffer_count",
+      "name": "Buffer count",
+      "description": "Number of messages currently in the buffer."
+    },
+    {
+      "id": "pending_payload",
+      "name": "Pending payload",
+      "description": "The full HTTP request body being published."
+    },
+    {
+      "id": "pending_count",
+      "name": "Pending count",
+      "description": "Number of messages in the current pending publish batch."
+    }
+  ]
+}
