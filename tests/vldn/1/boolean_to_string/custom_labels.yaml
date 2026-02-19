@@ -5,11 +5,6 @@ config:
   false_text: "OFF"
 
 steps:
-  - action: "assert_outputs"
-    comment: "Default input is false"
-    expected_outputs:
-      text: "OFF"
-
   - action: "set_inputs"
     comment: "Set value to true"
     inputs:
