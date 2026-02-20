@@ -378,8 +378,8 @@ if (channel == "off") {
     return
 }
 
-// pulse signals below
-if (value == true) {
+// pulse signals below - trigger only on rising edge
+if (value == false) {
     return
 }
 
