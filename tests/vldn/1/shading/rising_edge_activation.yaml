@@ -1,0 +1,124 @@
+name: "pulse inputs activate on rising edge only"
+
+config:
+  shading_type: 0
+  opening_duration: 1
+  closing_duration: 1
+  return_duration: 0.2
+  motor_lock_duration: 0
+
+steps:
+  # Verify that falling edge on toggle does NOT start movement
+  - action: "set_inputs"
+    comment: "Set toggle high without prior low (already defaults to false)"
+    inputs:
+      toggle: true
+
+  - action: "wait"
+    duration_ms: 5
+
+  - action: "assert_outputs"
+    comment: "Rising edge should start opening"
+    expected_outputs:
+      open: true
+      close: false
+
+  # Wait for full open
+  - action: "wait"
+    duration_ms: 1410
+
+  - action: "assert_outputs"
+    comment: "Fully open"
+    expected_outputs:
+      open: false
+      close: false
+      position: 100
+      slats: 0
+
+  # Release toggle (falling edge) - should NOT trigger any action
+  - action: "set_inputs"
+    comment: "Falling edge on toggle"
+    inputs:
+      toggle: false
+
+  - action: "wait"
+    duration_ms: 50
+
+  - action: "assert_outputs"
+    comment: "Falling edge must not start any movement"
+    expected_outputs:
+      open: false
+      close: false
+      position: 100
+      slats: 0
+
+  # Now test full_open with explicit falling edge - should not trigger
+  - action: "set_inputs"
+    comment: "Set full_close high (rising edge) to move to closed"
+    inputs:
+      full_close: true
+
+  - action: "wait"
+    duration_ms: 5
+
+  - action: "assert_outputs"
+    comment: "Rising edge on full_close should start closing"
+    expected_outputs:
+      open: false
+      close: true
+
+  - action: "set_inputs"
+    comment: "Release full_close (falling edge)"
+    inputs:
+      full_close: false
+
+  - action: "wait"
+    duration_ms: 5
+
+  - action: "assert_outputs"
+    comment: "Falling edge on full_close must not stop the movement"
+    expected_outputs:
+      open: false
+      close: true
+
+  # Wait for full close
+  - action: "wait"
+    duration_ms: 1410
+
+  - action: "assert_outputs"
+    comment: "Fully closed"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+      slats: 0
+
+  # Now send only a falling edge on full_open (set true then immediately false)
+  # First set high
+  - action: "set_inputs"
+    comment: "Rising edge on full_open"
+    inputs:
+      full_open: true
+
+  - action: "wait"
+    duration_ms: 5
+
+  - action: "assert_outputs"
+    comment: "Rising edge should start opening"
+    expected_outputs:
+      open: true
+      close: false
+
+  - action: "set_inputs"
+    comment: "Release full_open (falling edge)"
+    inputs:
+      full_open: false
+
+  - action: "wait"
+    duration_ms: 5
+
+  - action: "assert_outputs"
+    comment: "Falling edge must not stop the opening movement"
+    expected_outputs:
+      open: true
+      close: false
