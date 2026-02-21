@@ -1,0 +1,67 @@
+name: "no false trigger when input starts high"
+
+config:
+  direction: 0
+  pulse_duration: 0.2
+  startup_delay: 0
+
+steps:
+  # First event is true - should NOT trigger rising edge
+  # because block hasn't observed the prior false state
+  - action: "set_inputs"
+    comment: "First event: input starts at true"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "No pulse - first event only establishes baseline"
+    expected_outputs:
+      output: false
+
+  - action: "wait"
+    duration_ms: 50
+
+  - action: "assert_outputs"
+    comment: "Still no pulse after wait"
+    expected_outputs:
+      output: false
+
+  # Sending true again should not trigger (no state change)
+  - action: "set_inputs"
+    comment: "Input still true (no change)"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "No pulse - no edge transition"
+    expected_outputs:
+      output: false
+
+  # Now cycle: true -> false -> true to get a real rising edge
+  - action: "set_inputs"
+    comment: "Falling edge: true -> false (no pulse in Rising mode)"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    comment: "No pulse on falling edge in Rising mode"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Rising edge: false -> true"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Now pulse fires - proper rising edge observed"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Pulse ended"
+    expected_outputs:
+      output: false

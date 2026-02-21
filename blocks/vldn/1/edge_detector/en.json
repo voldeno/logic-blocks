@@ -1,0 +1,46 @@
+{
+  "description": "Detects rising, falling, or both edges on a boolean input and generates a timed output pulse.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Input",
+      "description": "Boolean signal to monitor for edge transitions."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Pulse output. Goes high for the configured pulse duration when an edge is detected."
+    }
+  ],
+  "config": [
+    {
+      "id": "direction",
+      "name": "Direction",
+      "description": "Which edge transitions to detect. Rising detects false-to-true, Falling detects true-to-false, Both detects any change."
+    },
+    {
+      "id": "pulse_duration",
+      "name": "Pulse duration",
+      "description": "Duration of the output pulse generated on each detected edge."
+    },
+    {
+      "id": "startup_delay",
+      "name": "Startup delay",
+      "description": "Time after system boot during which edge detection is suppressed. Prevents false triggers from peripherals initializing. Set to 0 to disable."
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_input",
+      "name": "Previous input state",
+      "description": "Stores the previous state of the input to detect transitions."
+    },
+    {
+      "id": "initialized",
+      "name": "Initialized",
+      "description": "Tracks whether the block has received at least one input event. The first event establishes a baseline without triggering edge detection."
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+channel = input::channel()
+value = input::value()
+
+std::print(str::fmt("uptime: {}", time::uptime()))
+
+extern fn onPulseEnd(v) {
+    output::set("output", false)
+}
+
+if (channel == "input") {
+    prev_input = state::get("prev_input")
+    initialized = state::get("initialized")
+
+    if (!initialized) {
+        state::set("prev_input", value)
+        state::set("initialized", true)
+        return
+    }
+
+    startup_delay = config::get("startup_delay")
+    if (startup_delay > 0 and time::uptime() < startup_delay) {
+        state::set("prev_input", value)
+        return
+    }
+
+    direction = config::get("direction") // 0=Rising, 1=Falling, 2=Both
+    edge_detected = false
+
+    if (direction == 0) {
+        edge_detected = value and !prev_input
+    } else if (direction == 1) {
+        edge_detected = !value and prev_input
+    } else {
+        edge_detected = (value and !prev_input) or (!value and prev_input)
+    }
+
+    state::set("prev_input", value)
+
+    if (edge_detected) {
+        callback::clear()
+        output::set("output", true)
+        pulse_ms = math::round(config::get("pulse_duration") * 1000)
+        callback::set(pulse_ms, "onPulseEnd", 0)
+    }
+}
