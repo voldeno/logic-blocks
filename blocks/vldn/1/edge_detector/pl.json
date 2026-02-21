@@ -1,0 +1,46 @@
+{
+  "description": "Wykrywa zbocza narastające, opadające lub oba na wejściu boolowskim i generuje impuls wyjściowy o konfigurowalnym czasie trwania.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Wejście",
+      "description": "Sygnał boolowski monitorowany pod kątem zmian zbocza."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Impuls wyjściowy. Aktywny przez skonfigurowany czas po wykryciu zbocza."
+    }
+  ],
+  "config": [
+    {
+      "id": "direction",
+      "name": "Kierunek",
+      "description": "Rodzaj wykrywanego zbocza. Narastające wykrywa przejście z false na true, opadające z true na false, oba wykrywają każdą zmianę."
+    },
+    {
+      "id": "pulse_duration",
+      "name": "Czas trwania impulsu",
+      "description": "Czas trwania impulsu wyjściowego generowanego przy każdym wykrytym zboczu."
+    },
+    {
+      "id": "startup_delay",
+      "name": "Opóźnienie startowe",
+      "description": "Czas po uruchomieniu systemu, w którym wykrywanie zboczy jest wstrzymane. Zapobiega fałszywym wyzwoleniom podczas inicjalizacji urządzeń peryferyjnych. Ustaw 0 aby wyłączyć."
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_input",
+      "name": "Poprzedni stan wejścia",
+      "description": "Przechowuje poprzedni stan wejścia do wykrywania zmian."
+    },
+    {
+      "id": "initialized",
+      "name": "Zainicjalizowany",
+      "description": "Śledzi czy blok otrzymał co najmniej jedno zdarzenie wejściowe. Pierwsze zdarzenie ustala punkt odniesienia bez wyzwalania detekcji zbocza."
+    }
+  ]
+}

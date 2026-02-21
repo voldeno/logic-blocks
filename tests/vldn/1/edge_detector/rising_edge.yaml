@@ -1,0 +1,75 @@
+name: "rising edge detection"
+
+config:
+  direction: 0
+  pulse_duration: 0.2
+  startup_delay: 0
+
+steps:
+  # First event establishes baseline - no edge detected
+  - action: "set_inputs"
+    comment: "First event: input false (baseline)"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    comment: "No pulse on first event"
+    expected_outputs:
+      output: false
+
+  # Rising edge: false -> true should trigger
+  - action: "set_inputs"
+    comment: "Rising edge: false -> true"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse active on rising edge"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Pulse ended after 200ms"
+    expected_outputs:
+      output: false
+
+  # Falling edge: true -> false should NOT trigger (direction=Rising)
+  - action: "set_inputs"
+    comment: "Falling edge: true -> false"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    comment: "No pulse on falling edge in Rising mode"
+    expected_outputs:
+      output: false
+
+  - action: "wait"
+    duration_ms: 50
+
+  - action: "assert_outputs"
+    comment: "Still no pulse"
+    expected_outputs:
+      output: false
+
+  # Another rising edge to confirm repeatable behavior
+  - action: "set_inputs"
+    comment: "Another rising edge: false -> true"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse active again"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Pulse ended"
+    expected_outputs:
+      output: false

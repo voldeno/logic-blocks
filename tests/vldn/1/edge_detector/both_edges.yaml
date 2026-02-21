@@ -1,0 +1,89 @@
+name: "both edges detection"
+
+config:
+  direction: 2
+  pulse_duration: 0.2
+  startup_delay: 0
+
+steps:
+  # First event establishes baseline
+  - action: "set_inputs"
+    comment: "First event: input false (baseline)"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    comment: "No pulse on first event"
+    expected_outputs:
+      output: false
+
+  # Rising edge: false -> true should trigger
+  - action: "set_inputs"
+    comment: "Rising edge: false -> true"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse active on rising edge"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Pulse ended"
+    expected_outputs:
+      output: false
+
+  # Falling edge: true -> false should also trigger
+  - action: "set_inputs"
+    comment: "Falling edge: true -> false"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    comment: "Pulse active on falling edge"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Pulse ended"
+    expected_outputs:
+      output: false
+
+  # Rapid toggle: rising edge while pulse from falling is still active
+  - action: "set_inputs"
+    comment: "Rising edge again"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse active (re-triggered)"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 100
+
+  # Falling edge mid-pulse re-triggers
+  - action: "set_inputs"
+    comment: "Falling edge during active pulse"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    comment: "Pulse re-triggered"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Pulse ended after re-trigger"
+    expected_outputs:
+      output: false

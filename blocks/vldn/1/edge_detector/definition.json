@@ -1,0 +1,72 @@
+{
+  "name": "Edge detector",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "input",
+      "abbrev": "I",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "direction",
+      "type": "ENUM",
+      "values": [
+        "Rising",
+        "Falling",
+        "Both"
+      ],
+      "default": "0"
+    },
+    {
+      "id": "pulse_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.1",
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "startup_delay",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_input",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "initialized",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}
