@@ -1,8 +1,6 @@
 channel = input::channel()
 value = input::value()
 
-std::print(str::fmt("uptime: {}", time::uptime()))
-
 extern fn onPulseEnd(v) {
     output::set("output", false)
 }
