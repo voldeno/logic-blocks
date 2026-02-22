@@ -3,13 +3,13 @@ name: "home before move - already at home skips homing"
 config:
   home_direction: 0 # Forward
   position_tolerance: 0
-  home_before_move: true
 
 steps:
-  # Activate home switch first - motor is physically at home
+  # Enable home_before_move and activate home switch
   - action: "set_inputs"
-    comment: "Home switch is already active"
+    comment: "Enable home before move and set home switch active"
     inputs:
+      home_before_move: true
       home_switch: true
 
   # Set target while home switch is active - should skip homing and move directly

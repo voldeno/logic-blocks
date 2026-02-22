@@ -3,7 +3,6 @@ name: "home before move - auto homes then moves to target"
 config:
   home_direction: 0 # Forward
   position_tolerance: 0
-  home_before_move: true
 
 steps:
   - action: "assert_outputs"
@@ -15,6 +14,12 @@ steps:
       at_target: false
       homed: false
       moving: false
+
+  # Enable home_before_move via input
+  - action: "set_inputs"
+    comment: "Enable home before move"
+    inputs:
+      home_before_move: true
 
   # Set target while not homed and not at home switch - should auto-home first
   - action: "set_inputs"
