@@ -88,6 +88,17 @@ if (state::get("is_homing") and input::get("home_switch")) {
     return
 }
 
+// Handle "home_switch" input - stop motor when home switch activates outside homing
+if (channel == "home_switch") {
+    if (value and output::get("moving")) {
+        stop_motors()
+        output::set("position", 0)
+        output::set("homed", true)
+        output::set("at_target", true)
+    }
+    return
+}
+
 // Handle "home" input
 if (channel == "home") {
     prev_home = state::get("prev_home")
