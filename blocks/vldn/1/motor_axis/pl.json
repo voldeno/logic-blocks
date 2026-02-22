@@ -25,6 +25,11 @@
       "id": "stop",
       "name": "Stop",
       "description": "Wejście impulsowe. Zbocze narastające zatrzymuje wszelki ruch i anuluje bazowanie. Wejście dominujące. Pozycja i status bazowania są zachowywane."
+    },
+    {
+      "id": "home_before_move",
+      "name": "Bazowanie przed ruchem",
+      "description": "Gdy aktywne, silnik automatycznie bazuje przed każdym ruchem do nowego celu. Jeśli czujnik bazowy jest już aktywny, ruch rozpoczyna się natychmiast od pozycji zero. W przeciwnym razie silnik najpierw bazuje, a następnie jedzie do celu."
     }
   ],
   "outputs": [
@@ -69,11 +74,6 @@
       "id": "position_tolerance",
       "name": "Tolerancja pozycji",
       "description": "Maksymalna dopuszczalna odległość od pozycji docelowej, aby uznać ją za osiągniętą. 0 oznacza dokładne dopasowanie."
-    },
-    {
-      "id": "home_before_move",
-      "name": "Bazowanie przed ruchem",
-      "description": "Gdy włączone, silnik automatycznie bazuje przed każdym ruchem do nowego celu. Jeśli czujnik bazowy jest już aktywny, ruch rozpoczyna się natychmiast od pozycji zero. W przeciwnym razie silnik najpierw bazuje, a następnie jedzie do celu."
     }
   ],
   "state": [

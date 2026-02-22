@@ -151,7 +151,7 @@ if (channel == "encoder") {
 // Handle "target" input
 if (channel == "target") {
     is_homing = state::get("is_homing")
-    home_before_move = config::get("home_before_move")
+    home_before_move = input::get("home_before_move")
 
     if (home_before_move) {
         if (is_homing) {

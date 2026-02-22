@@ -31,6 +31,12 @@
       "abbrev": "S",
       "type": "BOOLEAN",
       "default": "false"
+    },
+    {
+      "id": "home_before_move",
+      "abbrev": "HB",
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "outputs": [
@@ -90,11 +96,6 @@
           }
         ]
       }
-    },
-    {
-      "id": "home_before_move",
-      "type": "BOOLEAN",
-      "default": "false"
     }
   ],
   "state": [

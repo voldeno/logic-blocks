@@ -25,6 +25,11 @@
       "id": "stop",
       "name": "Stop",
       "description": "Pulse input. Rising edge stops all movement and cancels homing. Dominant input. Position and homed status are preserved."
+    },
+    {
+      "id": "home_before_move",
+      "name": "Home before move",
+      "description": "When active, the motor automatically homes before moving to each new target. If the home switch is already active, movement starts immediately from position zero. Otherwise, the motor homes first and then proceeds to the target."
     }
   ],
   "outputs": [
@@ -69,11 +74,6 @@
       "id": "position_tolerance",
       "name": "Position tolerance",
       "description": "Maximum acceptable distance from the target position to be considered at target. 0 means exact match."
-    },
-    {
-      "id": "home_before_move",
-      "name": "Home before move",
-      "description": "When enabled, the motor automatically homes before moving to each new target. If the home switch is already active, movement starts immediately from position zero. Otherwise, the motor homes first and then proceeds to the target."
     }
   ],
   "state": [
