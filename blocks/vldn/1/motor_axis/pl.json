@@ -1,5 +1,5 @@
 {
-  "description": "Jednosiowy sterownik silnika ze sprzężeniem zwrotnym z enkodera i obsługą bazowania. Napędza silnik do pozycji docelowej, zliczając impulsy enkodera.",
+  "description": "Jednosiowy sterownik silnika z obsługą bazowania. Napędza silnik do pozycji docelowej za pomocą zliczania impulsów enkodera lub sterowania czasowego.",
   "inputs": [
     {
       "id": "target",
@@ -74,6 +74,21 @@
       "id": "position_tolerance",
       "name": "Tolerancja pozycji",
       "description": "Maksymalna dopuszczalna odległość od pozycji docelowej, aby uznać ją za osiągniętą. 0 oznacza dokładne dopasowanie."
+    },
+    {
+      "id": "control_mode",
+      "name": "Tryb sterowania",
+      "description": "Tryb enkodera używa zewnętrznych impulsów enkodera do śledzenia pozycji. Tryb czasowy używa wewnętrznie taktowanych kroków, gdzie każda jednostka pozycji odpowiada skonfigurowanemu czasowi trwania."
+    },
+    {
+      "id": "pulse_time_forward",
+      "name": "Czas impulsu do przodu",
+      "description": "Czas trwania jednego kroku pozycji podczas ruchu w kierunku do przodu. Używane tylko w trybie sterowania czasowego."
+    },
+    {
+      "id": "pulse_time_reverse",
+      "name": "Czas impulsu do tyłu",
+      "description": "Czas trwania jednego kroku pozycji podczas ruchu w kierunku do tyłu. Używane tylko w trybie sterowania czasowego."
     }
   ],
   "state": [
@@ -106,6 +121,11 @@
       "id": "move_after_home",
       "name": "Ruch po bazowaniu",
       "description": "Prawda, gdy silnik powinien automatycznie ruszyć do oczekującego celu po zakończeniu bazowania."
+    },
+    {
+      "id": "steps_left",
+      "name": "Pozostałe kroki",
+      "description": "Pozostałe wirtualne kroki impulsowe w bieżącym ruchu czasowym."
     }
   ]
 }

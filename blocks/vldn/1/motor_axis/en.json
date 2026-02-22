@@ -1,5 +1,5 @@
 {
-  "description": "Single-axis motor controller with encoder feedback and homing support. Drives a motor to a target position by counting encoder pulses.",
+  "description": "Single-axis motor controller with homing support. Drives a motor to a target position using encoder pulse counting or time-based step control.",
   "inputs": [
     {
       "id": "target",
@@ -74,6 +74,21 @@
       "id": "position_tolerance",
       "name": "Position tolerance",
       "description": "Maximum acceptable distance from the target position to be considered at target. 0 means exact match."
+    },
+    {
+      "id": "control_mode",
+      "name": "Control mode",
+      "description": "Encoder mode uses external encoder pulses to track position. Time-based mode uses internally timed steps, where each position unit corresponds to a configured time duration."
+    },
+    {
+      "id": "pulse_time_forward",
+      "name": "Pulse time forward",
+      "description": "Duration of one position step when moving in the forward direction. Only used in time-based control mode."
+    },
+    {
+      "id": "pulse_time_reverse",
+      "name": "Pulse time reverse",
+      "description": "Duration of one position step when moving in the reverse direction. Only used in time-based control mode."
     }
   ],
   "state": [
@@ -106,6 +121,11 @@
       "id": "move_after_home",
       "name": "Move after home",
       "description": "True when the motor should automatically move to the pending target after homing completes."
+    },
+    {
+      "id": "steps_left",
+      "name": "Steps left",
+      "description": "Remaining virtual pulse steps in the current time-based movement."
     }
   ]
 }

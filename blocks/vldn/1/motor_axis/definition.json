@@ -96,6 +96,48 @@
           }
         ]
       }
+    },
+    {
+      "id": "control_mode",
+      "type": "ENUM",
+      "values": ["Encoder", "Time-based"],
+      "default": "0"
+    },
+    {
+      "id": "pulse_time_forward",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.1",
+      "visibleWhen": {
+        "configId": "control_mode",
+        "values": ["Time-based"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "pulse_time_reverse",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.1",
+      "visibleWhen": {
+        "configId": "control_mode",
+        "values": ["Time-based"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
     }
   ],
   "state": [
@@ -128,6 +170,11 @@
       "id": "move_after_home",
       "type": "BOOLEAN",
       "default": "false"
+    },
+    {
+      "id": "steps_left",
+      "type": "NUMBER",
+      "default": "0"
     }
   ]
 }

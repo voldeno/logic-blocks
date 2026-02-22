@@ -2,6 +2,7 @@ channel = input::channel()
 value = input::value()
 
 fn stop_motors() {
+    callback::clear()
     output::set("forward", false)
     output::set("reverse", false)
     output::set("moving", false)
@@ -19,6 +20,33 @@ fn start_reverse() {
     output::set("moving", true)
 }
 
+extern fn onStep(v) {
+    steps_left = state::get("steps_left") - 1
+    position = output::get("position")
+
+    if (output::get("forward")) {
+        position = position + 1
+    } else {
+        position = position - 1
+    }
+
+    output::set("position", position)
+    state::set("steps_left", steps_left)
+
+    if (steps_left <= 0) {
+        stop_motors()
+        output::set("at_target", true)
+    } else {
+        pulse_ms = 0
+        if (output::get("forward")) {
+            pulse_ms = math::round(config::get("pulse_time_forward") * 1000)
+        } else {
+            pulse_ms = math::round(config::get("pulse_time_reverse") * 1000)
+        }
+        callback::set(pulse_ms, "onStep", 0)
+    }
+}
+
 fn evaluate_target(target, position) {
     tolerance = config::get("position_tolerance")
     diff = target - position
@@ -26,9 +54,21 @@ fn evaluate_target(target, position) {
     if (diff > tolerance) {
         start_forward()
         output::set("at_target", false)
+        if (config::get("control_mode") == 1) {
+            steps = math::round(diff)
+            state::set("steps_left", steps)
+            pulse_ms = math::round(config::get("pulse_time_forward") * 1000)
+            callback::set(pulse_ms, "onStep", 0)
+        }
     } else if (diff < (0 - tolerance)) {
         start_reverse()
         output::set("at_target", false)
+        if (config::get("control_mode") == 1) {
+            steps = math::round(0 - diff)
+            state::set("steps_left", steps)
+            pulse_ms = math::round(config::get("pulse_time_reverse") * 1000)
+            callback::set(pulse_ms, "onStep", 0)
+        }
     } else {
         stop_motors()
         output::set("at_target", true)
@@ -113,6 +153,10 @@ if (channel == "home") {
 
 // Handle "encoder" input
 if (channel == "encoder") {
+    if (config::get("control_mode") == 1) {
+        return
+    }
+
     prev_encoder = state::get("prev_encoder")
 
     if (value and !prev_encoder) {
@@ -152,6 +196,10 @@ if (channel == "encoder") {
 if (channel == "target") {
     is_homing = state::get("is_homing")
     home_before_move = input::get("home_before_move")
+
+    if (config::get("control_mode") == 1 and output::get("moving")) {
+        stop_motors()
+    }
 
     if (home_before_move) {
         if (is_homing) {
