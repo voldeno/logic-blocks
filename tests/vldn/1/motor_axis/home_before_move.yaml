@@ -1,0 +1,161 @@
+name: "home before move - auto homes then moves to target"
+
+config:
+  home_direction: 0 # Forward
+  position_tolerance: 0
+  home_before_move: true
+
+steps:
+  - action: "assert_outputs"
+    comment: "Initial state"
+    expected_outputs:
+      forward: false
+      reverse: false
+      position: 0
+      at_target: false
+      homed: false
+      moving: false
+
+  # Set target while not homed and not at home switch - should auto-home first
+  - action: "set_inputs"
+    comment: "Set target to 5 while not homed"
+    inputs:
+      target: 5
+
+  - action: "assert_outputs"
+    comment: "Motor homes forward first (home_direction=Forward)"
+    expected_outputs:
+      forward: true
+      reverse: false
+      homed: false
+      moving: true
+      at_target: false
+
+  # Home switch activates - homing completes, then auto-moves to pending target
+  - action: "set_inputs"
+    comment: "Home switch activates"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homing done, now moving forward toward target 5"
+    expected_outputs:
+      homed: true
+      position: 0
+      forward: true
+      reverse: false
+      moving: true
+      at_target: false
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Simulate 5 encoder pulses to reach target
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      position: 1
+      at_target: false
+
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  - action: "set_inputs"
+    comment: "Encoder pulse 5"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Reached target 5"
+    expected_outputs:
+      position: 5
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  # Now set a new target - should auto-home again since home_switch is not active
+  - action: "set_inputs"
+    comment: "Set new target to 2 while at position 5"
+    inputs:
+      target: 2
+
+  - action: "assert_outputs"
+    comment: "Auto-home starts again (home_switch inactive)"
+    expected_outputs:
+      forward: true
+      reverse: false
+      homed: false
+      moving: true
+
+  - action: "set_inputs"
+    comment: "Home switch activates"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homing done, moving forward toward target 2"
+    expected_outputs:
+      homed: true
+      position: 0
+      forward: true
+      moving: true
+      at_target: false
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  - action: "set_inputs"
+    comment: "Encoder pulse 2"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Reached target 2"
+    expected_outputs:
+      position: 2
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false

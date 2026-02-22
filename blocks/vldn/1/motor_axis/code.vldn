@@ -39,8 +39,32 @@ fn complete_homing() {
     stop_motors()
     output::set("position", 0)
     output::set("homed", true)
-    output::set("at_target", true)
     state::set("is_homing", false)
+
+    if (state::get("move_after_home")) {
+        state::set("move_after_home", false)
+        pending_target = state::get("pending_target")
+        evaluate_target(pending_target, 0)
+    } else {
+        output::set("at_target", true)
+    }
+}
+
+fn start_homing_sequence() {
+    output::set("homed", false)
+    output::set("at_target", false)
+    state::set("is_homing", true)
+
+    if (input::get("home_switch")) {
+        complete_homing()
+    } else {
+        home_direction = config::get("home_direction") // 0=Forward, 1=Reverse
+        if (home_direction == 0) {
+            start_forward()
+        } else {
+            start_reverse()
+        }
+    }
 }
 
 // Handle "stop" input first (dominant input)
@@ -69,22 +93,7 @@ if (channel == "home") {
     prev_home = state::get("prev_home")
 
     if (value and !prev_home) {
-        // Rising edge on home - start homing sequence
-        output::set("homed", false)
-        output::set("at_target", false)
-        state::set("is_homing", true)
-
-        // Check if already at home position
-        if (input::get("home_switch")) {
-            complete_homing()
-        } else {
-            home_direction = config::get("home_direction") // 0=Forward, 1=Reverse
-            if (home_direction == 0) {
-                start_forward()
-            } else {
-                start_reverse()
-            }
-        }
+        start_homing_sequence()
     }
 
     state::set("prev_home", value)
@@ -130,13 +139,31 @@ if (channel == "encoder") {
 
 // Handle "target" input
 if (channel == "target") {
-    homed = output::get("homed")
     is_homing = state::get("is_homing")
+    home_before_move = config::get("home_before_move")
 
-    if (homed and !is_homing) {
-        // Only respond to target changes when homed and not homing
-        position = output::get("position")
-        evaluate_target(value, position)
+    if (home_before_move) {
+        if (is_homing) {
+            state::set("pending_target", value)
+            state::set("move_after_home", true)
+            return
+        }
+
+        if (input::get("home_switch")) {
+            output::set("position", 0)
+            output::set("homed", true)
+            evaluate_target(value, 0)
+        } else {
+            state::set("pending_target", value)
+            state::set("move_after_home", true)
+            start_homing_sequence()
+        }
+    } else {
+        homed = output::get("homed")
+        if (homed and !is_homing) {
+            position = output::get("position")
+            evaluate_target(value, position)
+        }
     }
 
     return

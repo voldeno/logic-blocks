@@ -69,6 +69,11 @@
       "id": "position_tolerance",
       "name": "Tolerancja pozycji",
       "description": "Maksymalna dopuszczalna odległość od pozycji docelowej, aby uznać ją za osiągniętą. 0 oznacza dokładne dopasowanie."
+    },
+    {
+      "id": "home_before_move",
+      "name": "Bazowanie przed ruchem",
+      "description": "Gdy włączone, silnik automatycznie bazuje przed każdym ruchem do nowego celu. Jeśli czujnik bazowy jest już aktywny, ruch rozpoczyna się natychmiast od pozycji zero. W przeciwnym razie silnik najpierw bazuje, a następnie jedzie do celu."
     }
   ],
   "state": [
@@ -91,6 +96,16 @@
       "id": "is_homing",
       "name": "Bazowanie w toku",
       "description": "Prawda, gdy sekwencja bazowania jest w trakcie realizacji."
+    },
+    {
+      "id": "pending_target",
+      "name": "Oczekujący cel",
+      "description": "Przechowuje pozycję docelową, do której silnik ma się przemieścić po zakończeniu bazowania."
+    },
+    {
+      "id": "move_after_home",
+      "name": "Ruch po bazowaniu",
+      "description": "Prawda, gdy silnik powinien automatycznie ruszyć do oczekującego celu po zakończeniu bazowania."
     }
   ]
 }

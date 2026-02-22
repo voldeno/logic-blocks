@@ -90,6 +90,11 @@
           }
         ]
       }
+    },
+    {
+      "id": "home_before_move",
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "state": [
@@ -110,6 +115,16 @@
     },
     {
       "id": "is_homing",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "pending_target",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "move_after_home",
       "type": "BOOLEAN",
       "default": "false"
     }

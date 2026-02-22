@@ -69,6 +69,11 @@
       "id": "position_tolerance",
       "name": "Position tolerance",
       "description": "Maximum acceptable distance from the target position to be considered at target. 0 means exact match."
+    },
+    {
+      "id": "home_before_move",
+      "name": "Home before move",
+      "description": "When enabled, the motor automatically homes before moving to each new target. If the home switch is already active, movement starts immediately from position zero. Otherwise, the motor homes first and then proceeds to the target."
     }
   ],
   "state": [
@@ -91,6 +96,16 @@
       "id": "is_homing",
       "name": "Is homing",
       "description": "True while the homing sequence is in progress."
+    },
+    {
+      "id": "pending_target",
+      "name": "Pending target",
+      "description": "Stores the target position to move to after homing completes when home-before-move is active."
+    },
+    {
+      "id": "move_after_home",
+      "name": "Move after home",
+      "description": "True when the motor should automatically move to the pending target after homing completes."
     }
   ]
 }
