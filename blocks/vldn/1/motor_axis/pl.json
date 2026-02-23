@@ -89,6 +89,11 @@
       "id": "pulse_time_reverse",
       "name": "Czas impulsu do tyłu",
       "description": "Czas trwania jednego kroku pozycji podczas ruchu w kierunku do tyłu. Używane tylko w trybie sterowania czasowego."
+    },
+    {
+      "id": "motor_lock_duration",
+      "name": "Czas blokady silnika",
+      "description": "Czas pauzy między zmianami kierunku w celu ochrony silnika. Silnik zatrzymuje się na ten okres przed uruchomieniem w przeciwnym kierunku. Ustaw 0, aby wyłączyć."
     }
   ],
   "state": [
@@ -126,6 +131,26 @@
       "id": "steps_left",
       "name": "Pozostałe kroki",
       "description": "Pozostałe wirtualne kroki impulsowe w bieżącym ruchu czasowym."
+    },
+    {
+      "id": "was_forward",
+      "name": "Był do przodu",
+      "description": "Prawda, jeśli ostatni ruch silnika był w kierunku do przodu. Używane do obliczania opóźnienia blokady silnika."
+    },
+    {
+      "id": "last_stop_time",
+      "name": "Czas ostatniego zatrzymania",
+      "description": "Czas działania systemu, kiedy silnik ostatnio się zatrzymał. Używane do obliczania opóźnienia blokady silnika."
+    },
+    {
+      "id": "lock_target",
+      "name": "Cel blokady",
+      "description": "Pozycja docelowa przechowywana podczas oczekiwania na zakończenie opóźnienia blokady silnika."
+    },
+    {
+      "id": "lock_position",
+      "name": "Pozycja blokady",
+      "description": "Bieżąca pozycja przechowywana podczas oczekiwania na zakończenie opóźnienia blokady silnika."
     }
   ]
 }

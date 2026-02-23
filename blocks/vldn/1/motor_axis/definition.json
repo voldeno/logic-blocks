@@ -138,6 +138,20 @@
           }
         ]
       }
+    },
+    {
+      "id": "motor_lock_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
     }
   ],
   "state": [
@@ -173,6 +187,26 @@
     },
     {
       "id": "steps_left",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "was_forward",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "last_stop_time",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "lock_target",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "lock_position",
       "type": "NUMBER",
       "default": "0"
     }

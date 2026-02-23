@@ -3,6 +3,10 @@ value = input::value()
 
 fn stop_motors() {
     callback::clear()
+    if (output::get("forward") or output::get("reverse")) {
+        state::set("was_forward", output::get("forward"))
+        state::set("last_stop_time", time::uptime())
+    }
     output::set("forward", false)
     output::set("reverse", false)
     output::set("moving", false)
@@ -47,7 +51,7 @@ extern fn onStep(v) {
     }
 }
 
-fn evaluate_target(target, position) {
+fn evaluate_target_now(target, position) {
     tolerance = config::get("position_tolerance")
     diff = target - position
 
@@ -73,6 +77,55 @@ fn evaluate_target(target, position) {
         stop_motors()
         output::set("at_target", true)
     }
+}
+
+extern fn onMotorLock(v) {
+    evaluate_target_now(state::get("lock_target"), state::get("lock_position"))
+}
+
+fn evaluate_target(target, position) {
+    callback::clear()
+    lock_ms = math::round(config::get("motor_lock_duration") * 1000)
+
+    if (lock_ms <= 0) {
+        evaluate_target_now(target, position)
+        return
+    }
+
+    tolerance = config::get("position_tolerance")
+    diff = target - position
+    going_forward = diff > tolerance
+    going_reverse = diff < (0 - tolerance)
+
+    if (!going_forward and !going_reverse) {
+        evaluate_target_now(target, position)
+        return
+    }
+
+    direction_changed = false
+    if (going_forward and !state::get("was_forward")) {
+        direction_changed = true
+    }
+    if (going_reverse and state::get("was_forward")) {
+        direction_changed = true
+    }
+
+    if (!direction_changed) {
+        evaluate_target_now(target, position)
+        return
+    }
+
+    elapsed_ms = time::uptime() - state::get("last_stop_time")
+    if (elapsed_ms >= lock_ms) {
+        evaluate_target_now(target, position)
+        return
+    }
+
+    remaining_ms = lock_ms - elapsed_ms
+    output::set("at_target", false)
+    state::set("lock_target", target)
+    state::set("lock_position", position)
+    callback::set(math::round(remaining_ms), "onMotorLock", 0)
 }
 
 fn complete_homing() {

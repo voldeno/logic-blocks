@@ -1,0 +1,158 @@
+name: "motor lock delay between direction changes"
+
+config:
+  home_direction: 0
+  position_tolerance: 0
+  control_mode: 1
+  pulse_time_forward: 0.1
+  pulse_time_reverse: 0.1
+  motor_lock_duration: 1.0
+
+steps:
+  # Home first
+  - action: "set_inputs"
+    inputs:
+      home: true
+  - action: "set_inputs"
+    inputs:
+      home: false
+  - action: "set_inputs"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homed"
+    expected_outputs:
+      homed: true
+      position: 0
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Move forward to position 3
+  - action: "set_inputs"
+    comment: "Set target to 3"
+    inputs:
+      target: 3
+
+  - action: "assert_outputs"
+    comment: "Moving forward immediately (first movement, no lock needed)"
+    expected_outputs:
+      forward: true
+      moving: true
+
+  - action: "wait"
+    duration_ms: 450
+
+  - action: "assert_outputs"
+    comment: "Reached position 3"
+    expected_outputs:
+      position: 3
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
+
+  # Now reverse to position 1 - motor lock should apply (direction change)
+  # Motor stopped ~150ms ago (at 300ms into the wait), lock remaining ~850ms
+  - action: "set_inputs"
+    comment: "Set target to 1 (reverse, lock should apply)"
+    inputs:
+      target: 1
+
+  - action: "assert_outputs"
+    comment: "Motor NOT moving yet - waiting for motor lock delay"
+    expected_outputs:
+      forward: false
+      reverse: false
+      moving: false
+      at_target: false
+
+  # Wait 400ms - still well within the ~850ms remaining lock
+  - action: "wait"
+    duration_ms: 400
+
+  - action: "assert_outputs"
+    comment: "Still locked, not moving yet"
+    expected_outputs:
+      forward: false
+      reverse: false
+      moving: false
+
+  # Wait 500ms more (total 900ms, lock ~850ms) - lock should have expired, motor running
+  - action: "wait"
+    duration_ms: 500
+
+  - action: "assert_outputs"
+    comment: "Lock expired, motor now running in reverse"
+    expected_outputs:
+      forward: false
+      reverse: true
+      moving: true
+      at_target: false
+
+  # Wait for 2 reverse steps to complete (200ms)
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Reached target 1"
+    expected_outputs:
+      position: 1
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
+
+  # Move forward again to 2 - direction change, lock applies again
+  - action: "set_inputs"
+    comment: "Set target to 2 (forward again, lock applies)"
+    inputs:
+      target: 2
+
+  - action: "assert_outputs"
+    comment: "Motor locked, not moving yet"
+    expected_outputs:
+      forward: false
+      reverse: false
+      moving: false
+      at_target: false
+
+  # Wait for full lock duration to expire plus one step
+  - action: "wait"
+    duration_ms: 1100
+
+  - action: "assert_outputs"
+    comment: "Lock expired, motor reached target 2"
+    expected_outputs:
+      position: 2
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
+
+  # Same direction movement (forward again to 4) - no lock needed
+  - action: "set_inputs"
+    comment: "Set target to 4 (same forward direction, no lock)"
+    inputs:
+      target: 4
+
+  - action: "assert_outputs"
+    comment: "Motor starts immediately - no direction change"
+    expected_outputs:
+      forward: true
+      moving: true
+      at_target: false
+
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Reached target 4"
+    expected_outputs:
+      position: 4
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
