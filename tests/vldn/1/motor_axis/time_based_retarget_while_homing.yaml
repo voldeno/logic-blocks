@@ -1,0 +1,135 @@
+name: "time-based retarget while homing with home_before_move"
+
+config:
+  home_direction: 0
+  position_tolerance: 0
+  control_mode: 1
+  pulse_time_forward: 0.1
+  pulse_time_reverse: 0.1
+
+steps:
+  # Enable home_before_move and home the motor
+  - action: "set_inputs"
+    comment: "Enable home_before_move"
+    inputs:
+      home_before_move: true
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: true
+
+  # Set initial target - already at home, should move directly
+  - action: "set_inputs"
+    comment: "Set target to 5 while at home"
+    inputs:
+      target: 5
+
+  - action: "assert_outputs"
+    comment: "Moving forward toward 5"
+    expected_outputs:
+      forward: true
+      moving: true
+      homed: true
+      at_target: false
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Wait for 2 steps
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Position 2, mid-movement"
+    expected_outputs:
+      position: 2
+      moving: true
+
+  # Retarget to 3 while moving - should stop, auto-home, then move to 3
+  - action: "set_inputs"
+    comment: "Retarget to 3 mid-movement (home_switch not active)"
+    inputs:
+      target: 3
+
+  - action: "assert_outputs"
+    comment: "Motor stopped and restarted homing toward home direction"
+    expected_outputs:
+      forward: true
+      moving: true
+      homed: false
+      at_target: false
+
+  # Home switch activates - homing completes, then auto-moves to pending target 3
+  - action: "set_inputs"
+    comment: "Home switch activates"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homing done, now moving forward toward target 3"
+    expected_outputs:
+      homed: true
+      position: 0
+      forward: true
+      moving: true
+      at_target: false
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Wait for 3 steps to reach target 3
+  - action: "wait"
+    duration_ms: 450
+
+  - action: "assert_outputs"
+    comment: "Reached target 3"
+    expected_outputs:
+      position: 3
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
+
+  # Now retarget again to verify motor is not stuck
+  - action: "set_inputs"
+    comment: "Set new target to 1 while not at home"
+    inputs:
+      target: 1
+
+  - action: "assert_outputs"
+    comment: "Auto-homing starts again"
+    expected_outputs:
+      forward: true
+      moving: true
+      homed: false
+
+  - action: "set_inputs"
+    comment: "Home switch activates"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homing done, moving to target 1"
+    expected_outputs:
+      homed: true
+      position: 0
+      forward: true
+      moving: true
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  - action: "wait"
+    duration_ms: 150
+
+  - action: "assert_outputs"
+    comment: "Reached target 1"
+    expected_outputs:
+      position: 1
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true

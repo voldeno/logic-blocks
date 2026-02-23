@@ -199,6 +199,8 @@ if (channel == "target") {
 
     if (config::get("control_mode") == 1 and output::get("moving")) {
         stop_motors()
+        state::set("is_homing", false)
+        is_homing = false
     }
 
     if (home_before_move) {
