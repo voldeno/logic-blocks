@@ -25,29 +25,58 @@ fn start_reverse() {
 }
 
 extern fn onStep(v) {
-    steps_left = state::get("steps_left") - 1
-    position = output::get("position")
+    start_time = state::get("move_start_time")
+    start_pos = state::get("move_start_position")
+    target = state::get("move_target")
+    is_forward = output::get("forward")
 
-    if (output::get("forward")) {
-        position = position + 1
+    pulse_ms = 0
+    if (is_forward) {
+        pulse_ms = math::round(config::get("pulse_time_forward") * 1000)
     } else {
-        position = position - 1
+        pulse_ms = math::round(config::get("pulse_time_reverse") * 1000)
+    }
+
+    total_steps = target - start_pos
+    if (total_steps < 0) {
+        total_steps = 0 - total_steps
+    }
+    total_ms = total_steps * pulse_ms
+    elapsed = time::uptime() - start_time
+
+    if (elapsed >= total_ms) {
+        output::set("position", target)
+        stop_motors()
+        output::set("at_target", true)
+        return
+    }
+
+    steps_float = elapsed / pulse_ms
+    steps_int = math::round(steps_float)
+    if (steps_int * pulse_ms > elapsed) {
+        steps_int = steps_int - 1
+    }
+
+    position = start_pos
+    if (is_forward) {
+        position = start_pos + steps_int
+        if (position > target) {
+            position = target
+        }
+    } else {
+        position = start_pos - steps_int
+        if (position < target) {
+            position = target
+        }
     }
 
     output::set("position", position)
-    state::set("steps_left", steps_left)
 
-    if (steps_left <= 0) {
-        stop_motors()
-        output::set("at_target", true)
+    remaining_ms = total_ms - elapsed
+    if (remaining_ms <= 100) {
+        callback::set(math::round(remaining_ms), "onStep", 0)
     } else {
-        pulse_ms = 0
-        if (output::get("forward")) {
-            pulse_ms = math::round(config::get("pulse_time_forward") * 1000)
-        } else {
-            pulse_ms = math::round(config::get("pulse_time_reverse") * 1000)
-        }
-        callback::set(pulse_ms, "onStep", 0)
+        callback::set(100, "onStep", 0)
     }
 }
 
@@ -59,19 +88,33 @@ fn evaluate_target_now(target, position) {
         start_forward()
         output::set("at_target", false)
         if (config::get("control_mode") == 1) {
+            state::set("move_start_time", time::uptime())
+            state::set("move_start_position", position)
+            state::set("move_target", target)
             steps = math::round(diff)
-            state::set("steps_left", steps)
             pulse_ms = math::round(config::get("pulse_time_forward") * 1000)
-            callback::set(pulse_ms, "onStep", 0)
+            total_ms = steps * pulse_ms
+            first_cb = 100
+            if (total_ms < first_cb) {
+                first_cb = total_ms
+            }
+            callback::set(first_cb, "onStep", 0)
         }
     } else if (diff < (0 - tolerance)) {
         start_reverse()
         output::set("at_target", false)
         if (config::get("control_mode") == 1) {
+            state::set("move_start_time", time::uptime())
+            state::set("move_start_position", position)
+            state::set("move_target", target)
             steps = math::round(0 - diff)
-            state::set("steps_left", steps)
             pulse_ms = math::round(config::get("pulse_time_reverse") * 1000)
-            callback::set(pulse_ms, "onStep", 0)
+            total_ms = steps * pulse_ms
+            first_cb = 100
+            if (total_ms < first_cb) {
+                first_cb = total_ms
+            }
+            callback::set(first_cb, "onStep", 0)
         }
     } else {
         stop_motors()

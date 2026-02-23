@@ -186,7 +186,17 @@
       "default": "false"
     },
     {
-      "id": "steps_left",
+      "id": "move_start_time",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "move_start_position",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "move_target",
       "type": "NUMBER",
       "default": "0"
     },

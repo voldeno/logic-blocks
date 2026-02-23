@@ -128,9 +128,19 @@
       "description": "Prawda, gdy silnik powinien automatycznie ruszyć do oczekującego celu po zakończeniu bazowania."
     },
     {
-      "id": "steps_left",
-      "name": "Pozostałe kroki",
-      "description": "Pozostałe wirtualne kroki impulsowe w bieżącym ruchu czasowym."
+      "id": "move_start_time",
+      "name": "Czas rozpoczęcia ruchu",
+      "description": "Czas działania systemu, kiedy rozpoczął się bieżący ruch czasowy. Używane do obliczania czasu, który upłynął, w celu śledzenia pozycji."
+    },
+    {
+      "id": "move_start_position",
+      "name": "Pozycja początkowa ruchu",
+      "description": "Pozycja w momencie rozpoczęcia bieżącego ruchu czasowego. Używane z czasem, który upłynął, do obliczania bieżącej pozycji."
+    },
+    {
+      "id": "move_target",
+      "name": "Cel ruchu",
+      "description": "Pozycja docelowa dla bieżącego ruchu czasowego."
     },
     {
       "id": "was_forward",

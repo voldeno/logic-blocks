@@ -128,9 +128,19 @@
       "description": "True when the motor should automatically move to the pending target after homing completes."
     },
     {
-      "id": "steps_left",
-      "name": "Steps left",
-      "description": "Remaining virtual pulse steps in the current time-based movement."
+      "id": "move_start_time",
+      "name": "Move start time",
+      "description": "System uptime when the current time-based movement started. Used to compute elapsed time for position tracking."
+    },
+    {
+      "id": "move_start_position",
+      "name": "Move start position",
+      "description": "Position when the current time-based movement started. Used with elapsed time to compute the current position."
+    },
+    {
+      "id": "move_target",
+      "name": "Move target",
+      "description": "Target position for the current time-based movement."
     },
     {
       "id": "was_forward",
