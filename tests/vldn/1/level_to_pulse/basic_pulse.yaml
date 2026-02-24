@@ -1,0 +1,28 @@
+name: "generates pulse on true input"
+
+config:
+  pulse_duration: 0.1
+
+steps:
+  - action: "assert_outputs"
+    comment: "Output starts false"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Set input to true"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Output is true (pulse started)"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 150
+
+  - action: "assert_outputs"
+    comment: "Pulse ended after 100ms"
+    expected_outputs:
+      output: false

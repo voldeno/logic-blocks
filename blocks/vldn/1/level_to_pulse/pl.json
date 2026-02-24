@@ -1,0 +1,25 @@
+{
+  "description": "Konwertuje sygnał logiczny na impuls. Generuje impuls wyjściowy o konfigurowalnym czasie za każdym razem, gdy wejście jest prawdziwe, nawet jeśli było już prawdziwe. Przydatne do łączenia stanowych wyjść logicznych z wejściami wyzwalanymi impulsem.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Wejście",
+      "description": "Sygnał logiczny. Każda wartość true wyzwala impuls wyjściowy, niezależnie od poprzedniego stanu."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Impuls wyjściowy. Aktywny przez skonfigurowany czas za każdym razem, gdy wejście jest prawdziwe."
+    }
+  ],
+  "config": [
+    {
+      "id": "pulse_duration",
+      "name": "Czas trwania impulsu",
+      "description": "Czas trwania impulsu wyjściowego."
+    }
+  ],
+  "state": []
+}
