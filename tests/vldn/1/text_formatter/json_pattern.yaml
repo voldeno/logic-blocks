@@ -1,0 +1,22 @@
+name: "json_pattern"
+
+steps:
+  - action: "set_inputs"
+    comment: "Set JSON pattern with {} placeholder inside JSON braces"
+    inputs:
+      pattern: '{"client":"cf","device":"wh","event":"pick","index":{}}'
+
+  - action: "assert_outputs"
+    comment: "No output yet - v1 not received"
+    expected_outputs:
+      text: ""
+
+  - action: "set_inputs"
+    comment: "Set v1 to a numeric string"
+    inputs:
+      v1: "42"
+
+  - action: "assert_outputs"
+    comment: "JSON output with value substituted"
+    expected_outputs:
+      text: '{"client":"cf","device":"wh","event":"pick","index":42}'
