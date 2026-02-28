@@ -42,5 +42,11 @@
     }
   ],
   "config": [],
-  "state": []
+  "state": [
+    { "id": "has_pattern", "type": "BOOLEAN", "default": "false" },
+    { "id": "has_v1", "type": "BOOLEAN", "default": "false" },
+    { "id": "has_v2", "type": "BOOLEAN", "default": "false" },
+    { "id": "has_v3", "type": "BOOLEAN", "default": "false" },
+    { "id": "has_v4", "type": "BOOLEAN", "default": "false" }
+  ]
 }

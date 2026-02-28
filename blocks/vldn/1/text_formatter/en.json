@@ -1,5 +1,5 @@
 {
-  "description": "Formats a text string from an input pattern, substituting placeholders with input values.",
+  "description": "Formats a text string from an input pattern, substituting {} placeholders with input values. Output is deferred until the pattern and all required values have been received, preventing incomplete messages.",
   "inputs": [
     {
       "id": "pattern",
@@ -35,5 +35,31 @@
     }
   ],
   "config": [],
-  "state": []
+  "state": [
+    {
+      "id": "has_pattern",
+      "name": "Pattern received",
+      "description": "Tracks whether the pattern input has been received at least once."
+    },
+    {
+      "id": "has_v1",
+      "name": "Value 1 received",
+      "description": "Tracks whether the v1 input has been received at least once."
+    },
+    {
+      "id": "has_v2",
+      "name": "Value 2 received",
+      "description": "Tracks whether the v2 input has been received at least once."
+    },
+    {
+      "id": "has_v3",
+      "name": "Value 3 received",
+      "description": "Tracks whether the v3 input has been received at least once."
+    },
+    {
+      "id": "has_v4",
+      "name": "Value 4 received",
+      "description": "Tracks whether the v4 input has been received at least once."
+    }
+  ]
 }
