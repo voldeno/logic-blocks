@@ -1,0 +1,76 @@
+name: "enable toggles between pulses"
+
+config: {}
+
+steps:
+  # First pulse while disabled - blocked
+  - action: "set_inputs"
+    comment: "Disable the gate"
+    inputs:
+      enable: false
+
+  - action: "set_inputs"
+    comment: "First pulse (rising edge)"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Blocked - output stays false"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # Enable the gate between pulses
+  - action: "set_inputs"
+    comment: "Enable the gate"
+    inputs:
+      enable: true
+
+  - action: "assert_outputs"
+    comment: "Enabling does not trigger output"
+    expected_outputs:
+      output: false
+
+  # Second pulse while enabled - passes
+  - action: "set_inputs"
+    comment: "Second pulse (rising edge)"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Passed - output is true"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    comment: "Output follows input down"
+    expected_outputs:
+      output: false
+
+  # Disable between pulses again
+  - action: "set_inputs"
+    comment: "Disable the gate again"
+    inputs:
+      enable: false
+
+  # Third pulse while disabled - blocked
+  - action: "set_inputs"
+    comment: "Third pulse (rising edge)"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Blocked again"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      input: false

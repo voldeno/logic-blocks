@@ -1,0 +1,18 @@
+channel = input::channel()
+value = input::value()
+
+if (channel == "input") {
+    prev_input = state::get("prev_input")
+
+    if (value and !prev_input) {
+        if (input::get("enable")) {
+            output::set("output", true)
+        }
+    }
+
+    if (!value and prev_input) {
+        output::set("output", false)
+    }
+
+    state::set("prev_input", value)
+}

@@ -1,0 +1,34 @@
+name: "pulse passes when enabled"
+
+config: {}
+
+steps:
+  - action: "assert_outputs"
+    comment: "Output starts false"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Enable the gate"
+    inputs:
+      enable: true
+
+  - action: "set_inputs"
+    comment: "Rising edge on input"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse forwarded to output"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Falling edge on input"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    comment: "Output follows input down"
+    expected_outputs:
+      output: false
