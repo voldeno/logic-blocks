@@ -1,0 +1,88 @@
+name: "reset"
+
+config:
+  default_value: "default"
+  trigger_on_capture: true
+
+steps:
+  - action: "set_inputs"
+    comment: "Set input value to 'hello'"
+    inputs:
+      value: "hello"
+
+  - action: "set_inputs"
+    comment: "Capture the value"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to 'hello'"
+    expected_outputs:
+      value: "hello"
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "Rising edge on reset"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Output reset to default_value ('default')"
+    expected_outputs:
+      value: "default"
+
+  - action: "set_inputs"
+    comment: "Release reset"
+    inputs:
+      reset: false
+
+  - action: "assert_outputs"
+    comment: "Output still holds default_value"
+    expected_outputs:
+      value: "default"
+
+  - action: "set_inputs"
+    comment: "Change input value to 'after reset'"
+    inputs:
+      value: "after reset"
+
+  - action: "set_inputs"
+    comment: "Capture after reset"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to 'after reset'"
+    expected_outputs:
+      value: "after reset"
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "Reset again"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Output reset to default_value ('default') again"
+    expected_outputs:
+      value: "default"
+
+  - action: "set_inputs"
+    inputs:
+      reset: false
+
+  - action: "set_inputs"
+    comment: "Change input value to 'ignored'"
+    inputs:
+      value: "ignored"
+
+  - action: "assert_outputs"
+    comment: "Output still holds default_value"
+    expected_outputs:
+      value: "default"

@@ -1,0 +1,129 @@
+name: "trigger"
+
+config:
+  default_value: ""
+  trigger_on_capture: false
+
+steps:
+  - action: "set_inputs"
+    comment: "Set input value to 'hello'"
+    inputs:
+      value: "hello"
+
+  - action: "set_inputs"
+    comment: "Capture the value (trigger_on_capture is false)"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output unchanged (capture does not auto-send)"
+    expected_outputs:
+      value: ""
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "Rising edge on trigger"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output now shows captured value 'hello'"
+    expected_outputs:
+      value: "hello"
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  - action: "set_inputs"
+    comment: "Change input value to 'world'"
+    inputs:
+      value: "world"
+
+  - action: "set_inputs"
+    comment: "Capture new value"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output still holds 'hello' (no auto-send)"
+    expected_outputs:
+      value: "hello"
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "Rising edge on trigger"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output now shows 'world'"
+    expected_outputs:
+      value: "world"
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  - action: "set_inputs"
+    comment: "Rising edge on trigger again (same captured value)"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output still 'world' (re-sent)"
+    expected_outputs:
+      value: "world"
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  - action: "set_inputs"
+    comment: "Change input value to 'not captured' (not captured)"
+    inputs:
+      value: "not captured"
+
+  - action: "set_inputs"
+    comment: "Rising edge on trigger (no new capture)"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output still 'world' (last captured value, not current input)"
+    expected_outputs:
+      value: "world"
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  - action: "set_inputs"
+    comment: "Reset"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Output reset to empty string"
+    expected_outputs:
+      value: ""
+
+  - action: "set_inputs"
+    inputs:
+      reset: false
+
+  - action: "set_inputs"
+    comment: "Trigger after reset (sends default captured value)"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output still empty string (captured value was reset to default)"
+    expected_outputs:
+      value: ""

@@ -1,0 +1,66 @@
+{
+  "description": "Przechwytuje wartość tekstową na impuls i przechowuje ją wewnętrznie.",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Wartość tekstowa dostępna do przechwycenia."
+    },
+    {
+      "id": "capture",
+      "name": "Przechwyć",
+      "description": "Wejście impulsowe. Zbocze narastające zatrzaskuje bieżącą wartość."
+    },
+    {
+      "id": "trigger",
+      "name": "Wyzwól",
+      "description": "Wejście impulsowe. Zbocze narastające wysyła przechwyconą wartość na wyjście."
+    },
+    {
+      "id": "reset",
+      "name": "Resetuj",
+      "description": "Wejście impulsowe. Zbocze narastające resetuje wyjście do wartości domyślnej."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Zatrzaśnięta wartość tekstowa."
+    }
+  ],
+  "config": [
+    {
+      "id": "default_value",
+      "name": "Wartość domyślna",
+      "description": "Wartość przywracana przy resecie."
+    },
+    {
+      "id": "trigger_on_capture",
+      "name": "Wyzwól przy przechwyceniu",
+      "description": "Gdy włączone, przechwycenie wartości natychmiast wysyła ją na wyjście."
+    }
+  ],
+  "state": [
+    {
+      "id": "captured_value",
+      "name": "Przechwycona wartość",
+      "description": "Przechowuje wewnętrznie przechwyconą wartość."
+    },
+    {
+      "id": "prev_capture",
+      "name": "Poprzedni stan przechwycenia",
+      "description": "Przechowuje poprzedni stan wejścia przechwycenia."
+    },
+    {
+      "id": "prev_trigger",
+      "name": "Poprzedni stan wyzwolenia",
+      "description": "Przechowuje poprzedni stan wejścia wyzwolenia."
+    },
+    {
+      "id": "prev_reset",
+      "name": "Poprzedni stan resetu",
+      "description": "Przechowuje poprzedni stan wejścia resetu."
+    }
+  ]
+}
