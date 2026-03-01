@@ -1,0 +1,104 @@
+name: "capture"
+
+config:
+  default_value: ""
+  trigger_on_capture: true
+
+steps:
+  - action: "assert_outputs"
+    comment: "Output starts at empty string (descriptor default)"
+    expected_outputs:
+      value: ""
+
+  - action: "set_inputs"
+    comment: "Set input value to 'hello', no capture trigger"
+    inputs:
+      value: "hello"
+
+  - action: "assert_outputs"
+    comment: "Output unchanged (no capture)"
+    expected_outputs:
+      value: ""
+
+  - action: "set_inputs"
+    comment: "Rising edge on capture"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to 'hello'"
+    expected_outputs:
+      value: "hello"
+
+  - action: "set_inputs"
+    comment: "Release capture"
+    inputs:
+      capture: false
+
+  - action: "assert_outputs"
+    comment: "Output still holds 'hello'"
+    expected_outputs:
+      value: "hello"
+
+  - action: "set_inputs"
+    comment: "Change input value to 'world'"
+    inputs:
+      value: "world"
+
+  - action: "assert_outputs"
+    comment: "Output still holds 'hello' (no new capture)"
+    expected_outputs:
+      value: "hello"
+
+  - action: "set_inputs"
+    comment: "Change input value to 'foo bar'"
+    inputs:
+      value: "foo bar"
+
+  - action: "assert_outputs"
+    comment: "Output still holds 'hello'"
+    expected_outputs:
+      value: "hello"
+
+  - action: "set_inputs"
+    comment: "Rising edge on capture"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to 'foo bar'"
+    expected_outputs:
+      value: "foo bar"
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "Change input value to empty string"
+    inputs:
+      value: ""
+
+  - action: "set_inputs"
+    comment: "Rising edge on capture"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to empty string"
+    expected_outputs:
+      value: ""
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "Change input value to 'after empty'"
+    inputs:
+      value: "after empty"
+
+  - action: "assert_outputs"
+    comment: "Output still holds empty string"
+    expected_outputs:
+      value: ""

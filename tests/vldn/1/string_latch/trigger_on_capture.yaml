@@ -1,0 +1,123 @@
+name: "trigger on capture config"
+
+config:
+  default_value: ""
+  trigger_on_capture: false
+
+steps:
+  - action: "set_inputs"
+    comment: "Set input value to 'alpha'"
+    inputs:
+      value: "alpha"
+
+  - action: "set_inputs"
+    comment: "Capture (trigger_on_capture is false)"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output unchanged (auto-send disabled)"
+    expected_outputs:
+      value: ""
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "Trigger sends captured value"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output now 'alpha'"
+    expected_outputs:
+      value: "alpha"
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  - action: "set_inputs"
+    comment: "Change input to 'beta'"
+    inputs:
+      value: "beta"
+
+  - action: "set_inputs"
+    comment: "Capture again"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output still 'alpha' (auto-send disabled)"
+    expected_outputs:
+      value: "alpha"
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "Trigger to send new value"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output now 'beta'"
+    expected_outputs:
+      value: "beta"
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  - action: "set_inputs"
+    inputs:
+      value: "first"
+
+  - action: "set_inputs"
+    inputs:
+      capture: true
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    inputs:
+      value: "second"
+
+  - action: "set_inputs"
+    inputs:
+      capture: true
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    inputs:
+      value: "third"
+
+  - action: "set_inputs"
+    inputs:
+      capture: true
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "assert_outputs"
+    comment: "Output still 'beta' (no trigger yet)"
+    expected_outputs:
+      value: "beta"
+
+  - action: "set_inputs"
+    comment: "Trigger sends last captured value ('third')"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Output now 'third' (last captured value)"
+    expected_outputs:
+      value: "third"

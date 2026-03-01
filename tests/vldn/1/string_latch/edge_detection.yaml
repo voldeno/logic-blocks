@@ -1,0 +1,115 @@
+name: "edge detection"
+
+config:
+  default_value: ""
+  trigger_on_capture: true
+
+steps:
+  - action: "set_inputs"
+    comment: "Set input value to 'first'"
+    inputs:
+      value: "first"
+
+  - action: "set_inputs"
+    comment: "Rising edge on capture"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to 'first'"
+    expected_outputs:
+      value: "first"
+
+  - action: "set_inputs"
+    comment: "Change input value to 'second' while capture still high"
+    inputs:
+      value: "second"
+
+  - action: "assert_outputs"
+    comment: "Output still 'first' (no rising edge on capture)"
+    expected_outputs:
+      value: "first"
+
+  - action: "set_inputs"
+    comment: "Capture still held high (no edge)"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output still 'first' (no rising edge)"
+    expected_outputs:
+      value: "first"
+
+  - action: "set_inputs"
+    comment: "Release capture"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "New rising edge on capture"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to 'second' (new value captured)"
+    expected_outputs:
+      value: "second"
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "Capture a value first"
+    inputs:
+      value: "before reset"
+
+  - action: "set_inputs"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      value: "before reset"
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "Rising edge on reset"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Output reset to empty string"
+    expected_outputs:
+      value: ""
+
+  - action: "set_inputs"
+    comment: "Release reset"
+    inputs:
+      reset: false
+
+  - action: "set_inputs"
+    inputs:
+      capture: true
+
+  - action: "assert_outputs"
+    comment: "Output latched to 'before reset' (current input value)"
+    expected_outputs:
+      value: "before reset"
+
+  - action: "set_inputs"
+    inputs:
+      capture: false
+
+  - action: "set_inputs"
+    comment: "New rising edge on reset"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Output reset to empty string again"
+    expected_outputs:
+      value: ""
