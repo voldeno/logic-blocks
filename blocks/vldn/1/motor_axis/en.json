@@ -1,5 +1,5 @@
 {
-  "description": "Single-axis motor controller with encoder feedback and homing support. Drives a motor to a target position by counting encoder pulses.",
+  "description": "Single-axis motor controller with homing support. Drives a motor to a target position using encoder pulse counting or time-based step control.",
   "inputs": [
     {
       "id": "target",
@@ -25,6 +25,11 @@
       "id": "stop",
       "name": "Stop",
       "description": "Pulse input. Rising edge stops all movement and cancels homing. Dominant input. Position and homed status are preserved."
+    },
+    {
+      "id": "home_before_move",
+      "name": "Home before move",
+      "description": "When active, the motor automatically homes before moving to each new target. If the home switch is already active, movement starts immediately from position zero. Otherwise, the motor homes first and then proceeds to the target."
     }
   ],
   "outputs": [
@@ -69,6 +74,26 @@
       "id": "position_tolerance",
       "name": "Position tolerance",
       "description": "Maximum acceptable distance from the target position to be considered at target. 0 means exact match."
+    },
+    {
+      "id": "control_mode",
+      "name": "Control mode",
+      "description": "Encoder mode uses external encoder pulses to track position. Time-based mode uses internally timed steps, where each position unit corresponds to a configured time duration."
+    },
+    {
+      "id": "pulse_time_forward",
+      "name": "Pulse time forward",
+      "description": "Duration of one position step when moving in the forward direction. Only used in time-based control mode."
+    },
+    {
+      "id": "pulse_time_reverse",
+      "name": "Pulse time reverse",
+      "description": "Duration of one position step when moving in the reverse direction. Only used in time-based control mode."
+    },
+    {
+      "id": "motor_lock_duration",
+      "name": "Motor lock duration",
+      "description": "Pause duration between direction changes to protect the motor. The motor stops for this period before starting in the opposite direction. Set to 0 to disable."
     }
   ],
   "state": [
@@ -91,6 +116,51 @@
       "id": "is_homing",
       "name": "Is homing",
       "description": "True while the homing sequence is in progress."
+    },
+    {
+      "id": "pending_target",
+      "name": "Pending target",
+      "description": "Stores the target position to move to after homing completes when home-before-move is active."
+    },
+    {
+      "id": "move_after_home",
+      "name": "Move after home",
+      "description": "True when the motor should automatically move to the pending target after homing completes."
+    },
+    {
+      "id": "move_start_time",
+      "name": "Move start time",
+      "description": "System uptime when the current time-based movement started. Used to compute elapsed time for position tracking."
+    },
+    {
+      "id": "move_start_position",
+      "name": "Move start position",
+      "description": "Position when the current time-based movement started. Used with elapsed time to compute the current position."
+    },
+    {
+      "id": "move_target",
+      "name": "Move target",
+      "description": "Target position for the current time-based movement."
+    },
+    {
+      "id": "was_forward",
+      "name": "Was forward",
+      "description": "True if the last motor movement was in the forward direction. Used for motor lock delay calculation."
+    },
+    {
+      "id": "last_stop_time",
+      "name": "Last stop time",
+      "description": "System uptime when the motor last stopped. Used for motor lock delay calculation."
+    },
+    {
+      "id": "lock_target",
+      "name": "Lock target",
+      "description": "Target position stored while waiting for the motor lock delay to complete."
+    },
+    {
+      "id": "lock_position",
+      "name": "Lock position",
+      "description": "Current position stored while waiting for the motor lock delay to complete."
     }
   ]
 }

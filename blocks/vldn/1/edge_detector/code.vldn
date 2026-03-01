@@ -1,7 +1,7 @@
 channel = input::channel()
 value = input::value()
 
-extern fn onPulseEnd(v) {
+extern fn onPulseEnd() {
     output::set("output", false)
 }
 
@@ -38,6 +38,6 @@ if (channel == "input") {
         callback::clear()
         output::set("output", true)
         pulse_ms = math::round(config::get("pulse_duration") * 1000)
-        callback::set(pulse_ms, "onPulseEnd", 0)
+        callback::set(pulse_ms, "onPulseEnd")
     }
 }

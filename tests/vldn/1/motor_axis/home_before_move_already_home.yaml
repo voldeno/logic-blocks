@@ -1,0 +1,114 @@
+name: "home before move - already at home skips homing"
+
+config:
+  home_direction: 0 # Forward
+  position_tolerance: 0
+
+steps:
+  # Enable home_before_move and activate home switch
+  - action: "set_inputs"
+    comment: "Enable home before move and set home switch active"
+    inputs:
+      home_before_move: true
+      home_switch: true
+
+  # Set target while home switch is active - should skip homing and move directly
+  - action: "set_inputs"
+    comment: "Set target to 3 while at home"
+    inputs:
+      target: 3
+
+  - action: "assert_outputs"
+    comment: "Skips homing, moves directly to target"
+    expected_outputs:
+      homed: true
+      position: 0
+      forward: true
+      reverse: false
+      moving: true
+      at_target: false
+
+  # Simulate 3 encoder pulses
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  - action: "set_inputs"
+    inputs:
+      encoder: true
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  - action: "set_inputs"
+    comment: "Encoder pulse 3"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Reached target 3"
+    expected_outputs:
+      position: 3
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false
+
+  # Set new target while home switch is NOT active - should auto-home
+  - action: "set_inputs"
+    comment: "Set target to 1 while away from home"
+    inputs:
+      target: 1
+
+  - action: "assert_outputs"
+    comment: "Auto-home starts (home_switch not active)"
+    expected_outputs:
+      forward: true
+      homed: false
+      moving: true
+
+  - action: "set_inputs"
+    comment: "Home switch activates"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homing done, moving to target 1"
+    expected_outputs:
+      homed: true
+      position: 0
+      forward: true
+      moving: true
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  - action: "set_inputs"
+    comment: "Encoder pulse 1"
+    inputs:
+      encoder: true
+
+  - action: "assert_outputs"
+    comment: "Reached target 1"
+    expected_outputs:
+      position: 1
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
+
+  - action: "set_inputs"
+    inputs:
+      encoder: false

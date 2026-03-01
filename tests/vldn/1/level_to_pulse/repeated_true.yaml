@@ -1,0 +1,43 @@
+name: "re-triggers pulse on repeated true input"
+
+config:
+  pulse_duration: 0.1
+
+steps:
+  # First true - pulse starts
+  - action: "set_inputs"
+    comment: "First true"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse active"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 150
+
+  - action: "assert_outputs"
+    comment: "Pulse ended"
+    expected_outputs:
+      output: false
+
+  # Second true (same value again) - should re-trigger
+  - action: "set_inputs"
+    comment: "Second true (repeated)"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse re-triggered"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 150
+
+  - action: "assert_outputs"
+    comment: "Second pulse ended"
+    expected_outputs:
+      output: false

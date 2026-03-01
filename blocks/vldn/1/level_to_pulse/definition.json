@@ -1,0 +1,37 @@
+{
+  "name": "Level to pulse",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "input",
+      "abbrev": "I",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "pulse_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.1",
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": []
+}

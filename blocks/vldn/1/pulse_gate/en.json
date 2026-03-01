@@ -1,0 +1,30 @@
+{
+  "description": "Conditionally passes or blocks a pulse signal based on the state of an enable input. When a rising edge arrives on the input and enable is true, the pulse is forwarded to the output. When enable is false, the pulse is suppressed.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Input",
+      "description": "Pulse signal. A rising edge triggers evaluation of the enable state to decide whether to forward the pulse."
+    },
+    {
+      "id": "enable",
+      "name": "Enable",
+      "description": "Level input checked at the moment a pulse arrives. When true, pulses pass through. When false, pulses are blocked. Changing this input does not trigger output on its own."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Forwarded pulse. Mirrors the input pulse when the gate is enabled."
+    }
+  ],
+  "config": [],
+  "state": [
+    {
+      "id": "prev_input",
+      "name": "Previous input state",
+      "description": "Stores the previous state of the input to detect rising and falling edges."
+    }
+  ]
+}

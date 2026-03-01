@@ -1,10 +1,10 @@
 {
-  "description": "Wykrywa zbocza narastające, opadające lub oba na wejściu boolowskim i generuje impuls wyjściowy o konfigurowalnym czasie trwania.",
+  "description": "Wykrywa zbocza narastające, opadające lub oba na wejściu logicznym i generuje impuls wyjściowy o konfigurowalnym czasie trwania.",
   "inputs": [
     {
       "id": "input",
       "name": "Wejście",
-      "description": "Sygnał boolowski monitorowany pod kątem zmian zbocza."
+      "description": "Sygnał logiczny monitorowany pod kątem zmian zbocza."
     }
   ],
   "outputs": [

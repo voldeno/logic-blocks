@@ -1,0 +1,43 @@
+name: "default enable passes pulses without explicit enable"
+
+config: {}
+
+steps:
+  # Pulse without ever setting enable - should pass (default is true)
+  - action: "set_inputs"
+    comment: "Pulse without setting enable"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse passes (enable defaults to true)"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    comment: "Output follows input down"
+    expected_outputs:
+      output: false
+
+  # Second pulse - also passes
+  - action: "set_inputs"
+    comment: "Another pulse"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Also passes"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false

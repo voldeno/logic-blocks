@@ -1,3 +1,25 @@
+channel = input::channel()
+
+if (channel == "pattern") {
+    state::set("has_pattern", true)
+}
+if (channel == "v1") {
+    state::set("has_v1", true)
+}
+if (channel == "v2") {
+    state::set("has_v2", true)
+}
+if (channel == "v3") {
+    state::set("has_v3", true)
+}
+if (channel == "v4") {
+    state::set("has_v4", true)
+}
+
+if (!state::get("has_pattern")) {
+    return
+}
+
 pattern = input::get("pattern")
 v1 = input::get("v1")
 v2 = input::get("v2")
@@ -5,6 +27,19 @@ v3 = input::get("v3")
 v4 = input::get("v4")
 
 count = str::count(pattern, "{}")
+
+if (count >= 1 and !state::get("has_v1")) {
+    return
+}
+if (count >= 2 and !state::get("has_v2")) {
+    return
+}
+if (count >= 3 and !state::get("has_v3")) {
+    return
+}
+if (count >= 4 and !state::get("has_v4")) {
+    return
+}
 
 if (count == 0) {
     output::set("text", pattern)

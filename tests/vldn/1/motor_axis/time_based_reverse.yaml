@@ -1,0 +1,84 @@
+name: "time-based reverse movement"
+
+config:
+  home_direction: 0
+  position_tolerance: 0
+  control_mode: 1
+  pulse_time_forward: 0.1
+  pulse_time_reverse: 0.15
+
+steps:
+  # Home first
+  - action: "set_inputs"
+    inputs:
+      home: true
+  - action: "set_inputs"
+    inputs:
+      home: false
+  - action: "set_inputs"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homed"
+    expected_outputs:
+      homed: true
+      position: 0
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Move forward to 3
+  - action: "set_inputs"
+    comment: "Set target to 3"
+    inputs:
+      target: 3
+
+  - action: "wait"
+    duration_ms: 450
+
+  - action: "assert_outputs"
+    comment: "At position 3"
+    expected_outputs:
+      position: 3
+      at_target: true
+      moving: false
+
+  # Now set target to 1 - should reverse
+  - action: "set_inputs"
+    comment: "Set target to 1 (reverse)"
+    inputs:
+      target: 1
+
+  - action: "assert_outputs"
+    comment: "Motor starts reverse"
+    expected_outputs:
+      forward: false
+      reverse: true
+      moving: true
+      at_target: false
+
+  # Reverse uses 150ms per step, 2 steps needed
+  - action: "wait"
+    duration_ms: 200
+
+  - action: "assert_outputs"
+    comment: "Position 2 after first reverse step"
+    expected_outputs:
+      position: 2
+      reverse: true
+      moving: true
+      at_target: false
+
+  - action: "wait"
+    duration_ms: 150
+
+  - action: "assert_outputs"
+    comment: "Position 1 = target, motor stopped"
+    expected_outputs:
+      position: 1
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true

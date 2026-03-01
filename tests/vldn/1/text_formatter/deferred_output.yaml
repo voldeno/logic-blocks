@@ -1,0 +1,55 @@
+name: "deferred_output"
+
+steps:
+  # Output deferred until pattern is received
+  - action: "set_inputs"
+    comment: "Set v1 before pattern"
+    inputs:
+      v1: "hello"
+
+  - action: "assert_outputs"
+    comment: "No output yet - pattern not received"
+    expected_outputs:
+      text: ""
+
+  - action: "set_inputs"
+    comment: "Now provide the pattern"
+    inputs:
+      pattern: "msg: {}"
+
+  - action: "assert_outputs"
+    comment: "Output produced once both pattern and v1 are available"
+    expected_outputs:
+      text: "msg: hello"
+
+  # Output deferred until all required values are received
+  - action: "set_inputs"
+    comment: "Change pattern to require two values"
+    inputs:
+      pattern: "{} and {}"
+
+  - action: "assert_outputs"
+    comment: "No output yet - v2 never received"
+    expected_outputs:
+      text: "msg: hello"
+
+  - action: "set_inputs"
+    comment: "Provide v2"
+    inputs:
+      v2: "world"
+
+  - action: "assert_outputs"
+    comment: "Output produced once both values available"
+    expected_outputs:
+      text: "hello and world"
+
+  # Empty string is a valid value once input has been received
+  - action: "set_inputs"
+    comment: "Set v1 to empty string"
+    inputs:
+      v1: ""
+
+  - action: "assert_outputs"
+    comment: "Empty string is valid - output still produced"
+    expected_outputs:
+      text: " and world"

@@ -1,0 +1,29 @@
+name: "pulse blocked when disabled"
+
+config: {}
+
+steps:
+  - action: "set_inputs"
+    comment: "Disable the gate"
+    inputs:
+      enable: false
+
+  - action: "set_inputs"
+    comment: "Rising edge on input"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Output stays false (gate disabled)"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Falling edge on input"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    comment: "Output still false"
+    expected_outputs:
+      output: false

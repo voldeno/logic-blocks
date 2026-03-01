@@ -1,0 +1,25 @@
+{
+  "description": "Converts a boolean level signal into a pulse. Generates a timed output pulse every time the input is true, even if it was already true. Useful for connecting stateful boolean outputs to pulse-triggered inputs.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Input",
+      "description": "Boolean signal. Every true value triggers an output pulse, regardless of the previous state."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Pulse output. Goes high for the configured pulse duration each time the input is true."
+    }
+  ],
+  "config": [
+    {
+      "id": "pulse_duration",
+      "name": "Pulse duration",
+      "description": "Duration of the output pulse."
+    }
+  ],
+  "state": []
+}

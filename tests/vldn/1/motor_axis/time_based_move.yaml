@@ -1,0 +1,87 @@
+name: "time-based forward movement"
+
+config:
+  home_direction: 0
+  position_tolerance: 0
+  control_mode: 1
+  pulse_time_forward: 0.1
+  pulse_time_reverse: 0.1
+
+steps:
+  # Home first
+  - action: "set_inputs"
+    comment: "Trigger homing"
+    inputs:
+      home: true
+
+  - action: "set_inputs"
+    inputs:
+      home: false
+
+  - action: "set_inputs"
+    comment: "Home switch activates"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homing complete"
+    expected_outputs:
+      homed: true
+      position: 0
+      at_target: true
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Set target to 3 - should start time-based movement
+  - action: "set_inputs"
+    comment: "Set target to 3"
+    inputs:
+      target: 3
+
+  - action: "assert_outputs"
+    comment: "Motor starts forward, not yet at target"
+    expected_outputs:
+      forward: true
+      reverse: false
+      moving: true
+      at_target: false
+      position: 0
+
+  # After 1 step (100ms)
+  - action: "wait"
+    duration_ms: 150
+
+  - action: "assert_outputs"
+    comment: "Position 1 after first step"
+    expected_outputs:
+      position: 1
+      forward: true
+      moving: true
+      at_target: false
+
+  # After 2nd step (200ms total)
+  - action: "wait"
+    duration_ms: 100
+
+  - action: "assert_outputs"
+    comment: "Position 2 after second step"
+    expected_outputs:
+      position: 2
+      forward: true
+      moving: true
+      at_target: false
+
+  # After 3rd step (300ms total) - should be at target
+  - action: "wait"
+    duration_ms: 100
+
+  - action: "assert_outputs"
+    comment: "Position 3 = target, motor stopped"
+    expected_outputs:
+      position: 3
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true

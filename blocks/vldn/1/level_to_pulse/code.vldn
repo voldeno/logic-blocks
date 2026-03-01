@@ -1,0 +1,12 @@
+value = input::value()
+
+extern fn onPulseEnd() {
+    output::set("output", false)
+}
+
+if (value) {
+    callback::clear()
+    output::set("output", true)
+    pulse_ms = math::round(config::get("pulse_duration") * 1000)
+    callback::set(pulse_ms, "onPulseEnd")
+}

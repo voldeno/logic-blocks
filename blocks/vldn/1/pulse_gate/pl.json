@@ -1,0 +1,30 @@
+{
+  "description": "Przepuszcza lub blokuje sygnał impulsowy w zależności od stanu wejścia zezwalającego. Impuls jest przekazywany na wyjście tylko gdy bramka jest aktywna.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Wejście",
+      "description": "Sygnał impulsowy. Zbocze narastające wyzwala sprawdzenie stanu wejścia zezwalającego w celu podjęcia decyzji o przekazaniu impulsu."
+    },
+    {
+      "id": "enable",
+      "name": "Zezwolenie",
+      "description": "Wejście stanowe sprawdzane w momencie nadejścia impulsu. Gdy aktywne, impulsy są przepuszczane. Gdy nieaktywne, impulsy są blokowane. Zmiana tego wejścia nie wyzwala wyjścia."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Przekazany impuls. Odzwierciedla impuls wejściowy, gdy bramka jest aktywna."
+    }
+  ],
+  "config": [],
+  "state": [
+    {
+      "id": "prev_input",
+      "name": "Poprzedni stan wejścia",
+      "description": "Przechowuje poprzedni stan wejścia do wykrywania zboczy narastających i opadających."
+    }
+  ]
+}

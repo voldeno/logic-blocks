@@ -31,6 +31,12 @@
       "abbrev": "S",
       "type": "BOOLEAN",
       "default": "false"
+    },
+    {
+      "id": "home_before_move",
+      "abbrev": "HB",
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "outputs": [
@@ -90,6 +96,62 @@
           }
         ]
       }
+    },
+    {
+      "id": "control_mode",
+      "type": "ENUM",
+      "values": ["Encoder", "Time-based"],
+      "default": "0"
+    },
+    {
+      "id": "pulse_time_forward",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.1",
+      "visibleWhen": {
+        "configId": "control_mode",
+        "values": ["Time-based"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "pulse_time_reverse",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.1",
+      "visibleWhen": {
+        "configId": "control_mode",
+        "values": ["Time-based"]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "motor_lock_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
     }
   ],
   "state": [
@@ -112,6 +174,51 @@
       "id": "is_homing",
       "type": "BOOLEAN",
       "default": "false"
+    },
+    {
+      "id": "pending_target",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "move_after_home",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "move_start_time",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "move_start_position",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "move_target",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "was_forward",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "last_stop_time",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "lock_target",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "lock_position",
+      "type": "NUMBER",
+      "default": "0"
     }
   ]
 }

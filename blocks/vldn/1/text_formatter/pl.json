@@ -1,5 +1,5 @@
 {
-  "description": "Formatuje tekst na podstawie wzorca z wejścia, podstawiając wartości w miejsce znaczników.",
+  "description": "Formatuje tekst na podstawie wzorca z wejścia, podstawiając wartości w miejsce znaczników {}. Wyjście jest wstrzymane do momentu odebrania wzorca i wszystkich wymaganych wartości.",
   "inputs": [
     {
       "id": "pattern",
@@ -35,5 +35,31 @@
     }
   ],
   "config": [],
-  "state": []
+  "state": [
+    {
+      "id": "has_pattern",
+      "name": "Wzorzec odebrany",
+      "description": "Śledzi, czy wejście wzorca zostało odebrane przynajmniej raz."
+    },
+    {
+      "id": "has_v1",
+      "name": "Wartość 1 odebrana",
+      "description": "Śledzi, czy wejście v1 zostało odebrane przynajmniej raz."
+    },
+    {
+      "id": "has_v2",
+      "name": "Wartość 2 odebrana",
+      "description": "Śledzi, czy wejście v2 zostało odebrane przynajmniej raz."
+    },
+    {
+      "id": "has_v3",
+      "name": "Wartość 3 odebrana",
+      "description": "Śledzi, czy wejście v3 zostało odebrane przynajmniej raz."
+    },
+    {
+      "id": "has_v4",
+      "name": "Wartość 4 odebrana",
+      "description": "Śledzi, czy wejście v4 zostało odebrane przynajmniej raz."
+    }
+  ]
 }

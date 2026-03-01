@@ -1,0 +1,34 @@
+{
+  "name": "Pulse gate",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "input",
+      "abbrev": "I",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "enable",
+      "abbrev": "E",
+      "type": "BOOLEAN",
+      "default": "true"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [],
+  "state": [
+    {
+      "id": "prev_input",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "description": "Jednosiowy sterownik silnika ze sprzężeniem zwrotnym z enkodera i obsługą bazowania. Napędza silnik do pozycji docelowej, zliczając impulsy enkodera.",
+  "description": "Jednosiowy sterownik silnika z obsługą bazowania. Napędza silnik do pozycji docelowej za pomocą zliczania impulsów enkodera lub sterowania czasowego.",
   "inputs": [
     {
       "id": "target",
@@ -25,6 +25,11 @@
       "id": "stop",
       "name": "Stop",
       "description": "Wejście impulsowe. Zbocze narastające zatrzymuje wszelki ruch i anuluje bazowanie. Wejście dominujące. Pozycja i status bazowania są zachowywane."
+    },
+    {
+      "id": "home_before_move",
+      "name": "Bazowanie przed ruchem",
+      "description": "Gdy aktywne, silnik automatycznie bazuje przed każdym ruchem do nowego celu. Jeśli czujnik bazowy jest już aktywny, ruch rozpoczyna się natychmiast od pozycji zero. W przeciwnym razie silnik najpierw bazuje, a następnie jedzie do celu."
     }
   ],
   "outputs": [
@@ -69,6 +74,26 @@
       "id": "position_tolerance",
       "name": "Tolerancja pozycji",
       "description": "Maksymalna dopuszczalna odległość od pozycji docelowej, aby uznać ją za osiągniętą. 0 oznacza dokładne dopasowanie."
+    },
+    {
+      "id": "control_mode",
+      "name": "Tryb sterowania",
+      "description": "Tryb enkodera używa zewnętrznych impulsów enkodera do śledzenia pozycji. Tryb czasowy używa wewnętrznie taktowanych kroków, gdzie każda jednostka pozycji odpowiada skonfigurowanemu czasowi trwania."
+    },
+    {
+      "id": "pulse_time_forward",
+      "name": "Czas impulsu do przodu",
+      "description": "Czas trwania jednego kroku pozycji podczas ruchu w kierunku do przodu. Używane tylko w trybie sterowania czasowego."
+    },
+    {
+      "id": "pulse_time_reverse",
+      "name": "Czas impulsu do tyłu",
+      "description": "Czas trwania jednego kroku pozycji podczas ruchu w kierunku do tyłu. Używane tylko w trybie sterowania czasowego."
+    },
+    {
+      "id": "motor_lock_duration",
+      "name": "Czas blokady silnika",
+      "description": "Czas pauzy między zmianami kierunku w celu ochrony silnika. Silnik zatrzymuje się na ten okres przed uruchomieniem w przeciwnym kierunku. Ustaw 0, aby wyłączyć."
     }
   ],
   "state": [
@@ -91,6 +116,51 @@
       "id": "is_homing",
       "name": "Bazowanie w toku",
       "description": "Prawda, gdy sekwencja bazowania jest w trakcie realizacji."
+    },
+    {
+      "id": "pending_target",
+      "name": "Oczekujący cel",
+      "description": "Przechowuje pozycję docelową, do której silnik ma się przemieścić po zakończeniu bazowania."
+    },
+    {
+      "id": "move_after_home",
+      "name": "Ruch po bazowaniu",
+      "description": "Prawda, gdy silnik powinien automatycznie ruszyć do oczekującego celu po zakończeniu bazowania."
+    },
+    {
+      "id": "move_start_time",
+      "name": "Czas rozpoczęcia ruchu",
+      "description": "Czas działania systemu, kiedy rozpoczął się bieżący ruch czasowy. Używane do obliczania czasu, który upłynął, w celu śledzenia pozycji."
+    },
+    {
+      "id": "move_start_position",
+      "name": "Pozycja początkowa ruchu",
+      "description": "Pozycja w momencie rozpoczęcia bieżącego ruchu czasowego. Używane z czasem, który upłynął, do obliczania bieżącej pozycji."
+    },
+    {
+      "id": "move_target",
+      "name": "Cel ruchu",
+      "description": "Pozycja docelowa dla bieżącego ruchu czasowego."
+    },
+    {
+      "id": "was_forward",
+      "name": "Był do przodu",
+      "description": "Prawda, jeśli ostatni ruch silnika był w kierunku do przodu. Używane do obliczania opóźnienia blokady silnika."
+    },
+    {
+      "id": "last_stop_time",
+      "name": "Czas ostatniego zatrzymania",
+      "description": "Czas działania systemu, kiedy silnik ostatnio się zatrzymał. Używane do obliczania opóźnienia blokady silnika."
+    },
+    {
+      "id": "lock_target",
+      "name": "Cel blokady",
+      "description": "Pozycja docelowa przechowywana podczas oczekiwania na zakończenie opóźnienia blokady silnika."
+    },
+    {
+      "id": "lock_position",
+      "name": "Pozycja blokady",
+      "description": "Bieżąca pozycja przechowywana podczas oczekiwania na zakończenie opóźnienia blokady silnika."
     }
   ]
 }

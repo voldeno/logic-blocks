@@ -2,6 +2,11 @@ channel = input::channel()
 value = input::value()
 
 fn stop_motors() {
+    callback::clear()
+    if (output::get("forward") or output::get("reverse")) {
+        state::set("was_forward", output::get("forward"))
+        state::set("last_stop_time", time::uptime())
+    }
     output::set("forward", false)
     output::set("reverse", false)
     output::set("moving", false)
@@ -19,28 +24,183 @@ fn start_reverse() {
     output::set("moving", true)
 }
 
-fn evaluate_target(target, position) {
+extern fn onStep(v) {
+    start_time = state::get("move_start_time")
+    start_pos = state::get("move_start_position")
+    target = state::get("move_target")
+    is_forward = output::get("forward")
+
+    pulse_ms = 0
+    if (is_forward) {
+        pulse_ms = math::round(config::get("pulse_time_forward") * 1000)
+    } else {
+        pulse_ms = math::round(config::get("pulse_time_reverse") * 1000)
+    }
+
+    total_steps = target - start_pos
+    if (total_steps < 0) {
+        total_steps = 0 - total_steps
+    }
+    total_ms = total_steps * pulse_ms
+    elapsed = time::uptime() - start_time
+
+    if (elapsed >= total_ms) {
+        output::set("position", target)
+        stop_motors()
+        output::set("at_target", true)
+        return
+    }
+
+    steps_float = elapsed / pulse_ms
+    steps_int = math::round(steps_float)
+    if (steps_int * pulse_ms > elapsed) {
+        steps_int = steps_int - 1
+    }
+
+    position = start_pos
+    if (is_forward) {
+        position = start_pos + steps_int
+        if (position > target) {
+            position = target
+        }
+    } else {
+        position = start_pos - steps_int
+        if (position < target) {
+            position = target
+        }
+    }
+
+    output::set("position", position)
+
+    remaining_ms = total_ms - elapsed
+    if (remaining_ms <= 100) {
+        callback::set(math::round(remaining_ms), "onStep", 0)
+    } else {
+        callback::set(100, "onStep", 0)
+    }
+}
+
+fn evaluate_target_now(target, position) {
     tolerance = config::get("position_tolerance")
     diff = target - position
 
     if (diff > tolerance) {
         start_forward()
         output::set("at_target", false)
+        if (config::get("control_mode") == 1) {
+            state::set("move_start_time", time::uptime())
+            state::set("move_start_position", position)
+            state::set("move_target", target)
+            steps = math::round(diff)
+            pulse_ms = math::round(config::get("pulse_time_forward") * 1000)
+            total_ms = steps * pulse_ms
+            first_cb = 100
+            if (total_ms < first_cb) {
+                first_cb = total_ms
+            }
+            callback::set(first_cb, "onStep", 0)
+        }
     } else if (diff < (0 - tolerance)) {
         start_reverse()
         output::set("at_target", false)
+        if (config::get("control_mode") == 1) {
+            state::set("move_start_time", time::uptime())
+            state::set("move_start_position", position)
+            state::set("move_target", target)
+            steps = math::round(0 - diff)
+            pulse_ms = math::round(config::get("pulse_time_reverse") * 1000)
+            total_ms = steps * pulse_ms
+            first_cb = 100
+            if (total_ms < first_cb) {
+                first_cb = total_ms
+            }
+            callback::set(first_cb, "onStep", 0)
+        }
     } else {
         stop_motors()
         output::set("at_target", true)
     }
 }
 
+extern fn onMotorLock(v) {
+    evaluate_target_now(state::get("lock_target"), state::get("lock_position"))
+}
+
+fn evaluate_target(target, position) {
+    callback::clear()
+    lock_ms = math::round(config::get("motor_lock_duration") * 1000)
+
+    if (lock_ms <= 0) {
+        evaluate_target_now(target, position)
+        return
+    }
+
+    tolerance = config::get("position_tolerance")
+    diff = target - position
+    going_forward = diff > tolerance
+    going_reverse = diff < (0 - tolerance)
+
+    if (!going_forward and !going_reverse) {
+        evaluate_target_now(target, position)
+        return
+    }
+
+    direction_changed = false
+    if (going_forward and !state::get("was_forward")) {
+        direction_changed = true
+    }
+    if (going_reverse and state::get("was_forward")) {
+        direction_changed = true
+    }
+
+    if (!direction_changed) {
+        evaluate_target_now(target, position)
+        return
+    }
+
+    elapsed_ms = time::uptime() - state::get("last_stop_time")
+    if (elapsed_ms >= lock_ms) {
+        evaluate_target_now(target, position)
+        return
+    }
+
+    remaining_ms = lock_ms - elapsed_ms
+    output::set("at_target", false)
+    state::set("lock_target", target)
+    state::set("lock_position", position)
+    callback::set(math::round(remaining_ms), "onMotorLock", 0)
+}
+
 fn complete_homing() {
     stop_motors()
     output::set("position", 0)
     output::set("homed", true)
-    output::set("at_target", true)
     state::set("is_homing", false)
+
+    if (state::get("move_after_home")) {
+        state::set("move_after_home", false)
+        pending_target = state::get("pending_target")
+        evaluate_target(pending_target, 0)
+    } else {
+        output::set("at_target", true)
+    }
+}
+
+fn start_homing_sequence() {
+    output::set("homed", false)
+    output::set("at_target", false)
+    state::set("is_homing", true)
+
+    if (input::get("home_switch")) {
+        complete_homing()
+    } else {
+        home_direction = config::get("home_direction") // 0=Forward, 1=Reverse
+        if (home_direction == 0) {
+            start_forward()
+        } else {
+            start_reverse()
+        }
+    }
 }
 
 // Handle "stop" input first (dominant input)
@@ -64,27 +224,23 @@ if (state::get("is_homing") and input::get("home_switch")) {
     return
 }
 
+// Handle "home_switch" input - stop motor when home switch activates outside homing
+if (channel == "home_switch") {
+    if (value and output::get("moving")) {
+        stop_motors()
+        output::set("position", 0)
+        output::set("homed", true)
+        output::set("at_target", true)
+    }
+    return
+}
+
 // Handle "home" input
 if (channel == "home") {
     prev_home = state::get("prev_home")
 
     if (value and !prev_home) {
-        // Rising edge on home - start homing sequence
-        output::set("homed", false)
-        output::set("at_target", false)
-        state::set("is_homing", true)
-
-        // Check if already at home position
-        if (input::get("home_switch")) {
-            complete_homing()
-        } else {
-            home_direction = config::get("home_direction") // 0=Forward, 1=Reverse
-            if (home_direction == 0) {
-                start_forward()
-            } else {
-                start_reverse()
-            }
-        }
+        start_homing_sequence()
     }
 
     state::set("prev_home", value)
@@ -93,6 +249,10 @@ if (channel == "home") {
 
 // Handle "encoder" input
 if (channel == "encoder") {
+    if (config::get("control_mode") == 1) {
+        return
+    }
+
     prev_encoder = state::get("prev_encoder")
 
     if (value and !prev_encoder) {
@@ -130,13 +290,37 @@ if (channel == "encoder") {
 
 // Handle "target" input
 if (channel == "target") {
-    homed = output::get("homed")
     is_homing = state::get("is_homing")
+    home_before_move = input::get("home_before_move")
 
-    if (homed and !is_homing) {
-        // Only respond to target changes when homed and not homing
-        position = output::get("position")
-        evaluate_target(value, position)
+    if (config::get("control_mode") == 1 and output::get("moving")) {
+        stop_motors()
+        state::set("is_homing", false)
+        is_homing = false
+    }
+
+    if (home_before_move) {
+        if (is_homing) {
+            state::set("pending_target", value)
+            state::set("move_after_home", true)
+            return
+        }
+
+        if (input::get("home_switch")) {
+            output::set("position", 0)
+            output::set("homed", true)
+            evaluate_target(value, 0)
+        } else {
+            state::set("pending_target", value)
+            state::set("move_after_home", true)
+            start_homing_sequence()
+        }
+    } else {
+        homed = output::get("homed")
+        if (homed and !is_homing) {
+            position = output::get("position")
+            evaluate_target(value, position)
+        }
     }
 
     return

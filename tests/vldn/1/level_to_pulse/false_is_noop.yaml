@@ -1,0 +1,46 @@
+name: "false input is a no-op"
+
+config:
+  pulse_duration: 0.1
+
+steps:
+  # Start a pulse
+  - action: "set_inputs"
+    comment: "Set input to true"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse active"
+    expected_outputs:
+      output: true
+
+  # Send false while pulse is active - should NOT shorten the pulse
+  - action: "set_inputs"
+    comment: "Set input to false mid-pulse"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    comment: "Pulse still active (false is no-op)"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 150
+
+  - action: "assert_outputs"
+    comment: "Pulse ends naturally after configured duration"
+    expected_outputs:
+      output: false
+
+  # Sending false when output is already false - still no-op
+  - action: "set_inputs"
+    comment: "False again when already idle"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    comment: "Output stays false"
+    expected_outputs:
+      output: false

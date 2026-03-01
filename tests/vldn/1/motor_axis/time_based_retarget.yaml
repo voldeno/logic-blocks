@@ -1,0 +1,79 @@
+name: "time-based retarget mid-movement"
+
+config:
+  home_direction: 0
+  position_tolerance: 0
+  control_mode: 1
+  pulse_time_forward: 0.1
+  pulse_time_reverse: 0.1
+
+steps:
+  # Home first
+  - action: "set_inputs"
+    inputs:
+      home: true
+  - action: "set_inputs"
+    inputs:
+      home: false
+  - action: "set_inputs"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      homed: true
+      position: 0
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Start moving to target 5
+  - action: "set_inputs"
+    comment: "Set target to 5"
+    inputs:
+      target: 5
+
+  - action: "assert_outputs"
+    comment: "Moving forward"
+    expected_outputs:
+      forward: true
+      moving: true
+
+  # Wait for 2 steps (200ms)
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Position 2 mid-movement"
+    expected_outputs:
+      position: 2
+      moving: true
+      at_target: false
+
+  # Change target to 4 mid-movement
+  - action: "set_inputs"
+    comment: "Retarget to 4 from position 2"
+    inputs:
+      target: 4
+
+  - action: "assert_outputs"
+    comment: "Motor restarts forward from position 2 toward 4"
+    expected_outputs:
+      forward: true
+      moving: true
+      at_target: false
+      position: 2
+
+  # 2 steps needed (2 -> 4), wait for completion
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Position 4 = new target, motor stopped"
+    expected_outputs:
+      position: 4
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
