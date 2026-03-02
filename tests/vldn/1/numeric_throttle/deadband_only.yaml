@@ -1,0 +1,98 @@
+name: "deadband only"
+
+config:
+  min_change: 5
+  discard_period: 0
+
+steps:
+  - action: "assert_outputs"
+    comment: "Output starts at 0 (default)"
+    expected_outputs:
+      value: 0
+
+  # Small change below threshold - should not pass
+  - action: "set_inputs"
+    comment: "Change by 2 (below min_change of 5)"
+    inputs:
+      value: 2
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - change too small"
+    expected_outputs:
+      value: 0
+
+  - action: "set_inputs"
+    comment: "Change by 4.9 from last output (still below 5)"
+    inputs:
+      value: 4.9
+
+  - action: "assert_outputs"
+    comment: "Output unchanged"
+    expected_outputs:
+      value: 0
+
+  # Change meets threshold - should pass
+  - action: "set_inputs"
+    comment: "Change by exactly 5 from last output"
+    inputs:
+      value: 5
+
+  - action: "assert_outputs"
+    comment: "Output updated to 5"
+    expected_outputs:
+      value: 5
+
+  # Small change from new baseline - should not pass
+  - action: "set_inputs"
+    comment: "Change by 3 from last output of 5"
+    inputs:
+      value: 8
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - change too small from 5"
+    expected_outputs:
+      value: 5
+
+  # Large change - should pass
+  - action: "set_inputs"
+    comment: "Change by 15 from last output of 5"
+    inputs:
+      value: 20
+
+  - action: "assert_outputs"
+    comment: "Output updated to 20"
+    expected_outputs:
+      value: 20
+
+  # Negative direction change
+  - action: "set_inputs"
+    comment: "Drop by 10 from last output of 20"
+    inputs:
+      value: 10
+
+  - action: "assert_outputs"
+    comment: "Output updated to 10 (abs diff of 10 >= 5)"
+    expected_outputs:
+      value: 10
+
+  # Small negative change - should not pass
+  - action: "set_inputs"
+    comment: "Change by -3 from last output of 10"
+    inputs:
+      value: 7
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - change too small"
+    expected_outputs:
+      value: 10
+
+  # Negative values
+  - action: "set_inputs"
+    comment: "Drop to -2 (abs diff of 12 from 10)"
+    inputs:
+      value: -2
+
+  - action: "assert_outputs"
+    comment: "Output updated to -2"
+    expected_outputs:
+      value: -2

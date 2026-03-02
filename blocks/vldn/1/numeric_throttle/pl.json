@@ -1,0 +1,41 @@
+{
+  "description": "Ogranicza częstotliwość zmian wartości numerycznej za pomocą progu minimalnej zmiany (martwa strefa) oraz okresu blokady (cooldown). Istotne zmiany, które nadejdą podczas blokady, są przekazywane na wyjście po jej zakończeniu.",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Surowa wartość numeryczna, np. z czujnika."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Wartość wyjściowa po ograniczeniu. Aktualizowana tylko gdy zmiana przekracza próg minimalny i okres blokady upłynął."
+    }
+  ],
+  "config": [
+    {
+      "id": "min_change",
+      "name": "Minimalna zmiana",
+      "description": "Minimalna bezwzględna różnica od ostatniej wartości wyjściowej wymagana do przepuszczenia nowej wartości. Ustaw 0, aby wyłączyć filtrowanie martwej strefy."
+    },
+    {
+      "id": "discard_period",
+      "name": "Okres blokady",
+      "description": "Okno blokady w sekundach po każdym wyjściu, podczas którego nowe wartości są pomijane. Ustaw 0, aby wyłączyć ograniczanie czasowe."
+    }
+  ],
+  "state": [
+    {
+      "id": "last_output_value",
+      "name": "Ostatnia wartość wyjściowa",
+      "description": "Przechowuje ostatnią wartość wysłaną na wyjście do porównania martwej strefy."
+    },
+    {
+      "id": "discarding",
+      "name": "Blokowanie",
+      "description": "Czy blok jest obecnie w oknie blokady."
+    }
+  ]
+}

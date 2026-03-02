@@ -1,0 +1,41 @@
+{
+  "description": "Rate-limits numeric input changes using a minimum value change threshold (deadband) and a time-based discard period (cooldown). Significant changes that arrive during cooldown are deferred and output when the cooldown expires.",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "The raw numeric input value, e.g. from a sensor."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "The throttled output value. Updated only when the change exceeds the minimum threshold and the discard period has elapsed."
+    }
+  ],
+  "config": [
+    {
+      "id": "min_change",
+      "name": "Minimum change",
+      "description": "Minimum absolute difference from the last output value required to pass a new value through. Set to 0 to disable deadband filtering."
+    },
+    {
+      "id": "discard_period",
+      "name": "Discard period",
+      "description": "Cooldown window in seconds after each output during which incoming values are suppressed. Set to 0 to disable time-based throttling."
+    }
+  ],
+  "state": [
+    {
+      "id": "last_output_value",
+      "name": "Last output value",
+      "description": "Tracks the last value sent to the output, used for deadband comparison."
+    },
+    {
+      "id": "discarding",
+      "name": "Discarding",
+      "description": "Whether the block is currently in the cooldown window."
+    }
+  ]
+}
