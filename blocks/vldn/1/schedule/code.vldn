@@ -3,7 +3,7 @@ extern fn std::next_activation_at() {
     // execute immediately after initialization
     // then follow the schedule entries edges
     if (state::get("next_activation_ts") == 0 and state::get("last_activation_ts") == 0) {
-        return time::now()
+        return time::now() + 10000
     }
     schedule_id = config::get("schedule")
     return schedule::get_next_activation_ts(schedule_id)
