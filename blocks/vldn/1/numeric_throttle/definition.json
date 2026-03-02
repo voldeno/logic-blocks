@@ -1,0 +1,61 @@
+{
+  "name": "Numeric throttle",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "min_change",
+      "type": "NUMBER",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "discard_period",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "last_output_value",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "discarding",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}

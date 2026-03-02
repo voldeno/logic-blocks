@@ -1,0 +1,78 @@
+name: "combined deadband and discard"
+
+config:
+  min_change: 3
+  discard_period: 0.5
+
+steps:
+  - action: "assert_outputs"
+    comment: "Output starts at 0 (default)"
+    expected_outputs:
+      value: 0
+
+  # Small change - blocked by deadband
+  - action: "set_inputs"
+    comment: "Change by 2 (below min_change of 3)"
+    inputs:
+      value: 2
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - deadband blocks"
+    expected_outputs:
+      value: 0
+
+  # Large enough change - passes deadband, starts cooldown
+  - action: "set_inputs"
+    comment: "Change by 5 from last output"
+    inputs:
+      value: 5
+
+  - action: "assert_outputs"
+    comment: "Output updated to 5"
+    expected_outputs:
+      value: 5
+
+  # During cooldown: large change is suppressed by discard period
+  - action: "set_inputs"
+    comment: "Change by 15 from last output, but in cooldown"
+    inputs:
+      value: 20
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - in discard period"
+    expected_outputs:
+      value: 5
+
+  - action: "wait"
+    duration_ms: 550
+
+  # Cooldown expired - deferred value passes (diff of 15 >= 3)
+  - action: "assert_outputs"
+    comment: "Output updated to 20 (cooldown expired, deferred value exceeds deadband)"
+    expected_outputs:
+      value: 20
+
+  # After cooldown: small change blocked by deadband
+  - action: "wait"
+    duration_ms: 550
+
+  - action: "set_inputs"
+    comment: "Change by 1 from last output of 20"
+    inputs:
+      value: 21
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - deadband blocks"
+    expected_outputs:
+      value: 20
+
+  # After cooldown: large enough change passes
+  - action: "set_inputs"
+    comment: "Change by 5 from last output of 20"
+    inputs:
+      value: 25
+
+  - action: "assert_outputs"
+    comment: "Output updated to 25"
+    expected_outputs:
+      value: 25

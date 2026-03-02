@@ -1,0 +1,87 @@
+name: "deferred output on cooldown expiry"
+
+config:
+  min_change: 5
+  discard_period: 0.5
+
+steps:
+  # First value passes (diff of 10 from default 0)
+  - action: "set_inputs"
+    comment: "Set initial value"
+    inputs:
+      value: 10
+
+  - action: "assert_outputs"
+    comment: "Output updated to 10"
+    expected_outputs:
+      value: 10
+
+  # Multiple changes during cooldown - only latest matters
+  - action: "set_inputs"
+    comment: "Change during cooldown (suppressed)"
+    inputs:
+      value: 20
+
+  - action: "set_inputs"
+    comment: "Another change during cooldown (suppressed)"
+    inputs:
+      value: 30
+
+  - action: "set_inputs"
+    comment: "Final change during cooldown (this is what callback will see)"
+    inputs:
+      value: 50
+
+  - action: "assert_outputs"
+    comment: "Output still 10 - all changes suppressed during cooldown"
+    expected_outputs:
+      value: 10
+
+  - action: "wait"
+    duration_ms: 550
+
+  # Cooldown expired - callback checks current input (50), diff from 10 is 40 >= 5
+  - action: "assert_outputs"
+    comment: "Output updated to 50 (deferred, latest input at cooldown expiry)"
+    expected_outputs:
+      value: 50
+
+  # Deferred output of 50 started a new cooldown - wait for it to expire
+  - action: "wait"
+    duration_ms: 550
+
+  - action: "set_inputs"
+    comment: "Large change passes after cooldown expired"
+    inputs:
+      value: 60
+
+  - action: "assert_outputs"
+    comment: "Output updated to 60"
+    expected_outputs:
+      value: 60
+
+  # During cooldown, input changes to something close to last output
+  - action: "set_inputs"
+    comment: "Change to 62 during cooldown (diff of 2 from 60, below min_change)"
+    inputs:
+      value: 62
+
+  - action: "wait"
+    duration_ms: 550
+
+  # Cooldown expired but diff (2) < min_change (5), so no output
+  - action: "assert_outputs"
+    comment: "Output unchanged - deferred value too close to last output"
+    expected_outputs:
+      value: 60
+
+  # After failed deferred check, cooldown is NOT restarted - next change passes immediately
+  - action: "set_inputs"
+    comment: "Change by 10 from last output of 60"
+    inputs:
+      value: 70
+
+  - action: "assert_outputs"
+    comment: "Output updated to 70 (no cooldown active, deadband met)"
+    expected_outputs:
+      value: 70

@@ -1,0 +1,77 @@
+name: "discard only"
+
+config:
+  min_change: 0
+  discard_period: 0.5
+
+steps:
+  - action: "assert_outputs"
+    comment: "Output starts at 0 (default)"
+    expected_outputs:
+      value: 0
+
+  # First value passes immediately (no cooldown active)
+  - action: "set_inputs"
+    comment: "Set value to 10"
+    inputs:
+      value: 10
+
+  - action: "assert_outputs"
+    comment: "Output updated to 10 (no cooldown yet)"
+    expected_outputs:
+      value: 10
+
+  # Value during cooldown - should be suppressed
+  - action: "set_inputs"
+    comment: "Set value to 20 during cooldown"
+    inputs:
+      value: 20
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - in discard period"
+    expected_outputs:
+      value: 10
+
+  - action: "wait"
+    duration_ms: 200
+
+  # Still in cooldown (200ms < 500ms)
+  - action: "set_inputs"
+    comment: "Set value to 30 still during cooldown"
+    inputs:
+      value: 30
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - still in discard period"
+    expected_outputs:
+      value: 10
+
+  - action: "wait"
+    duration_ms: 350
+
+  # Cooldown expired (550ms total > 500ms), callback should check current input
+  # Current input is 30, last output is 10, min_change is 0 so diff >= 0 passes
+  - action: "assert_outputs"
+    comment: "Output updated to 30 (cooldown expired, deferred value passes)"
+    expected_outputs:
+      value: 30
+
+  # New cooldown started after deferred output
+  - action: "set_inputs"
+    comment: "Set value to 40 during new cooldown"
+    inputs:
+      value: 40
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - in new discard period"
+    expected_outputs:
+      value: 30
+
+  - action: "wait"
+    duration_ms: 550
+
+  # Cooldown expired again
+  - action: "assert_outputs"
+    comment: "Output updated to 40 (cooldown expired)"
+    expected_outputs:
+      value: 40
