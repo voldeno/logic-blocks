@@ -20,6 +20,27 @@ if (!state::get("has_pattern")) {
     return
 }
 
+trigger = false
+if (channel == "pattern" and config::get("trigger_on_pattern")) {
+    trigger = true
+}
+if (channel == "v1" and config::get("trigger_on_v1")) {
+    trigger = true
+}
+if (channel == "v2" and config::get("trigger_on_v2")) {
+    trigger = true
+}
+if (channel == "v3" and config::get("trigger_on_v3")) {
+    trigger = true
+}
+if (channel == "v4" and config::get("trigger_on_v4")) {
+    trigger = true
+}
+
+if (!trigger) {
+    return
+}
+
 pattern = input::get("pattern")
 v1 = input::get("v1")
 v2 = input::get("v2")

@@ -1,5 +1,8 @@
 name: "deferred_output"
 
+config:
+  trigger_on_pattern: true
+
 steps:
   # Output deferred until pattern is received
   - action: "set_inputs"
