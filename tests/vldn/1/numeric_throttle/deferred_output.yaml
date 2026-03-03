@@ -46,12 +46,9 @@ steps:
     expected_outputs:
       value: 50
 
-  # Deferred output of 50 started a new cooldown - wait for it to expire
-  - action: "wait"
-    duration_ms: 550
-
+  # No cooldown after deferred output - next input passes immediately
   - action: "set_inputs"
-    comment: "Large change passes after cooldown expired"
+    comment: "Large change passes immediately (no cooldown after deferred output)"
     inputs:
       value: 60
 

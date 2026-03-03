@@ -56,22 +56,13 @@ steps:
     expected_outputs:
       value: 30
 
-  # New cooldown started after deferred output
+  # No cooldown after deferred output - next input passes immediately
   - action: "set_inputs"
-    comment: "Set value to 40 during new cooldown"
+    comment: "Set value to 40 (no cooldown after deferred output)"
     inputs:
       value: 40
 
   - action: "assert_outputs"
-    comment: "Output unchanged - in new discard period"
-    expected_outputs:
-      value: 30
-
-  - action: "wait"
-    duration_ms: 550
-
-  # Cooldown expired again
-  - action: "assert_outputs"
-    comment: "Output updated to 40 (cooldown expired)"
+    comment: "Output updated to 40 immediately (callback does not restart cooldown)"
     expected_outputs:
       value: 40
