@@ -52,10 +52,7 @@ steps:
     expected_outputs:
       value: 20
 
-  # After cooldown: small change blocked by deadband
-  - action: "wait"
-    duration_ms: 550
-
+  # No cooldown after deferred output - small change blocked by deadband only
   - action: "set_inputs"
     comment: "Change by 1 from last output of 20"
     inputs:

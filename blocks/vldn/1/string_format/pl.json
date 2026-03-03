@@ -34,7 +34,33 @@
       "description": "Sformatowany tekst z podstawionymi wartościami wejściowymi."
     }
   ],
-  "config": [],
+  "config": [
+    {
+      "id": "trigger_on_pattern",
+      "name": "Wyzwól na wzorcu",
+      "description": "Gdy włączone, zmiana wzorca wyzwala przeliczenie wyjścia. Gdy wyłączone, zmiana wzorca jest zapisywana bez wyzwalania."
+    },
+    {
+      "id": "trigger_on_v1",
+      "name": "Wyzwól na V1",
+      "description": "Gdy włączone, zmiana Wartości 1 wyzwala przeliczenie wyjścia. Gdy wyłączone, zmiana jest zapisywana bez wyzwalania."
+    },
+    {
+      "id": "trigger_on_v2",
+      "name": "Wyzwól na V2",
+      "description": "Gdy włączone, zmiana Wartości 2 wyzwala przeliczenie wyjścia. Gdy wyłączone, zmiana jest zapisywana bez wyzwalania."
+    },
+    {
+      "id": "trigger_on_v3",
+      "name": "Wyzwól na V3",
+      "description": "Gdy włączone, zmiana Wartości 3 wyzwala przeliczenie wyjścia. Gdy wyłączone, zmiana jest zapisywana bez wyzwalania."
+    },
+    {
+      "id": "trigger_on_v4",
+      "name": "Wyzwól na V4",
+      "description": "Gdy włączone, zmiana Wartości 4 wyzwala przeliczenie wyjścia. Gdy wyłączone, zmiana jest zapisywana bez wyzwalania."
+    }
+  ],
   "state": [
     {
       "id": "has_pattern",

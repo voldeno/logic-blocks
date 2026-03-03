@@ -1,5 +1,8 @@
 name: "basic_format"
 
+config:
+  trigger_on_pattern: true
+
 steps:
   # Set pattern first
   - action: "set_inputs"

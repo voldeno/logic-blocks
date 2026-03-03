@@ -1,5 +1,5 @@
 {
-  "name": "Text formatter",
+  "name": "String format",
   "group": "process",
   "inputs": [
     {
@@ -41,7 +41,13 @@
       "default": ""
     }
   ],
-  "config": [],
+  "config": [
+    { "id": "trigger_on_pattern", "type": "BOOLEAN", "default": "false" },
+    { "id": "trigger_on_v1", "type": "BOOLEAN", "default": "true" },
+    { "id": "trigger_on_v2", "type": "BOOLEAN", "default": "true" },
+    { "id": "trigger_on_v3", "type": "BOOLEAN", "default": "true" },
+    { "id": "trigger_on_v4", "type": "BOOLEAN", "default": "true" }
+  ],
   "state": [
     { "id": "has_pattern", "type": "BOOLEAN", "default": "false" },
     { "id": "has_v1", "type": "BOOLEAN", "default": "false" },

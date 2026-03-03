@@ -34,7 +34,33 @@
       "description": "The formatted text string with placeholders replaced by input values."
     }
   ],
-  "config": [],
+  "config": [
+    {
+      "id": "trigger_on_pattern",
+      "name": "Trigger on pattern",
+      "description": "When enabled, changing the pattern input triggers output recalculation. When disabled, pattern changes are captured silently."
+    },
+    {
+      "id": "trigger_on_v1",
+      "name": "Trigger on V1",
+      "description": "When enabled, changing Value 1 triggers output recalculation. When disabled, value changes are captured silently."
+    },
+    {
+      "id": "trigger_on_v2",
+      "name": "Trigger on V2",
+      "description": "When enabled, changing Value 2 triggers output recalculation. When disabled, value changes are captured silently."
+    },
+    {
+      "id": "trigger_on_v3",
+      "name": "Trigger on V3",
+      "description": "When enabled, changing Value 3 triggers output recalculation. When disabled, value changes are captured silently."
+    },
+    {
+      "id": "trigger_on_v4",
+      "name": "Trigger on V4",
+      "description": "When enabled, changing Value 4 triggers output recalculation. When disabled, value changes are captured silently."
+    }
+  ],
   "state": [
     {
       "id": "has_pattern",

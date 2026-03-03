@@ -1,5 +1,8 @@
 name: "empty_pattern"
 
+config:
+  trigger_on_pattern: true
+
 steps:
   # Empty pattern (default) produces empty output
   - action: "assert_outputs"
