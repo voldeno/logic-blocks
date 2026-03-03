@@ -191,6 +191,14 @@ channel = input::channel()
 if (channel == "message") {
     message = input::get("message")
     if (message != "") {
+        if (str::count(message, "${CURRENT_TIMESTAMP_MS}") > 0) {
+            now_s = time::now()
+            uptime_ms = time::uptime()
+            ms_part = uptime_ms % 1000
+            timestamp_ms = now_s * 1000 + ms_part
+            message = str::replace(message, "${CURRENT_TIMESTAMP_MS}", str::fmt("{}", timestamp_ms))
+        }
+
         add_to_buffer(message)
     }
 }
