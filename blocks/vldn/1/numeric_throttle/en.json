@@ -28,11 +28,6 @@
   ],
   "state": [
     {
-      "id": "last_output_value",
-      "name": "Last output value",
-      "description": "Tracks the last value sent to the output, used for deadband comparison."
-    },
-    {
       "id": "discarding",
       "name": "Discarding",
       "description": "Whether the block is currently in the cooldown window."

@@ -48,11 +48,6 @@
   ],
   "state": [
     {
-      "id": "last_output_value",
-      "type": "NUMBER",
-      "default": "0"
-    },
-    {
       "id": "discarding",
       "type": "BOOLEAN",
       "default": "false"

@@ -6,12 +6,11 @@ extern fn onCallback(v) {
 
     min_change = config::get("min_change")
     current_input = input::get("value")
-    last_output = state::get("last_output_value")
+    current_output = output::get("value")
 
-    diff = math::abs(current_input - last_output)
-    if (diff > 0 and diff >= min_change) {
+    diff = math::abs(current_input - current_output)
+    if (diff >= min_change) {
         output::set("value", current_input)
-        state::set("last_output_value", current_input)
     }
 }
 
@@ -23,12 +22,11 @@ if (channel == "value") {
 
     min_change = config::get("min_change")
     discard_ms = math::round(config::get("discard_period") * 1000)
-    last_output = state::get("last_output_value")
+    current_output = output::get("value")
 
-    diff = math::abs(value - last_output)
-    if (diff > 0 and diff >= min_change) {
+    diff = math::abs(value - current_output)
+    if (diff >= min_change) {
         output::set("value", value)
-        state::set("last_output_value", value)
 
         if (discard_ms > 0) {
             state::set("discarding", true)

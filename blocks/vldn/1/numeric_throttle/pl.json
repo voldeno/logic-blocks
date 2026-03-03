@@ -28,11 +28,6 @@
   ],
   "state": [
     {
-      "id": "last_output_value",
-      "name": "Ostatnia wartość wyjściowa",
-      "description": "Przechowuje ostatnią wartość wysłaną na wyjście do porównania martwej strefy."
-    },
-    {
       "id": "discarding",
       "name": "Blokowanie",
       "description": "Czy blok jest obecnie w oknie blokady."
