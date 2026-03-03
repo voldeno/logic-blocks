@@ -1,5 +1,5 @@
 {
-  "name": "Text formatter",
+  "name": "String format",
   "group": "process",
   "inputs": [
     {
