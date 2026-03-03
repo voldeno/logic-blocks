@@ -1,0 +1,48 @@
+{
+  "name": "Pulse throttle",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "input",
+      "abbrev": "I",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "discard_period",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_input",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "discarding",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}

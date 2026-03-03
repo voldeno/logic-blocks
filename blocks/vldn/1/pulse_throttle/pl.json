@@ -1,0 +1,36 @@
+{
+  "description": "Blokuje powtarzające się impulsy w konfigurowalnym okresie blokady. Pierwszy impuls przechodzi i rozpoczyna okno blokady, podczas którego kolejne impulsy są odrzucane. Przydatny do eliminacji drgań sygnałów lub ograniczania częstotliwości impulsów.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Wejście",
+      "description": "Sygnał impulsowy. Tylko zbocza narastające poza okresem blokady są przekazywane."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Ograniczony impuls wyjściowy. Odwzorowuje kształt przekazanego impulsu."
+    }
+  ],
+  "config": [
+    {
+      "id": "discard_period",
+      "name": "Okres blokady",
+      "description": "Okno blokady w sekundach po przekazaniu impulsu. Impulsy przychodzące w tym oknie są odrzucane. Ustaw 0, aby wyłączyć ograniczanie."
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_input",
+      "name": "Poprzedni stan wejścia",
+      "description": "Przechowuje poprzedni stan wejścia do wykrywania zboczy."
+    },
+    {
+      "id": "discarding",
+      "name": "Blokowanie",
+      "description": "Czy blok jest obecnie w oknie blokady."
+    }
+  ]
+}

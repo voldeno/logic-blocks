@@ -1,0 +1,36 @@
+{
+  "description": "Suppresses repeated pulses within a configurable discard period. The first pulse passes through and starts a cooldown window during which subsequent pulses are dropped. Useful for debouncing noisy signals or rate-limiting pulse outputs.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Input",
+      "description": "Pulse signal. Only rising edges that arrive outside the discard period are forwarded."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Throttled pulse output. Mirrors the forwarded pulse shape."
+    }
+  ],
+  "config": [
+    {
+      "id": "discard_period",
+      "name": "Discard period",
+      "description": "Cooldown window in seconds after forwarding a pulse. Pulses arriving during this window are dropped. Set to 0 to disable throttling."
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_input",
+      "name": "Previous input state",
+      "description": "Stores the previous state of the input to detect rising and falling edges."
+    },
+    {
+      "id": "discarding",
+      "name": "Discarding",
+      "description": "Whether the block is currently in the cooldown window."
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+name: "rate limit"
+
+config:
+  discard_period: 0.5
+
+steps:
+  # First pulse passes
+  - action: "set_inputs"
+    comment: "First pulse"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse forwarded"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # Pulse at 200ms - still in cooldown (< 500ms)
+  - action: "wait"
+    duration_ms: 200
+
+  - action: "set_inputs"
+    comment: "Pulse at 200ms - in cooldown"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse dropped"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # Pulse at 400ms - still in cooldown
+  - action: "wait"
+    duration_ms: 200
+
+  - action: "set_inputs"
+    comment: "Pulse at 400ms - still in cooldown"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse dropped"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # Wait for cooldown to expire (need 100ms more from 400ms mark)
+  - action: "wait"
+    duration_ms: 150
+
+  # Pulse at ~550ms - cooldown expired
+  - action: "set_inputs"
+    comment: "Pulse after cooldown expired"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse forwarded - new cooldown starts"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # Pulse during new cooldown
+  - action: "set_inputs"
+    comment: "Pulse during new cooldown"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse dropped - new cooldown active"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # Wait for second cooldown to expire
+  - action: "wait"
+    duration_ms: 550
+
+  - action: "set_inputs"
+    comment: "Pulse after second cooldown expired"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse forwarded"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false

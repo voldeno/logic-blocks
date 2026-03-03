@@ -1,0 +1,65 @@
+name: "no discard"
+
+config:
+  discard_period: 0
+
+steps:
+  - action: "assert_outputs"
+    comment: "Output starts false"
+    expected_outputs:
+      output: false
+
+  # All pulses pass through with discard_period=0
+  - action: "set_inputs"
+    comment: "First pulse"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse forwarded"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Second pulse immediately after"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse forwarded - no throttling"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    comment: "Third pulse"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse forwarded - no throttling"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
