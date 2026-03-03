@@ -1,0 +1,29 @@
+channel = input::channel()
+value = input::value()
+
+extern fn onCallback(v) {
+    state::set("discarding", false)
+}
+
+if (channel == "input") {
+    prev_input = state::get("prev_input")
+
+    if (value and !prev_input) {
+        discarding = state::get("discarding")
+        if (!discarding) {
+            output::set("output", true)
+
+            discard_ms = math::round(config::get("discard_period") * 1000)
+            if (discard_ms > 0) {
+                state::set("discarding", true)
+                callback::set(discard_ms, "onCallback", 0)
+            }
+        }
+    }
+
+    if (!value and prev_input) {
+        output::set("output", false)
+    }
+
+    state::set("prev_input", value)
+}

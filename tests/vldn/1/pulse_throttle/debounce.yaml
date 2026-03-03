@@ -1,0 +1,84 @@
+name: "debounce"
+
+config:
+  discard_period: 1.0
+
+steps:
+  - action: "assert_outputs"
+    comment: "Output starts false"
+    expected_outputs:
+      output: false
+
+  # First pulse passes
+  - action: "set_inputs"
+    comment: "Rising edge - first pulse"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse forwarded"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    comment: "Falling edge"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    comment: "Output follows falling edge"
+    expected_outputs:
+      output: false
+
+  # Rapid second pulse during cooldown - should be dropped
+  - action: "set_inputs"
+    comment: "Rising edge during cooldown"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse dropped - in discard period"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # Third rapid pulse - still in cooldown
+  - action: "set_inputs"
+    comment: "Another rising edge during cooldown"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse dropped - still in discard period"
+    expected_outputs:
+      output: false
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  # Wait for cooldown to expire
+  - action: "wait"
+    duration_ms: 1100
+
+  # Pulse after cooldown - should pass
+  - action: "set_inputs"
+    comment: "Rising edge after cooldown expired"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    comment: "Pulse forwarded - cooldown expired"
+    expected_outputs:
+      output: true
+
+  - action: "set_inputs"
+    inputs:
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
