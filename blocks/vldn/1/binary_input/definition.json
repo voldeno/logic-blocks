@@ -4,6 +4,15 @@
   "ioType": "register",
   "ioRegisterFilters": [
     {
+      "moduleId": 2,
+      "registerIds": [
+        100,
+        101,
+        102,
+        103
+      ]
+    },
+    {
       "moduleId": 3,
       "registerIds": [
         60,
@@ -13,7 +22,15 @@
         64,
         65,
         66,
-        67
+        67,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107
       ]
     }
   ],
