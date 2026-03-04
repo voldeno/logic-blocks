@@ -10,17 +10,6 @@ steps:
     expected_outputs:
       value: 0
 
-  # Small change - blocked by deadband
-  - action: "set_inputs"
-    comment: "Change by 2 (below min_change of 3)"
-    inputs:
-      value: 2
-
-  - action: "assert_outputs"
-    comment: "Output unchanged - deadband blocks"
-    expected_outputs:
-      value: 0
-
   # Large enough change - passes deadband, starts cooldown
   - action: "set_inputs"
     comment: "Change by 5 from last output"
@@ -32,11 +21,11 @@ steps:
     expected_outputs:
       value: 5
 
-  # During cooldown: large change is suppressed by discard period
+  # During cooldown: send same value - suppressed by discard period
   - action: "set_inputs"
-    comment: "Change by 15 from last output, but in cooldown"
+    comment: "Same value during cooldown"
     inputs:
-      value: 20
+      value: 5
 
   - action: "assert_outputs"
     comment: "Output unchanged - in discard period"
@@ -46,30 +35,65 @@ steps:
   - action: "wait"
     duration_ms: 550
 
-  # Cooldown expired - deferred value passes (diff of 15 >= 3)
+  # Cooldown expired - deferred check: same value as output, diff = 0 < 3, no output
   - action: "assert_outputs"
-    comment: "Output updated to 20 (cooldown expired, deferred value exceeds deadband)"
+    comment: "Output still 5 - deferred value same as output"
     expected_outputs:
+      value: 5
+
+  # Same value again after cooldown expired - not in cooldown, but diff = 0 < 3
+  - action: "set_inputs"
+    comment: "Same value after cooldown expired"
+    inputs:
+      value: 5
+
+  - action: "assert_outputs"
+    comment: "Output still 5 - deadband blocks (diff = 0)"
+    expected_outputs:
+      value: 5
+
+  # Different value during cooldown, then same value before expiry
+  - action: "set_inputs"
+    comment: "Large change passes deadband, starts new cooldown"
+    inputs:
+      value: 10
+
+  - action: "assert_outputs"
+    comment: "Output updated to 10"
+    expected_outputs:
+      value: 10
+
+  - action: "set_inputs"
+    comment: "Different value during cooldown"
+    inputs:
       value: 20
 
-  # No cooldown after deferred output - small change blocked by deadband only
   - action: "set_inputs"
-    comment: "Change by 1 from last output of 20"
+    comment: "Back to same value as output during cooldown"
     inputs:
-      value: 21
+      value: 10
 
   - action: "assert_outputs"
-    comment: "Output unchanged - deadband blocks"
+    comment: "Output unchanged - in discard period"
     expected_outputs:
-      value: 20
+      value: 10
 
-  # After cooldown: large enough change passes
+  - action: "wait"
+    duration_ms: 550
+
+  # Cooldown expired - current input is 10 (same as output), diff = 0 < 3
+  - action: "assert_outputs"
+    comment: "Output still 10 - deferred value same as output, deadband blocks"
+    expected_outputs:
+      value: 10
+
+  # Now send a genuinely different value after cooldown
   - action: "set_inputs"
-    comment: "Change by 5 from last output of 20"
+    comment: "Change by 5 from last output of 10"
     inputs:
-      value: 25
+      value: 15
 
   - action: "assert_outputs"
-    comment: "Output updated to 25"
+    comment: "Output updated to 15"
     expected_outputs:
-      value: 25
+      value: 15

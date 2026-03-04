@@ -1,4 +1,4 @@
-name: "deadband only"
+name: "deadband only, decimal"
 
 config:
   min_change: 0.2
@@ -39,6 +39,17 @@ steps:
 
   - action: "assert_outputs"
     comment: "Output updated to 0.2"
+    expected_outputs:
+      value: 0.2
+
+  # Change meets threshold - should pass - test for the same value
+  - action: "set_inputs"
+    comment: "No change (same value)"
+    inputs:
+      value: 0.2
+
+  - action: "assert_outputs"
+    comment: "Output unchanged"
     expected_outputs:
       value: 0.2
 
