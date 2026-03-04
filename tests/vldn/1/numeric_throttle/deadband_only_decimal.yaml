@@ -1,0 +1,98 @@
+name: "deadband only"
+
+config:
+  min_change: 0.2
+  discard_period: 0
+
+steps:
+  - action: "assert_outputs"
+    comment: "Output starts at 0 (default)"
+    expected_outputs:
+      value: 0
+
+  # Small change below threshold - should not pass
+  - action: "set_inputs"
+    comment: "Change by 0.1 (below min_change of 0.2)"
+    inputs:
+      value: 0.1
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - change too small"
+    expected_outputs:
+      value: 0
+
+  - action: "set_inputs"
+    comment: "Change by 0.19 from last output (still below 0.2)"
+    inputs:
+      value: 0.19
+
+  - action: "assert_outputs"
+    comment: "Output unchanged"
+    expected_outputs:
+      value: 0
+
+  # Change meets threshold - should pass
+  - action: "set_inputs"
+    comment: "Change by exactly 0.2 from last output"
+    inputs:
+      value: 0.2
+
+  - action: "assert_outputs"
+    comment: "Output updated to 0.2"
+    expected_outputs:
+      value: 0.2
+
+  # Small change from new baseline - should not pass
+  - action: "set_inputs"
+    comment: "Change by 0.19 from last output of 0.2"
+    inputs:
+      value: 0.39
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - change too small from 0.2"
+    expected_outputs:
+      value: 0.2
+
+  # Large change - should pass
+  - action: "set_inputs"
+    comment: "Change by 0.3 from last output of 0.2"
+    inputs:
+      value: 0.5
+
+  - action: "assert_outputs"
+    comment: "Output updated to 0.5"
+    expected_outputs:
+      value: 0.5
+
+  # Negative direction change
+  - action: "set_inputs"
+    comment: "Drop by 0.2 from last output of 0.5"
+    inputs:
+      value: 0.3
+
+  - action: "assert_outputs"
+    comment: "Output updated to 0.3 (abs diff of 0.2 >= 0.2)"
+    expected_outputs:
+      value: 0.3
+
+  # Small negative change - should not pass
+  - action: "set_inputs"
+    comment: "Change by -0.11 from last output of 0.3"
+    inputs:
+      value: 0.19
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - change too small"
+    expected_outputs:
+      value: 0.3
+
+  # Negative values
+  - action: "set_inputs"
+    comment: "Drop to -0.44 (abs diff of 0.74 from 0.3)"
+    inputs:
+      value: -0.44
+
+  - action: "assert_outputs"
+    comment: "Output updated to -0.44"
+    expected_outputs:
+      value: -0.44
