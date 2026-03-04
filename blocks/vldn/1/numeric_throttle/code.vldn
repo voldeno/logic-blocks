@@ -5,12 +5,18 @@ extern fn onCallback(v) {
     state::set("discarding", false)
 
     min_change = config::get("min_change")
+    discard_ms = math::round(config::get("discard_period") * 1000)
     current_input = input::get("value")
     current_output = output::get("value")
 
     diff = math::abs(current_input - current_output)
-    if (diff >= min_change) {
+    if (diff > 0 and diff >= min_change) {
         output::set("value", current_input)
+
+        if (discard_ms > 0) {
+            state::set("discarding", true)
+            callback::set(discard_ms, "onCallback", 0)
+        }
     }
 }
 

@@ -49,20 +49,31 @@ steps:
   - action: "wait"
     duration_ms: 350
 
-  # Cooldown expired (550ms total > 500ms), callback should check current input
-  # Current input is 30, last output is 10, min_change is 0 so diff >= 0 passes
+  # Cooldown expired - callback: input=30, output=10, diff=20 > 0 and >= 0
+  # Deferred output restarts cooldown
   - action: "assert_outputs"
     comment: "Output updated to 30 (cooldown expired, deferred value passes)"
     expected_outputs:
       value: 30
 
-  # No cooldown after deferred output - next input passes immediately
+  # New cooldown active from deferred output, no new inputs
+  - action: "wait"
+    duration_ms: 550
+
+  # Callback fires: input=30, output=30, diff=0, diff > 0 is false
+  # No output, cooldown ends naturally (infinite loop prevented by diff > 0 guard)
+  - action: "assert_outputs"
+    comment: "Output still 30 - callback found no change, cooldown ends"
+    expected_outputs:
+      value: 30
+
+  # No cooldown active - next input passes immediately
   - action: "set_inputs"
-    comment: "Set value to 40 (no cooldown after deferred output)"
+    comment: "Set value to 40 (no cooldown active)"
     inputs:
       value: 40
 
   - action: "assert_outputs"
-    comment: "Output updated to 40 immediately (callback does not restart cooldown)"
+    comment: "Output updated to 40 immediately"
     expected_outputs:
       value: 40
