@@ -19,6 +19,17 @@
       "description": "Output"
     }
   ],
-  "config": [],
+  "config": [
+    {
+      "id": "trigger_on_input_1",
+      "name": "Trigger on Input #1",
+      "description": "When enabled, changes to Input #1 trigger output recalculation"
+    },
+    {
+      "id": "trigger_on_input_2",
+      "name": "Trigger on Input #2",
+      "description": "When enabled, changes to Input #2 trigger output recalculation"
+    }
+  ],
   "state": []
 }

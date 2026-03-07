@@ -19,6 +19,17 @@
       "description": "Wyjście"
     }
   ],
-  "config": [],
+  "config": [
+    {
+      "id": "trigger_on_input_1",
+      "name": "Wyzwalaj na Wejście #1",
+      "description": "Gdy włączone, zmiany na Wejściu #1 wyzwalają przeliczenie wyjścia"
+    },
+    {
+      "id": "trigger_on_input_2",
+      "name": "Wyzwalaj na Wejście #2",
+      "description": "Gdy włączone, zmiany na Wejściu #2 wyzwalają przeliczenie wyjścia"
+    }
+  ],
   "state": []
 }
