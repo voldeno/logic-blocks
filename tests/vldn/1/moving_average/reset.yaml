@@ -1,0 +1,68 @@
+name: "reset restarts averaging"
+
+config:
+  algorithm: 0
+  alpha: 0.5
+
+steps:
+  # Build up some EMA history
+  - action: "set_inputs"
+    comment: "First value: 100"
+    inputs:
+      value: 100
+
+  - action: "assert_outputs"
+    comment: "First value sets average directly"
+    expected_outputs:
+      average: 100
+
+  # EMA: 0.5 * 200 + 0.5 * 100 = 150
+  - action: "set_inputs"
+    comment: "Second value: 200"
+    inputs:
+      value: 200
+
+  - action: "assert_outputs"
+    comment: "EMA: 0.5 * 200 + 0.5 * 100 = 150"
+    expected_outputs:
+      average: 150
+
+  # Now set input to 50 (non-triggering, just captures value for reset)
+  - action: "set_inputs"
+    comment: "Set value to 50 before reset"
+    inputs:
+      value: 50
+
+  # EMA: 0.5 * 50 + 0.5 * 150 = 100
+  - action: "assert_outputs"
+    comment: "EMA: 0.5 * 50 + 0.5 * 150 = 100"
+    expected_outputs:
+      average: 100
+
+  # Reset - average should become the current input value (50)
+  - action: "set_inputs"
+    comment: "Reset pulse rising edge"
+    inputs:
+      reset: true
+
+  - action: "assert_outputs"
+    comment: "Reset sets average to current input value (50)"
+    expected_outputs:
+      average: 50
+
+  - action: "set_inputs"
+    comment: "Reset pulse falling edge"
+    inputs:
+      reset: false
+
+  # After reset, next value should be treated as fresh start from 50
+  # EMA: 0.5 * 80 + 0.5 * 50 = 65
+  - action: "set_inputs"
+    comment: "First value after reset: 80"
+    inputs:
+      value: 80
+
+  - action: "assert_outputs"
+    comment: "EMA from reset point: 0.5 * 80 + 0.5 * 50 = 65"
+    expected_outputs:
+      average: 65

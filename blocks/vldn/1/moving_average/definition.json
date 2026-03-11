@@ -1,0 +1,72 @@
+{
+  "name": "Moving average",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "reset",
+      "abbrev": "R",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "average",
+      "abbrev": "AVG",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "algorithm",
+      "type": "ENUM",
+      "values": [
+        "EMA",
+        "CA"
+      ],
+      "default": "0"
+    },
+    {
+      "id": "alpha",
+      "type": "NUMBER",
+      "default": "0.2",
+      "visibleWhen": {
+        "configId": "algorithm",
+        "values": [
+          "EMA"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          },
+          {
+            "type": "lte",
+            "value": 1
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "count",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "prev_reset",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}
