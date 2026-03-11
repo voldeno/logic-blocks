@@ -1,3 +1,17 @@
+channel = input::channel()
+
+trigger = false
+if (channel == "input_1" and config::get("trigger_on_input_1")) {
+    trigger = true
+}
+if (channel == "input_2" and config::get("trigger_on_input_2")) {
+    trigger = true
+}
+
+if (!trigger) {
+    return
+}
+
 i1 = input::get("input_1")
 i2 = input::get("input_2")
 

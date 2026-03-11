@@ -23,6 +23,17 @@
       "default": "0"
     }
   ],
-  "config": [],
+  "config": [
+    {
+      "id": "trigger_on_input_1",
+      "type": "BOOLEAN",
+      "default": "true"
+    },
+    {
+      "id": "trigger_on_input_2",
+      "type": "BOOLEAN",
+      "default": "true"
+    }
+  ],
   "state": []
 }

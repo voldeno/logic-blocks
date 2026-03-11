@@ -1,0 +1,56 @@
+name: "trigger config"
+
+config:
+  trigger_on_input_1: true
+  trigger_on_input_2: false
+
+steps:
+  # input_2 defaults to 1 for modulo, so output = input_1 % 1 = 0
+  - action: "assert_outputs"
+    comment: "Output starts at 0 (default)"
+    expected_outputs:
+      output: 0
+
+  # Non-triggering input captures value but does not produce output
+  - action: "set_inputs"
+    comment: "Set non-triggering input_2 (modulus) to 3"
+    inputs:
+      input_2: 3
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - input_2 is non-triggering"
+    expected_outputs:
+      output: 0
+
+  # Triggering input uses the captured non-triggering value
+  - action: "set_inputs"
+    comment: "Set triggering input_1 to 10"
+    inputs:
+      input_1: 10
+
+  - action: "assert_outputs"
+    comment: "Output is 10 % 3 = 1"
+    expected_outputs:
+      output: 1
+
+  # Another non-triggering update - no output change
+  - action: "set_inputs"
+    comment: "Update non-triggering input_2 to 4"
+    inputs:
+      input_2: 4
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - input_2 is non-triggering"
+    expected_outputs:
+      output: 1
+
+  # Triggering input picks up updated non-triggering value
+  - action: "set_inputs"
+    comment: "Set triggering input_1 to 15"
+    inputs:
+      input_1: 15
+
+  - action: "assert_outputs"
+    comment: "Output is 15 % 4 = 3"
+    expected_outputs:
+      output: 3

@@ -1,0 +1,55 @@
+name: "trigger config"
+
+config:
+  trigger_on_input_1: true
+  trigger_on_input_2: false
+
+steps:
+  - action: "assert_outputs"
+    comment: "Output starts at 0 (default)"
+    expected_outputs:
+      output: 0
+
+  # Non-triggering input captures value but does not produce output
+  - action: "set_inputs"
+    comment: "Set non-triggering input_2 (scale factor) to 3"
+    inputs:
+      input_2: 3
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - input_2 is non-triggering"
+    expected_outputs:
+      output: 0
+
+  # Triggering input uses the captured non-triggering value
+  - action: "set_inputs"
+    comment: "Set triggering input_1 to 7"
+    inputs:
+      input_1: 7
+
+  - action: "assert_outputs"
+    comment: "Output is 7 * 3 = 21"
+    expected_outputs:
+      output: 21
+
+  # Another non-triggering update - no output change
+  - action: "set_inputs"
+    comment: "Update non-triggering input_2 to 10"
+    inputs:
+      input_2: 10
+
+  - action: "assert_outputs"
+    comment: "Output unchanged - input_2 is non-triggering"
+    expected_outputs:
+      output: 21
+
+  # Triggering input picks up updated non-triggering value
+  - action: "set_inputs"
+    comment: "Set triggering input_1 to 5"
+    inputs:
+      input_1: 5
+
+  - action: "assert_outputs"
+    comment: "Output is 5 * 10 = 50"
+    expected_outputs:
+      output: 50
