@@ -1,0 +1,66 @@
+name: "EMA with alpha 0.5"
+
+config:
+  algorithm: 0
+  alpha: 0.5
+
+steps:
+  - action: "assert_outputs"
+    comment: "Output starts at 0 (default)"
+    expected_outputs:
+      average: 0
+
+  # First value initializes the average directly
+  - action: "set_inputs"
+    comment: "First value: 10"
+    inputs:
+      value: 10
+
+  - action: "assert_outputs"
+    comment: "First value sets average directly"
+    expected_outputs:
+      average: 10
+
+  # EMA: 0.5 * 20 + 0.5 * 10 = 15
+  - action: "set_inputs"
+    comment: "Second value: 20"
+    inputs:
+      value: 20
+
+  - action: "assert_outputs"
+    comment: "EMA: 0.5 * 20 + 0.5 * 10 = 15"
+    expected_outputs:
+      average: 15
+
+  # EMA: 0.5 * 30 + 0.5 * 15 = 22.5
+  - action: "set_inputs"
+    comment: "Third value: 30"
+    inputs:
+      value: 30
+
+  - action: "assert_outputs"
+    comment: "EMA: 0.5 * 30 + 0.5 * 15 = 22.5"
+    expected_outputs:
+      average: 22.5
+
+  # EMA: 0.5 * 10 + 0.5 * 22.5 = 16.25
+  - action: "set_inputs"
+    comment: "Fourth value: 10 (drop)"
+    inputs:
+      value: 10
+
+  - action: "assert_outputs"
+    comment: "EMA: 0.5 * 10 + 0.5 * 22.5 = 16.25"
+    expected_outputs:
+      average: 16.25
+
+  # EMA: 0.5 * 10 + 0.5 * 16.25 = 13.125
+  - action: "set_inputs"
+    comment: "Fifth value: 10 (stable)"
+    inputs:
+      value: 10
+
+  - action: "assert_outputs"
+    comment: "EMA: 0.5 * 10 + 0.5 * 16.25 = 13.125"
+    expected_outputs:
+      average: 13.125

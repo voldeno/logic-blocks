@@ -1,0 +1,65 @@
+name: "cumulative average"
+
+config:
+  algorithm: 1
+
+steps:
+  - action: "assert_outputs"
+    comment: "Output starts at 0 (default)"
+    expected_outputs:
+      average: 0
+
+  # First value initializes the average directly
+  - action: "set_inputs"
+    comment: "First value: 10"
+    inputs:
+      value: 10
+
+  - action: "assert_outputs"
+    comment: "CA after 1 value: 10 / 1 = 10"
+    expected_outputs:
+      average: 10
+
+  # CA: (10 + 20) / 2 = 15
+  - action: "set_inputs"
+    comment: "Second value: 20"
+    inputs:
+      value: 20
+
+  - action: "assert_outputs"
+    comment: "CA after 2 values: (10 + 20) / 2 = 15"
+    expected_outputs:
+      average: 15
+
+  # CA: (10 + 20 + 30) / 3 = 20
+  - action: "set_inputs"
+    comment: "Third value: 30"
+    inputs:
+      value: 30
+
+  - action: "assert_outputs"
+    comment: "CA after 3 values: (10 + 20 + 30) / 3 = 20"
+    expected_outputs:
+      average: 20
+
+  # CA: (10 + 20 + 30 + 0) / 4 = 15
+  - action: "set_inputs"
+    comment: "Fourth value: 0"
+    inputs:
+      value: 0
+
+  - action: "assert_outputs"
+    comment: "CA after 4 values: (10 + 20 + 30 + 0) / 4 = 15"
+    expected_outputs:
+      average: 15
+
+  # CA: (10 + 20 + 30 + 0 + 40) / 5 = 20
+  - action: "set_inputs"
+    comment: "Fifth value: 40"
+    inputs:
+      value: 40
+
+  - action: "assert_outputs"
+    comment: "CA after 5 values: (10 + 20 + 30 + 0 + 40) / 5 = 20"
+    expected_outputs:
+      average: 20

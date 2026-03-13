@@ -1,0 +1,37 @@
+channel = input::channel()
+value = input::value()
+
+if (channel == "reset") {
+    prev_reset = state::get("prev_reset")
+    if (value and !prev_reset) {
+        current = input::get("value")
+        state::set("count", 1)
+        output::set("average", current)
+    }
+    state::set("prev_reset", value)
+    return
+}
+
+if (channel == "value") {
+    count = state::get("count")
+    avg = output::get("average")
+
+    if (count == 0) {
+        state::set("count", 1)
+        output::set("average", value)
+        return
+    }
+
+    algorithm = config::get("algorithm")
+
+    if (algorithm == 0) {
+        alpha = config::get("alpha")
+        new_avg = alpha * value + (1 - alpha) * avg
+        output::set("average", new_avg)
+    } else {
+        count = count + 1
+        state::set("count", count)
+        new_avg = avg + (value - avg) / count
+        output::set("average", new_avg)
+    }
+}

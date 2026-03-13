@@ -1,0 +1,46 @@
+{
+  "description": "Oblicza bieżącą średnią z przychodzących wartości liczbowych za pomocą wybranego algorytmu (EMA lub CA)",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Wartość liczbowa do uwzględnienia w średniej"
+    },
+    {
+      "id": "reset",
+      "name": "Reset",
+      "description": "Zbocze narastające resetuje średnią do aktualnej wartości wejściowej"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "average",
+      "name": "Średnia",
+      "description": "Obliczona średnia krocząca"
+    }
+  ],
+  "config": [
+    {
+      "id": "algorithm",
+      "name": "Algorytm",
+      "description": "Algorytm uśredniania: EMA (wykładnicza średnia krocząca) lub CA (średnia kumulacyjna)"
+    },
+    {
+      "id": "alpha",
+      "name": "Alfa (współczynnik wygładzania)",
+      "description": "Współczynnik wygładzania EMA (0-1). Wyższe wartości nadają większą wagę najnowszym wartościom"
+    }
+  ],
+  "state": [
+    {
+      "id": "count",
+      "name": "Licznik",
+      "description": "Liczba otrzymanych wartości"
+    },
+    {
+      "id": "prev_reset",
+      "name": "Poprzedni stan resetu",
+      "description": "Poprzedni stan wejścia reset do detekcji zbocza"
+    }
+  ]
+}

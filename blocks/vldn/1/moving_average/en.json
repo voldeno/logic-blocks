@@ -1,0 +1,46 @@
+{
+  "description": "Computes a running average of incoming numeric values using a selectable algorithm (EMA or CA)",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "Numeric input value to include in the average"
+    },
+    {
+      "id": "reset",
+      "name": "Reset",
+      "description": "Rising edge resets the average to the current input value"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "average",
+      "name": "Average",
+      "description": "The computed moving average"
+    }
+  ],
+  "config": [
+    {
+      "id": "algorithm",
+      "name": "Algorithm",
+      "description": "Averaging algorithm: EMA (Exponential Moving Average) or CA (Cumulative Average)"
+    },
+    {
+      "id": "alpha",
+      "name": "Alpha (smoothing factor)",
+      "description": "EMA smoothing factor (0-1). Higher values give more weight to recent values"
+    }
+  ],
+  "state": [
+    {
+      "id": "count",
+      "name": "Count",
+      "description": "Number of values received"
+    },
+    {
+      "id": "prev_reset",
+      "name": "Previous reset state",
+      "description": "Previous state of the reset input for edge detection"
+    }
+  ]
+}
