@@ -37,6 +37,12 @@
       "abbrev": "HB",
       "type": "BOOLEAN",
       "default": "false"
+    },
+    {
+      "id": "freq",
+      "abbrev": "FQ",
+      "type": "NUMBER",
+      "default": "0"
     }
   ],
   "outputs": [
@@ -100,7 +106,7 @@
     {
       "id": "control_mode",
       "type": "ENUM",
-      "values": ["Encoder", "Time-based"],
+      "values": ["Encoder", "Time-based", "Frequency"],
       "default": "0"
     },
     {
@@ -110,7 +116,7 @@
       "default": "0.1",
       "visibleWhen": {
         "configId": "control_mode",
-        "values": ["Time-based"]
+        "values": ["Time-based", "Frequency"]
       },
       "validation": {
         "rules": [
@@ -128,7 +134,7 @@
       "default": "0.1",
       "visibleWhen": {
         "configId": "control_mode",
-        "values": ["Time-based"]
+        "values": ["Time-based", "Frequency"]
       },
       "validation": {
         "rules": [
@@ -217,6 +223,31 @@
     },
     {
       "id": "lock_position",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "last_freq_time",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "avg_pulse_time_ms",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "freq_sample_count",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "freq_finishing",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "fractional_pulses",
       "type": "NUMBER",
       "default": "0"
     }

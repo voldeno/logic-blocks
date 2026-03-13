@@ -1,0 +1,90 @@
+name: "frequency small move finishes via fallback"
+
+config:
+  home_direction: 0
+  position_tolerance: 0
+  control_mode: 2
+  pulse_time_forward: 0.1
+  pulse_time_reverse: 0.1
+
+steps:
+  # Home first
+  - action: "set_inputs"
+    comment: "Trigger homing"
+    inputs:
+      home: true
+
+  - action: "set_inputs"
+    inputs:
+      home: false
+
+  - action: "set_inputs"
+    comment: "Home switch activates"
+    inputs:
+      home_switch: true
+
+  - action: "assert_outputs"
+    comment: "Homing complete"
+    expected_outputs:
+      homed: true
+      position: 0
+      at_target: true
+
+  - action: "set_inputs"
+    inputs:
+      home_switch: false
+
+  # Small forward movement: target = 2, pulse_time = 100ms
+  # Fallback callback scheduled at 2 * 100 = 200ms
+  - action: "set_inputs"
+    comment: "Set target to 2 (small move)"
+    inputs:
+      target: 2
+
+  - action: "assert_outputs"
+    comment: "Motor starts forward"
+    expected_outputs:
+      forward: true
+      reverse: false
+      moving: true
+      at_target: false
+
+  # Wait for fallback finish callback (200ms) without sending any freq input
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Fallback fired: position at target, motor stopped"
+    expected_outputs:
+      position: 2
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true
+
+  # Small reverse movement: target = 0, pulse_time_reverse = 100ms
+  # Fallback callback scheduled at 2 * 100 = 200ms
+  - action: "set_inputs"
+    comment: "Set target to 0 (small reverse)"
+    inputs:
+      target: 0
+
+  - action: "assert_outputs"
+    comment: "Motor starts reverse"
+    expected_outputs:
+      forward: false
+      reverse: true
+      moving: true
+      at_target: false
+
+  - action: "wait"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Fallback fired: position at target, motor stopped"
+    expected_outputs:
+      position: 0
+      forward: false
+      reverse: false
+      moving: false
+      at_target: true

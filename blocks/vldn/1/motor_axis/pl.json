@@ -30,6 +30,11 @@
       "id": "home_before_move",
       "name": "Bazowanie przed ruchem",
       "description": "Gdy aktywne, silnik automatycznie bazuje przed każdym ruchem do nowego celu. Jeśli czujnik bazowy jest już aktywny, ruch rozpoczyna się natychmiast od pozycji zero. W przeciwnym razie silnik najpierw bazuje, a następnie jedzie do celu."
+    },
+    {
+      "id": "freq",
+      "name": "Częstotliwość",
+      "description": "Częstotliwość impulsów w Hz. Używane w trybie częstotliwościowym. Pozycja obliczana z częstotliwości i czasu, z estymacją czasową na końcu."
     }
   ],
   "outputs": [
@@ -78,17 +83,17 @@
     {
       "id": "control_mode",
       "name": "Tryb sterowania",
-      "description": "Tryb enkodera używa zewnętrznych impulsów enkodera do śledzenia pozycji. Tryb czasowy używa wewnętrznie taktowanych kroków, gdzie każda jednostka pozycji odpowiada skonfigurowanemu czasowi trwania."
+      "description": "Enkoder: pozycja ze zliczania impulsów. Czasowy: wewnętrznie taktowane kroki. Częstotliwościowy: pozycja z wejść Hz, z estymacją czasową na końcu dojazdu."
     },
     {
       "id": "pulse_time_forward",
       "name": "Czas impulsu do przodu",
-      "description": "Czas trwania jednego kroku pozycji podczas ruchu w kierunku do przodu. Używane tylko w trybie sterowania czasowego."
+      "description": "Czas jednego kroku do przodu. Używane w trybie czasowym i częstotliwościowym. W trybie częstotliwościowym jako estymata początkowa."
     },
     {
       "id": "pulse_time_reverse",
       "name": "Czas impulsu do tyłu",
-      "description": "Czas trwania jednego kroku pozycji podczas ruchu w kierunku do tyłu. Używane tylko w trybie sterowania czasowego."
+      "description": "Czas jednego kroku do tyłu. Używane w trybie czasowym i częstotliwościowym. W trybie częstotliwościowym jako estymata początkowa."
     },
     {
       "id": "motor_lock_duration",
@@ -161,6 +166,31 @@
       "id": "lock_position",
       "name": "Pozycja blokady",
       "description": "Bieżąca pozycja przechowywana podczas oczekiwania na zakończenie opóźnienia blokady silnika."
+    },
+    {
+      "id": "last_freq_time",
+      "name": "Czas ostatniego wejścia częstotliwości",
+      "description": "Czas działania systemu, kiedy otrzymano ostatnie wejście częstotliwości lub rozpoczęto ruch."
+    },
+    {
+      "id": "avg_pulse_time_ms",
+      "name": "Średni czas impulsu",
+      "description": "Bieżąca średnia czasu trwania impulsu w milisekundach, obliczona z wejść częstotliwości podczas ruchu."
+    },
+    {
+      "id": "freq_sample_count",
+      "name": "Liczba próbek częstotliwości",
+      "description": "Liczba próbek wejścia częstotliwości otrzymanych podczas bieżącego ruchu."
+    },
+    {
+      "id": "freq_finishing",
+      "name": "Kończenie częstotliwościowe",
+      "description": "Prawda, gdy blok przełączył się na estymację czasową w końcowej fazie dojazdu w trybie częstotliwościowym."
+    },
+    {
+      "id": "fractional_pulses",
+      "name": "Ułamkowe impulsy",
+      "description": "Skumulowana reszta ułamkowa z obliczeń częstotliwości na impulsy."
     }
   ]
 }
