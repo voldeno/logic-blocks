@@ -81,6 +81,7 @@ extern fn onStep(v) {
 }
 
 extern fn onFreqFinish(v) {
+    std::print(str::fmt("FREQ_DEBUG steps={} inputs={} sum={} avg_pt={} elapsed_ms={}", state::get("freq_travel_steps"), state::get("freq_sample_count"), state::get("freq_input_sum"), state::get("avg_pulse_time_ms"), time::uptime() - state::get("freq_start_time")))
     target = state::get("move_target")
     output::set("position", target)
     stop_motors()
@@ -93,6 +94,8 @@ fn init_freq_state() {
     state::set("freq_sample_count", 0)
     state::set("freq_finishing", false)
     state::set("fractional_pulses", 0)
+    state::set("freq_start_time", time::uptime())
+    state::set("freq_input_sum", 0)
 }
 
 fn evaluate_target_now(target, position) {
@@ -120,6 +123,7 @@ fn evaluate_target_now(target, position) {
         if (control_mode == 2) {
             state::set("move_target", target)
             init_freq_state()
+            state::set("freq_travel_steps", math::round(diff))
             pulse_ms = math::round(config::get("pulse_time_forward") * 1000)
             state::set("avg_pulse_time_ms", pulse_ms)
             total_ms = math::round(diff) * pulse_ms
@@ -144,6 +148,7 @@ fn evaluate_target_now(target, position) {
         if (control_mode == 2) {
             state::set("move_target", target)
             init_freq_state()
+            state::set("freq_travel_steps", math::round(0 - diff))
             pulse_ms = math::round(config::get("pulse_time_reverse") * 1000)
             state::set("avg_pulse_time_ms", pulse_ms)
             total_ms = math::round(0 - diff) * pulse_ms
@@ -350,6 +355,8 @@ if (channel == "freq") {
         return
     }
 
+    state::set("freq_input_sum", state::get("freq_input_sum") + value)
+
     pulse_count = value * elapsed_ms / 1000.0 + state::get("fractional_pulses")
     whole_steps = math::round(pulse_count)
     if (pulse_count < whole_steps) {
@@ -387,6 +394,7 @@ if (channel == "freq") {
     tolerance = config::get("position_tolerance")
 
     if (remaining <= tolerance) {
+        std::print(str::fmt("FREQ_DEBUG steps={} inputs={} sum={} avg_pt={} elapsed_ms={}", state::get("freq_travel_steps"), state::get("freq_sample_count"), state::get("freq_input_sum"), state::get("avg_pulse_time_ms"), time::uptime() - state::get("freq_start_time")))
         stop_motors()
         output::set("at_target", true)
         return

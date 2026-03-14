@@ -191,6 +191,21 @@
       "id": "fractional_pulses",
       "name": "Ułamkowe impulsy",
       "description": "Skumulowana reszta ułamkowa z obliczeń częstotliwości na impulsy."
+    },
+    {
+      "id": "freq_start_time",
+      "name": "Czas startu jazdy",
+      "description": "Czas systemowy rozpoczęcia bieżącego ruchu w trybie częstotliwościowym."
+    },
+    {
+      "id": "freq_travel_steps",
+      "name": "Kroki jazdy",
+      "description": "Liczba kroków do przebycia w bieżącym ruchu częstotliwościowym."
+    },
+    {
+      "id": "freq_input_sum",
+      "name": "Suma wejść częstotliwości",
+      "description": "Suma wartości wejść częstotliwości odebranych podczas bieżącej jazdy."
     }
   ]
 }

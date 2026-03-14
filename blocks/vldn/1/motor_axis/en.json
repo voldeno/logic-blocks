@@ -191,6 +191,21 @@
       "id": "fractional_pulses",
       "name": "Fractional pulses",
       "description": "Accumulated fractional pulse remainder from frequency-to-pulse calculations."
+    },
+    {
+      "id": "freq_start_time",
+      "name": "Frequency travel start time",
+      "description": "System uptime when the current frequency-mode travel started."
+    },
+    {
+      "id": "freq_travel_steps",
+      "name": "Frequency travel steps",
+      "description": "Total steps to travel in the current frequency-mode movement."
+    },
+    {
+      "id": "freq_input_sum",
+      "name": "Frequency input sum",
+      "description": "Sum of all frequency input values received during the current travel."
     }
   ]
 }
