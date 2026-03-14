@@ -67,6 +67,16 @@
       "id": "moving",
       "name": "W ruchu",
       "description": "Prawda, gdy silnik aktywnie napędza w dowolnym kierunku."
+    },
+    {
+      "id": "position_pct",
+      "name": "Pozycja %",
+      "description": "Bieżąca pozycja jako procent (0-100) skonfigurowanej pełnej długości ruchu."
+    },
+    {
+      "id": "rpm",
+      "name": "RPM",
+      "description": "Bieżąca prędkość obrotowa silnika w obrotach na minutę."
     }
   ],
   "config": [
@@ -99,6 +109,16 @@
       "id": "motor_lock_duration",
       "name": "Czas blokady silnika",
       "description": "Czas pauzy między zmianami kierunku w celu ochrony silnika. Silnik zatrzymuje się na ten okres przed uruchomieniem w przeciwnym kierunku. Ustaw 0, aby wyłączyć."
+    },
+    {
+      "id": "full_travel_steps",
+      "name": "Pełny zakres kroków",
+      "description": "Liczba kroków odpowiadająca 100% zakresu ruchu osi. Wartość 0 wyłącza procentowe wyjście pozycji."
+    },
+    {
+      "id": "steps_per_revolution",
+      "name": "Impulsy na obrót",
+      "description": "Liczba impulsów enkodera/częstotliwości na jeden pełny obrót wału. Wartość 0 wyłącza wyjście RPM."
     }
   ],
   "state": [
@@ -216,6 +236,11 @@
       "id": "freq_max_gap_ms",
       "name": "Maks. przerwa częstotliwości",
       "description": "Maksymalny czas między kolejnymi wejściami częstotliwości podczas bieżącej jazdy."
+    },
+    {
+      "id": "last_encoder_pulse_time",
+      "name": "Czas ostatniego impulsu enkodera",
+      "description": "Czas systemowy ostatniego zbocza narastającego enkodera. Używane do obliczania RPM."
     }
   ]
 }

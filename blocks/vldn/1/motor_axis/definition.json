@@ -81,6 +81,18 @@
       "abbrev": "M",
       "type": "BOOLEAN",
       "default": "false"
+    },
+    {
+      "id": "position_pct",
+      "abbrev": "PP",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "rpm",
+      "abbrev": "RPM",
+      "type": "NUMBER",
+      "default": "0"
     }
   ],
   "config": [
@@ -149,6 +161,32 @@
       "id": "motor_lock_duration",
       "type": "NUMBER",
       "unit": "s",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "full_travel_steps",
+      "type": "NUMBER",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "steps_per_revolution",
+      "type": "NUMBER",
       "default": "0",
       "validation": {
         "rules": [
@@ -273,6 +311,11 @@
     },
     {
       "id": "freq_max_gap_ms",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "last_encoder_pulse_time",
       "type": "NUMBER",
       "default": "0"
     }

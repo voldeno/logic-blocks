@@ -67,6 +67,16 @@
       "id": "moving",
       "name": "Moving",
       "description": "True when the motor is actively driving in either direction."
+    },
+    {
+      "id": "position_pct",
+      "name": "Position %",
+      "description": "Current position as a percentage (0-100) of the configured full travel length."
+    },
+    {
+      "id": "rpm",
+      "name": "RPM",
+      "description": "Current motor speed in revolutions per minute."
     }
   ],
   "config": [
@@ -99,6 +109,16 @@
       "id": "motor_lock_duration",
       "name": "Motor lock duration",
       "description": "Pause duration between direction changes to protect the motor. The motor stops for this period before starting in the opposite direction. Set to 0 to disable."
+    },
+    {
+      "id": "full_travel_steps",
+      "name": "Full travel steps",
+      "description": "Number of steps that represent 100% of the axis travel. When set to 0, the position percentage output is disabled."
+    },
+    {
+      "id": "steps_per_revolution",
+      "name": "Steps per revolution",
+      "description": "Number of encoder/frequency pulses per one full shaft revolution. Set to 0 to disable RPM output."
     }
   ],
   "state": [
@@ -216,6 +236,11 @@
       "id": "freq_max_gap_ms",
       "name": "Max frequency gap",
       "description": "Maximum elapsed time between consecutive frequency inputs during the current travel."
+    },
+    {
+      "id": "last_encoder_pulse_time",
+      "name": "Last encoder pulse time",
+      "description": "System uptime of the last encoder rising edge. Used to calculate inter-pulse timing for RPM."
     }
   ]
 }
