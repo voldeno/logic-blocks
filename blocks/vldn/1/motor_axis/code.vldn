@@ -2,9 +2,9 @@ channel = input::channel()
 value = input::value()
 
 fn freq_debug(reason) {
-    if (config::get("control_mode") == 2 and state::get("freq_travel_steps") > 0) {
-        std::print(str::fmt("FREQ_DEBUG steps={} inputs={} sum={} avg_pt={} elapsed_ms={} first_pt={} max_gap={} end={}", state::get("freq_travel_steps"), state::get("freq_sample_count"), state::get("freq_input_sum"), state::get("avg_pulse_time_ms"), time::uptime() - state::get("freq_start_time"), state::get("freq_first_pt"), state::get("freq_max_gap_ms"), reason))
-    }
+    // if (config::get("control_mode") == 2 and state::get("freq_travel_steps") > 0) {
+        // std::print(str::fmt("FREQ_DEBUG steps={} inputs={} sum={} avg_pt={} elapsed_ms={} first_pt={} max_gap={} end={}", state::get("freq_travel_steps"), state::get("freq_sample_count"), state::get("freq_input_sum"), state::get("avg_pulse_time_ms"), time::uptime() - state::get("freq_start_time"), state::get("freq_first_pt"), state::get("freq_max_gap_ms"), reason))
+    // }
 }
 
 fn stop_motors() {
