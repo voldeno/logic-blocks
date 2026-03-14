@@ -206,6 +206,16 @@
       "id": "freq_input_sum",
       "name": "Frequency input sum",
       "description": "Sum of all frequency input values received during the current travel."
+    },
+    {
+      "id": "freq_first_pt",
+      "name": "First pulse time",
+      "description": "Pulse time from the first frequency input of the current travel."
+    },
+    {
+      "id": "freq_max_gap_ms",
+      "name": "Max frequency gap",
+      "description": "Maximum elapsed time between consecutive frequency inputs during the current travel."
     }
   ]
 }

@@ -234,7 +234,7 @@
     {
       "id": "avg_pulse_time_ms",
       "type": "NUMBER",
-      "default": "0"
+      "default": "0.0"
     },
     {
       "id": "freq_sample_count",
@@ -263,6 +263,16 @@
     },
     {
       "id": "freq_input_sum",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "freq_first_pt",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "freq_max_gap_ms",
       "type": "NUMBER",
       "default": "0"
     }
