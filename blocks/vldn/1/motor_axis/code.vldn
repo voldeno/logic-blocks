@@ -244,7 +244,7 @@ fn evaluate_target(target, position) {
 }
 
 fn complete_homing() {
-    std::print(str::fmt("HOMING_DONE id={} mah={} pt={}", config::get("full_travel_steps"), state::get("move_after_home"), state::get("pending_target")))
+    // std::print(str::fmt("HOMING_DONE id={} mah={} pt={}", config::get("full_travel_steps"), state::get("move_after_home"), state::get("pending_target")))
     stop_motors()
     set_position(0)
     output::set("homed", true)
@@ -261,7 +261,7 @@ fn complete_homing() {
 
 fn start_homing_sequence() {
     callback::clear()
-    std::print(str::fmt("HOMING_START id={} hs={}", config::get("full_travel_steps"), input::get("home_switch")))
+    // std::print(str::fmt("HOMING_START id={} hs={}", config::get("full_travel_steps"), input::get("home_switch")))
     output::set("homed", false)
     output::set("at_target", false)
     state::set("is_homing", true)
@@ -475,7 +475,7 @@ if (channel == "freq") {
 if (channel == "target") {
     is_homing = state::get("is_homing")
     home_before_move = input::get("home_before_move")
-    std::print(str::fmt("TARGET id={} tgt={} hbm={} homing={} moving={} fwd={} rev={} pos={} hs={}", config::get("full_travel_steps"), value, home_before_move, is_homing, output::get("moving"), output::get("forward"), output::get("reverse"), output::get("position"), input::get("home_switch")))
+    // std::print(str::fmt("TARGET id={} tgt={} hbm={} homing={} moving={} fwd={} rev={} pos={} hs={}", config::get("full_travel_steps"), value, home_before_move, is_homing, output::get("moving"), output::get("forward"), output::get("reverse"), output::get("position"), input::get("home_switch")))
 
     if (config::get("control_mode") != 0 and output::get("moving")) {
         freq_debug("retarget")
