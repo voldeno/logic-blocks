@@ -1,5 +1,6 @@
 if (input::get("state")) {
     register::set(1)
 } else {
+    std::print("R off")
     register::set(0)
 }
