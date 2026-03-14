@@ -377,15 +377,13 @@ if (channel == "freq") {
     sample_count = state::get("freq_sample_count") + 1
     state::set("freq_sample_count", sample_count)
     avg_pt = state::get("avg_pulse_time_ms")
-    if (sample_count > 1) {
-        config_pt = config::get("pulse_time_forward") * 1000.0
-        if (is_reverse) {
-            config_pt = config::get("pulse_time_reverse") * 1000.0
-        }
-        if (pulse_time < config_pt * 2.0) {
-            avg_pt = avg_pt + (pulse_time - avg_pt) / (sample_count * 1.0)
-            state::set("avg_pulse_time_ms", avg_pt)
-        }
+    config_pt = config::get("pulse_time_forward") * 1000.0
+    if (is_reverse) {
+        config_pt = config::get("pulse_time_reverse") * 1000.0
+    }
+    if (pulse_time > config_pt / 2.0 and pulse_time < config_pt * 2.0) {
+        avg_pt = avg_pt + (pulse_time - avg_pt) / (sample_count * 1.0)
+        state::set("avg_pulse_time_ms", avg_pt)
     }
 
     if (sample_count == 1) {
