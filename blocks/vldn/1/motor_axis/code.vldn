@@ -1,12 +1,6 @@
 channel = input::channel()
 value = input::value()
 
-fn freq_debug(reason) {
-    // if (config::get("control_mode") == 2 and state::get("freq_travel_steps") > 0) {
-        // std::print(str::fmt("FREQ_DEBUG steps={} inputs={} sum={} avg_pt={} elapsed_ms={} first_pt={} max_gap={} end={}", state::get("freq_travel_steps"), state::get("freq_sample_count"), state::get("freq_input_sum"), state::get("avg_pulse_time_ms"), time::uptime() - state::get("freq_start_time"), state::get("freq_first_pt"), state::get("freq_max_gap_ms"), reason))
-    // }
-}
-
 fn stop_motors() {
     callback::clear()
     if (output::get("forward") or output::get("reverse")) {
@@ -111,7 +105,6 @@ extern fn onStep(v) {
 }
 
 extern fn onFreqFinish(v) {
-    freq_debug("callback")
     target = state::get("move_target")
     set_position(target)
     stop_motors()
@@ -124,10 +117,6 @@ fn init_freq_state() {
     state::set("freq_sample_count", 0)
     state::set("freq_finishing", false)
     state::set("fractional_pulses", 0)
-    state::set("freq_start_time", time::uptime())
-    state::set("freq_input_sum", 0)
-    state::set("freq_first_pt", 0)
-    state::set("freq_max_gap_ms", 0)
 }
 
 fn evaluate_target_now(target, position) {
@@ -156,7 +145,6 @@ fn evaluate_target_now(target, position) {
         if (control_mode == 2) {
             state::set("move_target", target)
             init_freq_state()
-            state::set("freq_travel_steps", math::round(diff))
             pulse_ms = math::round(config::get("pulse_time_forward") * 1000)
             state::set("avg_pulse_time_ms", pulse_ms * 1.0)
             total_ms = math::round(diff) * pulse_ms
@@ -182,7 +170,6 @@ fn evaluate_target_now(target, position) {
         if (control_mode == 2) {
             state::set("move_target", target)
             init_freq_state()
-            state::set("freq_travel_steps", math::round(0 - diff))
             pulse_ms = math::round(config::get("pulse_time_reverse") * 1000)
             state::set("avg_pulse_time_ms", pulse_ms * 1.0)
             total_ms = math::round(0 - diff) * pulse_ms
@@ -244,7 +231,6 @@ fn evaluate_target(target, position) {
 }
 
 fn complete_homing() {
-    // std::print(str::fmt("HOMING_DONE id={} mah={} pt={}", config::get("full_travel_steps"), state::get("move_after_home"), state::get("pending_target")))
     stop_motors()
     set_position(0)
     output::set("homed", true)
@@ -261,7 +247,6 @@ fn complete_homing() {
 
 fn start_homing_sequence() {
     callback::clear()
-    // std::print(str::fmt("HOMING_START id={} hs={}", config::get("full_travel_steps"), input::get("home_switch")))
     output::set("homed", false)
     output::set("at_target", false)
     state::set("is_homing", true)
@@ -283,7 +268,6 @@ if (channel == "stop") {
     prev_stop = state::get("prev_stop")
 
     if (value and !prev_stop) {
-        freq_debug("stop")
         stop_motors()
         state::set("is_homing", false)
     }
@@ -302,7 +286,6 @@ if (state::get("is_homing") and input::get("home_switch")) {
 // Handle "home_switch" input - stop motor when home switch activates outside homing
 if (channel == "home_switch") {
     if (value and output::get("moving")) {
-        freq_debug("home_switch")
         stop_motors()
         set_position(0)
         output::set("homed", true)
@@ -403,8 +386,6 @@ if (channel == "freq") {
         return
     }
 
-    state::set("freq_input_sum", state::get("freq_input_sum") + value)
-
     pulse_count = value * elapsed_ms / 1000.0 + state::get("fractional_pulses")
     whole_steps = math::round(pulse_count)
     if (pulse_count < whole_steps) {
@@ -424,13 +405,6 @@ if (channel == "freq") {
     if (pulse_time > config_pt / 2.0 and pulse_time < config_pt * 2.0) {
         avg_pt = avg_pt + (pulse_time - avg_pt) / (sample_count * 1.0)
         state::set("avg_pulse_time_ms", avg_pt)
-    }
-
-    if (sample_count == 1) {
-        state::set("freq_first_pt", pulse_time)
-    }
-    if (elapsed_ms > state::get("freq_max_gap_ms")) {
-        state::set("freq_max_gap_ms", elapsed_ms)
     }
 
     position = output::get("position")
@@ -456,7 +430,6 @@ if (channel == "freq") {
     tolerance = config::get("position_tolerance")
 
     if (remaining <= tolerance) {
-        freq_debug("target")
         stop_motors()
         output::set("at_target", true)
         return
@@ -475,10 +448,8 @@ if (channel == "freq") {
 if (channel == "target") {
     is_homing = state::get("is_homing")
     home_before_move = input::get("home_before_move")
-    // std::print(str::fmt("TARGET id={} tgt={} hbm={} homing={} moving={} fwd={} rev={} pos={} hs={}", config::get("full_travel_steps"), value, home_before_move, is_homing, output::get("moving"), output::get("forward"), output::get("reverse"), output::get("position"), input::get("home_switch")))
 
     if (config::get("control_mode") != 0 and output::get("moving")) {
-        freq_debug("retarget")
         stop_motors()
         state::set("is_homing", false)
         is_homing = false

@@ -290,31 +290,6 @@
       "default": "0"
     },
     {
-      "id": "freq_start_time",
-      "type": "NUMBER",
-      "default": "0"
-    },
-    {
-      "id": "freq_travel_steps",
-      "type": "NUMBER",
-      "default": "0"
-    },
-    {
-      "id": "freq_input_sum",
-      "type": "NUMBER",
-      "default": "0"
-    },
-    {
-      "id": "freq_first_pt",
-      "type": "NUMBER",
-      "default": "0"
-    },
-    {
-      "id": "freq_max_gap_ms",
-      "type": "NUMBER",
-      "default": "0"
-    },
-    {
       "id": "last_encoder_pulse_time",
       "type": "NUMBER",
       "default": "0"

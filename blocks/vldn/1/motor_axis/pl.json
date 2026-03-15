@@ -213,31 +213,6 @@
       "description": "Skumulowana reszta ułamkowa z obliczeń częstotliwości na impulsy."
     },
     {
-      "id": "freq_start_time",
-      "name": "Czas startu jazdy",
-      "description": "Czas systemowy rozpoczęcia bieżącego ruchu w trybie częstotliwościowym."
-    },
-    {
-      "id": "freq_travel_steps",
-      "name": "Kroki jazdy",
-      "description": "Liczba kroków do przebycia w bieżącym ruchu częstotliwościowym."
-    },
-    {
-      "id": "freq_input_sum",
-      "name": "Suma wejść częstotliwości",
-      "description": "Suma wartości wejść częstotliwości odebranych podczas bieżącej jazdy."
-    },
-    {
-      "id": "freq_first_pt",
-      "name": "Pierwszy czas impulsu",
-      "description": "Czas impulsu z pierwszego wejścia częstotliwości bieżącej jazdy."
-    },
-    {
-      "id": "freq_max_gap_ms",
-      "name": "Maks. przerwa częstotliwości",
-      "description": "Maksymalny czas między kolejnymi wejściami częstotliwości podczas bieżącej jazdy."
-    },
-    {
       "id": "last_encoder_pulse_time",
       "name": "Czas ostatniego impulsu enkodera",
       "description": "Czas systemowy ostatniego zbocza narastającego enkodera. Używane do obliczania RPM."
