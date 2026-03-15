@@ -10,6 +10,8 @@ fn stop_motors() {
     output::set("forward", false)
     output::set("reverse", false)
     output::set("moving", false)
+    output::set("rpm", 0)
+    state::set("last_encoder_pulse_time", 0)
 }
 
 fn start_forward() {
@@ -22,6 +24,28 @@ fn start_reverse() {
     output::set("forward", false)
     output::set("reverse", true)
     output::set("moving", true)
+}
+
+fn set_position(pos) {
+    output::set("position", pos)
+    full = config::get("full_travel_steps")
+    if (full > 0) {
+        pct = pos * 100.0 / full
+        if (pct < 0) {
+            pct = 0
+        }
+        if (pct > 100) {
+            pct = 100
+        }
+        output::set("position_pct", pct)
+    }
+}
+
+fn set_rpm(pulses_per_second) {
+    spr = config::get("steps_per_revolution")
+    if (spr > 0) {
+        output::set("rpm", pulses_per_second * 60.0 / spr)
+    }
 }
 
 extern fn onStep(v) {
@@ -45,7 +69,7 @@ extern fn onStep(v) {
     elapsed = time::uptime() - start_time
 
     if (elapsed >= total_ms) {
-        output::set("position", target)
+        set_position(target)
         stop_motors()
         output::set("at_target", true)
         return
@@ -70,7 +94,7 @@ extern fn onStep(v) {
         }
     }
 
-    output::set("position", position)
+    set_position(position)
 
     remaining_ms = total_ms - elapsed
     if (remaining_ms <= 100) {
@@ -80,19 +104,37 @@ extern fn onStep(v) {
     }
 }
 
+extern fn onFreqFinish(v) {
+    target = state::get("move_target")
+    set_position(target)
+    stop_motors()
+    output::set("at_target", true)
+}
+
+fn init_freq_state() {
+    state::set("last_freq_time", time::uptime())
+    state::set("avg_pulse_time_ms", 0)
+    state::set("freq_sample_count", 0)
+    state::set("freq_finishing", false)
+    state::set("fractional_pulses", 0)
+}
+
 fn evaluate_target_now(target, position) {
     tolerance = config::get("position_tolerance")
     diff = target - position
 
+    control_mode = config::get("control_mode")
+
     if (diff > tolerance) {
         start_forward()
         output::set("at_target", false)
-        if (config::get("control_mode") == 1) {
+        if (control_mode == 1) {
             state::set("move_start_time", time::uptime())
             state::set("move_start_position", position)
             state::set("move_target", target)
             steps = math::round(diff)
             pulse_ms = math::round(config::get("pulse_time_forward") * 1000)
+            set_rpm(1000.0 / pulse_ms)
             total_ms = steps * pulse_ms
             first_cb = 100
             if (total_ms < first_cb) {
@@ -100,21 +142,38 @@ fn evaluate_target_now(target, position) {
             }
             callback::set(first_cb, "onStep", 0)
         }
+        if (control_mode == 2) {
+            state::set("move_target", target)
+            init_freq_state()
+            pulse_ms = math::round(config::get("pulse_time_forward") * 1000)
+            state::set("avg_pulse_time_ms", pulse_ms * 1.0)
+            total_ms = math::round(diff) * pulse_ms
+            callback::set(math::round(total_ms), "onFreqFinish", 0)
+        }
     } else if (diff < (0 - tolerance)) {
         start_reverse()
         output::set("at_target", false)
-        if (config::get("control_mode") == 1) {
+        if (control_mode == 1) {
             state::set("move_start_time", time::uptime())
             state::set("move_start_position", position)
             state::set("move_target", target)
             steps = math::round(0 - diff)
             pulse_ms = math::round(config::get("pulse_time_reverse") * 1000)
+            set_rpm(1000.0 / pulse_ms)
             total_ms = steps * pulse_ms
             first_cb = 100
             if (total_ms < first_cb) {
                 first_cb = total_ms
             }
             callback::set(first_cb, "onStep", 0)
+        }
+        if (control_mode == 2) {
+            state::set("move_target", target)
+            init_freq_state()
+            pulse_ms = math::round(config::get("pulse_time_reverse") * 1000)
+            state::set("avg_pulse_time_ms", pulse_ms * 1.0)
+            total_ms = math::round(0 - diff) * pulse_ms
+            callback::set(math::round(total_ms), "onFreqFinish", 0)
         }
     } else {
         stop_motors()
@@ -173,7 +232,7 @@ fn evaluate_target(target, position) {
 
 fn complete_homing() {
     stop_motors()
-    output::set("position", 0)
+    set_position(0)
     output::set("homed", true)
     state::set("is_homing", false)
 
@@ -187,6 +246,7 @@ fn complete_homing() {
 }
 
 fn start_homing_sequence() {
+    callback::clear()
     output::set("homed", false)
     output::set("at_target", false)
     state::set("is_homing", true)
@@ -208,7 +268,6 @@ if (channel == "stop") {
     prev_stop = state::get("prev_stop")
 
     if (value and !prev_stop) {
-        // Rising edge on stop - stop all movement, cancel homing
         stop_motors()
         state::set("is_homing", false)
     }
@@ -228,7 +287,7 @@ if (state::get("is_homing") and input::get("home_switch")) {
 if (channel == "home_switch") {
     if (value and output::get("moving")) {
         stop_motors()
-        output::set("position", 0)
+        set_position(0)
         output::set("homed", true)
         output::set("at_target", true)
     }
@@ -249,7 +308,7 @@ if (channel == "home") {
 
 // Handle "encoder" input
 if (channel == "encoder") {
-    if (config::get("control_mode") == 1) {
+    if (config::get("control_mode") != 0) {
         return
     }
 
@@ -270,7 +329,17 @@ if (channel == "encoder") {
                 position = position - 1
             }
 
-            output::set("position", position)
+            set_position(position)
+
+            enc_now = time::uptime()
+            last_enc = state::get("last_encoder_pulse_time")
+            if (last_enc > 0) {
+                enc_elapsed = enc_now - last_enc
+                if (enc_elapsed > 0) {
+                    set_rpm(1000.0 / enc_elapsed)
+                }
+            }
+            state::set("last_encoder_pulse_time", enc_now)
 
             // Check if at target
             target = input::get("target")
@@ -288,12 +357,99 @@ if (channel == "encoder") {
     return
 }
 
+// Handle "freq" input (Frequency control mode)
+if (channel == "freq") {
+    if (config::get("control_mode") != 2) {
+        return
+    }
+    if (state::get("is_homing")) {
+        return
+    }
+    if (state::get("freq_finishing")) {
+        return
+    }
+
+    is_forward = output::get("forward")
+    is_reverse = output::get("reverse")
+    if (!is_forward and !is_reverse) {
+        return
+    }
+
+    callback::clear()
+
+    now = time::uptime()
+    last_time = state::get("last_freq_time")
+    elapsed_ms = now - last_time
+    state::set("last_freq_time", now)
+
+    if (value <= 0 or elapsed_ms <= 0) {
+        return
+    }
+
+    pulse_count = value * elapsed_ms / 1000.0 + state::get("fractional_pulses")
+    whole_steps = math::round(pulse_count)
+    if (pulse_count < whole_steps) {
+        whole_steps = whole_steps - 1.0
+    }
+    state::set("fractional_pulses", pulse_count - whole_steps)
+
+    pulse_time = 1000.0 / value
+    set_rpm(value)
+    sample_count = state::get("freq_sample_count") + 1
+    state::set("freq_sample_count", sample_count)
+    avg_pt = state::get("avg_pulse_time_ms")
+    config_pt = config::get("pulse_time_forward") * 1000.0
+    if (is_reverse) {
+        config_pt = config::get("pulse_time_reverse") * 1000.0
+    }
+    if (pulse_time > config_pt / 2.0 and pulse_time < config_pt * 2.0) {
+        avg_pt = avg_pt + (pulse_time - avg_pt) / (sample_count * 1.0)
+        state::set("avg_pulse_time_ms", avg_pt)
+    }
+
+    position = output::get("position")
+    target = state::get("move_target")
+
+    if (is_forward) {
+        position = position + whole_steps
+        if (position >= target) {
+            position = target
+        }
+    } else {
+        position = position - whole_steps
+        if (position <= target) {
+            position = target
+        }
+    }
+    set_position(position)
+
+    remaining = target - position
+    if (remaining < 0) {
+        remaining = 0 - remaining
+    }
+    tolerance = config::get("position_tolerance")
+
+    if (remaining <= tolerance) {
+        stop_motors()
+        output::set("at_target", true)
+        return
+    }
+
+    remaining_time_ms = remaining * avg_pt
+    callback::set(math::round(remaining_time_ms), "onFreqFinish", 0)
+    if (remaining_time_ms < elapsed_ms) {
+        state::set("freq_finishing", true)
+    }
+
+    return
+}
+
 // Handle "target" input
 if (channel == "target") {
     is_homing = state::get("is_homing")
     home_before_move = input::get("home_before_move")
 
-    if (config::get("control_mode") == 1 and output::get("moving")) {
+    if (config::get("control_mode") != 0 and output::get("moving")) {
         stop_motors()
         state::set("is_homing", false)
         is_homing = false
@@ -306,8 +462,12 @@ if (channel == "target") {
             return
         }
 
+        if (output::get("moving")) {
+            stop_motors()
+        }
+
         if (input::get("home_switch")) {
-            output::set("position", 0)
+            set_position(0)
             output::set("homed", true)
             evaluate_target(value, 0)
         } else {

@@ -37,6 +37,12 @@
       "abbrev": "HB",
       "type": "BOOLEAN",
       "default": "false"
+    },
+    {
+      "id": "freq",
+      "abbrev": "FQ",
+      "type": "NUMBER",
+      "default": "0"
     }
   ],
   "outputs": [
@@ -75,6 +81,18 @@
       "abbrev": "M",
       "type": "BOOLEAN",
       "default": "false"
+    },
+    {
+      "id": "position_pct",
+      "abbrev": "PP",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "rpm",
+      "abbrev": "RPM",
+      "type": "NUMBER",
+      "default": "0"
     }
   ],
   "config": [
@@ -100,7 +118,7 @@
     {
       "id": "control_mode",
       "type": "ENUM",
-      "values": ["Encoder", "Time-based"],
+      "values": ["Encoder", "Time-based", "Frequency"],
       "default": "0"
     },
     {
@@ -110,7 +128,7 @@
       "default": "0.1",
       "visibleWhen": {
         "configId": "control_mode",
-        "values": ["Time-based"]
+        "values": ["Time-based", "Frequency"]
       },
       "validation": {
         "rules": [
@@ -128,7 +146,7 @@
       "default": "0.1",
       "visibleWhen": {
         "configId": "control_mode",
-        "values": ["Time-based"]
+        "values": ["Time-based", "Frequency"]
       },
       "validation": {
         "rules": [
@@ -143,6 +161,32 @@
       "id": "motor_lock_duration",
       "type": "NUMBER",
       "unit": "s",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "full_travel_steps",
+      "type": "NUMBER",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "steps_per_revolution",
+      "type": "NUMBER",
       "default": "0",
       "validation": {
         "rules": [
@@ -217,6 +261,36 @@
     },
     {
       "id": "lock_position",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "last_freq_time",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "avg_pulse_time_ms",
+      "type": "NUMBER",
+      "default": "0.0"
+    },
+    {
+      "id": "freq_sample_count",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "freq_finishing",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "fractional_pulses",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "last_encoder_pulse_time",
       "type": "NUMBER",
       "default": "0"
     }

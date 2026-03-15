@@ -30,6 +30,11 @@
       "id": "home_before_move",
       "name": "Home before move",
       "description": "When active, the motor automatically homes before moving to each new target. If the home switch is already active, movement starts immediately from position zero. Otherwise, the motor homes first and then proceeds to the target."
+    },
+    {
+      "id": "freq",
+      "name": "Frequency",
+      "description": "Encoder pulse frequency in Hz. Used in Frequency control mode. The block calculates pulse count from frequency and elapsed time between inputs, switching to time-based estimation for the final approach."
     }
   ],
   "outputs": [
@@ -62,6 +67,16 @@
       "id": "moving",
       "name": "Moving",
       "description": "True when the motor is actively driving in either direction."
+    },
+    {
+      "id": "position_pct",
+      "name": "Position %",
+      "description": "Current position as a percentage (0-100) of the configured full travel length."
+    },
+    {
+      "id": "rpm",
+      "name": "RPM",
+      "description": "Current motor speed in revolutions per minute."
     }
   ],
   "config": [
@@ -78,22 +93,32 @@
     {
       "id": "control_mode",
       "name": "Control mode",
-      "description": "Encoder mode uses external encoder pulses to track position. Time-based mode uses internally timed steps, where each position unit corresponds to a configured time duration."
+      "description": "Encoder mode uses external encoder pulses to track position. Time-based mode uses internally timed steps. Frequency mode tracks position from periodic frequency (Hz) inputs, with automatic time-based finish for the final approach."
     },
     {
       "id": "pulse_time_forward",
       "name": "Pulse time forward",
-      "description": "Duration of one position step when moving in the forward direction. Only used in time-based control mode."
+      "description": "Duration of one position step when moving forward. Used in Time-based and Frequency modes. In Frequency mode serves as initial estimate before real data arrives."
     },
     {
       "id": "pulse_time_reverse",
       "name": "Pulse time reverse",
-      "description": "Duration of one position step when moving in the reverse direction. Only used in time-based control mode."
+      "description": "Duration of one position step when moving in reverse. Used in Time-based and Frequency modes. In Frequency mode serves as initial estimate before real data arrives."
     },
     {
       "id": "motor_lock_duration",
       "name": "Motor lock duration",
       "description": "Pause duration between direction changes to protect the motor. The motor stops for this period before starting in the opposite direction. Set to 0 to disable."
+    },
+    {
+      "id": "full_travel_steps",
+      "name": "Full travel steps",
+      "description": "Number of steps that represent 100% of the axis travel. When set to 0, the position percentage output is disabled."
+    },
+    {
+      "id": "steps_per_revolution",
+      "name": "Steps per revolution",
+      "description": "Number of encoder/frequency pulses per one full shaft revolution. Set to 0 to disable RPM output."
     }
   ],
   "state": [
@@ -161,6 +186,36 @@
       "id": "lock_position",
       "name": "Lock position",
       "description": "Current position stored while waiting for the motor lock delay to complete."
+    },
+    {
+      "id": "last_freq_time",
+      "name": "Last frequency input time",
+      "description": "System uptime when the last frequency input was received or movement started."
+    },
+    {
+      "id": "avg_pulse_time_ms",
+      "name": "Average pulse time",
+      "description": "Running average of pulse duration in milliseconds, calculated from frequency inputs during travel."
+    },
+    {
+      "id": "freq_sample_count",
+      "name": "Frequency sample count",
+      "description": "Number of frequency input samples received during the current movement."
+    },
+    {
+      "id": "freq_finishing",
+      "name": "Frequency finishing",
+      "description": "True when the block has switched to time-based estimation for the final approach in Frequency mode."
+    },
+    {
+      "id": "fractional_pulses",
+      "name": "Fractional pulses",
+      "description": "Accumulated fractional pulse remainder from frequency-to-pulse calculations."
+    },
+    {
+      "id": "last_encoder_pulse_time",
+      "name": "Last encoder pulse time",
+      "description": "System uptime of the last encoder rising edge. Used to calculate inter-pulse timing for RPM."
     }
   ]
 }
