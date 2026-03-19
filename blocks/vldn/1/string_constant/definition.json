@@ -14,7 +14,8 @@
     {
       "id": "value",
       "type": "STRING",
-      "default": ""
+      "default": "",
+      "validation": { "rules": [{ "type": "required" }] }
     }
   ],
   "state": []

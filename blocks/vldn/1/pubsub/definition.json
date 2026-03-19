@@ -39,17 +39,20 @@
     {
       "id": "service_account_key",
       "type": "STRING",
-      "default": ""
+      "default": "",
+      "validation": { "rules": [{ "type": "required" }] }
     },
     {
       "id": "project_id",
       "type": "STRING",
-      "default": ""
+      "default": "",
+      "validation": { "rules": [{ "type": "required" }] }
     },
     {
       "id": "topic",
       "type": "STRING",
-      "default": ""
+      "default": "",
+      "validation": { "rules": [{ "type": "required" }] }
     },
     {
       "id": "batch_timeout",

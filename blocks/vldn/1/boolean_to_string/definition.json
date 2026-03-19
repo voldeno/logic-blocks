@@ -21,12 +21,14 @@
     {
       "id": "true_text",
       "type": "STRING",
-      "default": "true"
+      "default": "true",
+      "validation": { "rules": [{ "type": "required" }] }
     },
     {
       "id": "false_text",
       "type": "STRING",
-      "default": "false"
+      "default": "false",
+      "validation": { "rules": [{ "type": "required" }] }
     }
   ],
   "state": []

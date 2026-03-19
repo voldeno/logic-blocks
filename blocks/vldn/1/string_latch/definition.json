@@ -39,7 +39,8 @@
     {
       "id": "default_value",
       "type": "STRING",
-      "default": ""
+      "default": "",
+      "validation": { "rules": [{ "type": "required" }] }
     },
     {
       "id": "trigger_on_capture",
