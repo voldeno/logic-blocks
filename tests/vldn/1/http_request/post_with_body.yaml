@@ -1,0 +1,38 @@
+name: "POST with body and headers"
+
+config:
+  method: 1
+  url: "https://downloads.voldeno.com/_test/request"
+  headers: "Content-Type:application/json|X-Request-Id:test-123"
+  body: '{"key": "value"}'
+
+steps:
+  - action: "set_inputs"
+    comment: "Trigger POST request"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Request in flight"
+    expected_outputs:
+      busy: true
+
+  - action: "wait"
+    duration_ms: 1000
+
+  - action: "assert_outputs"
+    comment: "POST returns 200"
+    expected_outputs:
+      status: 200
+      success: true
+      busy: false
+
+  - action: "assert_output_contains"
+    comment: "Response echoes Content-Type header"
+    expected_outputs:
+      response: '"content_type":"application/json"'
+
+  - action: "assert_output_contains"
+    comment: "Response echoes X-Request-Id header"
+    expected_outputs:
+      response: '"x_request_id":"test-123"'

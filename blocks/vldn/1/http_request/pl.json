@@ -1,0 +1,86 @@
+{
+  "description": "Wykonuje żądanie HTTP do zewnętrznego serwisu po wyzwoleniu. Obsługuje metody GET, POST, PUT, DELETE i PATCH. URL, nagłówki i treść mogą być statyczne (konfiguracja) lub dynamiczne (wejście).",
+  "inputs": [
+    {
+      "id": "trigger",
+      "name": "Wyzwalacz",
+      "description": "Zbocze narastające uruchamia żądanie HTTP. Ignorowane gdy żądanie jest w trakcie realizacji."
+    },
+    {
+      "id": "url",
+      "name": "URL",
+      "description": "Dynamiczny URL żądania. Nadpisuje URL z konfiguracji gdy niepusty."
+    },
+    {
+      "id": "headers",
+      "name": "Nagłówki",
+      "description": "Dynamiczne nagłówki w formacie Klucz:Wartość oddzielone |. Nadpisują konfigurację gdy niepuste."
+    },
+    {
+      "id": "body",
+      "name": "Treść",
+      "description": "Dynamiczna treść żądania. Nadpisuje treść z konfiguracji gdy niepusta."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "status",
+      "name": "Status",
+      "description": "Kod statusu HTTP ostatniej odpowiedzi. 0 oznacza, że żadne żądanie nie zostało jeszcze wykonane."
+    },
+    {
+      "id": "response",
+      "name": "Odpowiedź",
+      "description": "Treść odpowiedzi z ostatniego żądania."
+    },
+    {
+      "id": "response_headers",
+      "name": "Nagłówki odpowiedzi",
+      "description": "Nagłówki odpowiedzi zserializowane jako ciąg obiektu JSON."
+    },
+    {
+      "id": "success",
+      "name": "Sukces",
+      "description": "Prawda, jeśli status ostatniej odpowiedzi był w zakresie 2xx (200-299)."
+    },
+    {
+      "id": "busy",
+      "name": "Zajęty",
+      "description": "Prawda gdy żądanie jest w trakcie realizacji. Wyzwalacz jest ignorowany gdy zajęty."
+    }
+  ],
+  "config": [
+    {
+      "id": "method",
+      "name": "Metoda",
+      "description": "Metoda HTTP używana do żądania."
+    },
+    {
+      "id": "url",
+      "name": "URL",
+      "description": "Statyczny URL żądania. Używany gdy wejście URL jest puste."
+    },
+    {
+      "id": "headers",
+      "name": "Nagłówki",
+      "description": "Statyczne nagłówki w formacie Klucz:Wartość oddzielone |. Używane gdy wejście jest puste."
+    },
+    {
+      "id": "body",
+      "name": "Treść",
+      "description": "Statyczna treść żądania. Używana gdy wejście treści jest puste."
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_trigger",
+      "name": "Poprzedni wyzwalacz",
+      "description": "Poprzednia wartość wyzwalacza do wykrywania zbocza narastającego."
+    },
+    {
+      "id": "in_flight",
+      "name": "W trakcie",
+      "description": "Prawda podczas oczekiwania na odpowiedź HTTP."
+    }
+  ]
+}

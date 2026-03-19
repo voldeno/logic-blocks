@@ -1,0 +1,86 @@
+{
+  "description": "Performs an HTTP request to an external service when triggered. Supports GET, POST, PUT, DELETE, and PATCH. URL, headers, and body can be static (config) or dynamic (input).",
+  "inputs": [
+    {
+      "id": "trigger",
+      "name": "Trigger",
+      "description": "Rising edge fires the HTTP request. Ignored while a request is in flight."
+    },
+    {
+      "id": "url",
+      "name": "URL",
+      "description": "Dynamic request URL. Overrides the URL config when non-empty."
+    },
+    {
+      "id": "headers",
+      "name": "Headers",
+      "description": "Dynamic headers as Key:Value pairs separated by |. Overrides config when non-empty."
+    },
+    {
+      "id": "body",
+      "name": "Body",
+      "description": "Dynamic request body. Overrides the body config when non-empty."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "status",
+      "name": "Status",
+      "description": "HTTP status code of the last response. 0 means no request has been made yet."
+    },
+    {
+      "id": "response",
+      "name": "Response",
+      "description": "Response body text from the last request."
+    },
+    {
+      "id": "response_headers",
+      "name": "Response headers",
+      "description": "Response headers serialized as a JSON object string."
+    },
+    {
+      "id": "success",
+      "name": "Success",
+      "description": "True if the last response status was in the 2xx range (200-299)."
+    },
+    {
+      "id": "busy",
+      "name": "Busy",
+      "description": "True while a request is in flight. Trigger is ignored while busy."
+    }
+  ],
+  "config": [
+    {
+      "id": "method",
+      "name": "Method",
+      "description": "HTTP method to use for the request."
+    },
+    {
+      "id": "url",
+      "name": "URL",
+      "description": "Static request URL. Used when the URL input is empty."
+    },
+    {
+      "id": "headers",
+      "name": "Headers",
+      "description": "Static headers as Key:Value pairs separated by |. Used when headers input is empty."
+    },
+    {
+      "id": "body",
+      "name": "Body",
+      "description": "Static request body. Used when the body input is empty."
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_trigger",
+      "name": "Previous trigger",
+      "description": "Previous trigger value for rising edge detection."
+    },
+    {
+      "id": "in_flight",
+      "name": "In flight",
+      "description": "True while waiting for an HTTP response."
+    }
+  ]
+}

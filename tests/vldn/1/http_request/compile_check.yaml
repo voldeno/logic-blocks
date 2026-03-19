@@ -1,0 +1,11 @@
+name: "compile check"
+
+steps:
+  - action: "assert_outputs"
+    comment: "Default outputs on startup"
+    expected_outputs:
+      status: 0
+      response: ""
+      response_headers: ""
+      success: false
+      busy: false

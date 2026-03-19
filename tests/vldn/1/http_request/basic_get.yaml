@@ -1,0 +1,38 @@
+name: "basic GET request"
+
+config:
+  method: 0
+  url: "https://downloads.voldeno.com/_test/request"
+
+steps:
+  - action: "assert_outputs"
+    comment: "Default outputs before any request"
+    expected_outputs:
+      status: 0
+      success: false
+      busy: false
+
+  - action: "set_inputs"
+    comment: "Trigger rising edge"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Request in flight"
+    expected_outputs:
+      busy: true
+
+  - action: "wait"
+    duration_ms: 1000
+
+  - action: "assert_outputs"
+    comment: "Response received - GET returns 200"
+    expected_outputs:
+      status: 200
+      success: true
+      busy: false
+
+  - action: "assert_output_contains"
+    comment: "Response headers include content-type"
+    expected_outputs:
+      response_headers: '"content-type":"application/json"'
