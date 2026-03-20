@@ -1,0 +1,41 @@
+name: "trigger ignored while busy"
+
+config:
+  method: 0
+  url: "https://downloads.voldeno.com/_test/request"
+
+steps:
+  - action: "set_inputs"
+    comment: "First trigger - fires request"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Request in flight"
+    expected_outputs:
+      busy: true
+
+  # Release and re-trigger while still busy
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  - action: "set_inputs"
+    comment: "Second trigger while busy - should be ignored"
+    inputs:
+      trigger: true
+
+  - action: "assert_outputs"
+    comment: "Still busy from first request"
+    expected_outputs:
+      busy: true
+
+  - action: "wait"
+    duration_ms: 1000
+
+  - action: "assert_outputs"
+    comment: "First request completed, second was ignored"
+    expected_outputs:
+      status: 200
+      success: true
+      busy: false

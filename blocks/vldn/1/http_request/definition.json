@@ -1,0 +1,103 @@
+{
+  "name": "HTTP Request",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "trigger",
+      "abbrev": "T",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "url",
+      "abbrev": "U",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "headers",
+      "abbrev": "H",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "body",
+      "abbrev": "B",
+      "type": "STRING",
+      "default": ""
+    }
+  ],
+  "outputs": [
+    {
+      "id": "status",
+      "abbrev": "S",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "response",
+      "abbrev": "R",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "response_headers",
+      "abbrev": "RH",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "success",
+      "abbrev": "OK",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "busy",
+      "abbrev": "BY",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "method",
+      "type": "ENUM",
+      "values": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "default": "0"
+    },
+    {
+      "id": "url",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "headers",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "body",
+      "type": "STRING",
+      "default": ""
+    }
+  ],
+  "state": [
+    {
+      "id": "prev_trigger",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "in_flight",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}

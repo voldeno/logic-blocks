@@ -1,0 +1,102 @@
+fn apply_headers(client, headers) {
+    if (headers == "") {
+        return
+    }
+
+    pairs = str::split(headers, "|")
+    while (str::split_has_next(pairs)) {
+        pair = str::split_next(pairs)
+        kv = str::split(pair, ":")
+        key = str::split_next(kv)
+        value = ""
+        while (str::split_has_next(kv)) {
+            if (value != "") {
+                value = str::fmt("{}:{}", value, str::split_next(kv))
+            } else {
+                value = str::split_next(kv)
+            }
+        }
+        http::set_header(client, key, value)
+    }
+}
+
+fn serialize_headers(m) {
+    keys = map::keys(m)
+    if (array::len(keys) == 0) {
+        return "{}"
+    }
+
+    result = ""
+    i = 0
+    while (i < array::len(keys)) {
+        key = array::get_at(keys, i)
+        val = map::get(m, key)
+        result = str::fmt("""{}"{}":"{}",""", result, key, val)
+        i = i + 1
+    }
+    return str::replace(str::fmt("{{}}", result), ",}", "}")
+}
+
+fn get_method_string(method_index) {
+    if (method_index == 0) { return "GET" }
+    if (method_index == 1) { return "POST" }
+    if (method_index == 2) { return "PUT" }
+    if (method_index == 3) { return "DELETE" }
+    return "PATCH"
+}
+
+fn do_request() {
+    state::set("in_flight", true)
+    output::set("busy", true)
+
+    url = input::get("url")
+    if (url == "") {
+        url = config::get("url")
+    }
+
+    headers = input::get("headers")
+    if (headers == "") {
+        headers = config::get("headers")
+    }
+
+    body = input::get("body")
+    if (body == "") {
+        body = config::get("body")
+    }
+
+    client = http::client()
+    http::set_method(client, get_method_string(config::get("method")))
+    apply_headers(client, headers)
+
+    if (body != "") {
+        http::set_body(client, body)
+    }
+
+    http::call(client, url)
+}
+
+extern fn http::on_response(status, body, headers) {
+    output::set("status", status)
+    output::set("response", body)
+    output::set("success", status >= 200 and status < 300)
+
+    output::set("response_headers", serialize_headers(headers))
+
+    state::set("in_flight", false)
+    output::set("busy", false)
+}
+
+channel = input::channel()
+value = input::value()
+
+if (channel == "trigger") {
+    prev_trigger = state::get("prev_trigger")
+
+    if (value and !prev_trigger) {
+        if (!state::get("in_flight")) {
+            do_request()
+        }
+    }
+
+    state::set("prev_trigger", value)
+}

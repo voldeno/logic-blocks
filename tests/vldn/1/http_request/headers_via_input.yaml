@@ -1,0 +1,63 @@
+name: "headers via input override config"
+
+config:
+  method: 0
+  url: "https://downloads.voldeno.com/_test/request"
+  headers: "X-Custom-Header:from-config"
+
+steps:
+  # First request uses config headers
+  - action: "set_inputs"
+    comment: "Trigger with config headers"
+    inputs:
+      trigger: true
+
+  - action: "wait"
+    duration_ms: 1000
+
+  - action: "assert_outputs"
+    comment: "Request with config headers succeeds"
+    expected_outputs:
+      status: 200
+      success: true
+      busy: false
+
+  - action: "assert_output_contains"
+    comment: "Response echoes config header"
+    expected_outputs:
+      response: '"x_custom_header":"from-config"'
+
+  - action: "set_inputs"
+    inputs:
+      trigger: false
+
+  # Second request overrides headers via input
+  - action: "set_inputs"
+    comment: "Set dynamic headers via input"
+    inputs:
+      headers: "X-Custom-Header:from-input|X-Request-Id:dynamic-456"
+
+  - action: "set_inputs"
+    comment: "Trigger with input headers"
+    inputs:
+      trigger: true
+
+  - action: "wait"
+    duration_ms: 1000
+
+  - action: "assert_outputs"
+    comment: "Request with input headers succeeds"
+    expected_outputs:
+      status: 200
+      success: true
+      busy: false
+
+  - action: "assert_output_contains"
+    comment: "Response echoes input header overriding config"
+    expected_outputs:
+      response: '"x_custom_header":"from-input"'
+
+  - action: "assert_output_contains"
+    comment: "Response echoes dynamic X-Request-Id from input"
+    expected_outputs:
+      response: '"x_request_id":"dynamic-456"'
