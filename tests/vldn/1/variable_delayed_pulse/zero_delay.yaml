@@ -1,0 +1,39 @@
+name: "zero_delay"
+
+config:
+  pulse: 0.2
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      delay: 0
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  # Trigger rising edge - with zero delay, pulse starts immediately
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 100
+
+  # Still in pulse phase (100ms < 200ms pulse)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 150
+
+  # Pulse complete (250ms > 200ms pulse end)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false

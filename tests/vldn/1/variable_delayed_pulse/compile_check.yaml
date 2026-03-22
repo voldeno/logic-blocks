@@ -1,0 +1,10 @@
+name: "compile check"
+
+config:
+  pulse: 0.1
+
+steps:
+  - action: "assert_outputs"
+    comment: "Default outputs on startup"
+    expected_outputs:
+      output: false

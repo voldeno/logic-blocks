@@ -1,0 +1,56 @@
+name: "base_scenario"
+
+config:
+  pulse: 0.2
+
+steps:
+  - action: "set_inputs"
+    inputs:
+      delay: 0.3
+      input: false
+
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  # Trigger rising edge
+  - action: "set_inputs"
+    inputs:
+      input: true
+
+  # Output should still be false (in delay phase)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "wait"
+    duration_ms: 150
+
+  # Still in delay phase (150ms < 300ms delay)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
+
+  - action: "wait"
+    duration_ms: 200
+
+  # Delay complete, pulse active (350ms > 300ms delay)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 100
+
+  # Still in pulse phase (pulse started at 300ms, now 450ms, pulse ends at 500ms)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: true
+
+  - action: "wait"
+    duration_ms: 100
+
+  # Pulse complete (550ms > 500ms pulse end)
+  - action: "assert_outputs"
+    expected_outputs:
+      output: false
