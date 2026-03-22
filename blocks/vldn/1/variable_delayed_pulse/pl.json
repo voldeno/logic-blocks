@@ -1,0 +1,36 @@
+{
+  "description": "Generuje opóźniony impuls na wyjściu po wyzwoleniu zboczem narastającym. Czas opóźnienia podawany przez wejście.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Wejście",
+      "description": "Sygnał wyzwalający. Zbocze narastające rozpoczyna sekwencję opóźnionego impulsu."
+    },
+    {
+      "id": "delay",
+      "name": "Opóźnienie",
+      "description": "Czas opóźnienia w sekundach przed impulsem wyjściowym. 0 oznacza natychmiastowy impuls."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Sygnał impulsu. Aktywny po upływie opóźnienia przez skonfigurowany czas trwania impulsu."
+    }
+  ],
+  "config": [
+    {
+      "id": "pulse",
+      "name": "Czas trwania impulsu",
+      "description": "Czas trwania impulsu wyjściowego generowanego po opóźnieniu."
+    }
+  ],
+  "state": [
+    {
+      "id": "last_input_state",
+      "name": "Ostatni stan wejścia",
+      "description": "Przechowuje poprzedni stan wejścia do wykrywania zbocza narastającego."
+    }
+  ]
+}

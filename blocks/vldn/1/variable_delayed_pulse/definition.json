@@ -1,0 +1,50 @@
+{
+  "name": "Variable Delayed Pulse",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "input",
+      "abbrev": "I",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "delay",
+      "abbrev": "D",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "pulse",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.1",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "last_input_state",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}

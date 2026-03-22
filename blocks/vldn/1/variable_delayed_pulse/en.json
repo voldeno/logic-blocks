@@ -1,0 +1,36 @@
+{
+  "description": "Generates a delayed pulse at the output when triggered by a rising edge. Delay duration is provided via input.",
+  "inputs": [
+    {
+      "id": "input",
+      "name": "Input",
+      "description": "Trigger signal. A rising edge starts the delayed pulse sequence."
+    },
+    {
+      "id": "delay",
+      "name": "Delay",
+      "description": "Delay duration in seconds before the output pulse. 0 means immediate pulse."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Pulse signal. Goes high after the delay and stays high for the configured pulse duration."
+    }
+  ],
+  "config": [
+    {
+      "id": "pulse",
+      "name": "Duration of output pulse",
+      "description": "Duration of the output pulse generated after the delay."
+    }
+  ],
+  "state": [
+    {
+      "id": "last_input_state",
+      "name": "Last input state",
+      "description": "Stores the previous state of the input to detect rising edges."
+    }
+  ]
+}

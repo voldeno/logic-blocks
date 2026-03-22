@@ -1,0 +1,49 @@
+channel = input::channel()
+value = input::value()
+
+delay_ms = math::round(input::get("delay") * 1000)
+
+extern fn onCallback(value) {
+    if (value == 1) {
+        pulse_ms = math::round(config::get("pulse") * 1000)
+        output::set("output", true)
+        if (pulse_ms > 0) {
+            callback::set(pulse_ms, "onCallback", 2)
+        } else {
+            output::set("output", false)
+        }
+        return
+    }
+
+    if (value == 2) {
+        output::set("output", false)
+        return
+    }
+}
+
+if (channel == "input") {
+    last_input_state = state::get("last_input_state")
+
+    if (value and !last_input_state) {
+        state::set("last_input_state", true)
+
+        callback::clear()
+        output::set("output", false)
+
+        if (delay_ms > 0) {
+            callback::set(delay_ms, "onCallback", 1)
+        } else {
+            pulse_ms = math::round(config::get("pulse") * 1000)
+            output::set("output", true)
+            if (pulse_ms > 0) {
+                callback::set(pulse_ms, "onCallback", 2)
+            } else {
+                output::set("output", false)
+            }
+        }
+    }
+
+    if (!value and last_input_state) {
+        state::set("last_input_state", false)
+    }
+}
