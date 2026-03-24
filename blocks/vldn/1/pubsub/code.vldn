@@ -36,6 +36,7 @@ fn do_publish() {
     http::call(client, url)
 
     state::set("phase", 2)
+    state::set("phase_started", time::uptime())
 }
 
 // ---- Helper: request a new OAuth2 access token ----
@@ -49,6 +50,7 @@ fn request_token() {
     http::call(client, "https://oauth2.googleapis.com/token")
 
     state::set("phase", 1)
+    state::set("phase_started", time::uptime())
 }
 
 // ---- Helper: snapshot buffer and begin the publish flow ----
@@ -73,7 +75,7 @@ fn start_flush() {
 
     // Check token validity
     token_expiry = state::get("token_expiry")
-    if (token_expiry > time::now()) {
+    if (token_expiry > time::uptime()) {
         do_publish()
     } else {
         request_token()
@@ -132,7 +134,7 @@ extern fn http::on_response(status, body, headers) {
         if (status == 200) {
             access_token = json::get(body, "access_token")
             state::set("token", access_token)
-            state::set("token_expiry", time::now() + 3500)
+            state::set("token_expiry", time::uptime() + 3500000)
             do_publish()
         } else {
             // Token request failed - drop the pending batch
@@ -168,6 +170,9 @@ extern fn http::on_response(status, body, headers) {
             // Publish failed - drop the pending batch
             output::set("dropped", output::get("dropped") + state::get("pending_count"))
             state::set("pending_count", 0)
+            if (status == 401) {
+                state::set("token_expiry", 0)
+            }
         }
 
         // If new messages accumulated during the HTTP round-trip, handle them
@@ -189,6 +194,18 @@ extern fn http::on_response(status, body, headers) {
 channel = input::channel()
 
 if (channel == "message") {
+    phase = state::get("phase")
+    if (phase != 0) {
+        phase_started = state::get("phase_started")
+        if (time::uptime() - phase_started > 10000) {
+            state::set("phase", 0)
+            output::set("status", 0)
+            output::set("success", false)
+            output::set("dropped", output::get("dropped") + state::get("pending_count"))
+            state::set("pending_count", 0)
+        }
+    }
+
     message = input::get("message")
     if (message != "") {
         if (str::count(message, "${CURRENT_TIMESTAMP_MS}") > 0) {

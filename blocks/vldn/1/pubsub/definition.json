@@ -138,6 +138,11 @@
       "id": "pending_count",
       "type": "NUMBER",
       "default": "0"
+    },
+    {
+      "id": "phase_started",
+      "type": "NUMBER",
+      "default": "0"
     }
   ]
 }
