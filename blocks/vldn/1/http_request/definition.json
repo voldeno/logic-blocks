@@ -98,6 +98,11 @@
       "id": "in_flight",
       "type": "BOOLEAN",
       "default": "false"
+    },
+    {
+      "id": "request_started",
+      "type": "NUMBER",
+      "default": "0"
     }
   ]
 }

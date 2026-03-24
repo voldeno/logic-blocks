@@ -47,6 +47,7 @@ fn get_method_string(method_index) {
 
 fn do_request() {
     state::set("in_flight", true)
+    state::set("request_started", time::uptime())
     output::set("busy", true)
 
     url = input::get("url")
@@ -90,6 +91,15 @@ channel = input::channel()
 value = input::value()
 
 if (channel == "trigger") {
+    if (state::get("in_flight")) {
+        request_started = state::get("request_started")
+        if (time::uptime() - request_started > 10000) {
+            state::set("in_flight", false)
+            output::set("busy", false)
+            output::set("success", false)
+        }
+    }
+
     prev_trigger = state::get("prev_trigger")
 
     if (value and !prev_trigger) {
