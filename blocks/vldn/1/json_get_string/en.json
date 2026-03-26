@@ -1,0 +1,25 @@
+{
+  "description": "Extracts a string value from a JSON string using a dot-notation path.",
+  "inputs": [
+    {
+      "id": "json",
+      "name": "JSON",
+      "description": "The JSON string to parse."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "The extracted string value."
+    }
+  ],
+  "config": [
+    {
+      "id": "path",
+      "name": "Path",
+      "description": "Dot-notation path to the desired field, e.g. \"sensor.name\"."
+    }
+  ],
+  "state": []
+}

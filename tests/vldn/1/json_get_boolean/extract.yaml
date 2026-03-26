@@ -1,0 +1,25 @@
+name: "extract boolean values"
+
+config:
+  path: "active"
+
+steps:
+  - action: "set_inputs"
+    comment: "Simple boolean extraction"
+    inputs:
+      json: '{"active": true, "name": "sensor1"}'
+
+  - action: "assert_outputs"
+    comment: "Extracted boolean value"
+    expected_outputs:
+      value: true
+
+  - action: "set_inputs"
+    comment: "Update JSON with false value"
+    inputs:
+      json: '{"active": false, "name": "sensor1"}'
+
+  - action: "assert_outputs"
+    comment: "Value updates to false"
+    expected_outputs:
+      value: false

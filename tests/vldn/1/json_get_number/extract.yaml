@@ -1,0 +1,25 @@
+name: "extract numeric values"
+
+config:
+  path: "temperature"
+
+steps:
+  - action: "set_inputs"
+    comment: "Simple number extraction"
+    inputs:
+      json: '{"temperature": 22.5, "location": "Salon"}'
+
+  - action: "assert_outputs"
+    comment: "Extracted numeric value"
+    expected_outputs:
+      value: 22.5
+
+  - action: "set_inputs"
+    comment: "Update JSON with new value"
+    inputs:
+      json: '{"temperature": 19.0, "location": "Kitchen"}'
+
+  - action: "assert_outputs"
+    comment: "Value updates on new input"
+    expected_outputs:
+      value: 19.0

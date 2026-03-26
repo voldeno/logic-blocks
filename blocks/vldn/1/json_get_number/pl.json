@@ -1,0 +1,25 @@
+{
+  "description": "Wyodrębnia wartość liczbową z ciągu JSON używając ścieżki w notacji kropkowej.",
+  "inputs": [
+    {
+      "id": "json",
+      "name": "JSON",
+      "description": "Ciąg JSON do sparsowania."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Wyodrębniona wartość liczbowa."
+    }
+  ],
+  "config": [
+    {
+      "id": "path",
+      "name": "Ścieżka",
+      "description": "Ścieżka w notacji kropkowej do żądanego pola, np. \"sensor.value\"."
+    }
+  ],
+  "state": []
+}

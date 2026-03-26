@@ -1,0 +1,29 @@
+{
+  "name": "JSON Get Number",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "json",
+      "abbrev": "J",
+      "type": "STRING",
+      "default": ""
+    }
+  ],
+  "outputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "path",
+      "type": "STRING",
+      "default": "",
+      "validation": { "rules": [{ "type": "required" }] }
+    }
+  ],
+  "state": []
+}

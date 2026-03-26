@@ -1,0 +1,15 @@
+name: "nested path extraction"
+
+config:
+  path: "sensor.enabled"
+
+steps:
+  - action: "set_inputs"
+    comment: "Nested boolean extraction"
+    inputs:
+      json: '{"sensor": {"name": "temp1", "enabled": true}}'
+
+  - action: "assert_outputs"
+    comment: "Extracted nested boolean"
+    expected_outputs:
+      value: true

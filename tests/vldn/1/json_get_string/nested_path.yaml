@@ -1,0 +1,15 @@
+name: "nested path extraction"
+
+config:
+  path: "sensor.name"
+
+steps:
+  - action: "set_inputs"
+    comment: "Nested string extraction"
+    inputs:
+      json: '{"sensor": {"name": "temp1", "value": 23.5}}'
+
+  - action: "assert_outputs"
+    comment: "Extracted nested string"
+    expected_outputs:
+      value: "temp1"
