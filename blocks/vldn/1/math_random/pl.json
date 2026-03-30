@@ -1,0 +1,25 @@
+{
+  "description": "Generuje pseudo-losową liczbę z zakresu [0.0, 1.0) przy każdym zboczu narastającym wyzwalacza.",
+  "inputs": [
+    {
+      "id": "trigger",
+      "name": "Wyzwalacz",
+      "description": "Zbocze narastające generuje nową liczbę losową."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Wyjście",
+      "description": "Liczba losowa z zakresu [0.0, 1.0)."
+    }
+  ],
+  "config": [],
+  "state": [
+    {
+      "id": "prev_trigger",
+      "name": "Poprzedni wyzwalacz",
+      "description": "Poprzednia wartość wyzwalacza do wykrywania zbocza narastającego."
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+name: "compile check"
+
+steps:
+  - action: "assert_outputs"
+    comment: "Default output on startup"
+    expected_outputs:
+      output: 0

@@ -1,0 +1,28 @@
+{
+  "name": "Math::Random",
+  "group": "process",
+  "inputs": [
+    {
+      "id": "trigger",
+      "abbrev": "T",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "abbrev": "O",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [],
+  "state": [
+    {
+      "id": "prev_trigger",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+channel = input::channel()
+value = input::value()
+
+if (channel == "trigger") {
+    prev_trigger = state::get("prev_trigger")
+    if (value and !prev_trigger) {
+        output::set("output", math::random())
+    }
+    state::set("prev_trigger", value)
+}
