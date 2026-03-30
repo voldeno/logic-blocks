@@ -1,0 +1,40 @@
+name: "trigger generates random value"
+
+steps:
+  - action: "assert_outputs"
+    comment: "Default before trigger"
+    expected_outputs:
+      output: 0
+
+  - action: "set_inputs"
+    comment: "Rising edge triggers random generation"
+    inputs:
+      trigger: true
+
+  - action: "assert_output_range"
+    comment: "Output is in [0.0, 1.0)"
+    output: "output"
+    gte: "0.0"
+    lt: "1.0"
+
+  - action: "capture_output"
+    comment: "Capture first random value"
+    output: "output"
+    as: "first_value"
+
+  - action: "set_inputs"
+    comment: "Falling edge"
+    inputs:
+      trigger: false
+
+  - action: "set_inputs"
+    comment: "Second rising edge generates new value"
+    inputs:
+      trigger: true
+
+  - action: "assert_output_range"
+    comment: "New value in [0.0, 1.0) and differs from first"
+    output: "output"
+    gte: "0.0"
+    lt: "1.0"
+    neq: "$first_value"

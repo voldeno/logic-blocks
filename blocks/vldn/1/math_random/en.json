@@ -1,0 +1,25 @@
+{
+  "description": "Generates a pseudo-random number in the range [0.0, 1.0) on each rising edge of the trigger.",
+  "inputs": [
+    {
+      "id": "trigger",
+      "name": "Trigger",
+      "description": "Rising edge generates a new random number."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output",
+      "name": "Output",
+      "description": "Random number in the range [0.0, 1.0)."
+    }
+  ],
+  "config": [],
+  "state": [
+    {
+      "id": "prev_trigger",
+      "name": "Previous trigger",
+      "description": "Previous trigger value for rising edge detection."
+    }
+  ]
+}
