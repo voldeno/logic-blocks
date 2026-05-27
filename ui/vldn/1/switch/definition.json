@@ -6,14 +6,16 @@
     {
       "id": "state",
       "abbrev": "S",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "outputs": [
     {
       "id": "set_state",
       "abbrev": "SS",
-      "type": "BOOLEAN"
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "config": []
