@@ -1,0 +1,17 @@
+{
+  "description": "Punkt sterowania włącz/wyłącz udostępniony interfejsom użytkownika",
+  "inputs": [
+    {
+      "id": "state",
+      "name": "Stan",
+      "description": "Bieżący stan włącz/wyłącz"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "set_state",
+      "name": "Ustaw stan",
+      "description": "Żądany stan włącz/wyłącz"
+    }
+  ]
+}

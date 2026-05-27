@@ -1,0 +1,17 @@
+{
+  "description": "On/off control point exposed to user interfaces",
+  "inputs": [
+    {
+      "id": "state",
+      "name": "State",
+      "description": "Current on/off state"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "set_state",
+      "name": "Set state",
+      "description": "Requested on/off state"
+    }
+  ]
+}
