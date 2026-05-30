@@ -1,0 +1,57 @@
+{
+  "description": "Odczyt liczbowy udostępniony interfejsom użytkownika",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Wartość liczbowa do wyświetlenia"
+    }
+  ],
+  "config": [
+    {
+      "id": "value_type",
+      "name": "Typ wartości",
+      "description": "Rodzaj pomiaru, używany do wyboru sposobu prezentacji (ikona, formatowanie, zakresy)"
+    },
+    {
+      "id": "unit_generic",
+      "name": "Jednostka",
+      "description": "Dowolna etykieta jednostki wyświetlana obok wartości"
+    },
+    {
+      "id": "unit_temperature",
+      "name": "Jednostka",
+      "description": "Jednostka temperatury"
+    },
+    {
+      "id": "unit_humidity",
+      "name": "Jednostka",
+      "description": "Jednostka wilgotności"
+    },
+    {
+      "id": "unit_pressure",
+      "name": "Jednostka",
+      "description": "Jednostka ciśnienia"
+    },
+    {
+      "id": "unit_illuminance",
+      "name": "Jednostka",
+      "description": "Jednostka natężenia oświetlenia"
+    },
+    {
+      "id": "unit_co2",
+      "name": "Jednostka",
+      "description": "Jednostka stężenia CO2"
+    },
+    {
+      "id": "min",
+      "name": "Min",
+      "description": "Minimalna oczekiwana wartość, używana do renderowania wskaźnika i zakresu"
+    },
+    {
+      "id": "max",
+      "name": "Max",
+      "description": "Maksymalna oczekiwana wartość, używana do renderowania wskaźnika i zakresu"
+    }
+  ]
+}

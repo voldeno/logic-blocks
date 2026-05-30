@@ -1,0 +1,57 @@
+{
+  "description": "Numeric reading exposed to user interfaces",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "Numeric value to display"
+    }
+  ],
+  "config": [
+    {
+      "id": "value_type",
+      "name": "Value type",
+      "description": "Kind of measurement, used to pick a renderer (icon, formatting, ranges)"
+    },
+    {
+      "id": "unit_generic",
+      "name": "Unit",
+      "description": "Free-text unit label shown next to the value"
+    },
+    {
+      "id": "unit_temperature",
+      "name": "Unit",
+      "description": "Temperature unit"
+    },
+    {
+      "id": "unit_humidity",
+      "name": "Unit",
+      "description": "Humidity unit"
+    },
+    {
+      "id": "unit_pressure",
+      "name": "Unit",
+      "description": "Pressure unit"
+    },
+    {
+      "id": "unit_illuminance",
+      "name": "Unit",
+      "description": "Illuminance unit"
+    },
+    {
+      "id": "unit_co2",
+      "name": "Unit",
+      "description": "CO2 concentration unit"
+    },
+    {
+      "id": "min",
+      "name": "Min",
+      "description": "Minimum expected value, used for gauge and range rendering"
+    },
+    {
+      "id": "max",
+      "name": "Max",
+      "description": "Maximum expected value, used for gauge and range rendering"
+    }
+  ]
+}

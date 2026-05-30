@@ -15,6 +15,11 @@
       "id": "off",
       "name": "Off",
       "description": "Pulse: Resets the output (O) to off. When held on: Block is locked and all other inputs are ignored. Dominant input."
+    },
+    {
+      "id": "set",
+      "name": "Set",
+      "description": "Level input. Sets the output (O) directly to the given value: true turns on, false turns off. Reacts to any change. Ignored while off input is held high."
     }
   ],
   "outputs": [
@@ -50,6 +55,11 @@
       "id": "last_off_state",
       "name": "Last off state",
       "description": "Stores the previous state of the off input to detect rising edges and lock state"
+    },
+    {
+      "id": "last_set_state",
+      "name": "Last set state",
+      "description": "Stores the previous state of the set input to detect changes"
     }
   ]
 }

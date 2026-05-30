@@ -15,6 +15,11 @@
       "id": "off",
       "name": "Wyłącz",
       "description": "Impuls: Resetuje wyjście do stanu wyłączonego. Przy ciągłym stanie wysokim: Blok jest zablokowany. Wejście dominujące."
+    },
+    {
+      "id": "set",
+      "name": "Ustaw",
+      "description": "Wejście poziomowe. Ustawia wyjście (O) bezpośrednio na podaną wartość: true włącza, false wyłącza. Reaguje na każdą zmianę. Ignorowane gdy wejście off jest utrzymywane w stanie wysokim."
     }
   ],
   "outputs": [
@@ -50,6 +55,11 @@
       "id": "last_off_state",
       "name": "Ostatni stan wyłączenia",
       "description": "Przechowuje poprzedni stan wejścia wyłączenia"
+    },
+    {
+      "id": "last_set_state",
+      "name": "Ostatni stan ustawienia",
+      "description": "Przechowuje poprzedni stan wejścia set do wykrywania zmian"
     }
   ]
 }

@@ -19,6 +19,12 @@
       "abbrev": "OFF",
       "type": "BOOLEAN",
       "default": "false"
+    },
+    {
+      "id": "set",
+      "abbrev": "S",
+      "type": "BOOLEAN",
+      "default": "false"
     }
   ],
   "outputs": [
@@ -55,6 +61,11 @@
     },
     {
       "id": "last_off_state",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "last_set_state",
       "type": "BOOLEAN",
       "default": "false"
     }

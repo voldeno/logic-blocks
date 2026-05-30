@@ -1,0 +1,144 @@
+{
+  "name": "Numeric sensor",
+  "group": "ui",
+  "version": 1,
+  "inputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "outputs": [],
+  "config": [
+    {
+      "id": "value_type",
+      "type": "ENUM",
+      "values": [
+        "generic",
+        "temperature",
+        "humidity",
+        "pressure",
+        "illuminance",
+        "co2"
+      ],
+      "default": "0"
+    },
+    {
+      "id": "unit_generic",
+      "type": "STRING",
+      "default": "",
+      "visibleWhen": {
+        "configId": "value_type",
+        "values": [
+          "generic"
+        ]
+      }
+    },
+    {
+      "id": "unit_temperature",
+      "type": "ENUM",
+      "values": [
+        "celsius",
+        "fahrenheit",
+        "kelvin"
+      ],
+      "default": "0",
+      "visibleWhen": {
+        "configId": "value_type",
+        "values": [
+          "temperature"
+        ]
+      }
+    },
+    {
+      "id": "unit_humidity",
+      "type": "ENUM",
+      "values": [
+        "relative_percent",
+        "absolute_g_per_m3"
+      ],
+      "default": "0",
+      "visibleWhen": {
+        "configId": "value_type",
+        "values": [
+          "humidity"
+        ]
+      }
+    },
+    {
+      "id": "unit_pressure",
+      "type": "ENUM",
+      "values": [
+        "hpa",
+        "kpa",
+        "bar",
+        "psi",
+        "mmhg"
+      ],
+      "default": "0",
+      "visibleWhen": {
+        "configId": "value_type",
+        "values": [
+          "pressure"
+        ]
+      }
+    },
+    {
+      "id": "unit_illuminance",
+      "type": "ENUM",
+      "values": [
+        "lux",
+        "foot_candle"
+      ],
+      "default": "0",
+      "visibleWhen": {
+        "configId": "value_type",
+        "values": [
+          "illuminance"
+        ]
+      }
+    },
+    {
+      "id": "unit_co2",
+      "type": "ENUM",
+      "values": [
+        "ppm"
+      ],
+      "default": "0",
+      "visibleWhen": {
+        "configId": "value_type",
+        "values": [
+          "co2"
+        ]
+      }
+    },
+    {
+      "id": "min",
+      "type": "NUMBER",
+      "default": "0",
+      "validation": {
+        "rules": [
+          {
+            "type": "lt",
+            "configId": "max"
+          }
+        ]
+      }
+    },
+    {
+      "id": "max",
+      "type": "NUMBER",
+      "default": "100",
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "configId": "min"
+          }
+        ]
+      }
+    }
+  ]
+}

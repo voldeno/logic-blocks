@@ -36,7 +36,39 @@ if (state::get("last_off_state")) {
         state::set("last_input_state", value)
     } else if (channel == "on") {
         state::set("last_on_state", value)
+    } else if (channel == "set") {
+        state::set("last_set_state", value)
     }
+    return
+}
+
+// Handle "set" input - level-driven: reacts to any change, sets output to match value
+if (channel == "set") {
+    last_set_state = state::get("last_set_state")
+
+    if (value != last_set_state) {
+        if (value) {
+            prev = output::get("output")
+            if (!prev) {
+                output::set("output", true)
+                callback::clear()
+                output::set("off", false)
+                output::set("on", true)
+                callback::set(pulse_ms, "onCallback", 0)
+            }
+        } else {
+            prev = output::get("output")
+            if (prev) {
+                output::set("output", false)
+                callback::clear()
+                output::set("on", false)
+                output::set("off", true)
+                callback::set(pulse_ms, "onCallback", 0)
+            }
+        }
+    }
+
+    state::set("last_set_state", value)
     return
 }
 
