@@ -1,6 +1,7 @@
 {
   "name": "Irrigation",
   "group": "process",
+  "widget": true,
   "inputs": [
     {
       "id": "trigger",

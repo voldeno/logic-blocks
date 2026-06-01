@@ -1,6 +1,7 @@
 {
   "name": "Climate regulator",
   "group": "process",
+  "widget": true,
   "ioType": "scheduler",
   "inputs": [
     {
