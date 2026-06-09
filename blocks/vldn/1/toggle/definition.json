@@ -1,6 +1,7 @@
 {
   "name": "Toggle",
   "group": "process",
+  "widget": true,
   "inputs": [
     {
       "id": "input",

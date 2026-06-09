@@ -1,6 +1,7 @@
 {
   "name": "Shading",
   "group": "process",
+  "widget": true,
   "inputs": [
     {
       "id": "toggle",
