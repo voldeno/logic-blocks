@@ -1,0 +1,91 @@
+name: "direct motor control - photocell blocks and stops closing"
+
+config:
+  control_mode: 0 # direct motor control
+  opening_duration: 1
+  closing_duration: 1
+  motor_lock_duration: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Open pulse - high"
+    inputs:
+      open: true
+
+  - action: "set_inputs"
+    comment: "Open pulse - low"
+    inputs:
+      open: false
+
+  - action: "wait"
+    comment: "Wait for full opening"
+    duration_ms: 1150
+
+  - action: "assert_outputs"
+    comment: "Fully open"
+    expected_outputs:
+      position: 100
+      gate_state: 2
+
+  - action: "set_inputs"
+    comment: "Photocell active"
+    inputs:
+      prevent_close: true
+
+  - action: "set_inputs"
+    comment: "Close pulse while photocell active - high"
+    inputs:
+      close: true
+
+  - action: "assert_outputs"
+    comment: "Closing blocked by the photocell"
+    expected_outputs:
+      close: false
+      moving: false
+      position: 100
+      gate_state: 2
+
+  - action: "set_inputs"
+    comment: "Close pulse while photocell active - low"
+    inputs:
+      close: false
+
+  - action: "set_inputs"
+    comment: "Photocell released"
+    inputs:
+      prevent_close: false
+
+  - action: "set_inputs"
+    comment: "Close pulse - high"
+    inputs:
+      close: true
+
+  - action: "assert_outputs"
+    comment: "Closing starts"
+    expected_outputs:
+      close: true
+      moving: true
+      gate_state: 3
+
+  - action: "set_inputs"
+    comment: "Close pulse - low"
+    inputs:
+      close: false
+
+  - action: "wait"
+    comment: "Close halfway (5 ticks of 10%)"
+    duration_ms: 510
+
+  - action: "set_inputs"
+    comment: "Photocell triggers during closing"
+    inputs:
+      prevent_close: true
+
+  - action: "assert_outputs"
+    comment: "Closing stopped by the photocell"
+    expected_outputs:
+      open: false
+      close: false
+      moving: false
+      position: 50
+      gate_state: 4

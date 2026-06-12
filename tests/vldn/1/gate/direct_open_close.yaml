@@ -1,0 +1,70 @@
+name: "direct motor control - full open and close cycle"
+
+config:
+  control_mode: 0 # direct motor control
+  opening_duration: 1
+  closing_duration: 1
+  motor_lock_duration: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Send a pulse to open input - high"
+    inputs:
+      open: true
+
+  - action: "assert_outputs"
+    comment: "Motor driven in opening direction"
+    expected_outputs:
+      open: true
+      close: false
+      moving: true
+      gate_state: 1
+
+  - action: "set_inputs"
+    comment: "Send a pulse to open input - low"
+    inputs:
+      open: false
+
+  - action: "wait"
+    comment: "Wait for the full opening duration"
+    duration_ms: 1150
+
+  - action: "assert_outputs"
+    comment: "Fully open - motor stopped"
+    expected_outputs:
+      open: false
+      close: false
+      moving: false
+      position: 100
+      gate_state: 2
+
+  - action: "set_inputs"
+    comment: "Send a pulse to close input - high"
+    inputs:
+      close: true
+
+  - action: "assert_outputs"
+    comment: "Motor driven in closing direction"
+    expected_outputs:
+      open: false
+      close: true
+      moving: true
+      gate_state: 3
+
+  - action: "set_inputs"
+    comment: "Send a pulse to close input - low"
+    inputs:
+      close: false
+
+  - action: "wait"
+    comment: "Wait for the full closing duration"
+    duration_ms: 1150
+
+  - action: "assert_outputs"
+    comment: "Fully closed - motor stopped"
+    expected_outputs:
+      open: false
+      close: false
+      moving: false
+      position: 0
+      gate_state: 0

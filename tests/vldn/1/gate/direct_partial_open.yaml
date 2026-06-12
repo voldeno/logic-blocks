@@ -1,0 +1,92 @@
+name: "direct motor control - partial open stops at position"
+
+config:
+  control_mode: 0 # direct motor control
+  opening_duration: 1
+  closing_duration: 1
+  partial_open_position: 20
+  partial_open_mode: 0 # stop at position
+  motor_lock_duration: 0
+
+steps:
+  - action: "set_inputs"
+    comment: "Partial open pulse - high"
+    inputs:
+      partial_open: true
+
+  - action: "assert_outputs"
+    comment: "Closed gate starts opening towards the partial position"
+    expected_outputs:
+      open: true
+      moving: true
+      gate_state: 1
+
+  - action: "set_inputs"
+    comment: "Partial open pulse - low"
+    inputs:
+      partial_open: false
+
+  - action: "wait"
+    comment: "Wait until the partial position is reached (2 ticks of 10%)"
+    duration_ms: 350
+
+  - action: "assert_outputs"
+    comment: "Stopped at the partial open position"
+    expected_outputs:
+      open: false
+      close: false
+      moving: false
+      position: 20
+      gate_state: 5
+
+  - action: "set_inputs"
+    comment: "Full open pulse from the partial position - high"
+    inputs:
+      open: true
+
+  - action: "set_inputs"
+    comment: "Full open pulse from the partial position - low"
+    inputs:
+      open: false
+
+  - action: "wait"
+    comment: "Wait for full opening from 20%"
+    duration_ms: 950
+
+  - action: "assert_outputs"
+    comment: "Fully open"
+    expected_outputs:
+      open: false
+      moving: false
+      position: 100
+      gate_state: 2
+
+  - action: "set_inputs"
+    comment: "Partial open from the open side - high"
+    inputs:
+      partial_open: true
+
+  - action: "assert_outputs"
+    comment: "Open gate moves down towards the partial position"
+    expected_outputs:
+      close: true
+      moving: true
+      gate_state: 3
+
+  - action: "set_inputs"
+    comment: "Partial open from the open side - low"
+    inputs:
+      partial_open: false
+
+  - action: "wait"
+    comment: "Wait until the partial position is reached from 100% (8 ticks of 10%)"
+    duration_ms: 900
+
+  - action: "assert_outputs"
+    comment: "Stopped at the partial open position again"
+    expected_outputs:
+      open: false
+      close: false
+      moving: false
+      position: 20
+      gate_state: 5
