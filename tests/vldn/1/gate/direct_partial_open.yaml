@@ -5,7 +5,6 @@ config:
   opening_duration: 1
   closing_duration: 1
   partial_open_position: 20
-  partial_open_mode: 0 # stop at position
   motor_lock_duration: 0
 
 steps:

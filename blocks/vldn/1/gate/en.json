@@ -111,9 +111,14 @@
       "description": "Target position for the partial open command, as a percentage of fully open (0-100)"
     },
     {
-      "id": "partial_open_mode",
-      "name": "Partial open mode",
-      "description": "With separate pulse outputs: stop at position (requires stop capability), or a close pulse on a fully closed gate interpreted as partial open by the controller (e.g. AWso UZ mode)."
+      "id": "open_output_function",
+      "name": "Open output function",
+      "description": "Controller function wired to the open pulse output: Open (Ot), Close (ZA), Open/Close (OZ), Open/Stop/Close (3F), Partial open (U), Partial open/Close (UZ)"
+    },
+    {
+      "id": "close_output_function",
+      "name": "Close output function",
+      "description": "Controller function wired to the close pulse output: Open (Ot), Close (ZA), Open/Close (OZ), Open/Stop/Close (3F), Partial open (U), Partial open/Close (UZ)"
     },
     {
       "id": "pulse_duration",
@@ -165,7 +170,22 @@
     {
       "id": "cycle_next",
       "name": "Controller cycle position",
-      "description": "Tracks the open/stop/close/stop cycle of an external controller: action the next pulse will trigger (0=open, 1=stop, 2=close, 3=stop)"
+      "description": "Tracks the open/stop/close/stop cycle of an external controller behind the control output: action the next pulse will trigger (0=open, 1=stop, 2=close, 3=stop)"
+    },
+    {
+      "id": "cycle_next_op",
+      "name": "Controller cycle position (open output)",
+      "description": "Tracks the open/stop/close/stop cycle of a controller channel behind the open pulse output"
+    },
+    {
+      "id": "cycle_next_cl",
+      "name": "Controller cycle position (close output)",
+      "description": "Tracks the open/stop/close/stop cycle of a controller channel behind the close pulse output"
+    },
+    {
+      "id": "target_stop_needed",
+      "name": "Stop needed at target",
+      "description": "Indicates that reaching the target position requires sending a stop pulse to the controller"
     },
     {
       "id": "pulse_out",

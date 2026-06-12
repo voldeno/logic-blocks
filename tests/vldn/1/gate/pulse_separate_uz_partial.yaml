@@ -2,7 +2,8 @@ name: "separate pulses - partial open through close pulse on a closed gate (UZ m
 
 config:
   control_mode: 3 # separate open and close pulses
-  partial_open_mode: 1 # close pulse when fully closed
+  open_output_function: 0 # open (Ot)
+  close_output_function: 5 # partial open / close (UZ)
   partial_open_position: 20
   opening_duration: 1
   closing_duration: 1

@@ -174,13 +174,36 @@
       }
     },
     {
-      "id": "partial_open_mode",
+      "id": "open_output_function",
       "type": "ENUM",
       "values": [
-        "Stop at position",
-        "Close pulse when fully closed"
+        "Open",
+        "Close",
+        "Open/Close",
+        "Open/Stop/Close",
+        "Partial open",
+        "Partial open/Close"
       ],
       "default": "0",
+      "visibleWhen": {
+        "configId": "control_mode",
+        "values": [
+          "Separate open and close pulses"
+        ]
+      }
+    },
+    {
+      "id": "close_output_function",
+      "type": "ENUM",
+      "values": [
+        "Open",
+        "Close",
+        "Open/Close",
+        "Open/Stop/Close",
+        "Partial open",
+        "Partial open/Close"
+      ],
+      "default": "1",
       "visibleWhen": {
         "configId": "control_mode",
         "values": [
@@ -290,6 +313,21 @@
       "id": "cycle_next",
       "type": "NUMBER",
       "default": "0"
+    },
+    {
+      "id": "cycle_next_op",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "cycle_next_cl",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "target_stop_needed",
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "pulse_out",
