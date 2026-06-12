@@ -1,0 +1,82 @@
+name: "single control open/stop/close - stop midway, then toggle closes"
+
+config:
+  control_mode: 1 # single control: open/stop/close
+  opening_duration: 1
+  closing_duration: 1
+  pulse_duration: 0.2
+  pulse_pause: 0.2
+
+steps:
+  - action: "set_inputs"
+    comment: "Open pulse - high"
+    inputs:
+      open: true
+
+  - action: "set_inputs"
+    comment: "Open pulse - low"
+    inputs:
+      open: false
+
+  - action: "wait"
+    comment: "Open halfway (5 ticks of 10%), pulse machinery idle again"
+    duration_ms: 510
+
+  - action: "set_inputs"
+    comment: "Stop pulse - high"
+    inputs:
+      stop: true
+
+  - action: "assert_outputs"
+    comment: "Stop sent to the controller as the next cycle pulse, movement stops"
+    expected_outputs:
+      control: true
+      moving: false
+      position: 50
+      gate_state: 4
+
+  - action: "set_inputs"
+    comment: "Stop pulse - low"
+    inputs:
+      stop: false
+
+  - action: "wait"
+    comment: "Wait for the stop pulse and pause to finish"
+    duration_ms: 500
+
+  - action: "assert_outputs"
+    comment: "Control output back to low, gate still stopped midway"
+    expected_outputs:
+      control: false
+      moving: false
+      position: 50
+      gate_state: 4
+
+  - action: "set_inputs"
+    comment: "Toggle pulse - high"
+    inputs:
+      toggle: true
+
+  - action: "assert_outputs"
+    comment: "Toggle is forwarded as a raw pulse - the controller cycle continues with close"
+    expected_outputs:
+      control: true
+      moving: true
+      gate_state: 3
+
+  - action: "set_inputs"
+    comment: "Toggle pulse - low"
+    inputs:
+      toggle: false
+
+  - action: "wait"
+    comment: "Wait for closing to complete from 50%"
+    duration_ms: 700
+
+  - action: "assert_outputs"
+    comment: "Fully closed"
+    expected_outputs:
+      control: false
+      moving: false
+      position: 0
+      gate_state: 0

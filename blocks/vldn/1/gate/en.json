@@ -1,0 +1,196 @@
+{
+  "description": "Controls gates and garage doors, either directly or through an external gate controller",
+  "inputs": [
+    {
+      "id": "toggle",
+      "name": "Toggle",
+      "description": "Single button control. With direct motor control or separate pulses it cycles open, stop, close, stop. With a single control output the pulse is forwarded to the controller which owns the cycle."
+    },
+    {
+      "id": "open",
+      "name": "Open",
+      "description": "Fully opens the gate"
+    },
+    {
+      "id": "close",
+      "name": "Close",
+      "description": "Fully closes the gate"
+    },
+    {
+      "id": "stop",
+      "name": "Stop",
+      "description": "Stops the movement. Available with direct motor control and the open/stop/close controller mode; ignored in controller modes without a stop function."
+    },
+    {
+      "id": "partial_open",
+      "name": "Partial open",
+      "description": "Moves the gate to the partial open position (e.g. pedestrian or ventilation position), according to the configured partial open mode"
+    },
+    {
+      "id": "is_open",
+      "name": "Is open",
+      "description": "Limit switch reporting the fully open position. Corrects the simulated position and detects externally triggered movement."
+    },
+    {
+      "id": "is_closed",
+      "name": "Is closed",
+      "description": "Limit switch reporting the fully closed position. Corrects the simulated position and detects externally triggered movement."
+    },
+    {
+      "id": "prevent_open",
+      "name": "Prevent opening",
+      "description": "Safety sensor input. While active, opening is blocked; an ongoing opening movement is stopped if the control mode allows stopping."
+    },
+    {
+      "id": "prevent_close",
+      "name": "Prevent closing",
+      "description": "Safety sensor input, e.g. a photocell. While active, closing is blocked; an ongoing closing movement is stopped if the control mode allows stopping."
+    },
+    {
+      "id": "off",
+      "name": "Off",
+      "description": "Stops the gate when activated and blocks all commands while active"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "control",
+      "name": "Control pulse",
+      "description": "Pulse output for single control input controllers (open/stop/close or open/close cycle)"
+    },
+    {
+      "id": "open",
+      "name": "Open",
+      "description": "With direct motor control: level signal driving the motor in the opening direction. With separate pulses: open pulse for the controller."
+    },
+    {
+      "id": "close",
+      "name": "Close",
+      "description": "With direct motor control: level signal driving the motor in the closing direction. With separate pulses: close pulse for the controller."
+    },
+    {
+      "id": "moving",
+      "name": "In motion",
+      "description": "Active while the gate is moving"
+    },
+    {
+      "id": "position",
+      "name": "Position",
+      "description": "Current gate position as a percentage (0=fully closed, 100=fully open)"
+    },
+    {
+      "id": "gate_state",
+      "name": "Gate state",
+      "description": "Current gate state: 0=closed, 1=opening, 2=open, 3=closing, 4=stopped midway, 5=partially open"
+    }
+  ],
+  "config": [
+    {
+      "id": "gate_type",
+      "name": "Gate type",
+      "description": "Type of the gate, used for the proper animation in client applications: Garage door, Gate (left wing), Gate (right wing), Double wing gate, Sliding gate (left), Sliding gate (right)"
+    },
+    {
+      "id": "control_mode",
+      "name": "Control mode",
+      "description": "How the gate is driven: direct motor control (level signals), single pulse output open/stop/close (3F cycle), single pulse output open/close toggle, or separate open and close pulse outputs."
+    },
+    {
+      "id": "opening_duration",
+      "name": "Opening duration",
+      "description": "The time taken to fully open the gate, in seconds. Used to simulate the gate position."
+    },
+    {
+      "id": "closing_duration",
+      "name": "Closing duration",
+      "description": "The time taken to fully close the gate, in seconds. Used to simulate the gate position."
+    },
+    {
+      "id": "partial_open_position",
+      "name": "Partial open position",
+      "description": "Target position for the partial open command, as a percentage of fully open (0-100)"
+    },
+    {
+      "id": "partial_open_mode",
+      "name": "Partial open mode",
+      "description": "With separate pulse outputs: stop at position (requires stop capability), or a close pulse on a fully closed gate interpreted as partial open by the controller (e.g. AWso UZ mode)."
+    },
+    {
+      "id": "pulse_duration",
+      "name": "Pulse duration",
+      "description": "Duration of pulses on the control, open and close outputs, in seconds"
+    },
+    {
+      "id": "pulse_pause",
+      "name": "Pulse pause",
+      "description": "Minimal pause between two consecutive pulses, in seconds"
+    },
+    {
+      "id": "motor_lock_duration",
+      "name": "Motor lock duration",
+      "description": "Time required to release the motor lock between direction changes with direct motor control, in seconds"
+    }
+  ],
+  "state": [
+    {
+      "id": "position",
+      "name": "Position",
+      "description": "Raw value of the simulated gate position as a percentage (0-100), not rounded"
+    },
+    {
+      "id": "moving_dir",
+      "name": "Moving direction",
+      "description": "Current movement direction: 0=stopped, 1=opening, -1=closing"
+    },
+    {
+      "id": "last_dir",
+      "name": "Last direction",
+      "description": "Direction of the last movement: 1=opening, -1=closing"
+    },
+    {
+      "id": "target",
+      "name": "Target position",
+      "description": "Target position for the current movement as a percentage, or -1 when moving to an end position"
+    },
+    {
+      "id": "partial_pending",
+      "name": "Partial open pending",
+      "description": "Indicates that the current movement was started by a partial open command"
+    },
+    {
+      "id": "desired_action",
+      "name": "Desired action",
+      "description": "Pending action to perform: 0=none, 1=open, 2=close, 3=stop, 4=partial open via controller, 5=raw control pulse"
+    },
+    {
+      "id": "cycle_next",
+      "name": "Controller cycle position",
+      "description": "Tracks the open/stop/close/stop cycle of an external controller: action the next pulse will trigger (0=open, 1=stop, 2=close, 3=stop)"
+    },
+    {
+      "id": "pulse_out",
+      "name": "Active pulse output",
+      "description": "Output currently emitting a pulse: 0=none, 1=control, 2=open, 3=close"
+    },
+    {
+      "id": "pulse_phase",
+      "name": "Pulse phase",
+      "description": "Phase of the pulse machinery: 0=idle, 1=pulse high, 2=pause or motor lock wait"
+    },
+    {
+      "id": "pulse_ticks",
+      "name": "Pulse ticks",
+      "description": "Ticks remaining in the current pulse phase"
+    },
+    {
+      "id": "tick_active",
+      "name": "Tick active",
+      "description": "Indicates whether the periodic simulation callback is scheduled"
+    },
+    {
+      "id": "last_movement_ts",
+      "name": "Last movement timestamp",
+      "description": "Timestamp of the last movement, used for the motor lock pause on direction change"
+    }
+  ]
+}

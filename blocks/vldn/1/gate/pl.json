@@ -1,0 +1,48 @@
+{
+  "description": "Steruje bramami i bramami garażowymi, bezpośrednio lub przez zewnętrzny sterownik bramy",
+  "inputs": [
+    {"id": "toggle", "name": "Przełącz", "description": "Sterowanie jednym przyciskiem. Przy sterowaniu bezpośrednim lub oddzielnych impulsach przełącza cyklicznie: otwórz, stop, zamknij, stop. Przy pojedynczym wyjściu sterującym impuls jest przekazywany do sterownika, który sam zarządza cyklem."},
+    {"id": "open", "name": "Otwórz", "description": "Całkowicie otwiera bramę"},
+    {"id": "close", "name": "Zamknij", "description": "Całkowicie zamyka bramę"},
+    {"id": "stop", "name": "Stop", "description": "Zatrzymuje ruch. Dostępne przy sterowaniu bezpośrednim i trybie sterownika otwórz/stop/zamknij; ignorowane w trybach sterownika bez funkcji stop."},
+    {"id": "partial_open", "name": "Uchyl", "description": "Przesuwa bramę do pozycji częściowego otwarcia (np. furtka lub wietrzenie), zgodnie ze skonfigurowanym trybem uchylania"},
+    {"id": "is_open", "name": "Otwarta", "description": "Wyłącznik krańcowy zgłaszający pozycję pełnego otwarcia. Koryguje symulowaną pozycję i wykrywa ruch wywołany zewnętrznie."},
+    {"id": "is_closed", "name": "Zamknięta", "description": "Wyłącznik krańcowy zgłaszający pozycję pełnego zamknięcia. Koryguje symulowaną pozycję i wykrywa ruch wywołany zewnętrznie."},
+    {"id": "prevent_open", "name": "Blokada otwierania", "description": "Wejście czujnika bezpieczeństwa. Gdy aktywne, otwieranie jest zablokowane; trwający ruch otwierania jest zatrzymywany, jeśli tryb sterowania pozwala na zatrzymanie."},
+    {"id": "prevent_close", "name": "Blokada zamykania", "description": "Wejście czujnika bezpieczeństwa, np. fotokomórki. Gdy aktywne, zamykanie jest zablokowane; trwający ruch zamykania jest zatrzymywany, jeśli tryb sterowania pozwala na zatrzymanie."},
+    {"id": "off", "name": "Wyłącz", "description": "Zatrzymuje bramę przy aktywacji i blokuje wszystkie polecenia, gdy aktywne"}
+  ],
+  "outputs": [
+    {"id": "control", "name": "Impuls sterujący", "description": "Wyjście impulsowe dla sterowników z pojedynczym wejściem sterującym (cykl otwórz/stop/zamknij lub otwórz/zamknij)"},
+    {"id": "open", "name": "Otwieranie", "description": "Przy sterowaniu bezpośrednim: sygnał poziomu sterujący silnikiem w kierunku otwierania. Przy oddzielnych impulsach: impuls otwarcia dla sterownika."},
+    {"id": "close", "name": "Zamykanie", "description": "Przy sterowaniu bezpośrednim: sygnał poziomu sterujący silnikiem w kierunku zamykania. Przy oddzielnych impulsach: impuls zamknięcia dla sterownika."},
+    {"id": "moving", "name": "W ruchu", "description": "Aktywne podczas ruchu bramy"},
+    {"id": "position", "name": "Pozycja", "description": "Bieżąca pozycja bramy jako procent (0=zamknięta, 100=otwarta)"},
+    {"id": "gate_state", "name": "Stan bramy", "description": "Bieżący stan bramy: 0=zamknięta, 1=otwieranie, 2=otwarta, 3=zamykanie, 4=zatrzymana w trakcie, 5=uchylona"}
+  ],
+  "config": [
+    {"id": "gate_type", "name": "Typ bramy", "description": "Typ bramy, używany do właściwej animacji w aplikacjach klienckich: Brama garażowa, Brama (lewe skrzydło), Brama (prawe skrzydło), Brama dwuskrzydłowa, Brama przesuwna (w lewo), Brama przesuwna (w prawo)"},
+    {"id": "control_mode", "name": "Tryb sterowania", "description": "Sposób sterowania bramą: bezpośredni (sygnały poziomu), pojedyncze wyjście impulsowe otwórz/stop/zamknij (3F), pojedyncze wyjście impulsowe otwórz/zamknij, lub oddzielne impulsy otwierania i zamykania."},
+    {"id": "opening_duration", "name": "Czas otwierania", "description": "Czas potrzebny do pełnego otwarcia bramy, w sekundach. Używany do symulacji pozycji bramy."},
+    {"id": "closing_duration", "name": "Czas zamykania", "description": "Czas potrzebny do pełnego zamknięcia bramy, w sekundach. Używany do symulacji pozycji bramy."},
+    {"id": "partial_open_position", "name": "Pozycja uchylenia", "description": "Pozycja docelowa polecenia uchylenia, jako procent pełnego otwarcia (0-100)"},
+    {"id": "partial_open_mode", "name": "Tryb uchylania", "description": "Przy oddzielnych impulsach: zatrzymanie na pozycji (wymaga funkcji stop), lub impuls zamknięcia na zamkniętej bramie interpretowany jako uchylenie przez sterownik (np. tryb UZ sterowników AWso)."},
+    {"id": "pulse_duration", "name": "Czas trwania impulsu", "description": "Czas trwania impulsów na wyjściach sterujących, otwierania i zamykania, w sekundach"},
+    {"id": "pulse_pause", "name": "Przerwa między impulsami", "description": "Minimalna przerwa między dwoma kolejnymi impulsami, w sekundach"},
+    {"id": "motor_lock_duration", "name": "Czas blokady silnika", "description": "Czas wymagany do zwolnienia blokady silnika między zmianami kierunku przy sterowaniu bezpośrednim, w sekundach"}
+  ],
+  "state": [
+    {"id": "position", "name": "Pozycja", "description": "Surowa wartość symulowanej pozycji bramy jako procent (0-100)"},
+    {"id": "moving_dir", "name": "Kierunek ruchu", "description": "Bieżący kierunek ruchu: 0=zatrzymana, 1=otwieranie, -1=zamykanie"},
+    {"id": "last_dir", "name": "Ostatni kierunek", "description": "Kierunek ostatniego ruchu: 1=otwieranie, -1=zamykanie"},
+    {"id": "target", "name": "Pozycja docelowa", "description": "Pozycja docelowa bieżącego ruchu jako procent lub -1 przy ruchu do pozycji krańcowej"},
+    {"id": "partial_pending", "name": "Oczekujące uchylenie", "description": "Wskazuje, że bieżący ruch został rozpoczęty poleceniem uchylenia"},
+    {"id": "desired_action", "name": "Żądana akcja", "description": "Oczekująca akcja do wykonania: 0=brak, 1=otwórz, 2=zamknij, 3=stop, 4=uchylenie przez sterownik, 5=surowy impuls sterujący"},
+    {"id": "cycle_next", "name": "Pozycja cyklu sterownika", "description": "Śledzi cykl otwórz/stop/zamknij/stop zewnętrznego sterownika: akcja wywołana następnym impulsem (0=otwórz, 1=stop, 2=zamknij, 3=stop)"},
+    {"id": "pulse_out", "name": "Aktywne wyjście impulsowe", "description": "Wyjście aktualnie emitujące impuls: 0=brak, 1=sterujące, 2=otwieranie, 3=zamykanie"},
+    {"id": "pulse_phase", "name": "Faza impulsu", "description": "Faza mechanizmu impulsów: 0=bezczynny, 1=impuls aktywny, 2=przerwa lub oczekiwanie blokady silnika"},
+    {"id": "pulse_ticks", "name": "Pozostałe takty impulsu", "description": "Liczba taktów pozostałych w bieżącej fazie impulsu"},
+    {"id": "tick_active", "name": "Aktywny takt", "description": "Wskazuje, czy okresowe wywołanie symulacji jest zaplanowane"},
+    {"id": "last_movement_ts", "name": "Znacznik czasu ostatniego ruchu", "description": "Znacznik czasu ostatniego ruchu, używany do pauzy blokady silnika przy zmianie kierunku"}
+  ]
+}

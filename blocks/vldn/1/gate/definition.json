@@ -1,0 +1,321 @@
+{
+  "name": "Gate",
+  "group": "process",
+  "widget": true,
+  "inputs": [
+    {
+      "id": "toggle",
+      "abbrev": "T",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "open",
+      "abbrev": "O",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "close",
+      "abbrev": "C",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "stop",
+      "abbrev": "S",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "partial_open",
+      "abbrev": "PO",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "is_open",
+      "abbrev": "IO",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "is_closed",
+      "abbrev": "IC",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "prevent_open",
+      "abbrev": "SPO",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "prevent_close",
+      "abbrev": "SPC",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "off",
+      "abbrev": "OFF",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "control",
+      "abbrev": "TG",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "open",
+      "abbrev": "OP",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "close",
+      "abbrev": "CL",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "moving",
+      "abbrev": "M",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "position",
+      "abbrev": "P",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "gate_state",
+      "abbrev": "GS",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "gate_type",
+      "type": "ENUM",
+      "values": [
+        "Garage door",
+        "Gate (left wing)",
+        "Gate (right wing)",
+        "Double wing gate",
+        "Sliding gate (left)",
+        "Sliding gate (right)"
+      ],
+      "default": "0"
+    },
+    {
+      "id": "control_mode",
+      "type": "ENUM",
+      "values": [
+        "Direct motor control",
+        "Single control: open/stop/close",
+        "Single control: open/close",
+        "Separate open and close pulses"
+      ],
+      "default": "0"
+    },
+    {
+      "id": "opening_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "30",
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "closing_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "30",
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "partial_open_position",
+      "type": "NUMBER",
+      "unit": "%",
+      "default": "20",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          },
+          {
+            "type": "lte",
+            "value": 100
+          }
+        ]
+      }
+    },
+    {
+      "id": "partial_open_mode",
+      "type": "ENUM",
+      "values": [
+        "Stop at position",
+        "Close pulse when fully closed"
+      ],
+      "default": "0",
+      "visibleWhen": {
+        "configId": "control_mode",
+        "values": [
+          "Separate open and close pulses"
+        ]
+      }
+    },
+    {
+      "id": "pulse_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.5",
+      "visibleWhen": {
+        "configId": "control_mode",
+        "values": [
+          "Single control: open/stop/close",
+          "Single control: open/close",
+          "Separate open and close pulses"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "pulse_pause",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.5",
+      "visibleWhen": {
+        "configId": "control_mode",
+        "values": [
+          "Single control: open/stop/close",
+          "Single control: open/close",
+          "Separate open and close pulses"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "motor_lock_duration",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0.5",
+      "visibleWhen": {
+        "configId": "control_mode",
+        "values": [
+          "Direct motor control"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "position",
+      "type": "NUMBER",
+      "unit": "%",
+      "default": "0.0"
+    },
+    {
+      "id": "moving_dir",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "last_dir",
+      "type": "NUMBER",
+      "default": "-1"
+    },
+    {
+      "id": "target",
+      "type": "NUMBER",
+      "unit": "%",
+      "default": "-1"
+    },
+    {
+      "id": "partial_pending",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "desired_action",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "cycle_next",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "pulse_out",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "pulse_phase",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "pulse_ticks",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "tick_active",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "last_movement_ts",
+      "type": "NUMBER",
+      "unit": "milliseconds",
+      "default": "-60000"
+    }
+  ]
+}

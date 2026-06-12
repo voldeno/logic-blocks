@@ -1,0 +1,15 @@
+name: "compile check"
+
+config:
+  control_mode: 0
+
+steps:
+  - action: "assert_outputs"
+    comment: "Default outputs on startup - gate closed"
+    expected_outputs:
+      control: false
+      open: false
+      close: false
+      moving: false
+      position: 0
+      gate_state: 0
