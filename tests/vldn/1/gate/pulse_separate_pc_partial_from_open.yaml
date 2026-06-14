@@ -1,0 +1,63 @@
+name: "separate pulses - partial open from a fully open gate closes fully first (PC mode)"
+
+config:
+  control_mode: 3 # separate open and close pulses
+  open_output_function: 0 # open (Ot)
+  close_output_function: 5 # partial open / close (PC)
+  partial_open_position: 20
+  opening_duration: 1
+  closing_duration: 1
+  pulse_duration: 0.2
+  pulse_pause: 0.2
+
+steps:
+  - action: "set_inputs"
+    comment: "Open the gate fully first"
+    inputs:
+      open: true
+
+  - action: "set_inputs"
+    inputs:
+      open: false
+
+  - action: "wait"
+    comment: "Wait for full opening"
+    duration_ms: 1150
+
+  - action: "assert_outputs"
+    comment: "Gate fully open"
+    expected_outputs:
+      moving: false
+      position: 100
+      gate_state: 2
+
+  - action: "set_inputs"
+    comment: "Partial open pulse on an open gate - high"
+    inputs:
+      partial_open: true
+
+  - action: "assert_outputs"
+    comment: "Gate starts closing (phase 1 - close to reach fully closed)"
+    expected_outputs:
+      open: false
+      close: true
+      moving: true
+      gate_state: 3
+
+  - action: "set_inputs"
+    comment: "Partial open pulse - low"
+    inputs:
+      partial_open: false
+
+  - action: "wait"
+    comment: "Wait for full close (1s) + auto PC pulse + opening to partial position (2 ticks)"
+    duration_ms: 1400
+
+  - action: "assert_outputs"
+    comment: "Gate stopped at the partial open position after the two-phase sequence"
+    expected_outputs:
+      open: false
+      close: false
+      moving: false
+      position: 20
+      gate_state: 5

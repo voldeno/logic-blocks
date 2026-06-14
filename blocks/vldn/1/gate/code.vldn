@@ -366,6 +366,7 @@ fn command(action) {
         state::set("target", -1)
         state::set("partial_pending", false)
         state::set("target_stop_needed", false)
+        state::set("partial_after_close", false)
     }
     state::set("desired_action", action)
     if (state::get("pulse_phase") == 0) {
@@ -388,6 +389,7 @@ fn reach_open_end() {
     state::set("target", -1)
     state::set("partial_pending", false)
     state::set("target_stop_needed", false)
+    state::set("partial_after_close", false)
     set_gate_state(2)
 }
 
@@ -406,6 +408,12 @@ fn reach_closed_end() {
     state::set("partial_pending", false)
     state::set("target_stop_needed", false)
     set_gate_state(0)
+    // if a two-phase partial open was waiting for the gate to be fully closed,
+    // now issue the partial open pulse (PC channel interprets it as partial open)
+    if (state::get("partial_after_close")) {
+        state::set("partial_after_close", false)
+        command(4)
+    }
 }
 
 extern fn onTick() {
@@ -648,9 +656,18 @@ if (channel == "partial_open") {
             command(4)
             return
         }
-        if (channel_with_function(5) != 0 and pos <= 0) {
-            // partial open/close channel triggers partial open on a closed gate
-            command(4)
+        if (channel_with_function(5) != 0) {
+            if (pos <= 0) {
+                // already closed - the PC pulse is interpreted as partial open directly
+                command(4)
+            } else {
+            // close fully first; reach_closed_end will fire command(4) automatically
+            if (input::get("prevent_close")) {
+                return
+            }
+            command(2) // clears all flags, so partial_after_close must be set afterwards
+            state::set("partial_after_close", true)
+            }
             return
         }
         if (channel_with_function(3) != 0) {

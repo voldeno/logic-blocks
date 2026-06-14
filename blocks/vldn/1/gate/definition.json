@@ -330,6 +330,11 @@
       "default": "false"
     },
     {
+      "id": "partial_after_close",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
       "id": "pulse_out",
       "type": "NUMBER",
       "default": "0"

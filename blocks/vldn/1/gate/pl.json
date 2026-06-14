@@ -43,6 +43,7 @@
     {"id": "cycle_next_op", "name": "Pozycja cyklu (wyjście otwierania)", "description": "Śledzi cykl otwórz/stop/zamknij/stop kanału sterownika za wyjściem impulsu otwierania"},
     {"id": "cycle_next_cl", "name": "Pozycja cyklu (wyjście zamykania)", "description": "Śledzi cykl otwórz/stop/zamknij/stop kanału sterownika za wyjściem impulsu zamykania"},
     {"id": "target_stop_needed", "name": "Wymagany stop na pozycji docelowej", "description": "Wskazuje, że osiągnięcie pozycji docelowej wymaga wysłania impulsu stop do sterownika"},
+    {"id": "partial_after_close", "name": "Uchylenie oczekuje na zamknięcie", "description": "Wskazuje, że polecenie uchylenia oczekuje na pełne zamknięcie bramy przed wysłaniem impulsu do sterownika"},
     {"id": "pulse_out", "name": "Aktywne wyjście impulsowe", "description": "Wyjście aktualnie emitujące impuls: 0=brak, 1=sterujące, 2=otwieranie, 3=zamykanie"},
     {"id": "pulse_phase", "name": "Faza impulsu", "description": "Faza mechanizmu impulsów: 0=bezczynny, 1=impuls aktywny, 2=przerwa lub oczekiwanie blokady silnika"},
     {"id": "pulse_ticks", "name": "Pozostałe takty impulsu", "description": "Liczba taktów pozostałych w bieżącej fazie impulsu"},

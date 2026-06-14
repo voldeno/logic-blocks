@@ -188,6 +188,11 @@
       "description": "Indicates that reaching the target position requires sending a stop pulse to the controller"
     },
     {
+      "id": "partial_after_close",
+      "name": "Partial open pending after close",
+      "description": "Indicates that a partial open command is waiting for the gate to reach fully closed before issuing the controller pulse"
+    },
+    {
       "id": "pulse_out",
       "name": "Active pulse output",
       "description": "Output currently emitting a pulse: 0=none, 1=control, 2=open, 3=close"
