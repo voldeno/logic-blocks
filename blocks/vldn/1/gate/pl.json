@@ -30,7 +30,7 @@
     {"id": "close_output_function", "name": "Funkcja wyjścia zamykania", "description": "Funkcja sterownika podłączona do wyjścia impulsu zamykania: Otwórz (Ot), Zamknij (ZA), Otwórz/Zamknij (OZ), Otwórz/Stop/Zamknij (3F), Uchyl (U), Uchyl/Zamknij (PC)"},
     {"id": "pulse_duration", "name": "Czas trwania impulsu", "description": "Czas trwania impulsów na wyjściach sterujących, otwierania i zamykania, w sekundach"},
     {"id": "pulse_pause", "name": "Przerwa między impulsami", "description": "Minimalna przerwa między dwoma kolejnymi impulsami, w sekundach"},
-    {"id": "motor_lock_duration", "name": "Czas blokady silnika", "description": "Czas wymagany do zwolnienia blokady silnika między zmianami kierunku przy sterowaniu bezpośrednim, w sekundach"},
+    {"id": "motor_lock_duration", "name": "Czas blokady silnika", "description": "Czas potrzebny silnikowi na zmianę kierunku, w sekundach. W trybie bezpośrednim chroni silnik, a w pozostałych trybach utrzymuje dokładność szacowanej pozycji."},
     {"id": "use_sensors", "name": "Używaj czujników krańcowych", "description": "Gdy włączone, wejścia is_open i is_closed są wiodącym źródłem informacji o pozycji krańcowej. Pozycja jest nadal szacowana z czasów konfiguracji na potrzeby wyświetlania. Wyłącz, gdy brak podłączonych czujników."}
   ],
   "state": [
@@ -48,6 +48,7 @@
     {"id": "pulse_out", "name": "Aktywne wyjście impulsowe", "description": "Wyjście aktualnie emitujące impuls: 0=brak, 1=sterujące, 2=otwieranie, 3=zamykanie"},
     {"id": "pulse_phase", "name": "Faza impulsu", "description": "Faza mechanizmu impulsów: 0=bezczynny, 1=impuls aktywny, 2=przerwa lub oczekiwanie blokady silnika"},
     {"id": "pulse_ticks", "name": "Pozostałe takty impulsu", "description": "Liczba taktów pozostałych w bieżącej fazie impulsu"},
+    {"id": "move_lock_ticks", "name": "Takty blokady ruchu", "description": "Liczba taktów, przez które szacowana pozycja jest wstrzymana po zmianie kierunku, gdy trwa blokada silnika (tryby pośrednie)"},
     {"id": "tick_active", "name": "Aktywny takt", "description": "Wskazuje, czy okresowe wywołanie symulacji jest zaplanowane"},
     {"id": "last_movement_ts", "name": "Znacznik czasu ostatniego ruchu", "description": "Znacznik czasu ostatniego ruchu, używany do pauzy blokady silnika przy zmianie kierunku"}
   ]

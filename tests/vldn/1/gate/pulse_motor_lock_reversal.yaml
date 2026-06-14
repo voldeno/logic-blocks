@@ -1,0 +1,94 @@
+name: "non-direct control - motor lock holds position on a direction reversal"
+
+# In the non-direct modes the controller owns the motor, but a direction reversal still
+# takes motor_lock_duration. The simulated position must be held for that window so the
+# position estimate stays accurate (instead of instantly tracking the new direction).
+
+config:
+  control_mode: 2 # single control: open/close
+  opening_duration: 1
+  closing_duration: 1
+  pulse_duration: 0.1
+  pulse_pause: 0.1
+  motor_lock_duration: 1 # wide reversal window so the asserts sit far from its boundary
+  use_sensors: false
+
+steps:
+  - action: "set_inputs"
+    comment: "Open - control pulse high"
+    inputs:
+      open: true
+
+  - action: "assert_outputs"
+    comment: "Controller pulsed, gate opening"
+    expected_outputs:
+      control: true
+      moving: true
+      gate_state: 1
+
+  - action: "set_inputs"
+    comment: "Open - control pulse low"
+    inputs:
+      open: false
+
+  - action: "wait"
+    comment: "Let the gate reach the open limit"
+    duration_ms: 1300
+
+  - action: "assert_outputs"
+    comment: "Fully open, controller stopped at the limit"
+    expected_outputs:
+      control: false
+      moving: false
+      position: 100
+      gate_state: 2
+
+  - action: "set_inputs"
+    comment: "Close - reverse straight from the open limit (control pulse high)"
+    inputs:
+      close: true
+
+  - action: "assert_outputs"
+    comment: "Reversal accepted - closing, but position still pinned at the open limit"
+    expected_outputs:
+      control: true
+      moving: true
+      position: 100
+      gate_state: 3
+
+  - action: "set_inputs"
+    comment: "Close - control pulse low"
+    inputs:
+      close: false
+
+  - action: "wait"
+    comment: "Still inside the motor lock window"
+    duration_ms: 400
+
+  - action: "assert_outputs"
+    comment: "Position held while the motor reverses - the lock has not elapsed yet"
+    expected_outputs:
+      moving: true
+      position: 100
+      gate_state: 3
+
+  - action: "wait"
+    comment: "One closing duration after the reverse command"
+    duration_ms: 600
+
+  - action: "assert_outputs"
+    comment: "Without the lock the gate would already be closed; the lock keeps it moving"
+    expected_outputs:
+      moving: true
+      gate_state: 3
+
+  - action: "wait"
+    comment: "Wait for the lock plus the full closing travel"
+    duration_ms: 1300
+
+  - action: "assert_outputs"
+    comment: "Fully closed"
+    expected_outputs:
+      moving: false
+      position: 0
+      gate_state: 0

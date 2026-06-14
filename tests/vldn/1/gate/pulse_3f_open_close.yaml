@@ -2,6 +2,7 @@ name: "single control open/stop/close - full travel"
 
 config:
   control_mode: 1 # single control: open/stop/close
+  motor_lock_duration: 0
   opening_duration: 1
   closing_duration: 1
   pulse_duration: 0.2

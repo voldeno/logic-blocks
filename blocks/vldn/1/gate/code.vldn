@@ -20,6 +20,11 @@
 //
 // Position is simulated from opening/closing durations on a 100ms tick and corrected
 // by the is_open / is_closed limit switch inputs when they are connected.
+//
+// motor_lock_duration is the time the motor needs to reverse direction. In direct mode it
+// keeps the motor off for that time (motor protection); in the non-direct modes the
+// controller owns the motor, so the lock instead holds the simulated position for the
+// reversal window so the position estimate accounts for the time a reversal takes.
 
 channel = input::channel()
 value = input::value()
@@ -61,9 +66,25 @@ fn apply_stopped_state() {
 }
 
 fn set_dir(d) {
+    prev_dir = state::get("last_dir")
     state::set("moving_dir", d)
     output::set("moving", d != 0)
     if (d != 0) {
+        // A direction reversal costs the motor lock time regardless of the control mode.
+        // In direct mode the motor is physically held off for that time (handled in
+        // process_desired). In the non-direct modes the controller owns the motor, so the
+        // pulse is sent right away, but the gate still needs that time to reverse - hold the
+        // simulated position for the remaining lock window so the estimate stays accurate.
+        if (config::get("control_mode") != 0 and prev_dir != d) {
+            lock_ms = math::round(config::get("motor_lock_duration") * 1000)
+            since = time::uptime() - state::get("last_movement_ts")
+            if (since < lock_ms) {
+                lt = math::round((lock_ms - since) / 100)
+                if (lt > 0) {
+                    state::set("move_lock_ticks", lt)
+                }
+            }
+        }
         state::set("last_dir", d)
         state::set("last_movement_ts", time::uptime())
         if (d == 1) {
@@ -71,6 +92,8 @@ fn set_dir(d) {
         } else {
             set_gate_state(3)
         }
+    } else {
+        state::set("move_lock_ticks", 0)
     }
 }
 
@@ -451,6 +474,9 @@ extern fn onTick() {
     // movement simulation; position is frozen while a stop pulse is pending
     // (the gate is about to be stopped, waiting only for the pulse machinery)
     d = state::get("moving_dir")
+    // reversal dead-time: in the non-direct modes the position is held while the motor
+    // lock is still elapsing, because the gate cannot have changed direction yet
+    move_lock = state::get("move_lock_ticks")
     // in sensor mode, position does not advance while the departure sensor is still
     // asserted: the gate may not have physically left the limit yet (e.g. power
     // failure, stalled motor) and the sensor is the authoritative source
@@ -463,7 +489,9 @@ extern fn onTick() {
             sensor_holds_pos = true
         }
     }
-    if (d != 0 and state::get("desired_action") != 3 and !sensor_holds_pos) {
+    if (move_lock > 0 and d != 0) {
+        state::set("move_lock_ticks", move_lock - 1)
+    } else if (d != 0 and state::get("desired_action") != 3 and !sensor_holds_pos) {
         pos = state::get("position")
         if (d == 1) {
             pos = pos + (100 * 100) / (config::get("opening_duration") * 1000.0)

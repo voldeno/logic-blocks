@@ -2,6 +2,7 @@ name: "separate pulses - open/stop/close channel function on the open output"
 
 config:
   control_mode: 3 # separate open and close pulses
+  motor_lock_duration: 0
   open_output_function: 3 # open/stop/close cycle (3F)
   close_output_function: 1 # close (ZA)
   partial_open_position: 20

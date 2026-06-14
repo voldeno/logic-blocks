@@ -8,6 +8,7 @@ name: "separate pulses - limit sensors: bounce rejection vs. authoritative remot
 
 config:
   control_mode: 3
+  motor_lock_duration: 0
   open_output_function: 0   # Open (Ot)
   close_output_function: 5  # Partial open/Close (PC)
   partial_open_position: 20

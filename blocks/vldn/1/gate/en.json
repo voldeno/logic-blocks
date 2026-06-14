@@ -133,7 +133,7 @@
     {
       "id": "motor_lock_duration",
       "name": "Motor lock duration",
-      "description": "Time required to release the motor lock between direction changes with direct motor control, in seconds"
+      "description": "Time the motor needs to reverse direction, in seconds. Protects the motor in direct mode and keeps the estimated position accurate in the other modes."
     },
     {
       "id": "use_sensors",
@@ -211,6 +211,11 @@
       "id": "pulse_ticks",
       "name": "Pulse ticks",
       "description": "Ticks remaining in the current pulse phase"
+    },
+    {
+      "id": "move_lock_ticks",
+      "name": "Movement lock ticks",
+      "description": "Ticks the simulated position is held after a reversal while the motor lock elapses (non-direct modes)"
     },
     {
       "id": "tick_active",

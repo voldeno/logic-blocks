@@ -2,6 +2,7 @@ name: "separate pulses - partial open from a fully open gate closes fully first 
 
 config:
   control_mode: 3 # separate open and close pulses
+  motor_lock_duration: 0
   open_output_function: 0 # open (Ot)
   close_output_function: 5 # partial open / close (PC)
   partial_open_position: 20

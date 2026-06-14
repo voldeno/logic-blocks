@@ -260,12 +260,6 @@
       "type": "NUMBER",
       "unit": "s",
       "default": "0.5",
-      "visibleWhen": {
-        "configId": "control_mode",
-        "values": [
-          "Direct motor control"
-        ]
-      },
       "validation": {
         "rules": [
           {
@@ -351,6 +345,11 @@
     },
     {
       "id": "pulse_ticks",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "move_lock_ticks",
       "type": "NUMBER",
       "default": "0"
     },
