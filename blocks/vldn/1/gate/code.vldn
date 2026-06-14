@@ -32,6 +32,14 @@ fn ticks_for(seconds) {
     return t
 }
 
+// Position margin (percent) within which a limit-switch re-assert right after the
+// gate departs that limit is treated as contact bounce rather than a real arrival.
+// Outside this margin the sensor is always trusted, so remote / external movement
+// that drives the gate back to a limit is honored.
+fn sensor_bounce_margin() {
+    return 5
+}
+
 fn set_gate_state(s) {
     output::set("gate_state", s)
 }
@@ -443,7 +451,19 @@ extern fn onTick() {
     // movement simulation; position is frozen while a stop pulse is pending
     // (the gate is about to be stopped, waiting only for the pulse machinery)
     d = state::get("moving_dir")
-    if (d != 0 and state::get("desired_action") != 3) {
+    // in sensor mode, position does not advance while the departure sensor is still
+    // asserted: the gate may not have physically left the limit yet (e.g. power
+    // failure, stalled motor) and the sensor is the authoritative source
+    sensor_holds_pos = false
+    if (config::get("use_sensors")) {
+        if (d == 1 and input::get("is_closed")) {
+            sensor_holds_pos = true
+        }
+        if (d == -1 and input::get("is_open")) {
+            sensor_holds_pos = true
+        }
+    }
+    if (d != 0 and state::get("desired_action") != 3 and !sensor_holds_pos) {
         pos = state::get("position")
         if (d == 1) {
             pos = pos + (100 * 100) / (config::get("opening_duration") * 1000.0)
@@ -524,7 +544,14 @@ extern fn onTick() {
 
 if (channel == "is_open") {
     if (value) {
-        reach_open_end()
+        // The sensor is authoritative (e.g. a remote may have driven the gate here),
+        // so honor it - except for contact bounce in the instant after the gate leaves
+        // the open limit: that shows up as a re-assert while closing and still within a
+        // small position margin of the open limit.
+        bounce = state::get("moving_dir") == -1 and state::get("position") > 100 - sensor_bounce_margin()
+        if (!bounce) {
+            reach_open_end()
+        }
     } else if (state::get("moving_dir") == 0 and state::get("position") >= 100) {
         // gate left the open limit without a command - assume external closing
         set_dir(-1)
@@ -535,7 +562,14 @@ if (channel == "is_open") {
 
 if (channel == "is_closed") {
     if (value) {
-        reach_closed_end()
+        // The sensor is authoritative (e.g. a remote may have driven the gate here),
+        // so honor it - except for contact bounce in the instant after the gate leaves
+        // the closed limit: that shows up as a re-assert while opening and still within a
+        // small position margin of the closed limit.
+        bounce = state::get("moving_dir") == 1 and state::get("position") < sensor_bounce_margin()
+        if (!bounce) {
+            reach_closed_end()
+        }
     } else if (state::get("moving_dir") == 0 and state::get("position") <= 0) {
         // gate left the closed limit without a command - assume external opening
         set_dir(1)
@@ -671,8 +705,14 @@ if (channel == "partial_open") {
             return
         }
         if (channel_with_function(5) != 0) {
-            if (pos <= 0) {
-                // already closed - the PC pulse is interpreted as partial open directly
+            if (pos <= 0 or input::get("is_closed")) {
+                // at closed position (by estimate or sensor);
+                // correct position estimate if sensor disagrees with it
+                if (pos > 0 and input::get("is_closed")) {
+                    state::set("position", 0.0)
+                    output::set("position", 0)
+                }
+                // the PC pulse on a closed gate is interpreted as partial open
                 command(4)
             } else {
             // close fully first; reach_closed_end will fire command(4) automatically

@@ -1,0 +1,109 @@
+name: "sensor mode - position stays at limit while departure sensor is still active"
+
+# In sensor mode the position output must not change away from 0 or 100
+# while the corresponding limit switch is still asserted.  This covers:
+#   - stalled motor / no power: gate never moves, sensor keeps reading closed
+#   - slow limit contact release: gate starts moving but contact chatters briefly
+
+config:
+  control_mode: 0 # direct motor control (simplest; sensor hold applies to all modes)
+  opening_duration: 1
+  closing_duration: 1
+  motor_lock_duration: 0
+  use_sensors: true
+
+steps:
+  # ----- opening direction: position must stay at 0 while is_closed=true -----
+
+  - action: "set_inputs"
+    comment: "Gate confirmed closed via sensor"
+    inputs:
+      is_closed: true
+
+  - action: "set_inputs"
+    comment: "Command open"
+    inputs:
+      open: true
+
+  - action: "set_inputs"
+    inputs:
+      open: false
+
+  - action: "wait"
+    comment: "Motor running but is_closed still asserted - position must not move"
+    duration_ms: 350
+
+  - action: "assert_outputs"
+    comment: "Position still 0 despite motor running for 3 ticks"
+    expected_outputs:
+      open: true
+      moving: true
+      position: 0
+      gate_state: 1
+
+  - action: "set_inputs"
+    comment: "Sensor releases - gate has physically cleared the closed limit"
+    inputs:
+      is_closed: false
+
+  - action: "wait"
+    comment: "3 more ticks of movement now that sensor released"
+    duration_ms: 320
+
+  - action: "assert_outputs"
+    comment: "Position now tracking from 0 (3 ticks of 10% each)"
+    expected_outputs:
+      moving: true
+      position: 30
+      gate_state: 1
+
+  - action: "set_inputs"
+    comment: "Open limit switch confirms gate reached full open"
+    inputs:
+      is_open: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      open: false
+      moving: false
+      position: 100
+      gate_state: 2
+
+  # ----- closing direction: position must stay at 100 while is_open=true -----
+
+  - action: "set_inputs"
+    comment: "Command close while is_open is still asserted"
+    inputs:
+      close: true
+
+  - action: "set_inputs"
+    inputs:
+      close: false
+
+  - action: "wait"
+    comment: "Motor running but is_open still asserted - position must not move"
+    duration_ms: 350
+
+  - action: "assert_outputs"
+    comment: "Position still 100 despite motor running"
+    expected_outputs:
+      close: true
+      moving: true
+      position: 100
+      gate_state: 3
+
+  - action: "set_inputs"
+    comment: "Open sensor releases"
+    inputs:
+      is_open: false
+
+  - action: "wait"
+    comment: "3 ticks of closing movement"
+    duration_ms: 320
+
+  - action: "assert_outputs"
+    comment: "Position tracking down from 100"
+    expected_outputs:
+      moving: true
+      position: 70
+      gate_state: 3

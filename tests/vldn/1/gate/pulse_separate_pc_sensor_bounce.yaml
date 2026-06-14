@@ -1,0 +1,116 @@
+name: "separate pulses - limit sensors: bounce rejection vs. authoritative remote movement"
+
+# The limit switches are the authoritative source of truth. They must be honored
+# even when they disagree with the block's believed direction (e.g. a remote drove
+# the gate). The ONLY false read we reject is contact bounce in the instant the gate
+# leaves a limit - detected as a re-assert while moving away and still within a small
+# position margin of that limit.
+
+config:
+  control_mode: 3
+  open_output_function: 0   # Open (Ot)
+  close_output_function: 5  # Partial open/Close (PC)
+  partial_open_position: 20
+  opening_duration: 1
+  closing_duration: 1
+  pulse_duration: 0.2
+  pulse_pause: 0.2
+  use_sensors: true
+
+steps:
+  # --- Scenario 1: contact bounce at departure (position ~0) is rejected ---
+
+  - action: "set_inputs"
+    comment: "Confirm closed state via sensor"
+    inputs:
+      is_closed: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      moving: false
+      position: 0
+      gate_state: 0
+
+  - action: "set_inputs"
+    comment: "Partial open on a closed gate - one CL (PC) pulse"
+    inputs:
+      partial_open: true
+
+  - action: "set_inputs"
+    inputs:
+      partial_open: false
+
+  - action: "assert_outputs"
+    comment: "CL pulse emitted, opening (position held at 0 by the sensor)"
+    expected_outputs:
+      close: true
+      moving: true
+      position: 0
+      gate_state: 1
+
+  - action: "set_inputs"
+    comment: "Gate leaves the closed limit"
+    inputs:
+      is_closed: false
+
+  - action: "set_inputs"
+    comment: "Contact bounces back true immediately (position still 0) - must be ignored"
+    inputs:
+      is_closed: true
+
+  - action: "assert_outputs"
+    comment: "Movement state unchanged by the bounce"
+    expected_outputs:
+      moving: true
+      gate_state: 1
+
+  - action: "set_inputs"
+    comment: "Bounce clears"
+    inputs:
+      is_closed: false
+
+  - action: "wait"
+    comment: "Travel to the partial open position"
+    duration_ms: 250
+
+  - action: "assert_outputs"
+    comment: "Stopped at partial position - only one CL pulse was ever sent"
+    expected_outputs:
+      close: false
+      moving: false
+      position: 20
+      gate_state: 5
+
+  # --- Scenario 2: remote drives the gate closed while the block believes it is opening ---
+  # The block must trust the is_closed sensor even though its direction/position disagree.
+
+  - action: "set_inputs"
+    comment: "Command open from the partial position"
+    inputs:
+      open: true
+
+  - action: "set_inputs"
+    inputs:
+      open: false
+
+  - action: "wait"
+    comment: "Open well past the bounce margin (block believes position ~50)"
+    duration_ms: 320
+
+  - action: "assert_outputs"
+    comment: "Block believes the gate is opening, far from any limit"
+    expected_outputs:
+      moving: true
+      gate_state: 1
+
+  - action: "set_inputs"
+    comment: "Remote slams the gate fully closed; is_closed fires while we still believe opening"
+    inputs:
+      is_closed: true
+
+  - action: "assert_outputs"
+    comment: "Sensor is authoritative - gate is now tracked as closed despite the direction mismatch"
+    expected_outputs:
+      moving: false
+      position: 0
+      gate_state: 0
