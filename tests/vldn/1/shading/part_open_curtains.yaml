@@ -74,19 +74,19 @@ steps:
       part_open: true
 
   - action: "wait"
-    comment: "Wait for the rest of the opening duration"
+    comment: "Opening time is proportional to position, plus a full-duration overshoot for calibration"
     duration_ms: 810
 
   - action: "assert_outputs"
-    comment: "Should not be moving after full opening, even if part_open wasn't released yet"
+    comment: "Opening overshoots towards the open end-stop - still moving even though position is 100"
     expected_outputs:
-      open: false
+      open: true
       close: false
       position: 100
       slats: 0
 
   - action: "wait"
-    comment: "Wait a bit more before release"
+    comment: "Wait for the rest of the full opening duration"
     duration_ms: 300
 
   - action: "assert_outputs"

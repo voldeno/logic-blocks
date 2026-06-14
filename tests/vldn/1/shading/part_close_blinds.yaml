@@ -98,35 +98,23 @@ steps:
       part_close: true
 
   - action: "wait"
-    comment: "Wait for the rest of the closing duration - closing time is proportional to the current position"
+    comment: "Closing time is proportional to the current position - 80% remaining"
     duration_ms: 810
 
   - action: "assert_outputs"
-    comment: "Should be still closing after full close to align to zero position"
+    comment: "Calibration is on opening now - closing only moves the calculated part and stops at 0"
     expected_outputs:
       open: false
-      close: true
+      close: false
       position: 0
       slats: 0
 
   - action: "wait"
-    comment: "Wait a bit, but still withing the closing duration"
-    duration_ms: 100
+    comment: "Confirm it stays stopped"
+    duration_ms: 200
 
   - action: "assert_outputs"
-    comment: "Should be still closing after full close to align to zero position - check again"
-    expected_outputs:
-      open: false
-      close: true
-      position: 0
-      slats: 0
-
-  - action: "wait"
-    comment: "Wait till full closing duration"
-    duration_ms: 500
-
-  - action: "assert_outputs"
-    comment: "Should not be moving after full closing, even if part_close wasn't released yet"
+    comment: "Still stopped at the closed position"
     expected_outputs:
       open: false
       close: false

@@ -95,19 +95,19 @@ steps:
     duration_ms: 810
 
   - action: "assert_outputs"
-    comment: "Should move into wind_alarm_position and continue closing if wind_alarm_position=0 (full close)"
+    comment: "Calibration is on opening now - closing moves only the calculated part and stops at 0"
     expected_outputs:
       open: false
-      close: true
+      close: false
       position: 0
       slats: 0
 
   - action: "wait"
-    comment: "Wait the rest of the closing duration"
+    comment: "Confirm it stays stopped"
     duration_ms: 410
 
   - action: "assert_outputs"
-    comment: "Should move into full close position if wind_alarm_position=0"
+    comment: "Should be at the full close position"
     expected_outputs:
       open: false
       close: false

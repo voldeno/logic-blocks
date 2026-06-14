@@ -71,43 +71,19 @@ steps:
     duration_ms: 5
 
   - action: "assert_outputs"
+    comment: "Calibration is on opening now - a wind alarm to the already-reached closed position is a no-op"
+    expected_outputs:
+      open: false
+      close: false
+      position: 0
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait to confirm nothing moves"
+    duration_ms: 1430
+
+  - action: "assert_outputs"
     comment: "Should not move"
-    expected_outputs:
-      open: false
-      close: true
-      position: 0
-      slats: 0
-
-  - action: "wait"
-    comment: "Wait 10% to re-check"
-    duration_ms: 110
-
-  - action: "assert_outputs"
-    comment: "Should not move after wait"
-    expected_outputs:
-      open: false
-      close: true
-      position: 0
-      slats: 0
-
-  - action: "wait"
-    comment: "Wait 10% to re-check"
-    duration_ms: 110
-
-  - action: "assert_outputs"
-    comment: "Should not move after wait"
-    expected_outputs:
-      open: false
-      close: true
-      position: 0
-      slats: 0
-
-  - action: "wait"
-    comment: "Wait full closing duration"
-    duration_ms: 1210
-
-  - action: "assert_outputs"
-    comment: "Should not move after wait"
     expected_outputs:
       open: false
       close: false

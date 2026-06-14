@@ -57,8 +57,11 @@ fn calculate_position_diff(position_in) {
     // zero - ok
     // negative - need to move in closing direction
     // positive - need to move in opening direction
-    position_diff = -100
-    if (position_in != 0) {
+    // calibration / auto-correction: a full-open target (100) forces a full move in the
+    // opening direction (not only the calculated part) so the shading re-aligns against
+    // the physical upper end-stop
+    position_diff = 100
+    if (position_in != 100) {
         position_diff = position_in - state::get("position")
     }
     return position_diff

@@ -185,7 +185,19 @@ steps:
     duration_ms: 110
 
   - action: "assert_outputs"
-    comment: "Should stop opening"
+    comment: "Opening overshoots for the full opening duration (calibration towards the open end-stop)"
+    expected_outputs:
+      open: true
+      close: false
+      position: 100
+      slats: 0
+
+  - action: "wait"
+    comment: "Wait the rest of the full opening duration"
+    duration_ms: 910
+
+  - action: "assert_outputs"
+    comment: "Should stop opening at the fully open position"
     expected_outputs:
       open: false
       close: false

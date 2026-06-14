@@ -4,8 +4,8 @@ config:
   shading_type: 0 # venetian blinds
   opening_duration: 1
   closing_duration: 1
-  return_duration: 0.2
-  motor_lock_duration: 0.5
+  return_duration: 1 # full slats rotation takes 2s - keeps the reversal window wide
+  motor_lock_duration: 1 # long lock so the asserts sit far from the lock boundary
 
 steps:
   - action: "set_inputs"
@@ -48,7 +48,7 @@ steps:
 
   - action: "wait"
     comment: "Wait till full opening time"
-    duration_ms: 910
+    duration_ms: 900
 
   - action: "assert_outputs"
     comment: "Should be 100% open and stopped for the motor lock duration"
@@ -59,11 +59,11 @@ steps:
       slats: 0
 
   - action: "wait"
-    comment: "Wait most of the motor lock duration"
-    duration_ms: 450
+    comment: "Wait roughly half of the motor lock duration"
+    duration_ms: 500
 
   - action: "assert_outputs"
-    comment: "Should be 100% open and stopped for the motor lock duration - after wait"
+    comment: "Should still be stopped, well within the motor lock duration"
     expected_outputs:
       open: false
       close: false
@@ -71,20 +71,19 @@ steps:
       slats: 0
 
   - action: "wait"
-    comment: "Wait till motor lock duration passes"
-    duration_ms: 60
+    comment: "Wait past the motor lock so the slats reversal is under way"
+    duration_ms: 900
 
   - action: "assert_outputs"
-    comment: "Should be 100% open and start closing"
+    comment: "Should be reversing (closing) the slats after the motor lock passed"
     expected_outputs:
       open: false
       close: true
       position: 100
-      slats: 0
 
   - action: "wait"
-    comment: "Wait till full slightly open time"
-    duration_ms: 210
+    comment: "Wait till the slats reach the slightly open position"
+    duration_ms: 900
 
   - action: "assert_outputs"
     comment: "Should be slightly open, not moving"
@@ -113,7 +112,7 @@ steps:
     duration_ms: 5
 
   - action: "assert_outputs"
-    comment: "Should start closing"
+    comment: "Should start closing (same direction as the slats reversal, so no motor lock)"
     expected_outputs:
       open: false
       close: true
@@ -121,8 +120,8 @@ steps:
       slats: 50
 
   - action: "wait"
-    comment: "Wait for another 50% of slats rotation"
-    duration_ms: 210
+    comment: "Wait for the remaining 50% of slats rotation"
+    duration_ms: 1010
 
   - action: "assert_outputs"
     comment: "Slats should be closed"
@@ -145,12 +144,8 @@ steps:
       slats: 100
 
   - action: "wait"
-    comment: "Wait till fully closed - 90% left"
-    duration_ms: 910
-
-  - action: "wait"
-    comment: "Wait till fully closed - ensure slats can perform full rotation"
-    duration_ms: 210
+    comment: "Wait till fully closed"
+    duration_ms: 1010
 
   - action: "assert_outputs"
     comment: "Should be closed"

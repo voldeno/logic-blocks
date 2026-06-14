@@ -65,11 +65,22 @@ steps:
       position: 80
 
   - action: "wait"
-    comment: "Wait the rest of the opening duration"
+    comment: "Wait part of the opening duration"
     duration_ms: 210
 
   - action: "assert_outputs"
-    comment: "Should move into wind_alarm_position and stop opening if wind_alarm_position != 0 (not fully closed)"
+    comment: "Opening overshoots for the full opening duration (calibration towards the open end-stop)"
+    expected_outputs:
+      open: true
+      close: false
+      position: 100
+
+  - action: "wait"
+    comment: "Wait the rest of the full opening duration"
+    duration_ms: 810
+
+  - action: "assert_outputs"
+    comment: "Should stop opening at the fully open position after the full opening duration"
     expected_outputs:
       open: false
       close: false

@@ -185,10 +185,14 @@ steps:
     inputs:
       part_open: true
 
+  - action: "wait"
+    comment: "Wait for callbacks to process"
+    duration_ms: 5
+
   - action: "assert_outputs"
-    comment: "Should be fully open and not be moving"
+    comment: "Part open targets the fully open position, which now re-runs the opening calibration"
     expected_outputs:
-      open: false
+      open: true
       close: false
       position: 100
       slats: 0
@@ -199,7 +203,7 @@ steps:
       part_open: false
 
   - action: "assert_outputs"
-    comment: "Should not be moving after the part_open release"
+    comment: "Releasing part_open stops the movement"
     expected_outputs:
       open: false
       close: false

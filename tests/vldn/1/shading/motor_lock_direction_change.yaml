@@ -175,15 +175,15 @@ steps:
     duration_ms: 110
 
   - action: "assert_outputs"
-    comment: "Should be closed and closing (as per full sync)"
+    comment: "Calibration is on opening now - closing moves only the calculated part and stops at 0"
     expected_outputs:
       open: false
-      close: true
+      close: false
       position: 0
       slats: 0
 
   - action: "wait"
-    comment: "Wait 90% opening time"
+    comment: "Confirm it stays stopped"
     duration_ms: 950
 
   - action: "assert_outputs"
