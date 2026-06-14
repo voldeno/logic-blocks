@@ -30,7 +30,8 @@
     {"id": "close_output_function", "name": "Funkcja wyjścia zamykania", "description": "Funkcja sterownika podłączona do wyjścia impulsu zamykania: Otwórz (Ot), Zamknij (ZA), Otwórz/Zamknij (OZ), Otwórz/Stop/Zamknij (3F), Uchyl (U), Uchyl/Zamknij (PC)"},
     {"id": "pulse_duration", "name": "Czas trwania impulsu", "description": "Czas trwania impulsów na wyjściach sterujących, otwierania i zamykania, w sekundach"},
     {"id": "pulse_pause", "name": "Przerwa między impulsami", "description": "Minimalna przerwa między dwoma kolejnymi impulsami, w sekundach"},
-    {"id": "motor_lock_duration", "name": "Czas blokady silnika", "description": "Czas wymagany do zwolnienia blokady silnika między zmianami kierunku przy sterowaniu bezpośrednim, w sekundach"}
+    {"id": "motor_lock_duration", "name": "Czas blokady silnika", "description": "Czas wymagany do zwolnienia blokady silnika między zmianami kierunku przy sterowaniu bezpośrednim, w sekundach"},
+    {"id": "use_sensors", "name": "Używaj czujników krańcowych", "description": "Gdy włączone, wejścia is_open i is_closed są wiodącym źródłem informacji o pozycji krańcowej. Pozycja jest nadal szacowana z czasów konfiguracji na potrzeby wyświetlania. Wyłącz, gdy brak podłączonych czujników."}
   ],
   "state": [
     {"id": "position", "name": "Pozycja", "description": "Surowa wartość symulowanej pozycji bramy jako procent (0-100)"},

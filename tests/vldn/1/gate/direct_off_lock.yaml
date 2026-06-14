@@ -6,6 +6,7 @@ config:
   closing_duration: 1
   motor_lock_duration: 0
 
+  use_sensors: false
 steps:
   - action: "set_inputs"
     comment: "Off active"

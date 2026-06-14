@@ -134,6 +134,11 @@
       "id": "motor_lock_duration",
       "name": "Motor lock duration",
       "description": "Time required to release the motor lock between direction changes with direct motor control, in seconds"
+    },
+    {
+      "id": "use_sensors",
+      "name": "Use limit switch sensors",
+      "description": "When enabled, the is_open and is_closed inputs are the authoritative source for end-of-travel events. Position is still estimated from configured durations for display. Requires sensors to be connected; disable when no sensors are used."
     }
   ],
   "state": [

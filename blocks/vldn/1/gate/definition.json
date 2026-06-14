@@ -274,6 +274,11 @@
           }
         ]
       }
+    },
+    {
+      "id": "use_sensors",
+      "type": "BOOLEAN",
+      "default": "true"
     }
   ],
   "state": [

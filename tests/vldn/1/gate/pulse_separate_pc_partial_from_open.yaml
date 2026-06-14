@@ -10,6 +10,7 @@ config:
   pulse_duration: 0.2
   pulse_pause: 0.2
 
+  use_sensors: false
 steps:
   - action: "set_inputs"
     comment: "Open the gate fully first"

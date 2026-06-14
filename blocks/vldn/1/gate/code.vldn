@@ -452,9 +452,23 @@ extern fn onTick() {
         }
 
         if (d == 1 and pos >= 100) {
-            reach_open_end()
+            if (config::get("use_sensors")) {
+                // clamp for display; actual end-of-travel is confirmed by the is_open sensor
+                state::set("position", 100.0)
+                output::set("position", 100)
+                state::set("last_movement_ts", time::uptime())
+            } else {
+                reach_open_end()
+            }
         } else if (d == -1 and pos <= 0) {
-            reach_closed_end()
+            if (config::get("use_sensors")) {
+                // clamp for display; actual end-of-travel is confirmed by the is_closed sensor
+                state::set("position", 0.0)
+                output::set("position", 0)
+                state::set("last_movement_ts", time::uptime())
+            } else {
+                reach_closed_end()
+            }
         } else {
             target = state::get("target")
             arrived = false
