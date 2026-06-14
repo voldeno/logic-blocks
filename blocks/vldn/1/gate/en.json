@@ -113,12 +113,12 @@
     {
       "id": "open_output_function",
       "name": "Open output function",
-      "description": "Controller function wired to the open pulse output: Open (Ot), Close (ZA), Open/Close (OZ), Open/Stop/Close (3F), Partial open (U), Partial open/Close (UZ)"
+      "description": "Controller function wired to the open pulse output: Open (Ot), Close (ZA), Open/Close (OZ), Open/Stop/Close (3F), Partial open (U), Partial open/Close (PC)"
     },
     {
       "id": "close_output_function",
       "name": "Close output function",
-      "description": "Controller function wired to the close pulse output: Open (Ot), Close (ZA), Open/Close (OZ), Open/Stop/Close (3F), Partial open (U), Partial open/Close (UZ)"
+      "description": "Controller function wired to the close pulse output: Open (Ot), Close (ZA), Open/Close (OZ), Open/Stop/Close (3F), Partial open (U), Partial open/Close (PC)"
     },
     {
       "id": "pulse_duration",

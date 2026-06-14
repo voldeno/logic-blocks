@@ -7,7 +7,7 @@
 //   3 - Separate pulse outputs for open and close; the controller function behind each
 //       output is configured with open_output_function / close_output_function:
 //       0 - Open (Ot), 1 - Close (ZA), 2 - Open/Close (OZ), 3 - Open/Stop/Close (3F),
-//       4 - Partial open (U), 5 - Partial open/Close (UZ)
+//       4 - Partial open (U), 5 - Partial open/Close (PC)
 //
 // gate_state output values:
 //   0 - closed, 1 - opening, 2 - open, 3 - closing, 4 - stopped midway, 5 - partially open

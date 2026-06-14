@@ -26,8 +26,8 @@
     {"id": "opening_duration", "name": "Czas otwierania", "description": "Czas potrzebny do pełnego otwarcia bramy, w sekundach. Używany do symulacji pozycji bramy."},
     {"id": "closing_duration", "name": "Czas zamykania", "description": "Czas potrzebny do pełnego zamknięcia bramy, w sekundach. Używany do symulacji pozycji bramy."},
     {"id": "partial_open_position", "name": "Pozycja uchylenia", "description": "Pozycja docelowa polecenia uchylenia, jako procent pełnego otwarcia (0-100)"},
-    {"id": "open_output_function", "name": "Funkcja wyjścia otwierania", "description": "Funkcja sterownika podłączona do wyjścia impulsu otwierania: Otwórz (Ot), Zamknij (ZA), Otwórz/Zamknij (OZ), Otwórz/Stop/Zamknij (3F), Uchyl (U), Uchyl/Zamknij (UZ)"},
-    {"id": "close_output_function", "name": "Funkcja wyjścia zamykania", "description": "Funkcja sterownika podłączona do wyjścia impulsu zamykania: Otwórz (Ot), Zamknij (ZA), Otwórz/Zamknij (OZ), Otwórz/Stop/Zamknij (3F), Uchyl (U), Uchyl/Zamknij (UZ)"},
+    {"id": "open_output_function", "name": "Funkcja wyjścia otwierania", "description": "Funkcja sterownika podłączona do wyjścia impulsu otwierania: Otwórz (Ot), Zamknij (ZA), Otwórz/Zamknij (OZ), Otwórz/Stop/Zamknij (3F), Uchyl (U), Uchyl/Zamknij (PC)"},
+    {"id": "close_output_function", "name": "Funkcja wyjścia zamykania", "description": "Funkcja sterownika podłączona do wyjścia impulsu zamykania: Otwórz (Ot), Zamknij (ZA), Otwórz/Zamknij (OZ), Otwórz/Stop/Zamknij (3F), Uchyl (U), Uchyl/Zamknij (PC)"},
     {"id": "pulse_duration", "name": "Czas trwania impulsu", "description": "Czas trwania impulsów na wyjściach sterujących, otwierania i zamykania, w sekundach"},
     {"id": "pulse_pause", "name": "Przerwa między impulsami", "description": "Minimalna przerwa między dwoma kolejnymi impulsami, w sekundach"},
     {"id": "motor_lock_duration", "name": "Czas blokady silnika", "description": "Czas wymagany do zwolnienia blokady silnika między zmianami kierunku przy sterowaniu bezpośrednim, w sekundach"}
