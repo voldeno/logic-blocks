@@ -1,0 +1,166 @@
+{
+  "description": "Ogólne sterowanie klimatyzatorem. Zawiera logikę wspólną dla wszystkich urządzeń, a komunikację deleguje do dołączonego bloku implementacji, który jako jedyny zna daną markę lub model.",
+  "inputs": [
+    {
+      "id": "power",
+      "name": "Zasilanie",
+      "description": "Włącza urządzenie przy stanie wysokim, wyłącza przy niskim"
+    },
+    {
+      "id": "mode",
+      "name": "Tryb",
+      "description": "Tryb pracy: 0 - auto, 1 - grzanie, 2 - chłodzenie, 3 - osuszanie, 4 - tylko wentylator. Urządzenie bez danego trybu użyje najbliższego odpowiednika."
+    },
+    {
+      "id": "target_temp",
+      "name": "Temperatura docelowa",
+      "description": "Żądana temperatura docelowa, ograniczona do skonfigurowanego zakresu"
+    },
+    {
+      "id": "fan_speed",
+      "name": "Prędkość wentylatora",
+      "description": "Prędkość wentylatora: 0 - auto, 1 - cicho, 2 - niska, 3 - średnia, 4 - wysoka, 5 - maksymalna (boost). Urządzenie z mniejszą liczbą stopni użyje najbliższego odpowiednika."
+    },
+    {
+      "id": "swing_v",
+      "name": "Nawiew pionowy",
+      "description": "Żaluzja pionowa: 0 - auto, 1 - oscylacja, 2 do 6 - stała pozycja od najwyższej do najniższej"
+    },
+    {
+      "id": "swing_h",
+      "name": "Nawiew poziomy",
+      "description": "Żaluzja pozioma: 0 - auto, 1 - oscylacja, 2 do 6 - stała pozycja od skrajnie lewej do skrajnie prawej"
+    },
+    {
+      "id": "air_clean",
+      "name": "Oczyszczanie powietrza",
+      "description": "Włącza funkcję oczyszczania powietrza w urządzeniu (jonizator, streamer, filtr plazmowy). Ignorowane przez urządzenia bez tej funkcji."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "power",
+      "name": "Zasilanie",
+      "description": "Stan wysoki, gdy urządzenie jest włączone. Odczytany z urządzenia, gdy implementacja udostępnia informację zwrotną, w przeciwnym razie stan zadany."
+    },
+    {
+      "id": "mode",
+      "name": "Tryb",
+      "description": "Aktualny tryb pracy, w tym samym kodowaniu co wejście trybu. Urządzenia raportujące swój stan rozwijają tutaj tryb auto na grzanie lub chłodzenie."
+    },
+    {
+      "id": "target_temp",
+      "name": "Temperatura docelowa",
+      "description": "Temperatura docelowa, na której pracuje urządzenie, po zastosowaniu skonfigurowanego zakresu"
+    },
+    {
+      "id": "room_temp",
+      "name": "Temperatura pomieszczenia",
+      "description": "Temperatura wewnętrzna zmierzona przez urządzenie. -1000, gdy urządzenie jej nie raportuje."
+    },
+    {
+      "id": "fault",
+      "name": "Awaria",
+      "description": "0 - brak awarii, -1 - brak komunikacji z urządzeniem, powyżej 0 - kod błędu urządzenia"
+    }
+  ],
+  "config": [
+    {
+      "id": "min_target_temp",
+      "name": "Minimalna temperatura docelowa",
+      "description": "Dolny limit wejścia temperatury docelowej. Urządzenie może go dodatkowo zawęzić."
+    },
+    {
+      "id": "max_target_temp",
+      "name": "Maksymalna temperatura docelowa",
+      "description": "Górny limit wejścia temperatury docelowej. Urządzenie może go dodatkowo zawęzić."
+    },
+    {
+      "id": "refresh_interval",
+      "name": "Interwał odświeżania",
+      "description": "Jak często odczytywany jest stan urządzenia, w sekundach. Ustaw 0, aby go nie odczytywać, na przykład dla urządzeń sterowanych przez podczerwień."
+    },
+    {
+      "id": "resend_on_refresh",
+      "name": "Wysyłaj stan przy odświeżaniu",
+      "description": "Wysyła pełny stan do urządzenia przy każdym odświeżeniu, a nie tylko po zmianie. Utrzymuje synchronizację urządzeń bez informacji zwrotnej po użyciu ich własnego pilota."
+    }
+  ],
+  "state": [
+    {
+      "id": "unit_power",
+      "name": "Raportowane zasilanie",
+      "description": "Stan zasilania raportowany przez blok implementacji: -1 nieznany, 0 wyłączone, 1 włączone"
+    },
+    {
+      "id": "unit_mode",
+      "name": "Raportowany tryb",
+      "description": "Tryb raportowany przez blok implementacji, -1 gdy nieznany"
+    },
+    {
+      "id": "unit_target_temp",
+      "name": "Raportowana temperatura docelowa",
+      "description": "Temperatura docelowa raportowana przez blok implementacji, -1000 gdy nieznana"
+    },
+    {
+      "id": "unit_room_temp",
+      "name": "Raportowana temperatura pomieszczenia",
+      "description": "Temperatura wewnętrzna raportowana przez blok implementacji, -1000 gdy nieznana"
+    },
+    {
+      "id": "unit_fault",
+      "name": "Raportowana awaria",
+      "description": "Awaria raportowana przez blok implementacji"
+    },
+    {
+      "id": "invoke_rc",
+      "name": "Wynik ostatniego wywołania implementacji",
+      "description": "Wartość zwrócona przez ostatnie wywołanie implementacji, publikowana jako awaria, gdy urządzenie nie raportuje własnej"
+    },
+    {
+      "id": "sent",
+      "name": "Stan wysłany",
+      "description": "Ustawione, gdy stan został przyjęty przez urządzenie co najmniej raz"
+    },
+    {
+      "id": "sent_power",
+      "name": "Wysłane zasilanie",
+      "description": "Ostatni stan zasilania przyjęty przez urządzenie"
+    },
+    {
+      "id": "sent_mode",
+      "name": "Wysłany tryb",
+      "description": "Ostatni tryb przyjęty przez urządzenie"
+    },
+    {
+      "id": "sent_target_temp",
+      "name": "Wysłana temperatura docelowa",
+      "description": "Ostatnia temperatura docelowa przyjęta przez urządzenie"
+    },
+    {
+      "id": "sent_fan_speed",
+      "name": "Wysłana prędkość wentylatora",
+      "description": "Ostatnia prędkość wentylatora przyjęta przez urządzenie"
+    },
+    {
+      "id": "sent_swing_v",
+      "name": "Wysłany nawiew pionowy",
+      "description": "Ostatnie ustawienie żaluzji pionowej przyjęte przez urządzenie"
+    },
+    {
+      "id": "sent_swing_h",
+      "name": "Wysłany nawiew poziomy",
+      "description": "Ostatnie ustawienie żaluzji poziomej przyjęte przez urządzenie"
+    },
+    {
+      "id": "sent_air_clean",
+      "name": "Wysłane oczyszczanie powietrza",
+      "description": "Ostatnie ustawienie oczyszczania powietrza przyjęte przez urządzenie"
+    },
+    {
+      "id": "tick_active",
+      "name": "Timer odświeżania aktywny",
+      "description": "Ustawione, gdy timer odświeżania oczekuje na wykonanie"
+    }
+  ]
+}

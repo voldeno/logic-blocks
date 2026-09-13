@@ -1,0 +1,235 @@
+// Air conditioner - abstract block.
+//
+// Turns the input channels into one desired unit state and hands that state
+// over to the attached implementation (driver) block. Only the driver knows how
+// to talk to a particular unit (IR, LAN, Modbus, ...), so everything that is
+// specific to a brand or a model stays there.
+//
+// Value encodings, shared by the inputs, the outputs and the driver call:
+//   mode       0 auto, 1 heating, 2 cooling, 3 drying, 4 fan only
+//   fan_speed  0 auto, 1 quiet, 2 low, 3 medium, 4 high, 5 powerful
+//   swing_v    0 auto, 1 swing, 2..6 fixed vane position (2 highest .. 6 lowest)
+//   swing_h    0 auto, 1 swing, 2..6 fixed vane position (2 leftmost .. 6 rightmost)
+//   fault      0 none, -1 unit unreachable, > 0 unit specific error code
+// A unit that cannot do what was asked for falls back to its closest
+// equivalent - that mapping belongs to the driver.
+//
+// The implementation block must declare both functions:
+//
+//   extern fn ac_apply(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
+//       Pushes the complete desired state to the unit. Called whenever any of
+//       the values changes, and on every refresh tick when resend_on_refresh is
+//       set.
+//
+//   extern fn ac_refresh()
+//       Asks the unit for its status. Called every refresh_interval seconds.
+//       Units without feedback (IR) just return 0.
+//
+// Both only have to accept the work, not finish it: a driver talking over the
+// network returns as soon as the request is on its way and reports the result
+// later. Their return value says how the request was taken:
+//     0   accepted
+//   < 0   not accepted right now, e.g. the previous exchange is still running;
+//         retried a second later, and not reported as a fault
+//   > 0   failed, published on the fault output
+//
+// The driver shares this block's state variables, which is how it reports back:
+//   unit_power        -1 unknown, 0 off, 1 on
+//   unit_mode         -1 unknown, otherwise a mode value
+//   unit_target_temp  -1000 unknown, otherwise °C
+//   unit_room_temp    -1000 unknown, otherwise °C
+//   unit_fault        the fault value to publish
+// Whatever is left unknown is published as the value this block commanded.
+//
+// Once a driver has stored fresh readings there, it makes the runtime call
+// std::on_driver_update below, which is what turns them into outputs. That is
+// the only way an implementation reaches back into this block, and it says
+// nothing about how the unit was reached.
+
+fn choice(value, hi) {
+    v = math::round(value)
+    if (v < 0) {
+        return 0
+    }
+    if (v > hi) {
+        return hi
+    }
+    return v
+}
+
+fn clamp(value, lo, hi) {
+    if (value < lo) {
+        return lo
+    }
+    if (value > hi) {
+        return hi
+    }
+    return value
+}
+
+fn publish(power, mode, target_temp) {
+    unit_power = state::get("unit_power")
+    if (unit_power >= 0) {
+        power = unit_power != 0
+    }
+    unit_mode = state::get("unit_mode")
+    if (unit_mode >= 0) {
+        mode = unit_mode
+    }
+    unit_target_temp = state::get("unit_target_temp")
+    if (unit_target_temp > -1000) {
+        target_temp = unit_target_temp
+    }
+    fault = state::get("unit_fault")
+    if (fault == 0) {
+        rc = state::get("invoke_rc")
+        // A negative code only means the driver was busy, which the retry on the
+        // next run takes care of.
+        if (rc > 0) {
+            fault = rc
+        }
+    }
+    output::set("power", power)
+    output::set("mode", mode)
+    output::set("target_temp", target_temp)
+    output::set("room_temp", state::get("unit_room_temp"))
+    output::set("fault", fault)
+}
+
+fn changed(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) {
+    if (!state::get("sent")) {
+        return true
+    }
+    if (state::get("sent_power") != power) {
+        return true
+    }
+    if (state::get("sent_air_clean") != air_clean) {
+        return true
+    }
+    if (state::get("sent_mode") != mode) {
+        return true
+    }
+    if (state::get("sent_target_temp") != target_temp) {
+        return true
+    }
+    if (state::get("sent_fan_speed") != fan_speed) {
+        return true
+    }
+    if (state::get("sent_swing_v") != swing_v) {
+        return true
+    }
+    if (state::get("sent_swing_h") != swing_h) {
+        return true
+    }
+    return false
+}
+
+// The last readings describe the unit as it was before a command, so they must
+// not mask what was just asked for. The next refresh fills them in again. The
+// room temperature is a measurement, not a setting, and stays.
+fn forget_readings() {
+    state::set("unit_power", -1)
+    state::set("unit_mode", -1)
+    state::set("unit_target_temp", -1000.0)
+}
+
+fn remember(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) {
+    state::set("sent_power", power)
+    state::set("sent_mode", mode)
+    state::set("sent_target_temp", target_temp)
+    state::set("sent_fan_speed", fan_speed)
+    state::set("sent_swing_v", swing_v)
+    state::set("sent_swing_h", swing_h)
+    state::set("sent_air_clean", air_clean)
+    state::set("sent", true)
+}
+
+// Only one callback can be pending per block, so the tick is the only timer
+// this block uses: the refresh interval and the retry below share it.
+fn arm_tick(delay_ms) {
+    callback::clear()
+    callback::set(delay_ms, "on_refresh")
+    state::set("tick_active", true)
+}
+
+fn arm_refresh() {
+    interval_ms = math::round(config::get("refresh_interval") * 1000)
+    if (interval_ms <= 0) {
+        state::set("tick_active", false)
+        return
+    }
+    arm_tick(interval_ms)
+}
+
+fn run(refresh) {
+    power = input::get("power")
+    mode = choice(input::get("mode"), 4)
+    fan_speed = choice(input::get("fan_speed"), 5)
+    swing_v = choice(input::get("swing_v"), 6)
+    swing_h = choice(input::get("swing_h"), 6)
+    air_clean = input::get("air_clean")
+    min_temp = config::get("min_target_temp")
+    max_temp = config::get("max_target_temp")
+    target_temp = clamp(input::get("target_temp"), min_temp, max_temp)
+
+    stale = true
+    if (!refresh) {
+        // Report the commanded state right away, so the outputs stay meaningful
+        // even when the driver call below fails or no driver is attached at all.
+        publish(power, mode, target_temp)
+        stale = false
+    }
+
+    if (refresh or !state::get("tick_active")) {
+        arm_refresh()
+    }
+
+    // A command comes before a status poll: a driver that can only run one
+    // exchange at a time would otherwise turn the command down and leave it
+    // waiting for a whole refresh interval.
+    applied = false
+    resend = refresh and config::get("resend_on_refresh")
+    if (changed(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) or resend) {
+        rc = std::invoke("ac_apply", power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
+        state::set("invoke_rc", rc)
+        if (rc == 0) {
+            remember(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
+            forget_readings()
+        }
+        if (rc < 0) {
+            // The driver is still busy with an earlier exchange. Come back
+            // shortly rather than leave the command until the next refresh.
+            arm_tick(1000)
+        }
+        applied = true
+        stale = true
+    }
+
+    if (refresh and !applied) {
+        state::set("invoke_rc", std::invoke("ac_refresh"))
+        stale = true
+    }
+
+    if (stale) {
+        publish(power, mode, target_temp)
+    }
+}
+
+extern fn on_refresh() {
+    run(true)
+}
+
+// Called by the runtime after the driver stored fresh readings. The commanded
+// values are only a fallback for whatever the unit did not report.
+extern fn std::on_driver_update() {
+    publish(state::get("sent_power"), state::get("sent_mode"), state::get("sent_target_temp"))
+}
+
+// A config change can alter the refresh interval - drop the timer so the run
+// below arms a new one.
+if (input::channel() == "config_change") {
+    callback::clear()
+    state::set("tick_active", false)
+}
+
+run(false)

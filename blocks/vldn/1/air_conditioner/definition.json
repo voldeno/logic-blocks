@@ -1,0 +1,214 @@
+{
+  "name": "Air conditioner",
+  "group": "process",
+  "abstract": true,
+  "widget": true,
+  "inputs": [
+    {
+      "id": "power",
+      "abbrev": "P",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "mode",
+      "abbrev": "M",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "target_temp",
+      "abbrev": "TT",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "21"
+    },
+    {
+      "id": "fan_speed",
+      "abbrev": "FS",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "swing_v",
+      "abbrev": "SV",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "swing_h",
+      "abbrev": "SH",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "air_clean",
+      "abbrev": "CLN",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "power",
+      "abbrev": "P",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "mode",
+      "abbrev": "M",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "target_temp",
+      "abbrev": "TT",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "0"
+    },
+    {
+      "id": "room_temp",
+      "abbrev": "RT",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "-1000"
+    },
+    {
+      "id": "fault",
+      "abbrev": "F",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "min_target_temp",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "16",
+      "validation": {
+        "rules": [
+          {
+            "type": "lte",
+            "configId": "max_target_temp"
+          }
+        ]
+      }
+    },
+    {
+      "id": "max_target_temp",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "30",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "configId": "min_target_temp"
+          }
+        ]
+      }
+    },
+    {
+      "id": "refresh_interval",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "60",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "resend_on_refresh",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "state": [
+    {
+      "id": "unit_power",
+      "type": "NUMBER",
+      "default": "-1"
+    },
+    {
+      "id": "unit_mode",
+      "type": "NUMBER",
+      "default": "-1"
+    },
+    {
+      "id": "unit_target_temp",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "-1000.0"
+    },
+    {
+      "id": "unit_room_temp",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "-1000.0"
+    },
+    {
+      "id": "unit_fault",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "invoke_rc",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "sent",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "sent_power",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "sent_mode",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "sent_target_temp",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "0.0"
+    },
+    {
+      "id": "sent_fan_speed",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "sent_swing_v",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "sent_swing_h",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "sent_air_clean",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "tick_active",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ]
+}

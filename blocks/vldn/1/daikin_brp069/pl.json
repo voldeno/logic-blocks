@@ -1,0 +1,49 @@
+{
+  "description": "Steruje klimatyzatorem Daikin w sieci lokalnej, korzystając z nieszyfrowanego API HTTP adapterów Wi-Fi z rodziny BRP069 (BRP069A4x, BRP069B4x, BRP072A4x). Nowsze adaptery BRP072C4x i BRP084 używają innych protokołów i wymagają własnych bloków.",
+  "inputs": [],
+  "outputs": [],
+  "config": [
+    {
+      "id": "host",
+      "name": "Adres",
+      "description": "Adres adaptera Wi-Fi w sieci lokalnej, na przykład 192.168.1.50, opcjonalnie z portem. Zgodność adaptera z tym protokołem można sprawdzić, otwierając w przeglądarce http://<adres>/common/basic_info: odpowie linią rozpoczynającą się od ret=OK."
+    }
+  ],
+  "state": [
+    {
+      "id": "drv_step",
+      "name": "Krok wymiany",
+      "description": "Które żądanie oczekuje obecnie na odpowiedź, 0 w stanie bezczynności"
+    },
+    {
+      "id": "drv_started",
+      "name": "Początek wymiany",
+      "description": "Czas pracy w milisekundach w chwili wysłania oczekującego żądania, używany do porzucenia zagubionej odpowiedzi"
+    },
+    {
+      "id": "drv_int_cast",
+      "name": "Bufor liczby całkowitej",
+      "description": "Przechowuje wartość na czas konwersji do liczby całkowitej"
+    },
+    {
+      "id": "drv_powerful",
+      "name": "Żądany tryb Powerful",
+      "description": "Czy zadana prędkość wentylatora oznaczała tryb Powerful"
+    },
+    {
+      "id": "drv_streamer",
+      "name": "Żądany Streamer",
+      "description": "Czy zadano włączenie oczyszczania powietrza"
+    },
+    {
+      "id": "drv_unit_powerful",
+      "name": "Powerful w urządzeniu",
+      "description": "Ostatni zgłoszony stan trybu Powerful: -1 nieznany, 0 wyłączony, 1 włączony"
+    },
+    {
+      "id": "drv_unit_streamer",
+      "name": "Streamer w urządzeniu",
+      "description": "Ostatni zgłoszony stan Streamera: -1 nieznany, 0 wyłączony, 1 włączony"
+    }
+  ]
+}
