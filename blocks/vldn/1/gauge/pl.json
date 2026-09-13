@@ -1,0 +1,24 @@
+{
+  "description": "Wyświetla wartość wejściową jako widget w aplikacji mobilnej. Blok jest tylko do odczytu: nie steruje żadnym rejestrem i nie ma wyjść. Tytuł widgetu pochodzi z nazwy instancji bloku.",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Wartość",
+      "description": "Wartość prezentowana przez widget."
+    }
+  ],
+  "config": [],
+  "ui": [
+    {
+      "id": "unit",
+      "name": "Jednostka",
+      "description": "Jednostka wyświetlana obok wartości, na przykład °C, %, kWh. Pusta wartość oznacza samą liczbę."
+    },
+    {
+      "id": "decimals",
+      "name": "Miejsca dziesiętne",
+      "description": "Liczba miejsc po przecinku, do której widget zaokrągla wartość."
+    }
+  ],
+  "state": []
+}
