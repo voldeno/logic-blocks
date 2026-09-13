@@ -26,31 +26,17 @@
 //   1000  no host configured
 //   1001  the adapter rejected the request
 
-fn to_int(value) {
-    // Arithmetic on a decimal stays decimal, and str::fmt would then render it
-    // as 22.500000. A state slot declared with an integer default truncates.
-    state::set("drv_int_cast", value)
-    return state::get("drv_int_cast")
-}
-
-// Reads one key out of a "ret=OK,pow=1,mode=4,..." reply.
-fn field(body, key) {
-    pairs = str::split(body, ",")
-    while (str::split_has_next(pairs)) {
-        kv = str::split(str::split_next(pairs), "=")
-        name = str::split_next(kv)
-        if (name == key) {
-            if (str::split_has_next(kv)) {
-                return str::split_next(kv)
-            }
-            return ""
-        }
+// A whole reply is turned into fields at once by map::parse, so these two only
+// read a key out of the result. A field the unit left out reads as empty.
+fn field(fields, key) {
+    if (map::contains(fields, key)) {
+        return map::get(fields, key)
     }
     return ""
 }
 
-fn number_field(body, key, fallback) {
-    raw = field(body, key)
+fn number_field(fields, key, fallback) {
+    raw = field(fields, key)
     if (str::is_number(raw)) {
         return str::number(raw)
     }
@@ -65,13 +51,6 @@ fn has_token(list, token) {
         if (str::split_next(items) == token) {
             return 1
         }
-    }
-    return 0
-}
-
-fn flag(value) {
-    if (value) {
-        return 1
     }
     return 0
 }
@@ -166,18 +145,15 @@ fn temp_param(mode, target_temp) {
     if (mode == 3 or mode == 4) {
         return "M"
     }
-    halves = to_int(math::round(target_temp * 2))
-    if (halves % 2 == 0) {
-        return str::fmt("{}.0", halves / 2)
-    }
-    return str::fmt("{}.5", halves / 2)
+    // The unit takes half-degree steps, spelled out with one decimal: "22.5".
+    return str::num_fmt(math::round(target_temp * 2) / 2, 1)
 }
 
 // Both special modes are only touched when the desired value differs from what
 // the unit last reported, because each of them costs a request. Returns 1 when
 // the command is finished, 0 when another request is on its way.
 fn apply_streamer() {
-    want = flag(state::get("drv_streamer"))
+    want = math::int(state::get("drv_streamer"))
     if (want == state::get("drv_unit_streamer")) {
         return 1
     }
@@ -186,7 +162,7 @@ fn apply_streamer() {
 }
 
 fn apply_powerful() {
-    want = flag(state::get("drv_powerful"))
+    want = math::int(state::get("drv_powerful"))
     if (want == state::get("drv_unit_powerful")) {
         return apply_streamer()
     }
@@ -194,17 +170,17 @@ fn apply_powerful() {
     return 0
 }
 
-fn read_control(body) {
-    state::set("unit_power", number_field(body, "pow", -1))
-    mode = number_field(body, "mode", -1)
+fn read_control(fields) {
+    state::set("unit_power", number_field(fields, "pow", -1))
+    mode = number_field(fields, "mode", -1)
     if (mode < 0) {
         state::set("unit_mode", -1)
     } else {
         state::set("unit_mode", abstract_mode(mode))
     }
     // stemp is "M" in drying and fan-only, which leaves the setpoint unknown.
-    state::set("unit_target_temp", number_field(body, "stemp", -1000.0))
-    adv = field(body, "adv")
+    state::set("unit_target_temp", number_field(fields, "stemp", -1000.0))
+    adv = field(fields, "adv")
     state::set("drv_unit_powerful", has_token(adv, "2"))
     state::set("drv_unit_streamer", has_token(adv, "13"))
 }
@@ -221,7 +197,7 @@ extern fn ac_apply(power, mode, target_temp, fan_speed, swing_v, swing_h, air_cl
     // pow, mode, stemp, shum, f_rate and f_dir are all mandatory on this
     // endpoint even when only one of them changes. shum stays 0: these units
     // have no humidity setpoint.
-    query = str::fmt("/aircon/set_control_info?pow={}&mode={}&stemp={}&shum=0&f_rate={}&f_dir={}", flag(power), daikin_mode(mode), temp_param(mode, target_temp), daikin_fan_rate(fan_speed), daikin_fan_dir(swing_v, swing_h))
+    query = str::fmt("/aircon/set_control_info?pow={}&mode={}&stemp={}&shum=0&f_rate={}&f_dir={}", math::int(power), daikin_mode(mode), temp_param(mode, target_temp), daikin_fan_rate(fan_speed), daikin_fan_dir(swing_v, swing_h))
     begin(1, query)
     return 0
 }
@@ -245,7 +221,8 @@ extern fn http::on_response(status, body, headers) {
         state::set("unit_fault", -1)
         return 1
     }
-    if (field(body, "ret") != "OK") {
+    fields = map::parse(body, ",", "=")
+    if (field(fields, "ret") != "OK") {
         state::set("unit_fault", 1001)
         return 1
     }
@@ -254,24 +231,24 @@ extern fn http::on_response(status, body, headers) {
     state::set("unit_fault", 0)
 
     if (step == 4) {
-        read_control(body)
+        read_control(fields)
         begin(5, "/aircon/get_sensor_info")
         return 0
     }
     if (step == 5) {
-        state::set("unit_room_temp", number_field(body, "htemp", -1000.0))
-        state::set("unit_fault", number_field(body, "err", 0))
+        state::set("unit_room_temp", number_field(fields, "htemp", -1000.0))
+        state::set("unit_fault", number_field(fields, "err", 0))
         return 1
     }
     if (step == 1) {
         return apply_powerful()
     }
     if (step == 2) {
-        state::set("drv_unit_powerful", flag(state::get("drv_powerful")))
+        state::set("drv_unit_powerful", math::int(state::get("drv_powerful")))
         return apply_streamer()
     }
     if (step == 3) {
-        state::set("drv_unit_streamer", flag(state::get("drv_streamer")))
+        state::set("drv_unit_streamer", math::int(state::get("drv_streamer")))
         return 1
     }
     return 1

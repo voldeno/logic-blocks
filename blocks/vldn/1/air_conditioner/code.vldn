@@ -47,7 +47,7 @@
 // nothing about how the unit was reached.
 
 fn choice(value, hi) {
-    v = math::round(value)
+    v = math::int(math::round(value))
     if (v < 0) {
         return 0
     }
@@ -153,7 +153,7 @@ fn arm_tick(delay_ms) {
 }
 
 fn arm_refresh() {
-    interval_ms = math::round(config::get("refresh_interval") * 1000)
+    interval_ms = math::int(math::round(config::get("refresh_interval") * 1000))
     if (interval_ms <= 0) {
         state::set("tick_active", false)
         return

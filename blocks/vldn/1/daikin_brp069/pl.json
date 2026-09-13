@@ -21,11 +21,6 @@
       "description": "Czas pracy w milisekundach w chwili wysłania oczekującego żądania, używany do porzucenia zagubionej odpowiedzi"
     },
     {
-      "id": "drv_int_cast",
-      "name": "Bufor liczby całkowitej",
-      "description": "Przechowuje wartość na czas konwersji do liczby całkowitej"
-    },
-    {
       "id": "drv_powerful",
       "name": "Żądany tryb Powerful",
       "description": "Czy zadana prędkość wentylatora oznaczała tryb Powerful"

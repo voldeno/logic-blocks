@@ -89,6 +89,13 @@ Things that bite:
   `extern fn` or the compiler will drop it.
 - An `ENUM` config reaches the script as the index of the selected value, a
   `SCHEDULE` config as a schedule id.
+- Arithmetic on a decimal stays decimal, and `str::fmt` then renders it as
+  `22.500000`. `math::int` turns a number (or a boolean) into a whole one, and
+  `str::num_fmt(value, decimals)` prints one with the precision a device wants.
+- Write the header names you pass to `http::set_header` canonically - `Host`,
+  `Content-Type`, not `host` or `content-type`. Some devices accept nothing
+  else, and the app normalises to that form anyway. A device that insists on an
+  unusual spelling has to be reached with `tcp::*`.
 
 ## Abstract blocks and implementations
 

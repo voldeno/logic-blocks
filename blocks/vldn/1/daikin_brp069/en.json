@@ -21,11 +21,6 @@
       "description": "Uptime in milliseconds when the pending request was sent, used to give up on a lost answer"
     },
     {
-      "id": "drv_int_cast",
-      "name": "Integer scratch",
-      "description": "Holds a value while it is converted to a whole number"
-    },
-    {
       "id": "drv_powerful",
       "name": "Powerful requested",
       "description": "Whether the commanded fan speed asked for the powerful mode"
