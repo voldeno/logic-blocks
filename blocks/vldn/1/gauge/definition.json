@@ -1,0 +1,30 @@
+{
+  "name": "Gauge",
+  "group": "output",
+  "ioType": "display",
+  "widget": true,
+  "inputs": [
+    {
+      "id": "value",
+      "abbrev": "V",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [],
+  "ui": [
+    {
+      "id": "unit",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "decimals",
+      "type": "NUMBER",
+      "default": "1",
+      "min": "0",
+      "max": "6"
+    }
+  ],
+  "state": []
+}

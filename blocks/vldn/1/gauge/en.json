@@ -1,0 +1,24 @@
+{
+  "description": "Displays the incoming value as a widget in the mobile app. The block is read-only: it drives no register and has no outputs. The widget title comes from the block instance name.",
+  "inputs": [
+    {
+      "id": "value",
+      "name": "Value",
+      "description": "Value shown by the widget."
+    }
+  ],
+  "config": [],
+  "ui": [
+    {
+      "id": "unit",
+      "name": "Unit",
+      "description": "Unit shown next to the value, for example °C, %, kWh. Leave empty to show the number alone."
+    },
+    {
+      "id": "decimals",
+      "name": "Decimals",
+      "description": "Number of decimal places the widget rounds the value to."
+    }
+  ],
+  "state": []
+}
