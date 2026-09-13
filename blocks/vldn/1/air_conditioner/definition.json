@@ -69,6 +69,30 @@
       "default": "0"
     },
     {
+      "id": "fan_speed",
+      "abbrev": "FS",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "swing_v",
+      "abbrev": "SV",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "swing_h",
+      "abbrev": "SH",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "air_clean",
+      "abbrev": "CLN",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
       "id": "room_temp",
       "abbrev": "RT",
       "type": "NUMBER",

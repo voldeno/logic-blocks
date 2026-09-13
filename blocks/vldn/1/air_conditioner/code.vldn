@@ -67,7 +67,10 @@ fn clamp(value, lo, hi) {
     return value
 }
 
-fn publish(power, mode, target_temp) {
+// The airflow and air cleaning settings have no counterpart in the driver
+// readings - no unit reports them back - so they are published exactly as
+// commanded, which is what a client needs to show the current selection.
+fn publish(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) {
     unit_power = state::get("unit_power")
     if (unit_power >= 0) {
         power = unit_power != 0
@@ -92,6 +95,10 @@ fn publish(power, mode, target_temp) {
     output::set("power", power)
     output::set("mode", mode)
     output::set("target_temp", target_temp)
+    output::set("fan_speed", fan_speed)
+    output::set("swing_v", swing_v)
+    output::set("swing_h", swing_h)
+    output::set("air_clean", air_clean)
     output::set("room_temp", state::get("unit_room_temp"))
     output::set("fault", fault)
 }
@@ -176,7 +183,7 @@ fn run(refresh) {
     if (!refresh) {
         // Report the commanded state right away, so the outputs stay meaningful
         // even when the driver call below fails or no driver is attached at all.
-        publish(power, mode, target_temp)
+        publish(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
         stale = false
     }
 
@@ -211,7 +218,7 @@ fn run(refresh) {
     }
 
     if (stale) {
-        publish(power, mode, target_temp)
+        publish(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
     }
 }
 
@@ -222,7 +229,9 @@ extern fn on_refresh() {
 // Called by the runtime after the driver stored fresh readings. The commanded
 // values are only a fallback for whatever the unit did not report.
 extern fn std::on_driver_update() {
-    publish(state::get("sent_power"), state::get("sent_mode"), state::get("sent_target_temp"))
+    publish(state::get("sent_power"), state::get("sent_mode"), state::get("sent_target_temp"),
+            state::get("sent_fan_speed"), state::get("sent_swing_v"), state::get("sent_swing_h"),
+            state::get("sent_air_clean"))
 }
 
 // A config change can alter the refresh interval - drop the timer so the run

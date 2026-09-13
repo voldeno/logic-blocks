@@ -54,6 +54,26 @@
       "description": "Temperatura docelowa, na której pracuje urządzenie, po zastosowaniu skonfigurowanego zakresu"
     },
     {
+      "id": "fan_speed",
+      "name": "Prędkość wentylatora",
+      "description": "Zadana prędkość wentylatora, w tym samym kodowaniu co wejście prędkości wentylatora. Żadne urządzenie jej nie raportuje, więc jest to zawsze wartość zadana."
+    },
+    {
+      "id": "swing_v",
+      "name": "Nawiew pionowy",
+      "description": "Zadane ustawienie kierownicy pionowej, w tym samym kodowaniu co wejście nawiewu pionowego. Żadne urządzenie go nie raportuje, więc jest to zawsze wartość zadana."
+    },
+    {
+      "id": "swing_h",
+      "name": "Nawiew poziomy",
+      "description": "Zadane ustawienie kierownicy poziomej, w tym samym kodowaniu co wejście nawiewu poziomego. Żadne urządzenie go nie raportuje, więc jest to zawsze wartość zadana."
+    },
+    {
+      "id": "air_clean",
+      "name": "Oczyszczanie powietrza",
+      "description": "Zadane ustawienie oczyszczania powietrza. Żadne urządzenie go nie raportuje, więc jest to zawsze wartość zadana."
+    },
+    {
       "id": "room_temp",
       "name": "Temperatura pomieszczenia",
       "description": "Temperatura wewnętrzna zmierzona przez urządzenie. -1000, gdy urządzenie jej nie raportuje."

@@ -13,5 +13,9 @@ steps:
       power: false
       mode: 0
       target_temp: 0
+      fan_speed: 0
+      swing_v: 0
+      swing_h: 0
+      air_clean: false
       room_temp: -1000
       fault: 0

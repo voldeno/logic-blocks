@@ -54,6 +54,26 @@
       "description": "Target temperature the unit works with, after the configured range has been applied"
     },
     {
+      "id": "fan_speed",
+      "name": "Fan speed",
+      "description": "Fan speed the unit was asked for, using the same values as the fan speed input. No unit reports this back, so it is always the commanded value."
+    },
+    {
+      "id": "swing_v",
+      "name": "Vertical airflow",
+      "description": "Vertical vane setting the unit was asked for, using the same values as the vertical airflow input. No unit reports this back, so it is always the commanded value."
+    },
+    {
+      "id": "swing_h",
+      "name": "Horizontal airflow",
+      "description": "Horizontal vane setting the unit was asked for, using the same values as the horizontal airflow input. No unit reports this back, so it is always the commanded value."
+    },
+    {
+      "id": "air_clean",
+      "name": "Air cleaning",
+      "description": "Air cleaning setting the unit was asked for. No unit reports this back, so it is always the commanded value."
+    },
+    {
       "id": "room_temp",
       "name": "Room temperature",
       "description": "Indoor temperature measured by the unit. -1000 when the unit does not report it."
