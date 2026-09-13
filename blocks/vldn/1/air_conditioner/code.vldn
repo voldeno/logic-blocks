@@ -229,9 +229,14 @@ extern fn on_refresh() {
 // Called by the runtime after the driver stored fresh readings. The commanded
 // values are only a fallback for whatever the unit did not report.
 extern fn std::on_driver_update() {
-    publish(state::get("sent_power"), state::get("sent_mode"), state::get("sent_target_temp"),
-            state::get("sent_fan_speed"), state::get("sent_swing_v"), state::get("sent_swing_h"),
-            state::get("sent_air_clean"))
+    power = state::get("sent_power")
+    mode = state::get("sent_mode")
+    target_temp = state::get("sent_target_temp")
+    fan_speed = state::get("sent_fan_speed")
+    swing_v = state::get("sent_swing_v")
+    swing_h = state::get("sent_swing_h")
+    air_clean = state::get("sent_air_clean")
+    publish(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
 }
 
 // A config change can alter the refresh interval - drop the timer so the run
