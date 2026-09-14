@@ -1,0 +1,233 @@
+// Air conditioner - abstract block.
+//
+// Turns the input channels into one desired unit state and hands it over to the
+// attached implementation (driver) block. Only the driver knows how to reach a
+// particular unit (IR, LAN, Modbus, ...), so everything specific to a brand or
+// a model stays there.
+//
+// Value encodings, shared by the inputs, the outputs and the driver call:
+//   mode       0 auto, 1 heating, 2 cooling, 3 drying, 4 fan only
+//   fan_speed  0 auto, 1 quiet, 2 low, 3 medium, 4 high, 5 powerful
+//   swing_v    0 auto, 1 swing, 2..6 fixed vane position (2 highest .. 6 lowest)
+//   swing_h    0 auto, 1 swing, 2..6 fixed vane position (2 leftmost .. 6 rightmost)
+//   fault      0 none, -1 unit unreachable, > 0 unit specific error code
+// A unit that cannot do what was asked for falls back to its closest
+// equivalent - that mapping belongs to the driver.
+//
+// The implementation block must declare both functions:
+//
+//   extern fn ac_apply(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
+//       Pushes the complete desired state to the unit. Called whenever any of
+//       the values changes, and on every refresh tick when resend_on_refresh is
+//       set.
+//
+//   extern fn ac_refresh()
+//       Asks the unit for its status, on the scheduled run the runtime performs
+//       every refresh_interval seconds. Units without feedback (IR) return 0.
+//
+// Both only have to accept the work, not finish it: a driver on the network
+// returns as soon as the request is on its way. Their return value says how the
+// request was taken:
+//     0   accepted
+//   < 0   not accepted right now, e.g. the previous exchange is still running;
+//         retried a second later, and not reported as a fault
+//   > 0   failed, published on the fault output
+//
+// The driver shares this block's state variables, which is how it reports back:
+//   unit_power        -1 unknown, 0 off, 1 on
+//   unit_mode         -1 unknown, otherwise a mode value
+//   unit_target_temp  -1000 unknown, otherwise °C
+//   unit_room_temp    -1000 unknown, otherwise °C
+//   unit_fault        the fault value to publish
+// Whatever is left unknown is published as the value this block commanded.
+
+fn choice(value, hi) {
+    v = math::int(math::round(value))
+    if (v < 0) {
+        return 0
+    }
+    if (v > hi) {
+        return hi
+    }
+    return v
+}
+
+fn clamp(value, lo, hi) {
+    if (value < lo) {
+        return lo
+    }
+    if (value > hi) {
+        return hi
+    }
+    return value
+}
+
+// The airflow and air cleaning settings have no counterpart in the driver
+// readings - no unit reports them back - so they are published exactly as
+// commanded, which is what a client needs to show the current selection.
+fn publish(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) {
+    unit_power = state::get("unit_power")
+    if (unit_power >= 0) {
+        power = unit_power != 0
+    }
+    unit_mode = state::get("unit_mode")
+    if (unit_mode >= 0) {
+        mode = unit_mode
+    }
+    unit_target_temp = state::get("unit_target_temp")
+    if (unit_target_temp > -1000) {
+        target_temp = unit_target_temp
+    }
+    fault = state::get("unit_fault")
+    if (fault == 0) {
+        rc = state::get("invoke_rc")
+        // A negative code only means the driver was busy, which the retry on the
+        // next run takes care of.
+        if (rc > 0) {
+            fault = rc
+        }
+    }
+    output::set("power", power)
+    output::set("mode", mode)
+    output::set("target_temp", target_temp)
+    output::set("fan_speed", fan_speed)
+    output::set("swing_v", swing_v)
+    output::set("swing_h", swing_h)
+    output::set("air_clean", air_clean)
+    output::set("room_temp", state::get("unit_room_temp"))
+    output::set("fault", fault)
+}
+
+fn changed(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) {
+    if (!state::get("sent")) {
+        return true
+    }
+    if (state::get("sent_power") != power) {
+        return true
+    }
+    if (state::get("sent_air_clean") != air_clean) {
+        return true
+    }
+    if (state::get("sent_mode") != mode) {
+        return true
+    }
+    if (state::get("sent_target_temp") != target_temp) {
+        return true
+    }
+    if (state::get("sent_fan_speed") != fan_speed) {
+        return true
+    }
+    if (state::get("sent_swing_v") != swing_v) {
+        return true
+    }
+    if (state::get("sent_swing_h") != swing_h) {
+        return true
+    }
+    return false
+}
+
+// The last readings describe the unit before a command, so they must not mask
+// what was just asked for; the next refresh fills them in again. The room
+// temperature is a measurement, not a setting, and stays.
+fn forget_readings() {
+    state::set("unit_power", -1)
+    state::set("unit_mode", -1)
+    state::set("unit_target_temp", -1000.0)
+}
+
+fn remember(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) {
+    state::set("sent_power", power)
+    state::set("sent_mode", mode)
+    state::set("sent_target_temp", target_temp)
+    state::set("sent_fan_speed", fan_speed)
+    state::set("sent_swing_v", swing_v)
+    state::set("sent_swing_h", swing_h)
+    state::set("sent_air_clean", air_clean)
+    state::set("sent", true)
+}
+
+// The refresh runs on the runtime's activation, so the block's one timer is
+// free for the retry below.
+fn arm_tick(delay_ms) {
+    callback::clear()
+    callback::set(delay_ms, "on_refresh")
+}
+
+fn run(refresh) {
+    power = input::get("power")
+    mode = choice(input::get("mode"), 4)
+    fan_speed = choice(input::get("fan_speed"), 5)
+    swing_v = choice(input::get("swing_v"), 6)
+    swing_h = choice(input::get("swing_h"), 6)
+    air_clean = input::get("air_clean")
+    min_temp = config::get("min_target_temp")
+    max_temp = config::get("max_target_temp")
+    target_temp = clamp(input::get("target_temp"), min_temp, max_temp)
+
+    stale = true
+    if (!refresh) {
+        // Report the commanded state right away, so the outputs stay meaningful
+        // even when the driver call below fails or no driver is attached at all.
+        publish(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
+        stale = false
+    }
+
+    // A command comes before a status poll: a driver that runs one exchange at a
+    // time would otherwise turn it down for a whole refresh interval.
+    applied = false
+    resend = refresh and config::get("resend_on_refresh")
+    if (changed(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) or resend) {
+        rc = std::invoke("ac_apply", power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
+        state::set("invoke_rc", rc)
+        if (rc == 0) {
+            remember(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
+            forget_readings()
+        }
+        if (rc < 0) {
+            // The driver is still busy with an earlier exchange. Come back
+            // shortly rather than leave the command until the next refresh.
+            arm_tick(1000)
+        }
+        applied = true
+        stale = true
+    }
+
+    if (refresh and !applied) {
+        state::set("invoke_rc", std::invoke("ac_refresh"))
+        stale = true
+    }
+
+    if (stale) {
+        publish(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
+    }
+}
+
+// Asked by the runtime for the next refresh, in whole seconds - the only form
+// the scheduler reads back. 0 turns polling off for units that report nothing.
+extern fn std::next_activation_at() {
+    interval = math::int(math::round(config::get("refresh_interval")))
+    if (interval <= 0) {
+        return 0
+    }
+    return time::now() + interval
+}
+
+extern fn on_refresh() {
+    run(true)
+}
+
+// Called by the runtime after the driver stored fresh readings. The commanded
+// values are only a fallback for whatever the unit did not report.
+extern fn std::on_driver_update() {
+    power = state::get("sent_power")
+    mode = state::get("sent_mode")
+    target_temp = state::get("sent_target_temp")
+    fan_speed = state::get("sent_fan_speed")
+    swing_v = state::get("sent_swing_v")
+    swing_h = state::get("sent_swing_h")
+    air_clean = state::get("sent_air_clean")
+    publish(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
+}
+
+// A scheduled run arrives without a channel, and that is the refresh tick.
+run(input::channel() == "")

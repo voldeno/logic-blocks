@@ -273,6 +273,26 @@
       "id": "use_sensors",
       "type": "BOOLEAN",
       "default": "true"
+    },
+    {
+      "id": "movement_timeout",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "5",
+      "visibleWhen": {
+        "configId": "use_sensors",
+        "values": [
+          "true"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gt",
+            "value": 0
+          }
+        ]
+      }
     }
   ],
   "state": [
@@ -352,6 +372,16 @@
       "id": "move_lock_ticks",
       "type": "NUMBER",
       "default": "0"
+    },
+    {
+      "id": "stall_ticks",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "external_move",
+      "type": "BOOLEAN",
+      "default": "false"
     },
     {
       "id": "tick_active",

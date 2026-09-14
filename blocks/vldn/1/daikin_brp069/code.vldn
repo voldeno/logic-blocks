@@ -1,0 +1,250 @@
+// Air conditioner - Daikin driver for the BRP069 family of Wi-Fi adapters.
+//
+// Implements vldn:air_conditioner:1 over the plain-HTTP "/aircon" API that
+// Daikin's earlier adapters expose on the local network - BRP069A4x, BRP069B4x
+// and BRP072A4x - documented at https://github.com/ael-code/daikin-control.
+// Newer adapters need drivers of their own: BRP072C4x wants HTTPS and a
+// registered terminal, BRP084 a single /dsiot/multireq JSON endpoint.
+//
+// Every request is a GET whose reply is a flat "ret=OK,pow=1,mode=4,..." list.
+// Both operations take more than one request, and only one exchange runs at a
+// time because an implementation has a single pending callback:
+//
+//   drv_step  0 idle
+//             1 set_control_info sent
+//             2 set_special_mode sent (powerful)
+//             3 set_special_mode sent (streamer)
+//             4 get_control_info sent
+//             5 get_sensor_info sent
+//
+// Faults reported through unit_fault, on top of the unit's own error codes:
+//   -1    the adapter could not be reached
+//   1000  no host configured
+//   1001  the adapter rejected the request
+
+// A field the unit left out of its reply reads as empty.
+fn field(fields, key) {
+    if (map::contains(fields, key)) {
+        return map::get(fields, key)
+    }
+    return ""
+}
+
+fn number_field(fields, key, fallback) {
+    raw = field(fields, key)
+    if (str::is_number(raw)) {
+        return str::number(raw)
+    }
+    return fallback
+}
+
+// The unit lists its active special modes in adv as a "/"-separated set:
+// "" none, "2" powerful, "12" econo, "13" streamer, "2/13", "12/13".
+fn has_token(list, token) {
+    items = str::split(list, "/")
+    while (str::split_has_next(items)) {
+        if (str::split_next(items) == token) {
+            return 1
+        }
+    }
+    return 0
+}
+
+fn busy() {
+    if (state::get("drv_step") == 0) {
+        return false
+    }
+    // The runtime answers every http::call, so a step can only stay pending if a
+    // reply was dropped. Time it out rather than wedge the driver for good.
+    if (time::uptime() - state::get("drv_started") > 30000) {
+        return false
+    }
+    return true
+}
+
+fn begin(step, path) {
+    state::set("drv_step", step)
+    state::set("drv_started", time::uptime())
+    client = http::client()
+    http::set_method(client, "GET")
+    http::call(client, str::fmt("http://{}{}", config::get("host"), path))
+}
+
+fn daikin_mode(mode) {
+    if (mode == 1) {
+        return "4"
+    }
+    if (mode == 2) {
+        return "3"
+    }
+    if (mode == 3) {
+        return "2"
+    }
+    if (mode == 4) {
+        return "6"
+    }
+    return "1"
+}
+
+fn abstract_mode(mode) {
+    if (mode == 4) {
+        return 1
+    }
+    if (mode == 3) {
+        return 2
+    }
+    if (mode == 2) {
+        return 3
+    }
+    if (mode == 6) {
+        return 4
+    }
+    return 0
+}
+
+// f_rate: A auto, B silence, 3 to 7 the five fixed steps. Powerful is not a fan
+// speed on these units but a special mode, handled separately.
+fn daikin_fan_rate(fan_speed) {
+    if (fan_speed == 1) {
+        return "B"
+    }
+    if (fan_speed == 2) {
+        return "3"
+    }
+    if (fan_speed == 3) {
+        return "5"
+    }
+    if (fan_speed >= 4) {
+        return "7"
+    }
+    return "A"
+}
+
+// f_dir is a two-bit set: 1 vertical, 2 horizontal. This API can start and stop
+// a vane but never aim it, so only "swing" translates: auto and the fixed
+// positions all stop the vane wherever it happens to be.
+fn daikin_fan_dir(swing_v, swing_h) {
+    dir = 0
+    if (swing_v == 1) {
+        dir = 1
+    }
+    if (swing_h == 1) {
+        dir = dir + 2
+    }
+    return dir
+}
+
+fn temp_param(mode, target_temp) {
+    // Drying and fan-only have no setpoint: the unit reports "M" for those modes
+    // and expects it back.
+    if (mode == 3 or mode == 4) {
+        return "M"
+    }
+    // The unit takes half-degree steps, spelled out with one decimal: "22.5".
+    return str::num_fmt(math::round(target_temp * 2) / 2, 1)
+}
+
+// Both special modes are only touched when the desired value differs from what
+// the unit last reported, because each of them costs a request. Returns 1 when
+// the command is finished, 0 when another request is on its way.
+fn apply_streamer() {
+    want = math::int(state::get("drv_streamer"))
+    if (want == state::get("drv_unit_streamer")) {
+        return 1
+    }
+    begin(3, str::fmt("/aircon/set_special_mode?en_streamer={}", want))
+    return 0
+}
+
+fn apply_powerful() {
+    want = math::int(state::get("drv_powerful"))
+    if (want == state::get("drv_unit_powerful")) {
+        return apply_streamer()
+    }
+    begin(2, str::fmt("/aircon/set_special_mode?set_spmode={}&spmode_kind=1", want))
+    return 0
+}
+
+fn read_control(fields) {
+    state::set("unit_power", number_field(fields, "pow", -1))
+    mode = number_field(fields, "mode", -1)
+    if (mode < 0) {
+        state::set("unit_mode", -1)
+    } else {
+        state::set("unit_mode", abstract_mode(mode))
+    }
+    // stemp is "M" in drying and fan-only, which leaves the setpoint unknown.
+    state::set("unit_target_temp", number_field(fields, "stemp", -1000.0))
+    adv = field(fields, "adv")
+    state::set("drv_unit_powerful", has_token(adv, "2"))
+    state::set("drv_unit_streamer", has_token(adv, "13"))
+}
+
+extern fn ac_apply(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) {
+    if (busy()) {
+        return -1
+    }
+    if (config::get("host") == "") {
+        return 1000
+    }
+    state::set("drv_powerful", fan_speed == 5)
+    state::set("drv_streamer", air_clean)
+    // pow, mode, stemp, shum, f_rate and f_dir are all mandatory on this
+    // endpoint even when only one of them changes. shum stays 0: these units
+    // have no humidity setpoint.
+    query = str::fmt("/aircon/set_control_info?pow={}&mode={}&stemp={}&shum=0&f_rate={}&f_dir={}", math::int(power), daikin_mode(mode), temp_param(mode, target_temp), daikin_fan_rate(fan_speed), daikin_fan_dir(swing_v, swing_h))
+    begin(1, query)
+    return 0
+}
+
+extern fn ac_refresh() {
+    if (busy()) {
+        return -1
+    }
+    if (config::get("host") == "") {
+        return 1000
+    }
+    begin(4, "/aircon/get_control_info")
+    return 0
+}
+
+extern fn http::on_response(status, body, headers) {
+    step = state::get("drv_step")
+    state::set("drv_step", 0)
+
+    if (status < 200 or status >= 300) {
+        state::set("unit_fault", -1)
+        return 1
+    }
+    fields = map::parse(body, ",", "=")
+    if (field(fields, "ret") != "OK") {
+        state::set("unit_fault", 1001)
+        return 1
+    }
+    // The adapter answered, so whatever went wrong before is over. A status read
+    // replaces this with the unit's own error code below.
+    state::set("unit_fault", 0)
+
+    if (step == 4) {
+        read_control(fields)
+        begin(5, "/aircon/get_sensor_info")
+        return 0
+    }
+    if (step == 5) {
+        state::set("unit_room_temp", number_field(fields, "htemp", -1000.0))
+        state::set("unit_fault", number_field(fields, "err", 0))
+        return 1
+    }
+    if (step == 1) {
+        return apply_powerful()
+    }
+    if (step == 2) {
+        state::set("drv_unit_powerful", math::int(state::get("drv_powerful")))
+        return apply_streamer()
+    }
+    if (step == 3) {
+        state::set("drv_unit_streamer", math::int(state::get("drv_streamer")))
+        return 1
+    }
+    return 1
+}
