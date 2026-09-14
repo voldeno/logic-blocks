@@ -1,6 +1,7 @@
 {
   "name": "Air conditioner",
   "group": "process",
+  "ioType": "scheduler",
   "abstract": true,
   "widget": true,
   "inputs": [
@@ -230,9 +231,16 @@
       "default": "false"
     },
     {
-      "id": "tick_active",
-      "type": "BOOLEAN",
-      "default": "false"
+      "id": "last_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    },
+    {
+      "id": "next_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
     }
   ]
 }

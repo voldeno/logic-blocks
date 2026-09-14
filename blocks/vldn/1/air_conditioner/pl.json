@@ -178,9 +178,14 @@
       "description": "Ostatnie ustawienie oczyszczania powietrza przyjęte przez urządzenie"
     },
     {
-      "id": "tick_active",
-      "name": "Timer odświeżania aktywny",
-      "description": "Ustawione, gdy timer odświeżania oczekuje na wykonanie"
+      "id": "last_activation_ts",
+      "name": "Ostatni znacznik czasu wykonania",
+      "description": "Ostatni znacznik czasu wykonania w sekundach od epoki"
+    },
+    {
+      "id": "next_activation_ts",
+      "name": "Następny znacznik czasu wykonania",
+      "description": "Następny znacznik czasu wykonania w sekundach od epoki"
     }
   ]
 }

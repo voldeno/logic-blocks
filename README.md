@@ -69,6 +69,7 @@ A block script runs whenever something happens to the block:
   `input::value()` its value
 - its configuration changes — `input::channel()` returns `"config_change"`
 - a timer the block set itself fires — `input::channel()` returns `"callback"`
+- a `scheduler` block reaches its next activation — `input::channel()` is empty
 
 Everything the script needs is read explicitly: `input::get("id")`,
 `config::get("id")`, `state::get("id")`, and results go out through
@@ -159,44 +160,35 @@ descriptor has to start with `drv_`, and no other block may use that prefix:
 That way the abstract block's slots and the implementation's can never collide,
 and both sides still read and write them with plain `state::get` / `state::set`.
 
-Implementations never run on their own. They execute inside `std::invoke`, and
-inside their own completions - see below. A call that finds no attached
-implementation, or a name the implementation does not declare, fails and aborts
-the rest of the run, so write the outputs you care about before invoking, and
-keep the set of functions small and stable.
+Implementations never run on their own: they execute inside `std::invoke` and
+inside their own completions. A call that finds no attached implementation, or a
+name the implementation does not declare, aborts the rest of the run - so write
+the outputs you care about before invoking, and keep the set of functions small
+and stable.
 
 ### Devices that answer later
 
 `http::call` and the `tcp::*` functions only send; the answer arrives later, in a
-separate run. An implementation may use them, and it receives the completion
-itself - an `extern fn http::on_response(status, body, headers)` declared in the
-implementation runs in the implementation, with the same shared state and its
-own config. Which is why a function invoked over a network has nothing useful to
-return yet: it can only report that the request is on its way.
-
-An implementation waiting for a device does not consume the block's timer, so a
-block can keep a refresh tick pending while its implementation has a request in
-flight.
+separate run. The completion belongs to the implementation: an
+`extern fn http::on_response(status, body, headers)` declared there runs there,
+with the same shared state and its own config, and it does not consume the
+block's timer. So a function invoked over a network can only report that the
+request is on its way, and needs a way to decline while an earlier exchange is
+still running.
 
 The return value of the completion decides what happens next:
 
 | Return | Meaning |
 | --- | --- |
-| `0` | the implementation's business only - a command acknowledged, or one step of a multi-request exchange it is about to continue |
+| `0` | the implementation's business only - a command acknowledged, or one step of an exchange it is about to continue |
 | non-zero | the shared state holds fresh readings |
 
 On non-zero the runtime calls `extern fn std::on_driver_update()` on the
 abstract block, if it declares one. That hook is the only way an implementation
 reaches back into its block, and it carries nothing: the readings are already in
-the shared state, so the hook just turns them into outputs. Nothing about the
-transport crosses the boundary.
+the shared state, so the hook just turns them into outputs.
 
-Since a request may already be in flight when the next one is invoked, give the
-invoked functions a way to decline. `air_conditioner` returns `0` for accepted,
-a negative value for "busy, ask again" - which it does a second later - and a
-positive value for a real failure.
-
-`blocks/vldn/1/air_conditioner` is a worked example: its header comment is the
+`blocks/vldn/1/air_conditioner` is a worked example - its header comment is the
 contract every air conditioner implementation has to satisfy, and
 `blocks/vldn/1/daikin_brp069` satisfies it over the local network.
 
@@ -231,8 +223,6 @@ steps:
       output: true
 ```
 
-Abstract blocks can only be compile checked this way - the test runner cannot
-attach an implementation, so any scenario that reaches `std::invoke` fails.
-Implementations cannot be tested at all yet, only compiled: the runner reports a
-compile error for every block it loads, but has no way to attach one to a block
-or to answer its requests.
+Abstract blocks and implementations can only be compile checked: the runner
+cannot attach an implementation to a block, nor answer its requests, so any
+scenario that reaches `std::invoke` fails.

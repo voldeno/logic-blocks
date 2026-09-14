@@ -3,16 +3,12 @@
 // Implements vldn:air_conditioner:1 over the plain-HTTP "/aircon" API that
 // Daikin's earlier adapters expose on the local network - BRP069A4x, BRP069B4x
 // and BRP072A4x - documented at https://github.com/ael-code/daikin-control.
-// The newer adapters speak entirely different protocols and need drivers of
-// their own: BRP072C4x wants HTTPS and a registered terminal, and BRP084
-// replaced the whole API with a single /dsiot/multireq JSON endpoint.
+// Newer adapters need drivers of their own: BRP072C4x wants HTTPS and a
+// registered terminal, BRP084 a single /dsiot/multireq JSON endpoint.
 //
 // Every request is a GET whose reply is a flat "ret=OK,pow=1,mode=4,..." list.
-// One exchange runs at a time, because an implementation may have a single
-// pending callback, and both operations need more than one request: a command
-// sends the control parameters and then, only when they changed, the powerful
-// and streamer special modes, each of which has an endpoint of its own; a status
-// read asks for the control parameters and then the sensors.
+// Both operations take more than one request, and only one exchange runs at a
+// time because an implementation has a single pending callback:
 //
 //   drv_step  0 idle
 //             1 set_control_info sent
@@ -26,8 +22,7 @@
 //   1000  no host configured
 //   1001  the adapter rejected the request
 
-// A whole reply is turned into fields at once by map::parse, so these two only
-// read a key out of the result. A field the unit left out reads as empty.
+// A field the unit left out of its reply reads as empty.
 fn field(fields, key) {
     if (map::contains(fields, key)) {
         return map::get(fields, key)

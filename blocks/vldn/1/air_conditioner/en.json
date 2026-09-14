@@ -178,9 +178,14 @@
       "description": "Last air cleaning setting accepted by the unit"
     },
     {
-      "id": "tick_active",
-      "name": "Refresh timer active",
-      "description": "Set while the refresh timer is pending"
+      "id": "last_activation_ts",
+      "name": "Last execution timestamp",
+      "description": "Last execution timestamp in seconds from epoch"
+    },
+    {
+      "id": "next_activation_ts",
+      "name": "Next execution timestamp",
+      "description": "Next execution timestamp in seconds from epoch"
     }
   ]
 }

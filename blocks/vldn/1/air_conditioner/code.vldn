@@ -1,9 +1,9 @@
 // Air conditioner - abstract block.
 //
-// Turns the input channels into one desired unit state and hands that state
-// over to the attached implementation (driver) block. Only the driver knows how
-// to talk to a particular unit (IR, LAN, Modbus, ...), so everything that is
-// specific to a brand or a model stays there.
+// Turns the input channels into one desired unit state and hands it over to the
+// attached implementation (driver) block. Only the driver knows how to reach a
+// particular unit (IR, LAN, Modbus, ...), so everything specific to a brand or
+// a model stays there.
 //
 // Value encodings, shared by the inputs, the outputs and the driver call:
 //   mode       0 auto, 1 heating, 2 cooling, 3 drying, 4 fan only
@@ -22,12 +22,12 @@
 //       set.
 //
 //   extern fn ac_refresh()
-//       Asks the unit for its status. Called every refresh_interval seconds.
-//       Units without feedback (IR) just return 0.
+//       Asks the unit for its status, on the scheduled run the runtime performs
+//       every refresh_interval seconds. Units without feedback (IR) return 0.
 //
-// Both only have to accept the work, not finish it: a driver talking over the
-// network returns as soon as the request is on its way and reports the result
-// later. Their return value says how the request was taken:
+// Both only have to accept the work, not finish it: a driver on the network
+// returns as soon as the request is on its way. Their return value says how the
+// request was taken:
 //     0   accepted
 //   < 0   not accepted right now, e.g. the previous exchange is still running;
 //         retried a second later, and not reported as a fault
@@ -40,11 +40,6 @@
 //   unit_room_temp    -1000 unknown, otherwise °C
 //   unit_fault        the fault value to publish
 // Whatever is left unknown is published as the value this block commanded.
-//
-// Once a driver has stored fresh readings there, it makes the runtime call
-// std::on_driver_update below, which is what turns them into outputs. That is
-// the only way an implementation reaches back into this block, and it says
-// nothing about how the unit was reached.
 
 fn choice(value, hi) {
     v = math::int(math::round(value))
@@ -131,9 +126,9 @@ fn changed(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) {
     return false
 }
 
-// The last readings describe the unit as it was before a command, so they must
-// not mask what was just asked for. The next refresh fills them in again. The
-// room temperature is a measurement, not a setting, and stays.
+// The last readings describe the unit before a command, so they must not mask
+// what was just asked for; the next refresh fills them in again. The room
+// temperature is a measurement, not a setting, and stays.
 fn forget_readings() {
     state::set("unit_power", -1)
     state::set("unit_mode", -1)
@@ -151,21 +146,11 @@ fn remember(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) {
     state::set("sent", true)
 }
 
-// Only one callback can be pending per block, so the tick is the only timer
-// this block uses: the refresh interval and the retry below share it.
+// The refresh runs on the runtime's activation, so the block's one timer is
+// free for the retry below.
 fn arm_tick(delay_ms) {
     callback::clear()
     callback::set(delay_ms, "on_refresh")
-    state::set("tick_active", true)
-}
-
-fn arm_refresh() {
-    interval_ms = math::int(math::round(config::get("refresh_interval") * 1000))
-    if (interval_ms <= 0) {
-        state::set("tick_active", false)
-        return
-    }
-    arm_tick(interval_ms)
 }
 
 fn run(refresh) {
@@ -187,13 +172,8 @@ fn run(refresh) {
         stale = false
     }
 
-    if (refresh or !state::get("tick_active")) {
-        arm_refresh()
-    }
-
-    // A command comes before a status poll: a driver that can only run one
-    // exchange at a time would otherwise turn the command down and leave it
-    // waiting for a whole refresh interval.
+    // A command comes before a status poll: a driver that runs one exchange at a
+    // time would otherwise turn it down for a whole refresh interval.
     applied = false
     resend = refresh and config::get("resend_on_refresh")
     if (changed(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) or resend) {
@@ -222,6 +202,16 @@ fn run(refresh) {
     }
 }
 
+// Asked by the runtime for the next refresh, in whole seconds - the only form
+// the scheduler reads back. 0 turns polling off for units that report nothing.
+extern fn std::next_activation_at() {
+    interval = math::int(math::round(config::get("refresh_interval")))
+    if (interval <= 0) {
+        return 0
+    }
+    return time::now() + interval
+}
+
 extern fn on_refresh() {
     run(true)
 }
@@ -239,11 +229,5 @@ extern fn std::on_driver_update() {
     publish(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
 }
 
-// A config change can alter the refresh interval - drop the timer so the run
-// below arms a new one.
-if (input::channel() == "config_change") {
-    callback::clear()
-    state::set("tick_active", false)
-}
-
-run(false)
+// A scheduled run arrives without a channel, and that is the refresh tick.
+run(input::channel() == "")
