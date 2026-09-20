@@ -145,8 +145,7 @@ fn temp_param(mode, target_temp) {
     return str::num_fmt(math::round(target_temp * 2) / 2, 1)
 }
 
-// The room temperature has no other source than a status read, and a command
-// leaves the rest of the readings describing the unit as it was before.
+// The only source of the room temperature, and of the readings after a command.
 fn read_status() {
     begin(4, "/aircon/get_control_info")
     return 0
