@@ -1,39 +1,33 @@
 // Air conditioner - abstract block.
 //
-// Turns the input channels into one desired unit state and hands it over to the
-// attached implementation (driver) block. Only the driver knows how to reach a
-// particular unit (IR, LAN, Modbus, ...), so everything specific to a brand or
-// a model stays there.
+// Turns the input channels into one desired unit state and hands it to the
+// attached implementation (driver), the only part that knows how to reach a
+// particular unit (IR, LAN, Modbus, ...).
 //
 // Value encodings, shared by the inputs, the outputs and the driver call:
 //   mode       0 auto, 1 heating, 2 cooling, 3 drying, 4 fan only
 //   fan_speed  0 auto, 1 quiet, 2 low, 3 medium, 4 high, 5 powerful
-//   swing_v    0 auto, 1 swing, 2..6 fixed vane position (2 highest .. 6 lowest)
-//   swing_h    0 auto, 1 swing, 2..6 fixed vane position (2 leftmost .. 6 rightmost)
+//   swing_v    0 auto, 1 swing, 2..6 fixed vane (2 highest .. 6 lowest)
+//   swing_h    0 auto, 1 swing, 2..6 fixed vane (2 leftmost .. 6 rightmost)
 //   fault      0 none, -1 unit unreachable, > 0 unit specific error code
 // A unit that cannot do what was asked for falls back to its closest
 // equivalent - that mapping belongs to the driver.
 //
-// The implementation block must declare both functions:
+// The driver must declare both functions. They only have to accept the work,
+// not finish it: one on the network returns as soon as the request is out.
 //
-//   extern fn ac_apply(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
-//       Pushes the complete desired state to the unit. Called whenever any of
-//       the values changes, and on every refresh tick when resend_on_refresh is
-//       set.
-//
-//   extern fn ac_refresh()
+//   ac_apply(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean)
+//       Pushes the complete desired state and leaves the readings refreshed, so
+//       a tick that sends a command does not poll on top of it. Called whenever
+//       a value changes, and on every refresh tick when resend_on_refresh is set.
+//   ac_refresh()
 //       Asks the unit for its status, on the scheduled run the runtime performs
 //       every refresh_interval seconds. Units without feedback (IR) return 0.
 //
-// Both only have to accept the work, not finish it: a driver on the network
-// returns as soon as the request is on its way. Their return value says how the
-// request was taken:
-//     0   accepted
-//   < 0   not accepted right now, e.g. the previous exchange is still running;
-//         retried a second later, and not reported as a fault
-//   > 0   failed, published on the fault output
+// Both return 0 accepted, < 0 busy - retried a second later and not a fault,
+// > 0 failed and published on the fault output.
 //
-// The driver shares this block's state variables, which is how it reports back:
+// The driver shares this block's state, which is how it reports back:
 //   unit_power        -1 unknown, 0 off, 1 on
 //   unit_mode         -1 unknown, otherwise a mode value
 //   unit_target_temp  -1000 unknown, otherwise °C
@@ -62,9 +56,8 @@ fn clamp(value, lo, hi) {
     return value
 }
 
-// The airflow and air cleaning settings have no counterpart in the driver
-// readings - no unit reports them back - so they are published exactly as
-// commanded, which is what a client needs to show the current selection.
+// Airflow and air cleaning have no counterpart in the readings - no unit
+// reports them back - so they are published exactly as commanded.
 fn publish(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) {
     unit_power = state::get("unit_power")
     if (unit_power >= 0) {
@@ -127,7 +120,7 @@ fn changed(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) {
 }
 
 // The last readings describe the unit before a command, so they must not mask
-// what was just asked for; the next refresh fills them in again. The room
+// what was just asked for; the read that follows fills them in again. The room
 // temperature is a measurement, not a setting, and stays.
 fn forget_readings() {
     state::set("unit_power", -1)
@@ -172,8 +165,8 @@ fn run(refresh) {
         stale = false
     }
 
-    // A command comes before a status poll: a driver that runs one exchange at a
-    // time would otherwise turn it down for a whole refresh interval.
+    // A command comes before a status poll: a driver runs one exchange at a time
+    // and would turn the poll down. It refreshes the readings itself.
     applied = false
     resend = refresh and config::get("resend_on_refresh")
     if (changed(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) or resend) {

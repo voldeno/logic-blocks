@@ -7,8 +7,9 @@
 // registered terminal, BRP084 a single /dsiot/multireq JSON endpoint.
 //
 // Every request is a GET whose reply is a flat "ret=OK,pow=1,mode=4,..." list.
-// Both operations take more than one request, and only one exchange runs at a
-// time because an implementation has a single pending callback:
+// Only one exchange runs at a time, because an implementation has a single
+// pending callback, and both operations take several requests - a command ends
+// with the status read that follows it, so a resend never costs the readings:
 //
 //   drv_step  0 idle
 //             1 set_control_info sent
@@ -144,13 +145,20 @@ fn temp_param(mode, target_temp) {
     return str::num_fmt(math::round(target_temp * 2) / 2, 1)
 }
 
+// The room temperature has no other source than a status read, and a command
+// leaves the rest of the readings describing the unit as it was before.
+fn read_status() {
+    begin(4, "/aircon/get_control_info")
+    return 0
+}
+
 // Both special modes are only touched when the desired value differs from what
-// the unit last reported, because each of them costs a request. Returns 1 when
-// the command is finished, 0 when another request is on its way.
+// the unit last reported, because each of them costs a request. Always returns
+// 0: the status read closes the exchange.
 fn apply_streamer() {
     want = math::int(state::get("drv_streamer"))
     if (want == state::get("drv_unit_streamer")) {
-        return 1
+        return read_status()
     }
     begin(3, str::fmt("/aircon/set_special_mode?en_streamer={}", want))
     return 0
@@ -204,8 +212,7 @@ extern fn ac_refresh() {
     if (config::get("host") == "") {
         return 1000
     }
-    begin(4, "/aircon/get_control_info")
-    return 0
+    return read_status()
 }
 
 extern fn http::on_response(status, body, headers) {
@@ -244,7 +251,7 @@ extern fn http::on_response(status, body, headers) {
     }
     if (step == 3) {
         state::set("drv_unit_streamer", math::int(state::get("drv_streamer")))
-        return 1
+        return read_status()
     }
     return 1
 }
