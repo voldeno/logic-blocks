@@ -31,7 +31,8 @@
     {"id": "pulse_duration", "name": "Czas trwania impulsu", "description": "Czas trwania impulsów na wyjściach sterujących, otwierania i zamykania, w sekundach"},
     {"id": "pulse_pause", "name": "Przerwa między impulsami", "description": "Minimalna przerwa między dwoma kolejnymi impulsami, w sekundach"},
     {"id": "motor_lock_duration", "name": "Czas blokady silnika", "description": "Czas potrzebny silnikowi na zmianę kierunku, w sekundach. W trybie bezpośrednim chroni silnik, a w pozostałych trybach utrzymuje dokładność szacowanej pozycji."},
-    {"id": "use_sensors", "name": "Używaj czujników krańcowych", "description": "Gdy włączone, wejścia is_open i is_closed są wiodącym źródłem informacji o pozycji krańcowej. Pozycja jest nadal szacowana z czasów konfiguracji na potrzeby wyświetlania. Wyłącz, gdy brak podłączonych czujników."}
+    {"id": "use_sensors", "name": "Używaj czujników krańcowych", "description": "Gdy włączone, wejścia is_open i is_closed są wiodącym źródłem informacji o pozycji krańcowej. Pozycja jest nadal szacowana z czasów konfiguracji na potrzeby wyświetlania. Wyłącz, gdy brak podłączonych czujników."},
+    {"id": "movement_timeout", "name": "Limit czasu bez ruchu", "description": "Jak długo brama może nie wykazywać ruchu, w sekundach, zanim blok przestanie go zakładać i zsynchronizuje stan z wyłącznikami krańcowymi. Musi być dłuższy niż opóźnienie od polecenia do ruchu bramy, np. gdy sterownik najpierw mruga lampą."}
   ],
   "state": [
     {"id": "position", "name": "Pozycja", "description": "Surowa wartość symulowanej pozycji bramy jako procent (0-100)"},
@@ -49,6 +50,8 @@
     {"id": "pulse_phase", "name": "Faza impulsu", "description": "Faza mechanizmu impulsów: 0=bezczynny, 1=impuls aktywny, 2=przerwa lub oczekiwanie blokady silnika"},
     {"id": "pulse_ticks", "name": "Pozostałe takty impulsu", "description": "Liczba taktów pozostałych w bieżącej fazie impulsu"},
     {"id": "move_lock_ticks", "name": "Takty blokady ruchu", "description": "Liczba taktów, przez które szacowana pozycja jest wstrzymana po zmianie kierunku, gdy trwa blokada silnika (tryby pośrednie)"},
+    {"id": "stall_ticks", "name": "Takty bez ruchu", "description": "Liczba taktów od ostatniej oznaki ruchu bramy, względem której mierzony jest limit czasu bez ruchu"},
+    {"id": "external_move", "name": "Ruch wywołany zewnętrznie", "description": "Wskazuje, że bieżący ruch nie został wywołany przez blok, ale założony na podstawie zwolnienia wyłącznika krańcowego, np. przy sterowaniu pilotem"},
     {"id": "tick_active", "name": "Aktywny takt", "description": "Wskazuje, czy okresowe wywołanie symulacji jest zaplanowane"},
     {"id": "last_movement_ts", "name": "Znacznik czasu ostatniego ruchu", "description": "Znacznik czasu ostatniego ruchu, używany do pauzy blokady silnika przy zmianie kierunku"}
   ]
