@@ -1,0 +1,138 @@
+name: "limit switch flicker on a parked gate must not latch a movement"
+
+# A limit switch on a gate that is standing still can drop out for a moment
+# (vibration, a dirty contact). Releasing means "the gate left the limit, something
+# else is driving it", but the re-assert that follows proves the gate never moved,
+# so the assumed movement has to be dropped again. If it were kept, the block would
+# believe the gate is moving for good, and every later command would be discarded as
+# already satisfied - the gate would stop reacting until real movement re-synced it.
+
+config:
+  control_mode: 3
+  open_output_function: 0   # Open (Ot)
+  close_output_function: 1  # Close (ZA)
+  opening_duration: 10
+  closing_duration: 10
+  motor_lock_duration: 0
+  pulse_duration: 0.2
+  pulse_pause: 0.2
+  use_sensors: true
+  movement_timeout: 5
+
+steps:
+  # ----- open limit -----
+
+  - action: "set_inputs"
+    comment: "Gate confirmed fully open"
+    inputs:
+      is_open: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      moving: false
+      position: 100
+      gate_state: 2
+
+  - action: "set_inputs"
+    comment: "Contact drops out although the gate is standing still"
+    inputs:
+      is_open: false
+
+  - action: "assert_outputs"
+    comment: "Taken as externally started closing - the gate may have been moved by a remote"
+    expected_outputs:
+      moving: true
+      gate_state: 3
+
+  - action: "set_inputs"
+    comment: "Contact is back: the gate never left the open limit"
+    inputs:
+      is_open: true
+
+  - action: "assert_outputs"
+    comment: "Assumed closing dropped, gate is open again"
+    expected_outputs:
+      moving: false
+      position: 100
+      gate_state: 2
+
+  - action: "set_inputs"
+    comment: "Close after the flicker - the command must still reach the controller"
+    inputs:
+      close: true
+
+  - action: "assert_outputs"
+    comment: "Close pulse emitted (position held at the limit until the gate departs)"
+    expected_outputs:
+      close: true
+      moving: true
+      position: 100
+      gate_state: 3
+
+  - action: "set_inputs"
+    inputs:
+      close: false
+
+  - action: "set_inputs"
+    comment: "Gate really departs this time"
+    inputs:
+      is_open: false
+
+  - action: "wait"
+    comment: "Long enough to also clear the pulse and the pulse pause, so the commands
+      below are acted on at once instead of being queued behind the pulse machinery"
+    duration_ms: 600
+
+  - action: "assert_output_range"
+    comment: "Closing is tracked normally"
+    output: "position"
+    gte: "85"
+    lt: "100"
+
+  # ----- closed limit -----
+
+  - action: "set_inputs"
+    comment: "Gate reaches the closed limit"
+    inputs:
+      is_closed: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      moving: false
+      position: 0
+      gate_state: 0
+
+  - action: "set_inputs"
+    comment: "Contact drops out although the gate is standing still"
+    inputs:
+      is_closed: false
+
+  - action: "assert_outputs"
+    comment: "Taken as externally started opening"
+    expected_outputs:
+      moving: true
+      gate_state: 1
+
+  - action: "set_inputs"
+    comment: "Contact is back: the gate never left the closed limit"
+    inputs:
+      is_closed: true
+
+  - action: "assert_outputs"
+    comment: "Assumed opening dropped, gate is closed again"
+    expected_outputs:
+      moving: false
+      position: 0
+      gate_state: 0
+
+  - action: "set_inputs"
+    comment: "Open after the flicker - the command must still reach the controller"
+    inputs:
+      open: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      open: true
+      moving: true
+      position: 0
+      gate_state: 1

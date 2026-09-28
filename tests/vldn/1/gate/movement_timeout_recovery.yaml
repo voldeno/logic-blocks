@@ -1,0 +1,116 @@
+name: "movement that never happens is given up on after the movement timeout"
+
+# Two ways a believed movement can never end on its own, both of which used to leave
+# the block convinced the gate is moving and therefore deaf to further commands:
+#   - the controller ignores the pulse (photocell, desynced controller cycle), so the
+#     gate never leaves the limit switch that holds the position estimate
+#   - the estimated travel ends but the limit switch at the far end never confirms it
+#     (not wired on that side, or the gate stopped just short of it)
+
+config:
+  control_mode: 3
+  open_output_function: 0   # Open (Ot)
+  close_output_function: 1  # Close (ZA)
+  opening_duration: 1
+  closing_duration: 1
+  motor_lock_duration: 0
+  pulse_duration: 0.2
+  pulse_pause: 0.2
+  use_sensors: true
+  movement_timeout: 1
+
+steps:
+  - action: "set_inputs"
+    comment: "Gate confirmed fully open"
+    inputs:
+      is_open: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      moving: false
+      position: 100
+      gate_state: 2
+
+  # ----- the controller ignores the close pulse -----
+
+  - action: "set_inputs"
+    inputs:
+      close: true
+
+  - action: "set_inputs"
+    inputs:
+      close: false
+
+  - action: "assert_outputs"
+    comment: "Close pulse sent, gate believed to be closing"
+    expected_outputs:
+      moving: true
+      position: 100
+      gate_state: 3
+
+  - action: "wait"
+    comment: "Gate does not move; it is still on the open limit switch"
+    duration_ms: 500
+
+  - action: "assert_outputs"
+    comment: "Still within the movement timeout, the movement is given the benefit of the doubt"
+    expected_outputs:
+      moving: true
+      position: 100
+      gate_state: 3
+
+  - action: "wait"
+    comment: "Past the movement timeout"
+    duration_ms: 1500
+
+  - action: "assert_outputs"
+    comment: "Movement given up on, gate reported as open again"
+    expected_outputs:
+      close: false
+      moving: false
+      position: 100
+      gate_state: 2
+
+  - action: "set_inputs"
+    comment: "Repeating the command must produce another pulse, not be swallowed"
+    inputs:
+      close: true
+
+  - action: "assert_outputs"
+    expected_outputs:
+      close: true
+      moving: true
+      position: 100
+      gate_state: 3
+
+  - action: "set_inputs"
+    inputs:
+      close: false
+
+  # ----- travel ends without the closed limit switch confirming it -----
+
+  - action: "set_inputs"
+    comment: "This time the gate really moves and leaves the open limit"
+    inputs:
+      is_open: false
+
+  - action: "wait"
+    comment: "Closing; the closed limit switch never reports"
+    duration_ms: 1300
+
+  - action: "assert_outputs"
+    comment: "Not given up on yet - the estimate is still allowed to run out"
+    expected_outputs:
+      moving: true
+      gate_state: 3
+
+  - action: "wait"
+    comment: "Past the estimated travel and the movement timeout on top of it"
+    duration_ms: 3000
+
+  - action: "assert_outputs"
+    comment: "End of travel accepted from the estimate"
+    expected_outputs:
+      moving: false
+      position: 0
+      gate_state: 0

@@ -25,6 +25,14 @@
 // keeps the motor off for that time (motor protection); in the non-direct modes the
 // controller owns the motor, so the lock instead holds the simulated position for the
 // reversal window so the position estimate accounts for the time a reversal takes.
+//
+// Movement is only believed for as long as the gate shows signs of moving. With limit
+// switches connected, a movement that never clears the switch it started from, and a
+// simulated travel that ends without the far switch confirming it, are both given up on
+// after movement_timeout and the state is resynchronised with the switches. Without that
+// a controller refusing a pulse, a stalled motor or a switch that merely flickered would
+// leave the block believing the gate moves for good, and every further command would be
+// discarded as already satisfied.
 
 channel = input::channel()
 value = input::value()
@@ -43,6 +51,18 @@ fn ticks_for(seconds) {
 // that drives the gate back to a limit is honored.
 fn sensor_bounce_margin() {
     return 5
+}
+
+// Counts the ticks in which the gate showed no sign of moving and reports when
+// movement_timeout has passed without any progress.
+fn no_progress_timeout() {
+    t = state::get("stall_ticks") + 1
+    if (t >= ticks_for(config::get("movement_timeout"))) {
+        state::set("stall_ticks", 0)
+        return true
+    }
+    state::set("stall_ticks", t)
+    return false
 }
 
 fn set_gate_state(s) {
@@ -68,6 +88,8 @@ fn apply_stopped_state() {
 fn set_dir(d) {
     prev_dir = state::get("last_dir")
     state::set("moving_dir", d)
+    state::set("stall_ticks", 0)
+    state::set("external_move", false)
     output::set("moving", d != 0)
     if (d != 0) {
         // A direction reversal costs the motor lock time regardless of the control mode.
@@ -410,6 +432,9 @@ fn reach_open_end() {
     state::set("position", 100.0)
     output::set("position", 100)
     set_dir(0)
+    // the gate sits at the open limit, so opening was the last travel that happened,
+    // whatever direction the block believed in before
+    state::set("last_dir", 1)
     if (config::get("control_mode") == 0) {
         direct_apply(0)
     }
@@ -428,6 +453,7 @@ fn reach_closed_end() {
     state::set("position", 0.0)
     output::set("position", 0)
     set_dir(0)
+    state::set("last_dir", -1)
     if (config::get("control_mode") == 0) {
         direct_apply(0)
     }
@@ -479,7 +505,9 @@ extern fn onTick() {
     move_lock = state::get("move_lock_ticks")
     // in sensor mode, position does not advance while the departure sensor is still
     // asserted: the gate may not have physically left the limit yet (e.g. power
-    // failure, stalled motor) and the sensor is the authoritative source
+    // failure, stalled motor) and the sensor is the authoritative source. That wait is
+    // bounded by movement_timeout below, or a gate that never departs would keep the
+    // block believing it moves forever.
     sensor_holds_pos = false
     if (config::get("use_sensors")) {
         if (d == 1 and input::get("is_closed")) {
@@ -491,7 +519,21 @@ extern fn onTick() {
     }
     if (move_lock > 0 and d != 0) {
         state::set("move_lock_ticks", move_lock - 1)
-    } else if (d != 0 and state::get("desired_action") != 3 and !sensor_holds_pos) {
+    } else if (d != 0 and state::get("desired_action") != 3 and sensor_holds_pos) {
+        // The gate is still on the limit switch it was told to leave. Give it
+        // movement_timeout to get going, then take it that the movement never started
+        // and park the gate back on that limit, so the state stops claiming a movement
+        // that is not happening and the next command is not discarded as already
+        // satisfied. If the gate does depart later, the released switch picks the
+        // movement up again.
+        if (no_progress_timeout()) {
+            if (d == 1) {
+                reach_closed_end()
+            } else {
+                reach_open_end()
+            }
+        }
+    } else if (d != 0 and state::get("desired_action") != 3) {
         pos = state::get("position")
         if (d == 1) {
             pos = pos + (100 * 100) / (config::get("opening_duration") * 1000.0)
@@ -501,19 +543,29 @@ extern fn onTick() {
 
         if (d == 1 and pos >= 100) {
             if (config::get("use_sensors")) {
-                // clamp for display; actual end-of-travel is confirmed by the is_open sensor
+                // clamp for display; actual end-of-travel is confirmed by the is_open
+                // sensor, or taken for granted once movement_timeout passes without it -
+                // the sensor may not be wired on this side, or the gate may have stopped
+                // just short of it
                 state::set("position", 100.0)
                 output::set("position", 100)
                 state::set("last_movement_ts", time::uptime())
+                if (no_progress_timeout()) {
+                    reach_open_end()
+                }
             } else {
                 reach_open_end()
             }
         } else if (d == -1 and pos <= 0) {
             if (config::get("use_sensors")) {
-                // clamp for display; actual end-of-travel is confirmed by the is_closed sensor
+                // clamp for display; actual end-of-travel is confirmed by the is_closed
+                // sensor, or taken for granted once movement_timeout passes without it
                 state::set("position", 0.0)
                 output::set("position", 0)
                 state::set("last_movement_ts", time::uptime())
+                if (no_progress_timeout()) {
+                    reach_closed_end()
+                }
             } else {
                 reach_closed_end()
             }
@@ -535,6 +587,7 @@ extern fn onTick() {
             state::set("position", pos)
             output::set("position", math::round(pos))
             state::set("last_movement_ts", time::uptime())
+            state::set("stall_ticks", 0)
 
             if (arrived) {
                 state::set("target", -1)
@@ -575,14 +628,17 @@ if (channel == "is_open") {
         // The sensor is authoritative (e.g. a remote may have driven the gate here),
         // so honor it - except for contact bounce in the instant after the gate leaves
         // the open limit: that shows up as a re-assert while closing and still within a
-        // small position margin of the open limit.
+        // small position margin of the open limit. A re-assert during a movement that was
+        // only assumed from this switch opening is never bounce - it means the gate never
+        // left the limit, so that assumed movement has to go.
         bounce = state::get("moving_dir") == -1 and state::get("position") > 100 - sensor_bounce_margin()
-        if (!bounce) {
+        if (!bounce or state::get("external_move")) {
             reach_open_end()
         }
     } else if (state::get("moving_dir") == 0 and state::get("position") >= 100) {
         // gate left the open limit without a command - assume external closing
         set_dir(-1)
+        state::set("external_move", true)
         ensure_tick()
     }
     return
@@ -593,14 +649,17 @@ if (channel == "is_closed") {
         // The sensor is authoritative (e.g. a remote may have driven the gate here),
         // so honor it - except for contact bounce in the instant after the gate leaves
         // the closed limit: that shows up as a re-assert while opening and still within a
-        // small position margin of the closed limit.
+        // small position margin of the closed limit. A re-assert during a movement that
+        // was only assumed from this switch opening is never bounce - it means the gate
+        // never left the limit, so that assumed movement has to go.
         bounce = state::get("moving_dir") == 1 and state::get("position") < sensor_bounce_margin()
-        if (!bounce) {
+        if (!bounce or state::get("external_move")) {
             reach_closed_end()
         }
     } else if (state::get("moving_dir") == 0 and state::get("position") <= 0) {
         // gate left the closed limit without a command - assume external opening
         set_dir(1)
+        state::set("external_move", true)
         ensure_tick()
     }
     return

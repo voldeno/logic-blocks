@@ -139,6 +139,11 @@
       "id": "use_sensors",
       "name": "Use limit switch sensors",
       "description": "When enabled, the is_open and is_closed inputs are the authoritative source for end-of-travel events. Position is still estimated from configured durations for display. Requires sensors to be connected; disable when no sensors are used."
+    },
+    {
+      "id": "movement_timeout",
+      "name": "Movement timeout",
+      "description": "How long the gate may show no movement, in seconds, before the block gives up on it and resynchronises its state with the limit switches. Must be longer than the delay between a command and the gate starting to move, e.g. a pre-flashing lamp."
     }
   ],
   "state": [
@@ -216,6 +221,16 @@
       "id": "move_lock_ticks",
       "name": "Movement lock ticks",
       "description": "Ticks the simulated position is held after a reversal while the motor lock elapses (non-direct modes)"
+    },
+    {
+      "id": "stall_ticks",
+      "name": "No movement ticks",
+      "description": "Ticks counted since the gate last showed any sign of moving, against which the movement timeout is measured"
+    },
+    {
+      "id": "external_move",
+      "name": "Externally started movement",
+      "description": "Indicates that the current movement was not commanded by the block but assumed from a limit switch releasing, e.g. the gate being driven by a remote"
     },
     {
       "id": "tick_active",

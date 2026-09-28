@@ -1,0 +1,191 @@
+{
+  "description": "Generic air conditioner control. Holds the logic common to every unit and delegates the communication to an attached implementation block, which is the only part that knows a given brand or model.",
+  "inputs": [
+    {
+      "id": "power",
+      "name": "Power",
+      "description": "Switches the unit on when high and off when low"
+    },
+    {
+      "id": "mode",
+      "name": "Mode",
+      "description": "Operating mode: 0 - auto, 1 - heating, 2 - cooling, 3 - drying, 4 - fan only. A unit without the requested mode uses its closest equivalent."
+    },
+    {
+      "id": "target_temp",
+      "name": "Target temperature",
+      "description": "Requested target temperature, limited to the configured range"
+    },
+    {
+      "id": "fan_speed",
+      "name": "Fan speed",
+      "description": "Fan speed: 0 - auto, 1 - quiet, 2 - low, 3 - medium, 4 - high, 5 - powerful (boost). A unit with fewer steps uses its closest equivalent."
+    },
+    {
+      "id": "swing_v",
+      "name": "Vertical airflow",
+      "description": "Vertical vane: 0 - auto, 1 - swing, 2 to 6 - fixed position from the highest to the lowest"
+    },
+    {
+      "id": "swing_h",
+      "name": "Horizontal airflow",
+      "description": "Horizontal vane: 0 - auto, 1 - swing, 2 to 6 - fixed position from the leftmost to the rightmost"
+    },
+    {
+      "id": "air_clean",
+      "name": "Air cleaning",
+      "description": "Enables the air cleaning feature of the unit (ionizer, streamer, plasma filter). Ignored by units without one."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "power",
+      "name": "Power",
+      "description": "High when the unit is on. Reported by the unit when the implementation provides feedback, otherwise the commanded state."
+    },
+    {
+      "id": "mode",
+      "name": "Mode",
+      "description": "Effective operating mode, using the same values as the mode input. Units that report their status resolve the auto mode into heating or cooling here."
+    },
+    {
+      "id": "target_temp",
+      "name": "Target temperature",
+      "description": "Target temperature the unit works with, after the configured range has been applied"
+    },
+    {
+      "id": "fan_speed",
+      "name": "Fan speed",
+      "description": "Fan speed the unit was asked for, using the same values as the fan speed input. No unit reports this back, so it is always the commanded value."
+    },
+    {
+      "id": "swing_v",
+      "name": "Vertical airflow",
+      "description": "Vertical vane setting the unit was asked for, using the same values as the vertical airflow input. No unit reports this back, so it is always the commanded value."
+    },
+    {
+      "id": "swing_h",
+      "name": "Horizontal airflow",
+      "description": "Horizontal vane setting the unit was asked for, using the same values as the horizontal airflow input. No unit reports this back, so it is always the commanded value."
+    },
+    {
+      "id": "air_clean",
+      "name": "Air cleaning",
+      "description": "Air cleaning setting the unit was asked for. No unit reports this back, so it is always the commanded value."
+    },
+    {
+      "id": "room_temp",
+      "name": "Room temperature",
+      "description": "Indoor temperature measured by the unit. -1000 when the unit does not report it."
+    },
+    {
+      "id": "fault",
+      "name": "Fault",
+      "description": "0 - no fault, -1 - unit unreachable, above 0 - unit specific error code"
+    }
+  ],
+  "config": [
+    {
+      "id": "min_target_temp",
+      "name": "Minimum target temperature",
+      "description": "Lower limit for the target temperature input. The unit may narrow it down further."
+    },
+    {
+      "id": "max_target_temp",
+      "name": "Maximum target temperature",
+      "description": "Upper limit for the target temperature input. The unit may narrow it down further."
+    },
+    {
+      "id": "refresh_interval",
+      "name": "Refresh interval",
+      "description": "How often the unit status is read, in seconds. Set to 0 to never read it, for example for units controlled over infrared."
+    },
+    {
+      "id": "resend_on_refresh",
+      "name": "Resend state on refresh",
+      "description": "Sends the full state to the unit on every refresh instead of only after a change. Keeps units without feedback in sync after they were operated with their own remote control."
+    }
+  ],
+  "state": [
+    {
+      "id": "unit_power",
+      "name": "Reported power",
+      "description": "Power state reported by the implementation block: -1 unknown, 0 off, 1 on"
+    },
+    {
+      "id": "unit_mode",
+      "name": "Reported mode",
+      "description": "Mode reported by the implementation block, -1 when unknown"
+    },
+    {
+      "id": "unit_target_temp",
+      "name": "Reported target temperature",
+      "description": "Target temperature reported by the implementation block, -1000 when unknown"
+    },
+    {
+      "id": "unit_room_temp",
+      "name": "Reported room temperature",
+      "description": "Indoor temperature reported by the implementation block, -1000 when unknown"
+    },
+    {
+      "id": "unit_fault",
+      "name": "Reported fault",
+      "description": "Fault reported by the implementation block"
+    },
+    {
+      "id": "invoke_rc",
+      "name": "Last implementation result",
+      "description": "Value returned by the last implementation call, published as a fault when the unit reports none"
+    },
+    {
+      "id": "sent",
+      "name": "State sent",
+      "description": "Set once the state has been accepted by the unit at least once"
+    },
+    {
+      "id": "sent_power",
+      "name": "Sent power",
+      "description": "Last power state accepted by the unit"
+    },
+    {
+      "id": "sent_mode",
+      "name": "Sent mode",
+      "description": "Last mode accepted by the unit"
+    },
+    {
+      "id": "sent_target_temp",
+      "name": "Sent target temperature",
+      "description": "Last target temperature accepted by the unit"
+    },
+    {
+      "id": "sent_fan_speed",
+      "name": "Sent fan speed",
+      "description": "Last fan speed accepted by the unit"
+    },
+    {
+      "id": "sent_swing_v",
+      "name": "Sent vertical airflow",
+      "description": "Last vertical vane setting accepted by the unit"
+    },
+    {
+      "id": "sent_swing_h",
+      "name": "Sent horizontal airflow",
+      "description": "Last horizontal vane setting accepted by the unit"
+    },
+    {
+      "id": "sent_air_clean",
+      "name": "Sent air cleaning",
+      "description": "Last air cleaning setting accepted by the unit"
+    },
+    {
+      "id": "last_activation_ts",
+      "name": "Last execution timestamp",
+      "description": "Last execution timestamp in seconds from epoch"
+    },
+    {
+      "id": "next_activation_ts",
+      "name": "Next execution timestamp",
+      "description": "Next execution timestamp in seconds from epoch"
+    }
+  ]
+}

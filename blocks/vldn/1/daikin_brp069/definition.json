@@ -1,0 +1,48 @@
+{
+  "name": "Air conditioner : Daikin BRP069",
+  "group": "driver",
+  "interface": {
+    "provider": "vldn",
+    "version": 1,
+    "name": "air_conditioner"
+  },
+  "config": [
+    {
+      "id": "host",
+      "type": "STRING",
+      "default": ""
+    }
+  ],
+  "state": [
+    {
+      "id": "drv_step",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "drv_started",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "drv_powerful",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "drv_streamer",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "drv_unit_powerful",
+      "type": "NUMBER",
+      "default": "-1"
+    },
+    {
+      "id": "drv_unit_streamer",
+      "type": "NUMBER",
+      "default": "-1"
+    }
+  ]
+}

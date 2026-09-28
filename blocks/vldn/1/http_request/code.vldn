@@ -3,20 +3,15 @@ fn apply_headers(client, headers) {
         return
     }
 
-    pairs = str::split(headers, "|")
-    while (str::split_has_next(pairs)) {
-        pair = str::split_next(pairs)
-        kv = str::split(pair, ":")
-        key = str::split_next(kv)
-        value = ""
-        while (str::split_has_next(kv)) {
-            if (value != "") {
-                value = str::fmt("{}:{}", value, str::split_next(kv))
-            } else {
-                value = str::split_next(kv)
-            }
-        }
-        http::set_header(client, key, value)
+    // Only the first colon of a pair separates the name from the value, so a
+    // value keeps the colons of its own, as in "Host: unit.local:8080".
+    pairs = map::parse(headers, "|", ":")
+    names = map::keys(pairs)
+    i = 0
+    while (i < array::len(names)) {
+        name = array::get_at(names, i)
+        http::set_header(client, name, map::get(pairs, name))
+        i = i + 1
     }
 }
 

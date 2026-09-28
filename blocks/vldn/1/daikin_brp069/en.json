@@ -1,0 +1,44 @@
+{
+  "description": "Drives a Daikin air conditioner over the local network, using the plain HTTP API of the BRP069 family of Wi-Fi adapters (BRP069A4x, BRP069B4x, BRP072A4x). The newer BRP072C4x and BRP084 adapters speak different protocols and need their own driver.",
+  "inputs": [],
+  "outputs": [],
+  "config": [
+    {
+      "id": "host",
+      "name": "Address",
+      "description": "Address of the Wi-Fi adapter on the local network, for example 192.168.1.50, optionally with a port. Check that the adapter speaks this protocol by opening http://<address>/common/basic_info in a browser: it answers with a line starting with ret=OK."
+    }
+  ],
+  "state": [
+    {
+      "id": "drv_step",
+      "name": "Exchange step",
+      "description": "Which request is currently waiting for an answer, 0 when idle"
+    },
+    {
+      "id": "drv_started",
+      "name": "Exchange started",
+      "description": "Uptime in milliseconds when the pending request was sent, used to give up on a lost answer"
+    },
+    {
+      "id": "drv_powerful",
+      "name": "Powerful requested",
+      "description": "Whether the commanded fan speed asked for the powerful mode"
+    },
+    {
+      "id": "drv_streamer",
+      "name": "Streamer requested",
+      "description": "Whether air cleaning was commanded on"
+    },
+    {
+      "id": "drv_unit_powerful",
+      "name": "Powerful on the unit",
+      "description": "Last reported state of the powerful mode: -1 unknown, 0 off, 1 on"
+    },
+    {
+      "id": "drv_unit_streamer",
+      "name": "Streamer on the unit",
+      "description": "Last reported state of the streamer: -1 unknown, 0 off, 1 on"
+    }
+  ]
+}
