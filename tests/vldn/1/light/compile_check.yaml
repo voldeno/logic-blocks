@@ -1,6 +1,7 @@
 name: "compile check"
 
-config: {}
+config:
+  features: 3
 
 steps:
   - action: "assert_outputs"

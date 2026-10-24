@@ -144,21 +144,22 @@ fn send_command() {
         begin(1, """{"method":"set_device_info","params":{"device_on":false}}""")
         return 0
     }
-    brightness = clamp_int(state::get("drv_brightness"), 1, 100)
-    if (state::get("drv_color_mode") and state::get("drv_has_color")) {
-        hue = clamp_int(state::get("drv_hue"), 0, 360)
-        saturation = clamp_int(state::get("drv_saturation"), 0, 100)
-        begin(1, str::fmt("""{"method":"set_device_info","params":{"device_on":true,"brightness":{},"hue":{},"saturation":{},"color_temp":0}}""", brightness, hue, saturation))
-        return 0
+    request = """{"method":"set_device_info","params":{"device_on":true"""
+    brightness = state::get("drv_brightness")
+    if (brightness >= 0) {
+        request = str::fmt("""{},"brightness":{}""", request, clamp_int(brightness, 1, 100))
     }
+    hue = state::get("drv_hue")
+    saturation = state::get("drv_saturation")
+    color_temp = state::get("drv_color_temp")
     ct_min = state::get("drv_ct_min")
     ct_max = state::get("drv_ct_max")
-    if (ct_min < ct_max) {
-        color_temp = clamp_int(state::get("drv_color_temp"), ct_min, ct_max)
-        begin(1, str::fmt("""{"method":"set_device_info","params":{"device_on":true,"brightness":{},"color_temp":{}}}""", brightness, color_temp))
-        return 0
+    if (state::get("drv_color_mode") and state::get("drv_has_color") and hue >= 0 and saturation >= 0) {
+        request = str::fmt("""{},"hue":{},"saturation":{},"color_temp":0""", request, clamp_int(hue, 0, 360), clamp_int(saturation, 0, 100))
+    } else if (color_temp >= 0 and ct_min < ct_max) {
+        request = str::fmt("""{},"color_temp":{}""", request, clamp_int(color_temp, ct_min, ct_max))
     }
-    begin(1, str::fmt("""{"method":"set_device_info","params":{"device_on":true,"brightness":{}}}""", brightness))
+    begin(1, str::fmt("""{}}}""", request))
     return 0
 }
 

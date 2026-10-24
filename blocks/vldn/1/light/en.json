@@ -69,6 +69,13 @@
       "description": "0 - no fault, -1 - lamp unreachable, above 0 - implementation specific error code"
     }
   ],
+  "config": [
+    {
+      "id": "features",
+      "name": "Features",
+      "description": "What the lamp can do, each level including the previous ones: on/off, brightness, white color temperature, color. Inputs beyond it are ignored and the matching outputs read -1 (color mode low)."
+    }
+  ],
   "state": [
     {
       "id": "unit_power",

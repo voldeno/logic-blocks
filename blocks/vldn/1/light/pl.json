@@ -69,6 +69,13 @@
       "description": "0 - brak awarii, -1 - brak komunikacji z lampą, powyżej 0 - kod błędu implementacji"
     }
   ],
+  "config": [
+    {
+      "id": "features",
+      "name": "Funkcje",
+      "description": "Co potrafi lampa, każdy poziom obejmuje poprzednie: włącz/wyłącz, jasność, temperatura barwowa bieli, kolor. Wejścia ponad poziom są ignorowane, a odpowiednie wyjścia mają -1 (tryb koloru niski)."
+    }
+  ],
   "state": [
     {
       "id": "unit_power",

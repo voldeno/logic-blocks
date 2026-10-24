@@ -11,14 +11,20 @@
 //   hue         0..360 °
 //   saturation  0..100 %
 //   fault       0 none, -1 lamp unreachable, > 0 driver specific error code
-// A lamp that cannot do what was asked for falls back to its closest
-// equivalent - one without color stays white, one without a color temperature
-// keeps its own - and that mapping belongs to the driver.
+// The features config tells what the lamp can do, each level including the
+// previous ones:
+//   0 on/off, 1 dimmable (brightness), 2 tunable white (color_temp),
+//   3 color (color_mode, hue, saturation)
+// The values beyond it are passed to the driver and published as -1, with
+// color_mode low. A lamp that still cannot do what was asked for falls back
+// to its closest equivalent - one without color stays white, one without a
+// color temperature keeps its own - and that mapping belongs to the driver.
 //
 // The driver must declare one function:
 //
 //   light_apply(power, brightness, color_mode, color_temp, hue, saturation)
 //       Pushes the complete desired state, called whenever a value changes.
+//       A value of -1 means the lamp keeps its own setting.
 //       It only has to accept the work, not finish it: a driver on the network
 //       returns as soon as the request is out, and one still busy with an
 //       earlier exchange keeps the state and sends it once that is over.
@@ -51,28 +57,29 @@ fn clamp_int(value, lo, hi) {
 }
 
 fn publish(power, brightness, color_mode, color_temp, hue, saturation) {
+    features = config::get("features")
     unit_power = state::get("unit_power")
     if (unit_power >= 0) {
         power = unit_power != 0
     }
     unit_brightness = state::get("unit_brightness")
-    if (unit_brightness >= 0) {
+    if (unit_brightness >= 0 and features >= 1) {
         brightness = unit_brightness
     }
     unit_color_mode = state::get("unit_color_mode")
-    if (unit_color_mode >= 0) {
+    if (unit_color_mode >= 0 and features >= 3) {
         color_mode = unit_color_mode != 0
     }
     unit_color_temp = state::get("unit_color_temp")
-    if (unit_color_temp >= 0) {
+    if (unit_color_temp >= 0 and features >= 2) {
         color_temp = unit_color_temp
     }
     unit_hue = state::get("unit_hue")
-    if (unit_hue >= 0) {
+    if (unit_hue >= 0 and features >= 3) {
         hue = unit_hue
     }
     unit_saturation = state::get("unit_saturation")
-    if (unit_saturation >= 0) {
+    if (unit_saturation >= 0 and features >= 3) {
         saturation = unit_saturation
     }
     fault = state::get("unit_fault")
@@ -152,6 +159,18 @@ color_mode = input::get("color_mode")
 color_temp = clamp_int(input::get("color_temp"), 1000, 10000)
 hue = clamp_int(input::get("hue"), 0, 360)
 saturation = clamp_int(input::get("saturation"), 0, 100)
+features = config::get("features")
+if (features < 1) {
+    brightness = -1
+}
+if (features < 2) {
+    color_temp = -1
+}
+if (features < 3) {
+    color_mode = false
+    hue = -1
+    saturation = -1
+}
 
 if (changed(power, brightness, color_mode, color_temp, hue, saturation)) {
     // Report the commanded state right away, so the outputs stay meaningful

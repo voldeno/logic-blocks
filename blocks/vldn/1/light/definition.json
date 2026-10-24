@@ -93,7 +93,19 @@
       "default": "0"
     }
   ],
-  "config": [],
+  "config": [
+    {
+      "id": "features",
+      "type": "ENUM",
+      "values": [
+        "On/Off",
+        "Dimmable",
+        "Tunable white",
+        "Color"
+      ],
+      "default": "3"
+    }
+  ],
   "state": [
     {
       "id": "unit_power",
