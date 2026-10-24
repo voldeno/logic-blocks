@@ -1,0 +1,167 @@
+// Light - abstract block.
+//
+// Turns the input channels into one desired light state and hands it to the
+// attached implementation (driver), the only part that knows how to reach a
+// particular lamp (Wi-Fi bulb, DALI, Zigbee, ...).
+//
+// Value encodings, shared by the inputs, the outputs and the driver call:
+//   brightness  1..100 %
+//   color_mode  false white light at color_temp, true color at hue/saturation
+//   color_temp  K, the driver narrows it to what the lamp can do
+//   hue         0..360 °
+//   saturation  0..100 %
+//   fault       0 none, -1 lamp unreachable, > 0 driver specific error code
+// A lamp that cannot do what was asked for falls back to its closest
+// equivalent - one without color stays white, one without a color temperature
+// keeps its own - and that mapping belongs to the driver.
+//
+// The driver must declare one function:
+//
+//   light_apply(power, brightness, color_mode, color_temp, hue, saturation)
+//       Pushes the complete desired state, called whenever a value changes.
+//       It only has to accept the work, not finish it: a driver on the network
+//       returns as soon as the request is out, and one still busy with an
+//       earlier exchange keeps the state and sends it once that is over.
+//       Returns 0 when accepted, otherwise an error code that is published on
+//       the fault output.
+//
+// Whether and how often the lamp is polled for its status is up to the
+// driver, which can be scheduled on its own. Either way it reports back through
+// this block's state, then returns non-zero from the run that stored the
+// readings, so the runtime calls std::on_driver_update here:
+//   unit_power        -1 unknown, 0 off, 1 on
+//   unit_brightness   -1 unknown, otherwise %
+//   unit_color_mode   -1 unknown, 0 white, 1 color
+//   unit_color_temp   -1 unknown, otherwise K
+//   unit_hue          -1 unknown, otherwise °
+//   unit_saturation   -1 unknown, otherwise %
+//   unit_fault        the fault value to publish
+// Whatever is left unknown is published as the value this block commanded, so
+// a lamp without feedback simply never touches these.
+
+fn clamp_int(value, lo, hi) {
+    v = math::int(math::round(value))
+    if (v < lo) {
+        return lo
+    }
+    if (v > hi) {
+        return hi
+    }
+    return v
+}
+
+fn publish(power, brightness, color_mode, color_temp, hue, saturation) {
+    unit_power = state::get("unit_power")
+    if (unit_power >= 0) {
+        power = unit_power != 0
+    }
+    unit_brightness = state::get("unit_brightness")
+    if (unit_brightness >= 0) {
+        brightness = unit_brightness
+    }
+    unit_color_mode = state::get("unit_color_mode")
+    if (unit_color_mode >= 0) {
+        color_mode = unit_color_mode != 0
+    }
+    unit_color_temp = state::get("unit_color_temp")
+    if (unit_color_temp >= 0) {
+        color_temp = unit_color_temp
+    }
+    unit_hue = state::get("unit_hue")
+    if (unit_hue >= 0) {
+        hue = unit_hue
+    }
+    unit_saturation = state::get("unit_saturation")
+    if (unit_saturation >= 0) {
+        saturation = unit_saturation
+    }
+    fault = state::get("unit_fault")
+    if (fault == 0) {
+        fault = state::get("invoke_rc")
+    }
+    output::set("power", power)
+    output::set("brightness", brightness)
+    output::set("color_mode", color_mode)
+    output::set("color_temp", color_temp)
+    output::set("hue", hue)
+    output::set("saturation", saturation)
+    output::set("fault", fault)
+}
+
+fn changed(power, brightness, color_mode, color_temp, hue, saturation) {
+    if (!state::get("sent")) {
+        return true
+    }
+    if (state::get("sent_power") != power) {
+        return true
+    }
+    if (state::get("sent_brightness") != brightness) {
+        return true
+    }
+    if (state::get("sent_color_mode") != color_mode) {
+        return true
+    }
+    if (state::get("sent_color_temp") != color_temp) {
+        return true
+    }
+    if (state::get("sent_hue") != hue) {
+        return true
+    }
+    if (state::get("sent_saturation") != saturation) {
+        return true
+    }
+    return false
+}
+
+// The last readings describe the lamp before a command, so they must not mask
+// what was just asked for; the read that follows fills them in again.
+fn forget_readings() {
+    state::set("unit_power", -1)
+    state::set("unit_brightness", -1)
+    state::set("unit_color_mode", -1)
+    state::set("unit_color_temp", -1)
+    state::set("unit_hue", -1)
+    state::set("unit_saturation", -1)
+}
+
+fn remember(power, brightness, color_mode, color_temp, hue, saturation) {
+    state::set("sent_power", power)
+    state::set("sent_brightness", brightness)
+    state::set("sent_color_mode", color_mode)
+    state::set("sent_color_temp", color_temp)
+    state::set("sent_hue", hue)
+    state::set("sent_saturation", saturation)
+    state::set("sent", true)
+}
+
+// Called by the runtime after the driver stored fresh readings. The commanded
+// values are only a fallback for whatever the lamp did not report.
+extern fn std::on_driver_update() {
+    power = state::get("sent_power")
+    brightness = state::get("sent_brightness")
+    color_mode = state::get("sent_color_mode")
+    color_temp = state::get("sent_color_temp")
+    hue = state::get("sent_hue")
+    saturation = state::get("sent_saturation")
+    publish(power, brightness, color_mode, color_temp, hue, saturation)
+}
+
+power = input::get("power")
+brightness = clamp_int(input::get("brightness"), 1, 100)
+color_mode = input::get("color_mode")
+color_temp = clamp_int(input::get("color_temp"), 1000, 10000)
+hue = clamp_int(input::get("hue"), 0, 360)
+saturation = clamp_int(input::get("saturation"), 0, 100)
+
+if (changed(power, brightness, color_mode, color_temp, hue, saturation)) {
+    // Report the commanded state right away, so the outputs stay meaningful
+    // even when the driver call below fails or no driver is attached at all.
+    publish(power, brightness, color_mode, color_temp, hue, saturation)
+    rc = std::invoke("light_apply", power, brightness, color_mode, color_temp, hue, saturation)
+    state::set("invoke_rc", rc)
+    if (rc == 0) {
+        remember(power, brightness, color_mode, color_temp, hue, saturation)
+        forget_readings()
+    }
+}
+publish(power, brightness, color_mode, color_temp, hue, saturation)

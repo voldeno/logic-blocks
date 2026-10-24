@@ -160,23 +160,41 @@ descriptor has to start with `drv_`, and no other block may use that prefix:
 That way the abstract block's slots and the implementation's can never collide,
 and both sides still read and write them with plain `state::get` / `state::set`.
 
-Implementations never run on their own: they execute inside `std::invoke` and
-inside their own completions. A call that finds no attached implementation, or a
-name the implementation does not declare, aborts the rest of the run - so write
-the outputs you care about before invoking, and keep the set of functions small
-and stable.
+Implementations execute inside `std::invoke`, inside their own completions and,
+when scheduled, on their own activations. A call that finds no attached
+implementation, or a name the implementation does not declare, aborts the rest
+of the run - so write the outputs you care about before invoking, and keep the
+set of functions small and stable.
+
+### Scheduled implementations
+
+An implementation with `"ioType": "scheduler"` is activated periodically, so
+anything device specific - polling for state, keeping a session alive - stays
+with it, together with the config that tunes it. It declares two functions:
+
+- `extern fn std::next_activation_at()` returns the timestamp of the next
+  activation, or `0` for none. `time::now()` activates it right away.
+- `extern fn std::on_activation()` runs at that time. Its return value means
+  the same as a completion's (see below).
+
+The runtime keeps the timestamps in the shared state, so the implementation
+declares `drv_next_activation_ts` and `drv_last_activation_ts` (`NUMBER`,
+default `"0"`). `drv_last_activation_ts` being `0` tells the first activation
+apart.
 
 ### Devices that answer later
 
-`http::call` and the `tcp::*` functions only send; the answer arrives later, in a
-separate run. The completion belongs to the implementation: an
-`extern fn http::on_response(status, body, headers)` declared there runs there,
+`http::call`, `klap::call` and the `tcp::*` functions only send; the answer
+arrives later, in a separate run. The completion belongs to the implementation:
+an `extern fn http::on_response(status, body, headers)` or
+`extern fn klap::on_response(status, body)` declared there runs there,
 with the same shared state and its own config, and it does not consume the
 block's timer. So a function invoked over a network can only report that the
 request is on its way, and needs a way to decline while an earlier exchange is
 still running.
 
-The return value of the completion decides what happens next:
+The return value of the completion, or of `std::on_activation`, decides what
+happens next:
 
 | Return | Meaning |
 | --- | --- |
@@ -190,7 +208,9 @@ the shared state, so the hook just turns them into outputs.
 
 `blocks/vldn/1/air_conditioner` is a worked example - its header comment is the
 contract every air conditioner implementation has to satisfy, and
-`blocks/vldn/1/daikin_brp069` satisfies it over the local network.
+`blocks/vldn/1/daikin_brp069` satisfies it over the local network. The same goes
+for `blocks/vldn/1/light` and `blocks/vldn/1/tapo_klap`, which drives TP-Link
+Tapo bulbs over KLAP.
 
 ## Checks
 

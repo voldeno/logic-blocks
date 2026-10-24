@@ -1,0 +1,156 @@
+{
+  "name": "Light : TP-Link Tapo",
+  "group": "driver",
+  "ioType": "scheduler",
+  "interface": {
+    "provider": "vldn",
+    "version": 1,
+    "name": "light"
+  },
+  "config": [
+    {
+      "id": "host",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "email",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "password",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "refresh_interval",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "60",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "ct_min",
+      "type": "NUMBER",
+      "unit": "K",
+      "default": "2500",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 1000
+          },
+          {
+            "type": "lte",
+            "value": 10000
+          }
+        ]
+      }
+    },
+    {
+      "id": "ct_max",
+      "type": "NUMBER",
+      "unit": "K",
+      "default": "6500",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 1000
+          },
+          {
+            "type": "lte",
+            "value": 10000
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "drv_step",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "drv_started",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "drv_pending",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "drv_probed",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "drv_has_color",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "drv_ct_min",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "drv_ct_max",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "drv_power",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "drv_brightness",
+      "type": "NUMBER",
+      "default": "100"
+    },
+    {
+      "id": "drv_color_mode",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "drv_color_temp",
+      "type": "NUMBER",
+      "default": "4000"
+    },
+    {
+      "id": "drv_hue",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "drv_saturation",
+      "type": "NUMBER",
+      "default": "100"
+    },
+    {
+      "id": "drv_last_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    },
+    {
+      "id": "drv_next_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    }
+  ]
+}

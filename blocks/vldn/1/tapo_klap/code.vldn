@@ -1,0 +1,261 @@
+// Light - TP-Link Tapo driver for bulbs and light strips speaking KLAP.
+//
+// Implements vldn:light:1 over the local KLAP protocol of current Tapo firmware
+// (L510, L530, L535, L610, L630, L900, L920, ...). The runtime's klap::call does
+// the handshake, the encryption and the session reuse; this driver only speaks
+// the JSON methods component_nego, get_device_info and set_device_info.
+//
+// Capabilities come from the device's component list, probed once before the
+// first command: get_device_info cannot tell, as it leaves hue and saturation
+// out while the bulb shows white. The white range is color_temp_range when
+// get_device_info reports one, otherwise the configured ct_min..ct_max.
+//
+// The status is read on the driver's own schedule, every refresh_interval
+// seconds, and after every command. Only one exchange runs at a time, because
+// the device expects its requests in sequence; a command that arrives during
+// another exchange waits in drv_* and goes out once that is over:
+//
+//   drv_step  0 idle
+//             1 set_device_info sent
+//             2 get_device_info sent
+//             3 component_nego sent to probe the capabilities before a command
+//
+// Faults reported through unit_fault:
+//   -1    the device could not be reached
+//   1000  host, email or password not configured
+//   1001  the device refused the credentials
+//   1002  the device answered with something that is not KLAP
+//   1003  the device dropped the session again right after a new handshake
+//   1004  the device rejected the request
+
+fn configured() {
+    host = config::get("host")
+    if (host == "" or config::get("email") == "" or config::get("password") == "") {
+        return false
+    }
+    // klap::call takes a bare host[:port] and aborts the script on anything else.
+    return str::count(host, "/") == 0 and str::count(host, " ") == 0
+}
+
+fn busy() {
+    if (state::get("drv_step") == 0) {
+        return false
+    }
+    // The runtime answers every klap::call, so a step can only stay pending if a
+    // reply was dropped. Time it out rather than wedge the driver for good.
+    if (time::uptime() - state::get("drv_started") > 30000) {
+        return false
+    }
+    return true
+}
+
+fn begin(step, request) {
+    state::set("drv_step", step)
+    state::set("drv_started", time::uptime())
+    klap::call(config::get("host"), config::get("email"), config::get("password"), request)
+}
+
+fn read_status() {
+    begin(2, """{"method":"get_device_info"}""")
+    return 0
+}
+
+// json::get fails on a path the reply does not have, so every optional field is
+// looked up in the raw text first. The only other place these names appear is
+// default_states, which repeats fields the device has at the top level anyway.
+fn has_field(body, key) {
+    return str::count(body, str::fmt("""{}":""", key)) > 0
+}
+
+fn result_field(body, key, fallback) {
+    if (has_field(body, key)) {
+        return math::int(json::get(body, str::concat("result.", key)))
+    }
+    return fallback
+}
+
+fn error_code(body) {
+    if (has_field(body, "error_code")) {
+        return math::int(json::get(body, "error_code"))
+    }
+    return -1
+}
+
+// component_nego lists entries like {"id":"color","ver_code":1}.
+fn has_component(body, id) {
+    return str::count(body, str::fmt("""id":"{}",""", id)) > 0
+}
+
+fn read_components(body) {
+    state::set("drv_has_color", has_component(body, "color"))
+    ct_min = 0
+    ct_max = 0
+    if (has_component(body, "color_temperature")) {
+        ct_min = config::get("ct_min")
+        ct_max = config::get("ct_max")
+    }
+    state::set("drv_ct_min", ct_min)
+    state::set("drv_ct_max", ct_max)
+    state::set("drv_probed", true)
+}
+
+// Light strips report their own range, a single value when the white is fixed.
+fn read_white_range(body) {
+    if (has_field(body, "color_temp_range")) {
+        range = json::get(body, "result.color_temp_range")
+        state::set("drv_ct_min", array::get_at(range, 0))
+        state::set("drv_ct_max", array::get_at(range, 1))
+    }
+}
+
+fn read_readings(body) {
+    state::set("unit_power", result_field(body, "device_on", -1))
+    state::set("unit_brightness", result_field(body, "brightness", -1))
+    color_mode = 0
+    color_temp = result_field(body, "color_temp", -1)
+    // A color bulb reports color_temp 0 while it shows hue and saturation.
+    if (color_temp == 0) {
+        color_mode = 1
+        color_temp = -1
+    }
+    state::set("unit_color_mode", color_mode)
+    state::set("unit_color_temp", color_temp)
+    state::set("unit_hue", result_field(body, "hue", -1))
+    state::set("unit_saturation", result_field(body, "saturation", -1))
+}
+
+fn clamp_int(value, lo, hi) {
+    v = math::int(math::round(value))
+    if (v < lo) {
+        return lo
+    }
+    if (v > hi) {
+        return hi
+    }
+    return v
+}
+
+// Always sends the complete state the device can take, so a command also
+// switches between white and color. Whatever the device lacks is left out:
+// color falls back to white, and without a white channel the bulb keeps its own
+// color temperature.
+fn send_command() {
+    if (!state::get("drv_power")) {
+        begin(1, """{"method":"set_device_info","params":{"device_on":false}}""")
+        return 0
+    }
+    brightness = clamp_int(state::get("drv_brightness"), 1, 100)
+    if (state::get("drv_color_mode") and state::get("drv_has_color")) {
+        hue = clamp_int(state::get("drv_hue"), 0, 360)
+        saturation = clamp_int(state::get("drv_saturation"), 0, 100)
+        begin(1, str::fmt("""{"method":"set_device_info","params":{"device_on":true,"brightness":{},"hue":{},"saturation":{},"color_temp":0}}""", brightness, hue, saturation))
+        return 0
+    }
+    ct_min = state::get("drv_ct_min")
+    ct_max = state::get("drv_ct_max")
+    if (ct_min < ct_max) {
+        color_temp = clamp_int(state::get("drv_color_temp"), ct_min, ct_max)
+        begin(1, str::fmt("""{"method":"set_device_info","params":{"device_on":true,"brightness":{},"color_temp":{}}}""", brightness, color_temp))
+        return 0
+    }
+    begin(1, str::fmt("""{"method":"set_device_info","params":{"device_on":true,"brightness":{}}}""", brightness))
+    return 0
+}
+
+fn fault_of(status) {
+    if (status == -1) {
+        return -1
+    }
+    if (status == -2) {
+        return 1001
+    }
+    if (status == -4) {
+        return 1003
+    }
+    return 1002
+}
+
+fn start_command() {
+    state::set("drv_pending", false)
+    if (!state::get("drv_probed")) {
+        begin(3, """{"method":"component_nego"}""")
+        return 0
+    }
+    return send_command()
+}
+
+// Ends an exchange, unless a command arrived while it was running.
+fn finish(rc) {
+    if (state::get("drv_pending")) {
+        start_command()
+    }
+    return rc
+}
+
+extern fn light_apply(power, brightness, color_mode, color_temp, hue, saturation) {
+    if (!configured()) {
+        return 1000
+    }
+    state::set("drv_power", power)
+    state::set("drv_brightness", brightness)
+    state::set("drv_color_mode", color_mode)
+    state::set("drv_color_temp", color_temp)
+    state::set("drv_hue", hue)
+    state::set("drv_saturation", saturation)
+    if (busy()) {
+        state::set("drv_pending", true)
+        return 0
+    }
+    return start_command()
+}
+
+// Asked by the runtime for the next refresh, in whole seconds. The first one
+// comes right away, so the readings are there as soon as the driver starts.
+extern fn std::next_activation_at() {
+    interval = math::int(math::round(config::get("refresh_interval")))
+    if (interval <= 0) {
+        return 0
+    }
+    if (state::get("drv_last_activation_ts") == 0) {
+        return time::now()
+    }
+    return time::now() + interval
+}
+
+extern fn std::on_activation() {
+    if (!configured()) {
+        state::set("unit_fault", 1000)
+        return 1
+    }
+    // A command in flight ends with a status read anyway.
+    if (busy()) {
+        return 0
+    }
+    return read_status()
+}
+
+extern fn klap::on_response(status, body) {
+    step = state::get("drv_step")
+    state::set("drv_step", 0)
+
+    if (status != 0) {
+        state::set("unit_fault", fault_of(status))
+        return finish(1)
+    }
+    if (error_code(body) != 0) {
+        state::set("unit_fault", 1004)
+        return finish(1)
+    }
+    state::set("unit_fault", 0)
+
+    if (step == 3) {
+        read_components(body)
+        return send_command()
+    }
+    if (step == 1) {
+        return read_status()
+    }
+    read_white_range(body)
+    read_readings(body)
+    return finish(1)
+}

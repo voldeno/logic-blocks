@@ -1,0 +1,174 @@
+{
+  "name": "Light",
+  "group": "process",
+  "abstract": true,
+  "widget": true,
+  "inputs": [
+    {
+      "id": "power",
+      "abbrev": "P",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "brightness",
+      "abbrev": "BR",
+      "type": "NUMBER",
+      "unit": "%",
+      "default": "100"
+    },
+    {
+      "id": "color_mode",
+      "abbrev": "CM",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "color_temp",
+      "abbrev": "CT",
+      "type": "NUMBER",
+      "unit": "K",
+      "default": "4000"
+    },
+    {
+      "id": "hue",
+      "abbrev": "H",
+      "type": "NUMBER",
+      "unit": "°",
+      "default": "0"
+    },
+    {
+      "id": "saturation",
+      "abbrev": "S",
+      "type": "NUMBER",
+      "unit": "%",
+      "default": "100"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "power",
+      "abbrev": "P",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "brightness",
+      "abbrev": "BR",
+      "type": "NUMBER",
+      "unit": "%",
+      "default": "0"
+    },
+    {
+      "id": "color_mode",
+      "abbrev": "CM",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "color_temp",
+      "abbrev": "CT",
+      "type": "NUMBER",
+      "unit": "K",
+      "default": "0"
+    },
+    {
+      "id": "hue",
+      "abbrev": "H",
+      "type": "NUMBER",
+      "unit": "°",
+      "default": "0"
+    },
+    {
+      "id": "saturation",
+      "abbrev": "S",
+      "type": "NUMBER",
+      "unit": "%",
+      "default": "0"
+    },
+    {
+      "id": "fault",
+      "abbrev": "F",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [],
+  "state": [
+    {
+      "id": "unit_power",
+      "type": "NUMBER",
+      "default": "-1"
+    },
+    {
+      "id": "unit_brightness",
+      "type": "NUMBER",
+      "default": "-1"
+    },
+    {
+      "id": "unit_color_mode",
+      "type": "NUMBER",
+      "default": "-1"
+    },
+    {
+      "id": "unit_color_temp",
+      "type": "NUMBER",
+      "default": "-1"
+    },
+    {
+      "id": "unit_hue",
+      "type": "NUMBER",
+      "default": "-1"
+    },
+    {
+      "id": "unit_saturation",
+      "type": "NUMBER",
+      "default": "-1"
+    },
+    {
+      "id": "unit_fault",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "invoke_rc",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "sent",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "sent_power",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "sent_brightness",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "sent_color_mode",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "sent_color_temp",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "sent_hue",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "sent_saturation",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ]
+}

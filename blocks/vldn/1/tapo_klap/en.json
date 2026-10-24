@@ -1,0 +1,114 @@
+{
+  "description": "Drives a TP-Link Tapo bulb or light strip over the local network, using the encrypted KLAP protocol of current Tapo firmware (L510, L530, L535, L610, L630, L900, L920 and similar). Color and white range are read from the device.",
+  "inputs": [],
+  "outputs": [],
+  "config": [
+    {
+      "id": "host",
+      "name": "Address",
+      "description": "Address of the device on the local network, for example 192.168.1.50, optionally with a port. Without http:// or a path. Give the device a fixed address in the router, so it does not change."
+    },
+    {
+      "id": "email",
+      "name": "Email",
+      "description": "Email of the TP-Link account the device was set up with in the Tapo app"
+    },
+    {
+      "id": "password",
+      "name": "Password",
+      "description": "Password of the TP-Link account used in the Tapo app"
+    },
+    {
+      "id": "refresh_interval",
+      "name": "Refresh interval",
+      "description": "How often the device status is read, in seconds. Set to 0 to read it only after a command."
+    },
+    {
+      "id": "ct_min",
+      "name": "Lowest color temperature",
+      "description": "Lower end of the white range in kelvins, used when the device does not report its own"
+    },
+    {
+      "id": "ct_max",
+      "name": "Highest color temperature",
+      "description": "Upper end of the white range in kelvins, used when the device does not report its own"
+    }
+  ],
+  "state": [
+    {
+      "id": "drv_step",
+      "name": "Exchange step",
+      "description": "Which request is currently waiting for an answer, 0 when idle"
+    },
+    {
+      "id": "drv_started",
+      "name": "Exchange started",
+      "description": "Uptime in milliseconds when the pending request was sent, used to give up on a lost answer"
+    },
+    {
+      "id": "drv_pending",
+      "name": "Command pending",
+      "description": "Set when a command arrived during another exchange and waits to be sent once it is over"
+    },
+    {
+      "id": "drv_probed",
+      "name": "Capabilities known",
+      "description": "Set once the device has reported what it supports"
+    },
+    {
+      "id": "drv_has_color",
+      "name": "Color supported",
+      "description": "Whether the device can show colors"
+    },
+    {
+      "id": "drv_ct_min",
+      "name": "Device lowest color temperature",
+      "description": "Lower end of the white range of the device in kelvins"
+    },
+    {
+      "id": "drv_ct_max",
+      "name": "Device highest color temperature",
+      "description": "Upper end of the white range of the device in kelvins, equal to the lower end when the white is not adjustable"
+    },
+    {
+      "id": "drv_power",
+      "name": "Requested power",
+      "description": "Power state of the pending command"
+    },
+    {
+      "id": "drv_brightness",
+      "name": "Requested brightness",
+      "description": "Brightness of the pending command"
+    },
+    {
+      "id": "drv_color_mode",
+      "name": "Requested color mode",
+      "description": "Color mode of the pending command"
+    },
+    {
+      "id": "drv_color_temp",
+      "name": "Requested color temperature",
+      "description": "Color temperature of the pending command"
+    },
+    {
+      "id": "drv_hue",
+      "name": "Requested hue",
+      "description": "Hue of the pending command"
+    },
+    {
+      "id": "drv_saturation",
+      "name": "Requested saturation",
+      "description": "Saturation of the pending command"
+    },
+    {
+      "id": "drv_last_activation_ts",
+      "name": "Last refresh timestamp",
+      "description": "Last scheduled refresh in seconds from epoch"
+    },
+    {
+      "id": "drv_next_activation_ts",
+      "name": "Next refresh timestamp",
+      "description": "Next scheduled refresh in seconds from epoch"
+    }
+  ]
+}

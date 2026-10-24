@@ -1,0 +1,114 @@
+{
+  "description": "Steruje żarówką lub taśmą LED TP-Link Tapo w sieci lokalnej przez szyfrowany protokół KLAP obecnego oprogramowania Tapo (L510, L530, L535, L610, L630, L900, L920 i podobne). Obsługa koloru i zakres bieli są odczytywane z urządzenia.",
+  "inputs": [],
+  "outputs": [],
+  "config": [
+    {
+      "id": "host",
+      "name": "Adres",
+      "description": "Adres urządzenia w sieci lokalnej, na przykład 192.168.1.50, opcjonalnie z portem. Bez http:// i ścieżki. Przypisz urządzeniu stały adres w routerze, aby się nie zmieniał."
+    },
+    {
+      "id": "email",
+      "name": "E-mail",
+      "description": "Adres e-mail konta TP-Link, na którym urządzenie zostało skonfigurowane w aplikacji Tapo"
+    },
+    {
+      "id": "password",
+      "name": "Hasło",
+      "description": "Hasło konta TP-Link używanego w aplikacji Tapo"
+    },
+    {
+      "id": "refresh_interval",
+      "name": "Interwał odświeżania",
+      "description": "Jak często odczytywany jest stan urządzenia, w sekundach. Ustaw 0, aby odczytywać go tylko po poleceniu."
+    },
+    {
+      "id": "ct_min",
+      "name": "Najniższa temperatura barwowa",
+      "description": "Dolna granica zakresu bieli w kelwinach, używana, gdy urządzenie nie raportuje własnej"
+    },
+    {
+      "id": "ct_max",
+      "name": "Najwyższa temperatura barwowa",
+      "description": "Górna granica zakresu bieli w kelwinach, używana, gdy urządzenie nie raportuje własnej"
+    }
+  ],
+  "state": [
+    {
+      "id": "drv_step",
+      "name": "Krok wymiany",
+      "description": "Które żądanie oczekuje obecnie na odpowiedź, 0 w stanie bezczynności"
+    },
+    {
+      "id": "drv_started",
+      "name": "Początek wymiany",
+      "description": "Czas pracy w milisekundach w chwili wysłania oczekującego żądania, używany do porzucenia zagubionej odpowiedzi"
+    },
+    {
+      "id": "drv_pending",
+      "name": "Oczekujące polecenie",
+      "description": "Ustawione, gdy polecenie przyszło w trakcie innej wymiany i czeka na wysłanie po jej zakończeniu"
+    },
+    {
+      "id": "drv_probed",
+      "name": "Możliwości znane",
+      "description": "Ustawione, gdy urządzenie zgłosiło, co obsługuje"
+    },
+    {
+      "id": "drv_has_color",
+      "name": "Obsługa koloru",
+      "description": "Czy urządzenie potrafi świecić kolorem"
+    },
+    {
+      "id": "drv_ct_min",
+      "name": "Najniższa temperatura barwowa urządzenia",
+      "description": "Dolna granica zakresu bieli urządzenia w kelwinach"
+    },
+    {
+      "id": "drv_ct_max",
+      "name": "Najwyższa temperatura barwowa urządzenia",
+      "description": "Górna granica zakresu bieli urządzenia w kelwinach, równa dolnej, gdy biel nie jest regulowana"
+    },
+    {
+      "id": "drv_power",
+      "name": "Żądane zasilanie",
+      "description": "Stan zasilania oczekującego polecenia"
+    },
+    {
+      "id": "drv_brightness",
+      "name": "Żądana jasność",
+      "description": "Jasność oczekującego polecenia"
+    },
+    {
+      "id": "drv_color_mode",
+      "name": "Żądany tryb koloru",
+      "description": "Tryb koloru oczekującego polecenia"
+    },
+    {
+      "id": "drv_color_temp",
+      "name": "Żądana temperatura barwowa",
+      "description": "Temperatura barwowa oczekującego polecenia"
+    },
+    {
+      "id": "drv_hue",
+      "name": "Żądany odcień",
+      "description": "Odcień oczekującego polecenia"
+    },
+    {
+      "id": "drv_saturation",
+      "name": "Żądane nasycenie",
+      "description": "Nasycenie oczekującego polecenia"
+    },
+    {
+      "id": "drv_last_activation_ts",
+      "name": "Ostatnie odświeżenie",
+      "description": "Znacznik czasu ostatniego zaplanowanego odświeżenia w sekundach od epoki"
+    },
+    {
+      "id": "drv_next_activation_ts",
+      "name": "Następne odświeżenie",
+      "description": "Znacznik czasu następnego zaplanowanego odświeżenia w sekundach od epoki"
+    }
+  ]
+}
