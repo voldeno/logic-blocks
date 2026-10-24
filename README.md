@@ -209,7 +209,7 @@ the shared state, so the hook just turns them into outputs.
 `blocks/vldn/1/air_conditioner` is a worked example - its header comment is the
 contract every air conditioner implementation has to satisfy, and
 `blocks/vldn/1/daikin_brp069` satisfies it over the local network. The same goes
-for `blocks/vldn/1/light` and `blocks/vldn/1/tapo_klap`, which drives TP-Link
+for `blocks/vldn/1/light` and `blocks/vldn/1/tapo_light`, which drives TP-Link
 Tapo bulbs over KLAP.
 
 ## Checks
