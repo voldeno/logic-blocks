@@ -1,6 +1,7 @@
 {
   "name": "Air conditioner : Daikin BRP069",
   "group": "driver",
+  "ioType": "scheduler",
   "interface": {
     "provider": "vldn",
     "version": 1,
@@ -11,6 +12,20 @@
       "id": "host",
       "type": "STRING",
       "default": ""
+    },
+    {
+      "id": "refresh_interval",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "60",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 0
+          }
+        ]
+      }
     }
   ],
   "state": [
@@ -21,6 +36,41 @@
     },
     {
       "id": "drv_started",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "drv_pending",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "drv_power",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "drv_mode",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "drv_target_temp",
+      "type": "NUMBER",
+      "default": "21"
+    },
+    {
+      "id": "drv_fan_speed",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "drv_swing_v",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "drv_swing_h",
       "type": "NUMBER",
       "default": "0"
     },
@@ -43,6 +93,18 @@
       "id": "drv_unit_streamer",
       "type": "NUMBER",
       "default": "-1"
+    },
+    {
+      "id": "drv_last_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    },
+    {
+      "id": "drv_next_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
     }
   ]
 }

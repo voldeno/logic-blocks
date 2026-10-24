@@ -94,16 +94,6 @@
       "id": "max_target_temp",
       "name": "Maximum target temperature",
       "description": "Upper limit for the target temperature input. The unit may narrow it down further."
-    },
-    {
-      "id": "refresh_interval",
-      "name": "Refresh interval",
-      "description": "How often the unit status is read, in seconds. Set to 0 to never read it, for example for units controlled over infrared."
-    },
-    {
-      "id": "resend_on_refresh",
-      "name": "Resend state on refresh",
-      "description": "Sends the full state to the unit on every refresh instead of only after a change. Keeps units without feedback in sync after they were operated with their own remote control."
     }
   ],
   "state": [
@@ -176,16 +166,6 @@
       "id": "sent_air_clean",
       "name": "Sent air cleaning",
       "description": "Last air cleaning setting accepted by the unit"
-    },
-    {
-      "id": "last_activation_ts",
-      "name": "Last execution timestamp",
-      "description": "Last execution timestamp in seconds from epoch"
-    },
-    {
-      "id": "next_activation_ts",
-      "name": "Next execution timestamp",
-      "description": "Next execution timestamp in seconds from epoch"
     }
   ]
 }

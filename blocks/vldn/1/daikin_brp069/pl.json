@@ -7,6 +7,11 @@
       "id": "host",
       "name": "Adres",
       "description": "Adres adaptera Wi-Fi w sieci lokalnej, na przykład 192.168.1.50, opcjonalnie z portem. Zgodność adaptera z tym protokołem można sprawdzić, otwierając w przeglądarce http://<adres>/common/basic_info: odpowie linią rozpoczynającą się od ret=OK."
+    },
+    {
+      "id": "refresh_interval",
+      "name": "Interwał odświeżania",
+      "description": "Jak często odczytywany jest stan urządzenia, w sekundach. Ustaw 0, aby odczytywać go tylko po poleceniu."
     }
   ],
   "state": [
@@ -19,6 +24,41 @@
       "id": "drv_started",
       "name": "Początek wymiany",
       "description": "Czas pracy w milisekundach w chwili wysłania oczekującego żądania, używany do porzucenia zagubionej odpowiedzi"
+    },
+    {
+      "id": "drv_pending",
+      "name": "Oczekujące polecenie",
+      "description": "Ustawione, gdy polecenie przyszło w trakcie innej wymiany i czeka na wysłanie po jej zakończeniu"
+    },
+    {
+      "id": "drv_power",
+      "name": "Żądane zasilanie",
+      "description": "Stan zasilania oczekującego polecenia"
+    },
+    {
+      "id": "drv_mode",
+      "name": "Żądany tryb",
+      "description": "Tryb oczekującego polecenia"
+    },
+    {
+      "id": "drv_target_temp",
+      "name": "Żądana temperatura docelowa",
+      "description": "Temperatura docelowa oczekującego polecenia"
+    },
+    {
+      "id": "drv_fan_speed",
+      "name": "Żądana prędkość wentylatora",
+      "description": "Prędkość wentylatora oczekującego polecenia"
+    },
+    {
+      "id": "drv_swing_v",
+      "name": "Żądany nawiew pionowy",
+      "description": "Ustawienie żaluzji pionowej oczekującego polecenia"
+    },
+    {
+      "id": "drv_swing_h",
+      "name": "Żądany nawiew poziomy",
+      "description": "Ustawienie żaluzji poziomej oczekującego polecenia"
     },
     {
       "id": "drv_powerful",
@@ -39,6 +79,16 @@
       "id": "drv_unit_streamer",
       "name": "Streamer w urządzeniu",
       "description": "Ostatni zgłoszony stan Streamera: -1 nieznany, 0 wyłączony, 1 włączony"
+    },
+    {
+      "id": "drv_last_activation_ts",
+      "name": "Ostatnie odświeżenie",
+      "description": "Znacznik czasu ostatniego zaplanowanego odświeżenia w sekundach od epoki"
+    },
+    {
+      "id": "drv_next_activation_ts",
+      "name": "Następne odświeżenie",
+      "description": "Znacznik czasu następnego zaplanowanego odświeżenia w sekundach od epoki"
     }
   ]
 }
