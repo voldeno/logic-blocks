@@ -94,16 +94,6 @@
       "id": "max_target_temp",
       "name": "Maksymalna temperatura docelowa",
       "description": "Górny limit wejścia temperatury docelowej. Urządzenie może go dodatkowo zawęzić."
-    },
-    {
-      "id": "refresh_interval",
-      "name": "Interwał odświeżania",
-      "description": "Jak często odczytywany jest stan urządzenia, w sekundach. Ustaw 0, aby go nie odczytywać, na przykład dla urządzeń sterowanych przez podczerwień."
-    },
-    {
-      "id": "resend_on_refresh",
-      "name": "Wysyłaj stan przy odświeżaniu",
-      "description": "Wysyła pełny stan do urządzenia przy każdym odświeżeniu, a nie tylko po zmianie. Utrzymuje synchronizację urządzeń bez informacji zwrotnej po użyciu ich własnego pilota."
     }
   ],
   "state": [
@@ -176,16 +166,6 @@
       "id": "sent_air_clean",
       "name": "Wysłane oczyszczanie powietrza",
       "description": "Ostatnie ustawienie oczyszczania powietrza przyjęte przez urządzenie"
-    },
-    {
-      "id": "last_activation_ts",
-      "name": "Ostatni znacznik czasu wykonania",
-      "description": "Ostatni znacznik czasu wykonania w sekundach od epoki"
-    },
-    {
-      "id": "next_activation_ts",
-      "name": "Następny znacznik czasu wykonania",
-      "description": "Następny znacznik czasu wykonania w sekundach od epoki"
     }
   ]
 }

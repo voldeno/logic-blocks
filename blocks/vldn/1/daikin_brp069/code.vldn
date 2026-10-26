@@ -7,9 +7,10 @@
 // registered terminal, BRP084 a single /dsiot/multireq JSON endpoint.
 //
 // Every request is a GET whose reply is a flat "ret=OK,pow=1,mode=4,..." list.
-// Only one exchange runs at a time, because an implementation has a single
-// pending callback, and both operations take several requests - a command ends
-// with the status read that follows it, so a resend never costs the readings:
+// The status is read on the driver's own schedule, every refresh_interval
+// seconds, and after every command. Only one exchange runs at a time, because
+// both operations take several requests; a command that arrives during another
+// exchange waits in drv_* and goes out once that is over:
 //
 //   drv_step  0 idle
 //             1 set_control_info sent
@@ -187,29 +188,66 @@ fn read_control(fields) {
     state::set("drv_unit_streamer", has_token(adv, "13"))
 }
 
-extern fn ac_apply(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) {
-    if (busy()) {
-        return -1
-    }
-    if (config::get("host") == "") {
-        return 1000
-    }
-    state::set("drv_powerful", fan_speed == 5)
-    state::set("drv_streamer", air_clean)
+fn send_command() {
+    state::set("drv_pending", false)
+    mode = state::get("drv_mode")
+    fan_speed = state::get("drv_fan_speed")
     // pow, mode, stemp, shum, f_rate and f_dir are all mandatory on this
     // endpoint even when only one of them changes. shum stays 0: these units
     // have no humidity setpoint.
-    query = str::fmt("/aircon/set_control_info?pow={}&mode={}&stemp={}&shum=0&f_rate={}&f_dir={}", math::int(power), daikin_mode(mode), temp_param(mode, target_temp), daikin_fan_rate(fan_speed), daikin_fan_dir(swing_v, swing_h))
+    query = str::fmt("/aircon/set_control_info?pow={}&mode={}&stemp={}&shum=0&f_rate={}&f_dir={}", math::int(state::get("drv_power")), daikin_mode(mode), temp_param(mode, state::get("drv_target_temp")), daikin_fan_rate(fan_speed), daikin_fan_dir(state::get("drv_swing_v"), state::get("drv_swing_h")))
     begin(1, query)
     return 0
 }
 
-extern fn ac_refresh() {
-    if (busy()) {
-        return -1
+// Ends an exchange, unless a command arrived while it was running.
+fn finish(rc) {
+    if (state::get("drv_pending")) {
+        send_command()
     }
+    return rc
+}
+
+extern fn ac_apply(power, mode, target_temp, fan_speed, swing_v, swing_h, air_clean) {
     if (config::get("host") == "") {
         return 1000
+    }
+    state::set("drv_power", power)
+    state::set("drv_mode", mode)
+    state::set("drv_target_temp", target_temp)
+    state::set("drv_fan_speed", fan_speed)
+    state::set("drv_swing_v", swing_v)
+    state::set("drv_swing_h", swing_h)
+    state::set("drv_powerful", fan_speed == 5)
+    state::set("drv_streamer", air_clean)
+    if (busy()) {
+        state::set("drv_pending", true)
+        return 0
+    }
+    return send_command()
+}
+
+// Asked by the runtime for the next refresh, in whole seconds. The first one
+// comes right away, so the readings are there as soon as the driver starts.
+extern fn std::next_activation_at() {
+    interval = math::int(math::round(config::get("refresh_interval")))
+    if (interval <= 0) {
+        return 0
+    }
+    if (state::get("drv_last_activation_ts") == 0) {
+        return time::now()
+    }
+    return time::now() + interval
+}
+
+extern fn std::on_activation() {
+    if (config::get("host") == "") {
+        state::set("unit_fault", 1000)
+        return 1
+    }
+    // A command in flight ends with a status read anyway.
+    if (busy()) {
+        return 0
     }
     return read_status()
 }
@@ -220,12 +258,12 @@ extern fn http::on_response(status, body, headers) {
 
     if (status < 200 or status >= 300) {
         state::set("unit_fault", -1)
-        return 1
+        return finish(1)
     }
     fields = map::parse(body, ",", "=")
     if (field(fields, "ret") != "OK") {
         state::set("unit_fault", 1001)
-        return 1
+        return finish(1)
     }
     // The adapter answered, so whatever went wrong before is over. A status read
     // replaces this with the unit's own error code below.
@@ -239,7 +277,7 @@ extern fn http::on_response(status, body, headers) {
     if (step == 5) {
         state::set("unit_room_temp", number_field(fields, "htemp", -1000.0))
         state::set("unit_fault", number_field(fields, "err", 0))
-        return 1
+        return finish(1)
     }
     if (step == 1) {
         return apply_powerful()
@@ -252,5 +290,5 @@ extern fn http::on_response(status, body, headers) {
         state::set("drv_unit_streamer", math::int(state::get("drv_streamer")))
         return read_status()
     }
-    return 1
+    return finish(1)
 }

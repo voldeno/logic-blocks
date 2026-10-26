@@ -7,6 +7,11 @@
       "id": "host",
       "name": "Address",
       "description": "Address of the Wi-Fi adapter on the local network, for example 192.168.1.50, optionally with a port. Check that the adapter speaks this protocol by opening http://<address>/common/basic_info in a browser: it answers with a line starting with ret=OK."
+    },
+    {
+      "id": "refresh_interval",
+      "name": "Refresh interval",
+      "description": "How often the unit status is read, in seconds. Set to 0 to read it only after a command."
     }
   ],
   "state": [
@@ -19,6 +24,41 @@
       "id": "drv_started",
       "name": "Exchange started",
       "description": "Uptime in milliseconds when the pending request was sent, used to give up on a lost answer"
+    },
+    {
+      "id": "drv_pending",
+      "name": "Command pending",
+      "description": "Set when a command arrived during another exchange and waits to be sent once it is over"
+    },
+    {
+      "id": "drv_power",
+      "name": "Requested power",
+      "description": "Power state of the pending command"
+    },
+    {
+      "id": "drv_mode",
+      "name": "Requested mode",
+      "description": "Mode of the pending command"
+    },
+    {
+      "id": "drv_target_temp",
+      "name": "Requested target temperature",
+      "description": "Target temperature of the pending command"
+    },
+    {
+      "id": "drv_fan_speed",
+      "name": "Requested fan speed",
+      "description": "Fan speed of the pending command"
+    },
+    {
+      "id": "drv_swing_v",
+      "name": "Requested vertical airflow",
+      "description": "Vertical vane setting of the pending command"
+    },
+    {
+      "id": "drv_swing_h",
+      "name": "Requested horizontal airflow",
+      "description": "Horizontal vane setting of the pending command"
     },
     {
       "id": "drv_powerful",
@@ -39,6 +79,16 @@
       "id": "drv_unit_streamer",
       "name": "Streamer on the unit",
       "description": "Last reported state of the streamer: -1 unknown, 0 off, 1 on"
+    },
+    {
+      "id": "drv_last_activation_ts",
+      "name": "Last refresh timestamp",
+      "description": "Last scheduled refresh in seconds from epoch"
+    },
+    {
+      "id": "drv_next_activation_ts",
+      "name": "Next refresh timestamp",
+      "description": "Next scheduled refresh in seconds from epoch"
     }
   ]
 }

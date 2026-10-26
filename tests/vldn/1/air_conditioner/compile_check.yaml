@@ -3,8 +3,6 @@ name: "compile check"
 config:
   min_target_temp: 16
   max_target_temp: 30
-  refresh_interval: 60
-  resend_on_refresh: false
 
 steps:
   - action: "assert_outputs"

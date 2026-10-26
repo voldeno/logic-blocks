@@ -1,0 +1,156 @@
+{
+  "description": "Ogólne sterowanie oświetleniem. Zawiera logikę wspólną dla wszystkich lamp, a komunikację deleguje do dołączonego bloku implementacji, który jako jedyny zna daną markę lub model.",
+  "inputs": [
+    {
+      "id": "power",
+      "name": "Zasilanie",
+      "description": "Włącza światło przy stanie wysokim, wyłącza przy niskim"
+    },
+    {
+      "id": "brightness",
+      "name": "Jasność",
+      "description": "Żądana jasność, od 1 do 100 %"
+    },
+    {
+      "id": "color_mode",
+      "name": "Tryb koloru",
+      "description": "Stan niski - światło białe o żądanej temperaturze barwowej, stan wysoki - kolor określony odcieniem i nasyceniem. Lampa bez koloru pozostanie biała."
+    },
+    {
+      "id": "color_temp",
+      "name": "Temperatura barwowa",
+      "description": "Żądana temperatura barwowa światła białego w kelwinach, zawężona do zakresu lampy. Ignorowana przez lampy bez regulacji bieli."
+    },
+    {
+      "id": "hue",
+      "name": "Odcień",
+      "description": "Żądany odcień w trybie koloru, od 0 do 360 °"
+    },
+    {
+      "id": "saturation",
+      "name": "Nasycenie",
+      "description": "Żądane nasycenie w trybie koloru, od 0 do 100 %"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "power",
+      "name": "Zasilanie",
+      "description": "Stan wysoki, gdy światło jest włączone. Odczytany z lampy, gdy implementacja udostępnia informację zwrotną, w przeciwnym razie stan zadany."
+    },
+    {
+      "id": "brightness",
+      "name": "Jasność",
+      "description": "Jasność lampy w %"
+    },
+    {
+      "id": "color_mode",
+      "name": "Tryb koloru",
+      "description": "Stan wysoki, gdy lampa świeci kolorem, niski, gdy świeci światłem białym"
+    },
+    {
+      "id": "color_temp",
+      "name": "Temperatura barwowa",
+      "description": "Temperatura barwowa światła białego w kelwinach. Wartość zadana, gdy lampa świeci kolorem lub jej nie raportuje."
+    },
+    {
+      "id": "hue",
+      "name": "Odcień",
+      "description": "Odcień lampy w °. Wartość zadana, gdy lampa go nie raportuje."
+    },
+    {
+      "id": "saturation",
+      "name": "Nasycenie",
+      "description": "Nasycenie lampy w %. Wartość zadana, gdy lampa go nie raportuje."
+    },
+    {
+      "id": "fault",
+      "name": "Awaria",
+      "description": "0 - brak awarii, -1 - brak komunikacji z lampą, powyżej 0 - kod błędu implementacji"
+    }
+  ],
+  "config": [
+    {
+      "id": "features",
+      "name": "Funkcje",
+      "description": "Co potrafi lampa, każdy poziom obejmuje poprzednie: włącz/wyłącz, jasność, temperatura barwowa bieli, kolor. Wejścia ponad poziom są ignorowane, a odpowiednie wyjścia mają -1 (tryb koloru niski)."
+    }
+  ],
+  "state": [
+    {
+      "id": "unit_power",
+      "name": "Raportowane zasilanie",
+      "description": "Stan zasilania raportowany przez blok implementacji: -1 nieznany, 0 wyłączone, 1 włączone"
+    },
+    {
+      "id": "unit_brightness",
+      "name": "Raportowana jasność",
+      "description": "Jasność raportowana przez blok implementacji, -1 gdy nieznana"
+    },
+    {
+      "id": "unit_color_mode",
+      "name": "Raportowany tryb koloru",
+      "description": "Tryb koloru raportowany przez blok implementacji: -1 nieznany, 0 biały, 1 kolor"
+    },
+    {
+      "id": "unit_color_temp",
+      "name": "Raportowana temperatura barwowa",
+      "description": "Temperatura barwowa raportowana przez blok implementacji, -1 gdy nieznana"
+    },
+    {
+      "id": "unit_hue",
+      "name": "Raportowany odcień",
+      "description": "Odcień raportowany przez blok implementacji, -1 gdy nieznany"
+    },
+    {
+      "id": "unit_saturation",
+      "name": "Raportowane nasycenie",
+      "description": "Nasycenie raportowane przez blok implementacji, -1 gdy nieznane"
+    },
+    {
+      "id": "unit_fault",
+      "name": "Raportowana awaria",
+      "description": "Awaria raportowana przez blok implementacji"
+    },
+    {
+      "id": "invoke_rc",
+      "name": "Wynik ostatniego wywołania implementacji",
+      "description": "Wartość zwrócona przez ostatnie wywołanie implementacji, publikowana jako awaria, gdy lampa nie raportuje własnej"
+    },
+    {
+      "id": "sent",
+      "name": "Stan wysłany",
+      "description": "Ustawione, gdy stan został przyjęty przez lampę co najmniej raz"
+    },
+    {
+      "id": "sent_power",
+      "name": "Wysłane zasilanie",
+      "description": "Ostatni stan zasilania przyjęty przez lampę"
+    },
+    {
+      "id": "sent_brightness",
+      "name": "Wysłana jasność",
+      "description": "Ostatnia jasność przyjęta przez lampę"
+    },
+    {
+      "id": "sent_color_mode",
+      "name": "Wysłany tryb koloru",
+      "description": "Ostatni tryb koloru przyjęty przez lampę"
+    },
+    {
+      "id": "sent_color_temp",
+      "name": "Wysłana temperatura barwowa",
+      "description": "Ostatnia temperatura barwowa przyjęta przez lampę"
+    },
+    {
+      "id": "sent_hue",
+      "name": "Wysłany odcień",
+      "description": "Ostatni odcień przyjęty przez lampę"
+    },
+    {
+      "id": "sent_saturation",
+      "name": "Wysłane nasycenie",
+      "description": "Ostatnie nasycenie przyjęte przez lampę"
+    }
+  ]
+}

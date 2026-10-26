@@ -59,7 +59,7 @@ steps:
       section_8: false
 
   - action: "wait"
-    duration_ms: 900
+    duration_ms: 480
 
   - action: "assert_outputs"
     comment: "Should enable pump and 1st section output - still active"
@@ -75,7 +75,7 @@ steps:
       section_8: false
 
   - action: "wait"
-    duration_ms: 120
+    duration_ms: 700
 
   - action: "assert_outputs"
     comment: "Should switch to 2nd section"
@@ -91,7 +91,7 @@ steps:
       section_8: false
 
   - action: "wait"
-    duration_ms: 1880
+    duration_ms: 800
 
   - action: "assert_outputs"
     comment: "Should switch to 2nd section - still active"
@@ -107,7 +107,7 @@ steps:
       section_8: false
 
   - action: "wait"
-    duration_ms: 120
+    duration_ms: 1200
 
   - action: "assert_outputs"
     comment: "Should switch to 3rd section"
@@ -123,7 +123,7 @@ steps:
       section_8: false
 
   - action: "wait"
-    duration_ms: 1380
+    duration_ms: 550
 
   - action: "assert_outputs"
     comment: "Should switch to 3rd section - still active"
@@ -139,7 +139,7 @@ steps:
       section_8: false
 
   - action: "wait"
-    duration_ms: 120
+    duration_ms: 950
 
   - action: "assert_outputs"
     comment: "Should switch to 5th section, as 4th is disabled"
@@ -155,7 +155,7 @@ steps:
       section_8: false
 
   - action: "wait"
-    duration_ms: 880
+    duration_ms: 300
 
   - action: "assert_outputs"
     comment: "Should switch to 5th section, as 4th is disabled - still active"
@@ -171,7 +171,7 @@ steps:
       section_8: false
 
   - action: "wait"
-    duration_ms: 120
+    duration_ms: 700
 
   - action: "assert_outputs"
     comment: "Should switch to 6th section"
@@ -187,7 +187,7 @@ steps:
       section_8: false
 
   - action: "wait"
-    duration_ms: 2080
+    duration_ms: 900
 
   - action: "assert_outputs"
     comment: "Should switch to 6th section - still active"
@@ -203,7 +203,7 @@ steps:
       section_8: false
 
   - action: "wait"
-    duration_ms: 120
+    duration_ms: 1300
 
   - action: "assert_outputs"
     comment: "Should switch off the 6th section and switch off the pump, as 7th and 8th sections are disabled"

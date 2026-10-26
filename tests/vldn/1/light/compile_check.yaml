@@ -1,0 +1,16 @@
+name: "compile check"
+
+config:
+  features: 3
+
+steps:
+  - action: "assert_outputs"
+    comment: "Default outputs on startup"
+    expected_outputs:
+      power: false
+      brightness: 0
+      color_mode: false
+      color_temp: 0
+      hue: 0
+      saturation: 0
+      fault: 0

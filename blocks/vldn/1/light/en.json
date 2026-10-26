@@ -1,0 +1,156 @@
+{
+  "description": "Generic light control. Holds the logic common to every lamp and delegates the communication to an attached implementation block, which is the only part that knows a given brand or model.",
+  "inputs": [
+    {
+      "id": "power",
+      "name": "Power",
+      "description": "Switches the light on when high and off when low"
+    },
+    {
+      "id": "brightness",
+      "name": "Brightness",
+      "description": "Requested brightness, 1 to 100 %"
+    },
+    {
+      "id": "color_mode",
+      "name": "Color mode",
+      "description": "Low - white light at the requested color temperature, high - color given by hue and saturation. A lamp without color stays white."
+    },
+    {
+      "id": "color_temp",
+      "name": "Color temperature",
+      "description": "Requested color temperature of the white light in kelvins, narrowed down to what the lamp supports. Ignored by lamps without adjustable white."
+    },
+    {
+      "id": "hue",
+      "name": "Hue",
+      "description": "Requested hue in color mode, 0 to 360 °"
+    },
+    {
+      "id": "saturation",
+      "name": "Saturation",
+      "description": "Requested saturation in color mode, 0 to 100 %"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "power",
+      "name": "Power",
+      "description": "High when the light is on. Reported by the lamp when the implementation provides feedback, otherwise the commanded state."
+    },
+    {
+      "id": "brightness",
+      "name": "Brightness",
+      "description": "Brightness of the lamp in %"
+    },
+    {
+      "id": "color_mode",
+      "name": "Color mode",
+      "description": "High when the lamp shows a color, low when it shows white light"
+    },
+    {
+      "id": "color_temp",
+      "name": "Color temperature",
+      "description": "Color temperature of the white light in kelvins. The commanded value while the lamp shows a color or does not report it."
+    },
+    {
+      "id": "hue",
+      "name": "Hue",
+      "description": "Hue of the lamp in °. The commanded value when the lamp does not report it."
+    },
+    {
+      "id": "saturation",
+      "name": "Saturation",
+      "description": "Saturation of the lamp in %. The commanded value when the lamp does not report it."
+    },
+    {
+      "id": "fault",
+      "name": "Fault",
+      "description": "0 - no fault, -1 - lamp unreachable, above 0 - implementation specific error code"
+    }
+  ],
+  "config": [
+    {
+      "id": "features",
+      "name": "Features",
+      "description": "What the lamp can do, each level including the previous ones: on/off, brightness, white color temperature, color. Inputs beyond it are ignored and the matching outputs read -1 (color mode low)."
+    }
+  ],
+  "state": [
+    {
+      "id": "unit_power",
+      "name": "Reported power",
+      "description": "Power state reported by the implementation block: -1 unknown, 0 off, 1 on"
+    },
+    {
+      "id": "unit_brightness",
+      "name": "Reported brightness",
+      "description": "Brightness reported by the implementation block, -1 when unknown"
+    },
+    {
+      "id": "unit_color_mode",
+      "name": "Reported color mode",
+      "description": "Color mode reported by the implementation block: -1 unknown, 0 white, 1 color"
+    },
+    {
+      "id": "unit_color_temp",
+      "name": "Reported color temperature",
+      "description": "Color temperature reported by the implementation block, -1 when unknown"
+    },
+    {
+      "id": "unit_hue",
+      "name": "Reported hue",
+      "description": "Hue reported by the implementation block, -1 when unknown"
+    },
+    {
+      "id": "unit_saturation",
+      "name": "Reported saturation",
+      "description": "Saturation reported by the implementation block, -1 when unknown"
+    },
+    {
+      "id": "unit_fault",
+      "name": "Reported fault",
+      "description": "Fault reported by the implementation block"
+    },
+    {
+      "id": "invoke_rc",
+      "name": "Last implementation result",
+      "description": "Value returned by the last implementation call, published as a fault when the lamp reports none"
+    },
+    {
+      "id": "sent",
+      "name": "State sent",
+      "description": "Set once the state has been accepted by the lamp at least once"
+    },
+    {
+      "id": "sent_power",
+      "name": "Sent power",
+      "description": "Last power state accepted by the lamp"
+    },
+    {
+      "id": "sent_brightness",
+      "name": "Sent brightness",
+      "description": "Last brightness accepted by the lamp"
+    },
+    {
+      "id": "sent_color_mode",
+      "name": "Sent color mode",
+      "description": "Last color mode accepted by the lamp"
+    },
+    {
+      "id": "sent_color_temp",
+      "name": "Sent color temperature",
+      "description": "Last color temperature accepted by the lamp"
+    },
+    {
+      "id": "sent_hue",
+      "name": "Sent hue",
+      "description": "Last hue accepted by the lamp"
+    },
+    {
+      "id": "sent_saturation",
+      "name": "Sent saturation",
+      "description": "Last saturation accepted by the lamp"
+    }
+  ]
+}
