@@ -57,7 +57,7 @@
     {
       "id": "drv_target_temp",
       "type": "NUMBER",
-      "default": "21"
+      "default": "21.0"
     },
     {
       "id": "drv_fan_speed",
