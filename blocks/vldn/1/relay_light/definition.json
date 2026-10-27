@@ -1,0 +1,42 @@
+{
+  "name": "Light : Relay",
+  "group": "driver",
+  "ioType": "register",
+  "ioRegisterFilters": [
+    {
+      "moduleId": 2,
+      "registerIds": [
+        100,
+        101,
+        102,
+        103
+      ]
+    },
+    {
+      "moduleId": 3,
+      "registerIds": [
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107
+      ]
+    }
+  ],
+  "interface": {
+    "provider": "vldn",
+    "version": 1,
+    "name": "light"
+  },
+  "config": [
+    {
+      "id": "invert",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "state": []
+}
