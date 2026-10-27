@@ -31,12 +31,6 @@
     "version": 1,
     "name": "light"
   },
-  "config": [
-    {
-      "id": "invert",
-      "type": "BOOLEAN",
-      "default": "false"
-    }
-  ],
+  "config": [],
   "state": []
 }

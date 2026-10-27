@@ -2,12 +2,6 @@
   "description": "Switches a lamp wired to a relay of a Voldeno module. On/off only, so set the features of the light block to On/Off.",
   "inputs": [],
   "outputs": [],
-  "config": [
-    {
-      "id": "invert",
-      "name": "Invert",
-      "description": "Releases the relay to switch the light on, for a lamp wired to the normally closed contact"
-    }
-  ],
+  "config": [],
   "state": []
 }

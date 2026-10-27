@@ -5,11 +5,7 @@
 // the light block publishes the state it commanded.
 
 extern fn light_apply(power, brightness, color_mode, color_temp, hue, saturation) {
-    on = power
-    if (config::get("invert")) {
-        on = !on
-    }
-    if (on) {
+    if (power) {
         register::set(1)
     } else {
         register::set(0)

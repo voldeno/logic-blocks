@@ -2,12 +2,6 @@
   "description": "Włącza lampę podłączoną do przekaźnika modułu Voldeno. Tylko włącz/wyłącz, więc ustaw funkcje bloku światła na Włącz/Wyłącz.",
   "inputs": [],
   "outputs": [],
-  "config": [
-    {
-      "id": "invert",
-      "name": "Odwróć",
-      "description": "Zwalnia przekaźnik, aby włączyć światło, dla lampy podłączonej do styku normalnie zamkniętego"
-    }
-  ],
+  "config": [],
   "state": []
 }
