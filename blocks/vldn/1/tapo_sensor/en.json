@@ -1,0 +1,85 @@
+{
+  "description": "Reads the temperature, humidity and battery state of a TP-Link Tapo T310 or T315 sensor paired with a Tapo hub (H100), over the local, encrypted KLAP protocol.",
+  "inputs": [],
+  "outputs": [
+    {
+      "id": "temperature",
+      "name": "Temperature",
+      "description": "Last measured temperature in °C, corrected by the offset. Keeps its last value while there is a fault."
+    },
+    {
+      "id": "humidity",
+      "name": "Humidity",
+      "description": "Last measured relative humidity in %. Keeps its last value while there is a fault."
+    },
+    {
+      "id": "low_battery",
+      "name": "Low battery",
+      "description": "True when the sensor reports a low battery"
+    },
+    {
+      "id": "fault",
+      "name": "Fault",
+      "description": "0 - reading ok, -1 - hub unreachable or sensor offline, 1000 not configured, 1001 credentials refused, 1002 not KLAP, 1003 session dropped, 1004 request rejected, 1005 sensor not on the hub"
+    }
+  ],
+  "config": [
+    {
+      "id": "host",
+      "name": "Hub address",
+      "description": "Address of the Tapo hub in the local network, for example 192.168.1.50, optionally with a port. No http:// and no path. Give the hub a fixed address in the router so that it does not change."
+    },
+    {
+      "id": "email",
+      "name": "E-mail",
+      "description": "E-mail of the TP-Link account the hub was set up with in the Tapo app"
+    },
+    {
+      "id": "password",
+      "name": "Password",
+      "description": "Password of the TP-Link account used in the Tapo app"
+    },
+    {
+      "id": "sensor",
+      "name": "Sensor",
+      "description": "Name of the sensor as given in the Tapo app, or its device ID. Leave empty to use the first temperature and humidity sensor paired with the hub."
+    },
+    {
+      "id": "refresh_interval",
+      "name": "Refresh interval",
+      "description": "How often the hub is asked for the readings, in seconds"
+    },
+    {
+      "id": "temp_offset",
+      "name": "Temperature offset",
+      "description": "Correction added to the measured temperature, in °C"
+    }
+  ],
+  "state": [
+    {
+      "id": "in_flight",
+      "name": "In flight",
+      "description": "True while waiting for the hub to answer"
+    },
+    {
+      "id": "request_started",
+      "name": "Request start",
+      "description": "Uptime in milliseconds when the pending request was sent, used to give up on a lost answer"
+    },
+    {
+      "id": "page_start",
+      "name": "Page start",
+      "description": "Index of the first child device in the requested page of the hub's list"
+    },
+    {
+      "id": "last_activation_ts",
+      "name": "Last refresh",
+      "description": "Timestamp of the last scheduled refresh in seconds since epoch"
+    },
+    {
+      "id": "next_activation_ts",
+      "name": "Next refresh",
+      "description": "Timestamp of the next scheduled refresh in seconds since epoch"
+    }
+  ]
+}

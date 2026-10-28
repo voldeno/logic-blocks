@@ -1,0 +1,13 @@
+name: "defaults before the first reading"
+
+config:
+  host: ""
+
+steps:
+  - action: "assert_outputs"
+    comment: "Nothing read yet"
+    expected_outputs:
+      temperature: 0
+      humidity: 0
+      low_battery: false
+      fault: 0
