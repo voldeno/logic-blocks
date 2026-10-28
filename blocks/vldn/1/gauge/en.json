@@ -12,7 +12,7 @@
     {
       "id": "unit",
       "name": "Unit",
-      "description": "Unit shown next to the value, for example °C, %, kWh. Leave empty to show the number alone."
+      "description": "Unit of the value, chosen from a predefined list. The app shows it in a form suited to the user's language. Choose \"None\" to show the number alone."
     },
     {
       "id": "decimals",

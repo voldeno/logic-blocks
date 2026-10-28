@@ -12,7 +12,7 @@
     {
       "id": "unit",
       "name": "Jednostka",
-      "description": "Jednostka wyświetlana obok wartości, na przykład °C, %, kWh. Pusta wartość oznacza samą liczbę."
+      "description": "Jednostka wartości wybierana z predefiniowanej listy. Aplikacja wyświetla ją w formie dopasowanej do języka użytkownika. Wybierz „Brak”, aby pokazać samą liczbę."
     },
     {
       "id": "decimals",

@@ -15,8 +15,34 @@
   "ui": [
     {
       "id": "unit",
-      "type": "STRING",
-      "default": ""
+      "type": "ENUM",
+      "values": [
+        "none",
+        "celsius",
+        "fahrenheit",
+        "percent",
+        "hectopascal",
+        "bar",
+        "parts_per_million",
+        "microgram_per_cubic_meter",
+        "lux",
+        "watt",
+        "kilowatt",
+        "kilowatt_hour",
+        "volt",
+        "ampere",
+        "cubic_meter",
+        "liter",
+        "liter_per_minute",
+        "meter_per_second",
+        "kilometer_per_hour",
+        "millimeter",
+        "decibel",
+        "second",
+        "minute",
+        "hour"
+      ],
+      "default": "0"
     },
     {
       "id": "decimals",
