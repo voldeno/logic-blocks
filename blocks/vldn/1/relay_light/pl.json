@@ -1,0 +1,7 @@
+{
+  "description": "Włącza lampę podłączoną do przekaźnika modułu Voldeno. Tylko włącz/wyłącz, więc ustaw funkcje bloku światła na Włącz/Wyłącz.",
+  "inputs": [],
+  "outputs": [],
+  "config": [],
+  "state": []
+}

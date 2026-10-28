@@ -182,6 +182,14 @@ declares `drv_next_activation_ts` and `drv_last_activation_ts` (`NUMBER`,
 default `"0"`). `drv_last_activation_ts` being `0` tells the first activation
 apart.
 
+### Register implementations
+
+An implementation with `"ioType": "register"` and `ioRegisterFilters` is bound
+to a module register, picked in the editor like for an output block. Calling
+`register::set(value)` from any of its functions writes that register once the
+function returns successfully; a function that does not call it writes nothing.
+`blocks/vldn/1/relay_light` switches a lamp on a module relay this way.
+
 ### Devices that answer later
 
 `http::call`, `klap::call` and the `tcp::*` functions only send; the answer

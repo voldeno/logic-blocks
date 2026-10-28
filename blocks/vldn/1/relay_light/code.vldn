@@ -1,0 +1,14 @@
+// Light : Relay - implementation of the light block.
+//
+// Switches a lamp wired to a relay of a Voldeno module. The relay only knows
+// on and off, so brightness and color are ignored, and there is no feedback:
+// the light block publishes the state it commanded.
+
+extern fn light_apply(power, brightness, color_mode, color_temp, hue, saturation) {
+    if (power) {
+        register::set(1)
+    } else {
+        register::set(0)
+    }
+    return 0
+}
