@@ -1,0 +1,104 @@
+{
+  "name": "Tapo T310 / T315",
+  "group": "input",
+  "ioType": "scheduler",
+  "outputs": [
+    {
+      "id": "temperature",
+      "abbrev": "T",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "0"
+    },
+    {
+      "id": "humidity",
+      "abbrev": "H",
+      "type": "NUMBER",
+      "unit": "%",
+      "default": "0"
+    },
+    {
+      "id": "low_battery",
+      "abbrev": "LB",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "fault",
+      "abbrev": "F",
+      "type": "NUMBER",
+      "default": "0"
+    }
+  ],
+  "config": [
+    {
+      "id": "host",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "email",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "password",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "sensor",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "refresh_interval",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "30",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "temp_offset",
+      "type": "NUMBER",
+      "unit": "°C",
+      "default": "0"
+    }
+  ],
+  "state": [
+    {
+      "id": "in_flight",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "request_started",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "page_start",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "last_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    },
+    {
+      "id": "next_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    }
+  ]
+}

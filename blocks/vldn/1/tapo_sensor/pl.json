@@ -1,0 +1,85 @@
+{
+  "description": "Odczytuje temperaturę, wilgotność i stan baterii czujnika TP-Link Tapo T310 lub T315 sparowanego z hubem Tapo (H100), w sieci lokalnej przez szyfrowany protokół KLAP.",
+  "inputs": [],
+  "outputs": [
+    {
+      "id": "temperature",
+      "name": "Temperatura",
+      "description": "Ostatnia zmierzona temperatura w °C, z uwzględnieniem korekty. Podczas awarii zachowuje ostatnią wartość."
+    },
+    {
+      "id": "humidity",
+      "name": "Wilgotność",
+      "description": "Ostatnia zmierzona wilgotność względna w %. Podczas awarii zachowuje ostatnią wartość."
+    },
+    {
+      "id": "low_battery",
+      "name": "Słaba bateria",
+      "description": "Prawda, gdy czujnik zgłasza słabą baterię"
+    },
+    {
+      "id": "fault",
+      "name": "Awaria",
+      "description": "0 - odczyt poprawny, -1 - hub nieosiągalny lub czujnik niedostępny, 1000 brak konfiguracji, 1001 odrzucone dane logowania, 1002 brak KLAP, 1003 zerwana sesja, 1004 odrzucone żądanie, 1005 brak czujnika w hubie"
+    }
+  ],
+  "config": [
+    {
+      "id": "host",
+      "name": "Adres huba",
+      "description": "Adres huba Tapo w sieci lokalnej, na przykład 192.168.1.50, opcjonalnie z portem. Bez http:// i ścieżki. Przypisz hubowi stały adres w routerze, aby się nie zmieniał."
+    },
+    {
+      "id": "email",
+      "name": "E-mail",
+      "description": "Adres e-mail konta TP-Link, na którym hub został skonfigurowany w aplikacji Tapo"
+    },
+    {
+      "id": "password",
+      "name": "Hasło",
+      "description": "Hasło konta TP-Link używanego w aplikacji Tapo"
+    },
+    {
+      "id": "sensor",
+      "name": "Czujnik",
+      "description": "Nazwa czujnika nadana w aplikacji Tapo albo jego identyfikator urządzenia. Pozostaw puste, aby użyć pierwszego czujnika temperatury i wilgotności sparowanego z hubem."
+    },
+    {
+      "id": "refresh_interval",
+      "name": "Interwał odświeżania",
+      "description": "Jak często hub jest pytany o odczyty, w sekundach"
+    },
+    {
+      "id": "temp_offset",
+      "name": "Korekta temperatury",
+      "description": "Poprawka dodawana do zmierzonej temperatury, w °C"
+    }
+  ],
+  "state": [
+    {
+      "id": "in_flight",
+      "name": "W trakcie",
+      "description": "Prawda podczas oczekiwania na odpowiedź huba"
+    },
+    {
+      "id": "request_started",
+      "name": "Początek żądania",
+      "description": "Czas pracy w milisekundach w chwili wysłania oczekującego żądania, używany do porzucenia zagubionej odpowiedzi"
+    },
+    {
+      "id": "page_start",
+      "name": "Początek strony",
+      "description": "Indeks pierwszego urządzenia podrzędnego na żądanej stronie listy huba"
+    },
+    {
+      "id": "last_activation_ts",
+      "name": "Ostatnie odświeżenie",
+      "description": "Znacznik czasu ostatniego zaplanowanego odświeżenia w sekundach od epoki"
+    },
+    {
+      "id": "next_activation_ts",
+      "name": "Następne odświeżenie",
+      "description": "Znacznik czasu następnego zaplanowanego odświeżenia w sekundach od epoki"
+    }
+  ]
+}

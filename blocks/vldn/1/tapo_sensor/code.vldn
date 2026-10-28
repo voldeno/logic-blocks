@@ -1,0 +1,165 @@
+// Tapo sensor - temperature and humidity of a TP-Link Tapo T310 / T315.
+//
+// The sensors talk to a Tapo hub (H100) over sub-GHz radio and have no address
+// of their own, so the block asks the hub over KLAP for its child device list
+// and picks the sensor out of it: the one named in the sensor config, by its
+// name in the Tapo app or its device ID, or the first temperature and humidity
+// sensor when none is configured. The hub hands its children out in pages,
+// which are walked until the sensor shows.
+//
+// The temperature is always published in °C. While there is a fault the
+// readings keep their last values.
+//
+// Faults reported through the fault output:
+//   -1    the hub could not be reached, or it reports the sensor offline
+//   1000  host, email or password not configured
+//   1001  the hub refused the credentials
+//   1002  the hub answered with something that is not KLAP
+//   1003  the hub dropped the session again right after a new handshake
+//   1004  the hub rejected the request
+//   1005  the sensor is not paired with the hub
+
+fn configured() {
+    host = config::get("host")
+    if (host == "" or config::get("email") == "" or config::get("password") == "") {
+        return false
+    }
+    // klap::call takes a bare host[:port] and aborts the script on anything else.
+    return str::count(host, "/") == 0 and str::count(host, " ") == 0
+}
+
+// The runtime answers every klap::call, so a request can only stay pending if a
+// reply was dropped. Time it out rather than wedge the block for good.
+fn busy() {
+    if (!state::get("in_flight")) {
+        return false
+    }
+    return time::uptime() - state::get("request_started") <= 30000
+}
+
+fn request_page(start) {
+    state::set("in_flight", true)
+    state::set("request_started", time::uptime())
+    state::set("page_start", start)
+    request = str::fmt("""{"method":"get_child_device_list","params":{"start_index":{}}}""", start)
+    klap::call(config::get("host"), config::get("email"), config::get("password"), request)
+}
+
+// json::get fails on a path the reply does not have, so every optional field is
+// looked up in the raw text first.
+fn has_field(body, key) {
+    return str::count(body, str::fmt("""{}":""", key)) > 0
+}
+
+fn error_code(body) {
+    if (has_field(body, "error_code")) {
+        return math::int(json::get(body, "error_code"))
+    }
+    return -1
+}
+
+fn fault_of(status) {
+    if (status == -1) {
+        return -1
+    }
+    if (status == -2) {
+        return 1001
+    }
+    if (status == -4) {
+        return 1003
+    }
+    return 1002
+}
+
+// The hub reports the name given in the Tapo app base64 encoded.
+fn is_wanted(child) {
+    if (str::count(child, "temp-hmdt-sensor") == 0) {
+        return false
+    }
+    wanted = config::get("sensor")
+    if (wanted == "") {
+        return true
+    }
+    if (has_field(child, "nickname") and json::get(child, "nickname") == base64::encode(wanted)) {
+        return true
+    }
+    return has_field(child, "device_id") and json::get(child, "device_id") == wanted
+}
+
+fn publish(child) {
+    if (!has_field(child, "status") or json::get(child, "status") != "online") {
+        output::set("fault", -1)
+        return
+    }
+    if (has_field(child, "current_temp")) {
+        temperature = json::get(child, "current_temp")
+        if (has_field(child, "temp_unit") and json::get(child, "temp_unit") == "fahrenheit") {
+            temperature = (temperature - 32) * 5 / 9.0
+        }
+        output::set("temperature", temperature + config::get("temp_offset"))
+    }
+    if (has_field(child, "current_humidity")) {
+        output::set("humidity", json::get(child, "current_humidity"))
+    }
+    if (has_field(child, "at_low_battery")) {
+        output::set("low_battery", json::get(child, "at_low_battery"))
+    }
+    output::set("fault", 0)
+}
+
+fn poll() {
+    if (!configured()) {
+        output::set("fault", 1000)
+        return
+    }
+    if (!busy()) {
+        request_page(0)
+    }
+}
+
+extern fn std::next_activation_at() {
+    if (state::get("last_activation_ts") == 0) {
+        return time::now()
+    }
+    return time::now() + math::int(math::round(config::get("refresh_interval")))
+}
+
+extern fn klap::on_response(status, body) {
+    state::set("in_flight", false)
+    if (status != 0) {
+        output::set("fault", fault_of(status))
+        return
+    }
+    if (error_code(body) != 0) {
+        output::set("fault", 1004)
+        return
+    }
+    if (!has_field(body, "child_device_list")) {
+        output::set("fault", 1005)
+        return
+    }
+
+    children = json::get(body, "result.child_device_list")
+    count = array::len(children)
+    i = 0
+    while (i < count) {
+        child = array::get_at(children, i)
+        if (is_wanted(child)) {
+            publish(child)
+            return
+        }
+        i = i + 1
+    }
+
+    next = state::get("page_start") + count
+    if (count > 0 and has_field(body, "sum") and next < math::int(json::get(body, "result.sum"))) {
+        request_page(next)
+        return
+    }
+    output::set("fault", 1005)
+}
+
+channel = input::channel()
+if (channel == "" or channel == "config_change") {
+    poll()
+}
