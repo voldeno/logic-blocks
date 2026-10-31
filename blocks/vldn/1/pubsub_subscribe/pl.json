@@ -1,0 +1,90 @@
+{
+  "description": "Odbiera wiadomości z subskrypcji pull Google Cloud Pub/Sub. Odpytuje unary Pull API, potwierdza każdą wiadomość zanim wystawi ją na wyjście i od razu pyta o kolejną, dopóki wiadomości napływają.",
+  "inputs": [],
+  "outputs": [
+    {
+      "id": "message",
+      "name": "Wiadomość",
+      "description": "Zdekodowane dane ostatniej potwierdzonej wiadomości. Bez zmian, gdy pull nic nie zwróci. Ten sam tekst może przyjść dwa razy; seq rośnie przy każdej dostawie."
+    },
+    {
+      "id": "seq",
+      "name": "Sekwencja",
+      "description": "Liczba potwierdzonych i dostarczonych wiadomości. Zaczyna od 0 i rośnie o jeden przy każdej wiadomości, także przy powtórzeniu tego samego tekstu."
+    },
+    {
+      "id": "status",
+      "name": "Status",
+      "description": "Kod statusu HTTP ostatniego zakończonego żądania tokena, pull albo acknowledge. 0 oznacza, że żadne żądanie jeszcze się nie zakończyło."
+    },
+    {
+      "id": "success",
+      "name": "Sukces",
+      "description": "Prawda, jeśli ostatnie zakończone żądanie zwróciło HTTP 200."
+    }
+  ],
+  "config": [
+    {
+      "id": "service_account_key",
+      "name": "Klucz konta usługi",
+      "description": "Pełna zawartość JSON pliku klucza konta usługi GCP używanego do uwierzytelniania."
+    },
+    {
+      "id": "project_id",
+      "name": "ID projektu",
+      "description": "Identyfikator projektu Google Cloud."
+    },
+    {
+      "id": "subscription",
+      "name": "Subskrypcja",
+      "description": "Nazwa subskrypcji pull, z której mają być odbierane wiadomości."
+    },
+    {
+      "id": "poll_interval",
+      "name": "Interwał odpytywania",
+      "description": "Sekundy oczekiwania po pustym pullu lub błędzie przed kolejnym pytaniem. Po dostarczeniu wiadomości następny pull startuje od razu."
+    }
+  ],
+  "state": [
+    {
+      "id": "token",
+      "name": "Token",
+      "description": "Zbuforowany token dostępu OAuth2."
+    },
+    {
+      "id": "token_expiry",
+      "name": "Wygaśnięcie tokena",
+      "description": "Czas działania w milisekundach, po którym zbuforowany token wygasa."
+    },
+    {
+      "id": "phase",
+      "name": "Faza",
+      "description": "Śledzenie operacji asynchronicznej: 0 = bezczynny, 1 = oczekiwanie na token, 2 = oczekiwanie na odpowiedź pull, 3 = oczekiwanie na odpowiedź acknowledge."
+    },
+    {
+      "id": "phase_started",
+      "name": "Początek fazy",
+      "description": "Czas działania w milisekundach rozpoczęcia bieżącego żądania HTTP. Żądanie wiszące dłużej niż 10 sekund jest porzucane."
+    },
+    {
+      "id": "pending_ack_id",
+      "name": "Oczekujące ID ack",
+      "description": "Identyfikator potwierdzenia wiadomości w trakcie acknowledge. Czyszczony po zakończeniu wywołania."
+    },
+    {
+      "id": "pending_message",
+      "name": "Oczekująca wiadomość",
+      "description": "Zdekodowana wiadomość trzymana do skutku acknowledge. Dopiero wtedy trafia na wyjście message."
+    },
+    {
+      "id": "last_activation_ts",
+      "name": "Ostatnie odpytanie",
+      "description": "Znacznik czasu ostatniego zaplanowanego odpytania w sekundach od epoki."
+    },
+    {
+      "id": "next_activation_ts",
+      "name": "Następne odpytanie",
+      "description": "Znacznik czasu następnego zaplanowanego odpytania w sekundach od epoki."
+    }
+  ]
+}

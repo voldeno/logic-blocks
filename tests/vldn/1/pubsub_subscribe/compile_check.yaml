@@ -1,0 +1,21 @@
+name: "compile check"
+
+steps:
+  - action: "assert_outputs"
+    comment: "Default outputs before the first pull"
+    expected_outputs:
+      message: ""
+      seq: 0
+      status: 0
+      success: false
+
+  - action: "wait"
+    duration_ms: 200
+
+  - action: "assert_outputs"
+    comment: "Unconfigured block does not pull"
+    expected_outputs:
+      message: ""
+      seq: 0
+      status: 0
+      success: false
