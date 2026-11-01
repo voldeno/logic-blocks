@@ -1,25 +1,40 @@
 {
-  "description": "Sends a pulse at specified time",
+  "description": "Sends a 1 second pulse periodically or at sunrise / sunset. Sun times are fetched from the sunrise-sunset.org web service, so the sunrise / sunset modes require internet access. When the service is unreachable, the pulse time is estimated from the last fetched sun time and corrected once fresh data is available.",
   "outputs": [
     {
       "id": "pulse",
       "name": "Pulse",
-      "description": "Pulse output"
+      "description": "Pulse output, true for 1 second"
     }
   ],
   "config": [
     {
+      "id": "mode",
+      "name": "Mode",
+      "description": "When the pulse is sent: every interval, at sunrise or at sunset"
+    },
+    {
       "id": "interval",
       "name": "Interval",
-      "description": "Pulse interval in seconds"
+      "description": "Pulse interval in seconds (Interval mode)"
+    },
+    {
+      "id": "offset",
+      "name": "Offset",
+      "description": "Shift of the pulse relative to sunrise / sunset in minutes, negative means earlier"
+    },
+    {
+      "id": "latitude",
+      "name": "Latitude",
+      "description": "Geographic latitude of the location, in decimal degrees (north positive)"
+    },
+    {
+      "id": "longitude",
+      "name": "Longitude",
+      "description": "Geographic longitude of the location, in decimal degrees (east positive)"
     }
   ],
   "state": [
-    {
-      "id": "last_output",
-      "name": "Last output",
-      "description": "Last output value"
-    },
     {
       "id": "last_activation_ts",
       "name": "Last execution timestamp",
@@ -29,6 +44,36 @@
       "id": "next_activation_ts",
       "name": "Next execution timestamp",
       "description": "Next execution timestamp in seconds from epoch"
+    },
+    {
+      "id": "event_ts",
+      "name": "Next pulse timestamp",
+      "description": "Timestamp of the next pulse in seconds from epoch, 0 if unknown"
+    },
+    {
+      "id": "pulse_off_ts",
+      "name": "Pulse end timestamp",
+      "description": "Timestamp when the active pulse ends, 0 if no pulse is active"
+    },
+    {
+      "id": "request_date",
+      "name": "Requested date",
+      "description": "Date of the last sun times request (today / tomorrow)"
+    },
+    {
+      "id": "sun_ts",
+      "name": "Last sun time",
+      "description": "Last fetched sunrise / sunset timestamp without offset, used to estimate the next pulse when the service is unreachable"
+    },
+    {
+      "id": "event_estimated",
+      "name": "Estimated pulse time",
+      "description": "True if the next pulse time is estimated from the last known sun time instead of fetched data"
+    },
+    {
+      "id": "last_pulse_ts",
+      "name": "Last pulse timestamp",
+      "description": "Timestamp of the last pulse in seconds from epoch"
     }
   ]
 }
