@@ -1,0 +1,90 @@
+{
+  "description": "Receives messages from a Google Cloud Pub/Sub pull subscription. Polls with the unary Pull API, acknowledges each message before publishing it, and pulls again immediately while messages keep arriving.",
+  "inputs": [],
+  "outputs": [
+    {
+      "id": "message",
+      "name": "Message",
+      "description": "Decoded data of the last acknowledged message. Stays unchanged when a pull returns nothing. The same text can arrive twice; seq increases on every delivery."
+    },
+    {
+      "id": "seq",
+      "name": "Sequence",
+      "description": "Number of messages acknowledged and delivered. Starts at 0 and increases by one for every message, including a repeat of the same text."
+    },
+    {
+      "id": "status",
+      "name": "Status",
+      "description": "HTTP status code of the last completed token, pull or acknowledge request. 0 means no request has finished yet."
+    },
+    {
+      "id": "success",
+      "name": "Success",
+      "description": "True if the last completed request returned HTTP 200."
+    }
+  ],
+  "config": [
+    {
+      "id": "service_account_key",
+      "name": "Service account key",
+      "description": "Full JSON content of the GCP service account key file used for authentication."
+    },
+    {
+      "id": "project_id",
+      "name": "Project ID",
+      "description": "Google Cloud project ID."
+    },
+    {
+      "id": "subscription",
+      "name": "Subscription",
+      "description": "Name of the pull subscription to receive messages from."
+    },
+    {
+      "id": "poll_interval",
+      "name": "Poll interval",
+      "description": "Seconds to wait after an empty pull or an error before asking again. After a message is delivered the next pull starts at once."
+    }
+  ],
+  "state": [
+    {
+      "id": "token",
+      "name": "Token",
+      "description": "Cached OAuth2 access token."
+    },
+    {
+      "id": "token_expiry",
+      "name": "Token expiry",
+      "description": "Uptime in milliseconds when the cached token expires."
+    },
+    {
+      "id": "phase",
+      "name": "Phase",
+      "description": "Async operation tracker: 0 = idle, 1 = awaiting token, 2 = awaiting pull response, 3 = awaiting acknowledge response."
+    },
+    {
+      "id": "phase_started",
+      "name": "Phase started",
+      "description": "Uptime in milliseconds when the current HTTP request started. A request stuck for more than 10 seconds is abandoned."
+    },
+    {
+      "id": "pending_ack_id",
+      "name": "Pending ack ID",
+      "description": "Acknowledgement id of the message being confirmed. Cleared once the acknowledge call finishes."
+    },
+    {
+      "id": "pending_message",
+      "name": "Pending message",
+      "description": "Decoded message held until the acknowledge call succeeds. Only then is it written to the message output."
+    },
+    {
+      "id": "last_activation_ts",
+      "name": "Last poll",
+      "description": "Timestamp of the last scheduled poll in seconds since epoch."
+    },
+    {
+      "id": "next_activation_ts",
+      "name": "Next poll",
+      "description": "Timestamp of the next scheduled poll in seconds since epoch."
+    }
+  ]
+}

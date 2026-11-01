@@ -1,0 +1,109 @@
+{
+  "name": "PubSub::Subscribe",
+  "group": "input",
+  "ioType": "scheduler",
+  "outputs": [
+    {
+      "id": "message",
+      "abbrev": "M",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "seq",
+      "abbrev": "SEQ",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "status",
+      "abbrev": "S",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "success",
+      "abbrev": "OK",
+      "type": "BOOLEAN",
+      "default": "false"
+    }
+  ],
+  "config": [
+    {
+      "id": "service_account_key",
+      "type": "STRING",
+      "default": "",
+      "validation": { "rules": [{ "type": "required" }] }
+    },
+    {
+      "id": "project_id",
+      "type": "STRING",
+      "default": "",
+      "validation": { "rules": [{ "type": "required" }] }
+    },
+    {
+      "id": "subscription",
+      "type": "STRING",
+      "default": "",
+      "validation": { "rules": [{ "type": "required" }] }
+    },
+    {
+      "id": "poll_interval",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "1",
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 1
+          }
+        ]
+      }
+    }
+  ],
+  "state": [
+    {
+      "id": "token",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "token_expiry",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "phase",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "phase_started",
+      "type": "NUMBER",
+      "default": "0"
+    },
+    {
+      "id": "pending_ack_id",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "pending_message",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "last_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    },
+    {
+      "id": "next_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    }
+  ]
+}
