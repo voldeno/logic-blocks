@@ -4,10 +4,14 @@ config:
   host: ""
 
 steps:
+  # wait for the first scheduled activation (1 cycle = 100ms)
+  - action: "wait"
+    duration_ms: 200
+
   - action: "assert_outputs"
-    comment: "Nothing read yet"
+    comment: "Nothing read yet, the block is not configured"
     expected_outputs:
       temperature: 0
       humidity: 0
       low_battery: false
-      fault: 0
+      fault: 1000
