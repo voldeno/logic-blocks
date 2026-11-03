@@ -1,10 +1,10 @@
 {
-  "description": "Sends a 1 second pulse periodically or at sunrise / sunset. Sun times are fetched from the sunrise-sunset.org web service, so the sunrise / sunset modes require internet access. When the service is unreachable, the pulse time is estimated from the last fetched sun time and corrected once fresh data is available.",
+  "description": "Sends a 100 ms pulse periodically or at sunrise / sunset. Sun times are fetched from the sunrise-sunset.org web service, so the sunrise / sunset modes require internet access. When the service is unreachable, the pulse time is estimated from the last fetched sun time and corrected once fresh data is available.",
   "outputs": [
     {
       "id": "pulse",
       "name": "Pulse",
-      "description": "Pulse output, true for 1 second"
+      "description": "Pulse output, true for 100 ms"
     }
   ],
   "config": [
@@ -49,11 +49,6 @@
       "id": "event_ts",
       "name": "Next pulse timestamp",
       "description": "Timestamp of the next pulse in seconds from epoch, 0 if unknown"
-    },
-    {
-      "id": "pulse_off_ts",
-      "name": "Pulse end timestamp",
-      "description": "Timestamp when the active pulse ends, 0 if no pulse is active"
     },
     {
       "id": "request_date",

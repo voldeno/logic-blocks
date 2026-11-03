@@ -107,12 +107,6 @@
       "default": "0"
     },
     {
-      "id": "pulse_off_ts",
-      "type": "NUMBER",
-      "unit": "s",
-      "default": "0"
-    },
-    {
       "id": "request_date",
       "type": "STRING",
       "default": ""

@@ -1,10 +1,10 @@
 {
-  "description": "Wysyła 1-sekundowy impuls cyklicznie albo o wschodzie / zachodzie słońca. Godziny wschodu i zachodu są pobierane z serwisu sunrise-sunset.org, więc tryby słoneczne wymagają dostępu do internetu. Gdy serwis jest niedostępny, czas impulsu jest szacowany na podstawie ostatnio pobranej godziny i korygowany po otrzymaniu aktualnych danych.",
+  "description": "Wysyła 100-milisekundowy impuls cyklicznie albo o wschodzie / zachodzie słońca. Godziny wschodu i zachodu są pobierane z serwisu sunrise-sunset.org, więc tryby słoneczne wymagają dostępu do internetu. Gdy serwis jest niedostępny, czas impulsu jest szacowany na podstawie ostatnio pobranej godziny i korygowany po otrzymaniu aktualnych danych.",
   "outputs": [
     {
       "id": "pulse",
       "name": "Impuls",
-      "description": "Wyjście impulsowe, stan wysoki przez 1 sekundę"
+      "description": "Wyjście impulsowe, stan wysoki przez 100 ms"
     }
   ],
   "config": [
@@ -49,11 +49,6 @@
       "id": "event_ts",
       "name": "Czas następnego impulsu",
       "description": "Znacznik czasu następnego impulsu w sekundach od epoki, 0 jeśli nieznany"
-    },
-    {
-      "id": "pulse_off_ts",
-      "name": "Czas końca impulsu",
-      "description": "Znacznik czasu zakończenia aktywnego impulsu, 0 jeśli impuls nie jest aktywny"
     },
     {
       "id": "request_date",

@@ -62,9 +62,7 @@ extern fn http::on_response(status, body, headers) {
     if (ts > time::now() and ts - state::get("last_pulse_ts") > 43200) {
         state::set("event_ts", ts)
         state::set("event_estimated", false)
-        if (state::get("pulse_off_ts") == 0) {
-            state::set("next_activation_ts", ts)
-        }
+        state::set("next_activation_ts", ts)
         return
     }
     if (state::get("request_date") == "today") {
@@ -72,12 +70,12 @@ extern fn http::on_response(status, body, headers) {
     }
 }
 
+extern fn pulse_end() {
+    output::set("pulse", false)
+}
+
 extern fn std::next_activation_at() {
     now = time::now()
-    pulse_off = state::get("pulse_off_ts")
-    if (pulse_off > 0) {
-        return pulse_off
-    }
     event = state::get("event_ts")
     if (event > now and !state::get("event_estimated")) {
         return event
@@ -105,29 +103,20 @@ if (input::channel() == "config_change") {
     state::set("event_ts", 0)
     state::set("event_estimated", false)
     state::set("sun_ts", 0)
-    state::set("pulse_off_ts", 0)
+    callback::clear()
     output::set("pulse", false)
     return
 }
 
 now = time::now()
-pulse_off = state::get("pulse_off_ts")
-if (pulse_off > 0) {
-    if (now >= pulse_off) {
-        state::set("pulse_off_ts", 0)
-        output::set("pulse", false)
-    }
-    return
-}
-
 event = state::get("event_ts")
 if (event == 0 or event > now) {
     return
 }
 
-state::set("pulse_off_ts", now + 1)
 state::set("last_pulse_ts", now)
 output::set("pulse", true)
+callback::set(100, "pulse_end")
 if (config::get("mode") == 0) {
     state::set("event_ts", event + math::round(config::get("interval")))
 } else {
