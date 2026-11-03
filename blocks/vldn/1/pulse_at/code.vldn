@@ -1,7 +1,125 @@
+// Converts "2026-11-01T05:31:12+00:00" (UTC) to a Unix timestamp
+fn iso_to_ts(iso) {
+    parts = str::split(iso, "T")
+    date = str::split(str::split_next(parts), "-")
+    time = str::split(str::split_next(str::split(str::split_next(parts), "+")), ":")
 
-extern fn std::next_activation_at() {
-    return time::now() + config::get("interval")
+    y = str::number(str::split_next(date))
+    m = str::number(str::split_next(date))
+    d = str::number(str::split_next(date))
+    hh = str::number(str::split_next(time))
+    mi = str::number(str::split_next(time))
+    ss = str::number(str::split_next(time))
+
+    mp = m - 3
+    if (m <= 2) {
+        y = y - 1
+        mp = m + 9
+    }
+    era = y / 400
+    yoe = y - era * 400
+    doy = (153 * mp + 2) / 5 + d - 1
+    doe = yoe * 365 + yoe / 4 - yoe / 100 + doy
+    days = era * 146097 + doe - 719468
+    return days * 86400 + hh * 3600 + mi * 60 + ss
 }
 
-output::toggle("pulse")
+fn request_sun_time(date) {
+    state::set("request_date", date)
+    url = str::fmt("https://api.sunrise-sunset.org/json?lat={}&lng={}&formatted=0&date={}", config::get("latitude"), config::get("longitude"), date)
+    client = http::client()
+    http::set_method(client, "GET")
+    http::call(client, url)
+}
 
+// Last known sun time shifted by whole days, used while fresh data cannot be fetched
+fn estimate_event(now) {
+    sun = state::get("sun_ts")
+    // also rejects 1970-01-01T00:00:01, returned when the sun does not rise / set that day
+    if (sun < 86400) {
+        return 0
+    }
+    t = sun + math::round(config::get("offset")) * 60
+    if (t <= now) {
+        t = t + ((now - t) / 86400 + 1) * 86400
+    }
+    return t
+}
+
+extern fn http::on_response(status, body, headers) {
+    mode = config::get("mode")
+    if (mode == 0 or status < 200 or status >= 300) {
+        return
+    }
+    key = "results.sunrise"
+    if (mode == 2) {
+        key = "results.sunset"
+    }
+    sun = iso_to_ts(json::get(body, key))
+    state::set("sun_ts", sun)
+    ts = sun + math::round(config::get("offset")) * 60
+    // an event close to the last pulse is the one already pulsed on an estimate
+    if (ts > time::now() and ts - state::get("last_pulse_ts") > 43200) {
+        state::set("event_ts", ts)
+        state::set("event_estimated", false)
+        state::set("next_activation_ts", ts)
+        return
+    }
+    if (state::get("request_date") == "today") {
+        request_sun_time("tomorrow")
+    }
+}
+
+extern fn pulse_end() {
+    output::set("pulse", false)
+}
+
+extern fn std::next_activation_at() {
+    now = time::now()
+    event = state::get("event_ts")
+    if (event > now and !state::get("event_estimated")) {
+        return event
+    }
+    if (config::get("mode") == 0) {
+        event = now + math::round(config::get("interval"))
+        state::set("event_ts", event)
+        return event
+    }
+    request_sun_time("today")
+    if (event <= now) {
+        event = estimate_event(now)
+        state::set("event_ts", event)
+        state::set("event_estimated", event > 0)
+    }
+    // retry if no response arrives; a response overrides this activation
+    retry = now + 600
+    if (event > 0 and event < retry) {
+        return event
+    }
+    return retry
+}
+
+if (input::channel() == "config_change") {
+    state::set("event_ts", 0)
+    state::set("event_estimated", false)
+    state::set("sun_ts", 0)
+    callback::clear()
+    output::set("pulse", false)
+    return
+}
+
+now = time::now()
+event = state::get("event_ts")
+if (event == 0 or event > now) {
+    return
+}
+
+state::set("last_pulse_ts", now)
+output::set("pulse", true)
+callback::set(100, "pulse_end")
+if (config::get("mode") == 0) {
+    state::set("event_ts", event + math::round(config::get("interval")))
+} else {
+    state::set("event_ts", 0)
+    state::set("event_estimated", false)
+}

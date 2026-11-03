@@ -1,25 +1,40 @@
 {
-  "description": "Wysyła impuls o określonym czasie",
+  "description": "Wysyła 100-milisekundowy impuls cyklicznie albo o wschodzie / zachodzie słońca. Godziny wschodu i zachodu są pobierane z serwisu sunrise-sunset.org, więc tryby słoneczne wymagają dostępu do internetu. Gdy serwis jest niedostępny, czas impulsu jest szacowany na podstawie ostatnio pobranej godziny i korygowany po otrzymaniu aktualnych danych.",
   "outputs": [
     {
       "id": "pulse",
       "name": "Impuls",
-      "description": "Wyjście impulsowe"
+      "description": "Wyjście impulsowe, stan wysoki przez 100 ms"
     }
   ],
   "config": [
     {
+      "id": "mode",
+      "name": "Tryb",
+      "description": "Kiedy wysyłany jest impuls: co interwał, o wschodzie lub o zachodzie słońca"
+    },
+    {
       "id": "interval",
       "name": "Interwał",
-      "description": "Interwał impulsu w sekundach"
+      "description": "Interwał impulsu w sekundach (tryb Interval)"
+    },
+    {
+      "id": "offset",
+      "name": "Przesunięcie",
+      "description": "Przesunięcie impulsu względem wschodu / zachodu słońca w minutach, wartość ujemna oznacza wcześniej"
+    },
+    {
+      "id": "latitude",
+      "name": "Szerokość geograficzna",
+      "description": "Szerokość geograficzna lokalizacji w stopniach dziesiętnych (północ dodatnia)"
+    },
+    {
+      "id": "longitude",
+      "name": "Długość geograficzna",
+      "description": "Długość geograficzna lokalizacji w stopniach dziesiętnych (wschód dodatni)"
     }
   ],
   "state": [
-    {
-      "id": "last_output",
-      "name": "Ostatnie wyjście",
-      "description": "Ostatnia wartość wyjściowa"
-    },
     {
       "id": "last_activation_ts",
       "name": "Ostatni znacznik czasu wykonania",
@@ -29,6 +44,31 @@
       "id": "next_activation_ts",
       "name": "Następny znacznik czasu wykonania",
       "description": "Następny znacznik czasu wykonania"
+    },
+    {
+      "id": "event_ts",
+      "name": "Czas następnego impulsu",
+      "description": "Znacznik czasu następnego impulsu w sekundach od epoki, 0 jeśli nieznany"
+    },
+    {
+      "id": "request_date",
+      "name": "Żądana data",
+      "description": "Data ostatniego zapytania o godziny słońca (today / tomorrow)"
+    },
+    {
+      "id": "sun_ts",
+      "name": "Ostatnia godzina słońca",
+      "description": "Ostatnio pobrany znacznik czasu wschodu / zachodu bez przesunięcia, używany do oszacowania następnego impulsu, gdy serwis jest niedostępny"
+    },
+    {
+      "id": "event_estimated",
+      "name": "Szacowany czas impulsu",
+      "description": "Prawda, jeśli czas następnego impulsu jest oszacowany na podstawie ostatniej znanej godziny słońca, a nie pobranych danych"
+    },
+    {
+      "id": "last_pulse_ts",
+      "name": "Czas ostatniego impulsu",
+      "description": "Znacznik czasu ostatniego impulsu w sekundach od epoki"
     }
   ]
 }

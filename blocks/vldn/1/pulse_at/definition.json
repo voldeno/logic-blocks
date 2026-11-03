@@ -12,19 +12,82 @@
   ],
   "config": [
     {
+      "id": "mode",
+      "type": "ENUM",
+      "values": [
+        "Interval",
+        "Sunrise",
+        "Sunset"
+      ],
+      "default": "0"
+    },
+    {
       "id": "interval",
       "type": "NUMBER",
-      "unit": "",
-      "default": "1"
+      "unit": "s",
+      "default": "60",
+      "visibleWhen": {
+        "configId": "mode",
+        "values": [
+          "Interval"
+        ]
+      },
+      "validation": {
+        "rules": [
+          {
+            "type": "gte",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "offset",
+      "type": "NUMBER",
+      "unit": "min",
+      "default": "0",
+      "min": "-720",
+      "max": "720",
+      "visibleWhen": {
+        "configId": "mode",
+        "values": [
+          "Sunrise",
+          "Sunset"
+        ]
+      }
+    },
+    {
+      "id": "latitude",
+      "type": "NUMBER",
+      "unit": "°",
+      "default": "52.2297",
+      "min": "-90",
+      "max": "90",
+      "visibleWhen": {
+        "configId": "mode",
+        "values": [
+          "Sunrise",
+          "Sunset"
+        ]
+      }
+    },
+    {
+      "id": "longitude",
+      "type": "NUMBER",
+      "unit": "°",
+      "default": "21.0122",
+      "min": "-180",
+      "max": "180",
+      "visibleWhen": {
+        "configId": "mode",
+        "values": [
+          "Sunrise",
+          "Sunset"
+        ]
+      }
     }
   ],
   "state": [
-    {
-      "id": "last_output",
-      "type": "BOOLEAN",
-      "unit": "",
-      "default": "false"
-    },
     {
       "id": "last_activation_ts",
       "type": "NUMBER",
@@ -33,6 +96,34 @@
     },
     {
       "id": "next_activation_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    },
+    {
+      "id": "event_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    },
+    {
+      "id": "request_date",
+      "type": "STRING",
+      "default": ""
+    },
+    {
+      "id": "sun_ts",
+      "type": "NUMBER",
+      "unit": "s",
+      "default": "0"
+    },
+    {
+      "id": "event_estimated",
+      "type": "BOOLEAN",
+      "default": "false"
+    },
+    {
+      "id": "last_pulse_ts",
       "type": "NUMBER",
       "unit": "s",
       "default": "0"
